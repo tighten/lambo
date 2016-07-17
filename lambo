@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+## Error handling
+abort()
+{
+    echo >&2 '
+***********************************************
+*** There was an error running this script. ***
+***********************************************
+'
+    echo "An error occurred. Exiting..." >&2
+    exit 1
+}
+
+trap 'abort' 0
+
+set -e
+## Start script
+
+PROJECTNAME=$1
+laravel new $PROJECTNAME
+cd $PROJECTNAME
+git init
+git add .
+git commit -m "Initial commit."
+open "http://$PROJECTNAME.dev"
+
+# End script; disable error handling
+trap : 0
