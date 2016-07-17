@@ -10,7 +10,7 @@ composer global require mattstauffer/lambo
 
 ## Usage
 
-Make sure ~/.composer/vendor/bin is in your site's path.
+Make sure ~/.composer/vendor/bin is in your terminal's path.
 
 ```bash
 cd ~/Sites
@@ -21,4 +21,4 @@ This will `laravel new superApplication`, change into that directory, make an in
 
 ## Requirements
 
-Mac-only. Requires the Laravel installer and Laravel Valet to be globally installed.
+Mac-only. Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
