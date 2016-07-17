@@ -23,3 +23,8 @@ This will `laravel new superApplication`, change into that directory, make an in
 
 - Mac-only.
 - Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
+
+## Acknowledgements
+
+Inspired by Taylor Otwell and Adam Wathan's work on Valet.
+Name from TJ Miller, inspired by Taylor's love for the lambo.
