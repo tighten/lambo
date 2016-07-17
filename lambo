@@ -24,6 +24,8 @@ git init
 git add .
 git commit -m "Initial commit."
 open "http://$PROJECTNAME.dev"
+echo "***********************"
+echo "You're ready to go! Remember to cd into $PROJECTNAME before you start editing."
 
 # End script; disable error handling
 trap : 0
