@@ -5,7 +5,7 @@ Super-powered `laravel new` for Laravel and Valet.
 ## Installation
 
 ```bash
-composer global require mattstauffer/lambo
+composer global require tightenco/lambo
 ```
 
 ## Usage
