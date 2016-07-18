@@ -2,10 +2,8 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
-![](https://i.imgur.com/CrS803Y.gif)
 
 ![](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.gif)
-
 
 
 ## Installation
@@ -34,3 +32,5 @@ This will `laravel new superApplication`, change into that directory, make an in
 
 Inspired by Taylor Otwell and Adam Wathan's work on Valet.
 Name from TJ Miller, inspired by Taylor's love for the lambo.
+
+![](https://i.imgur.com/CrS803Y.gif)
