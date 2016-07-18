@@ -2,7 +2,11 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
+![](https://i.imgur.com/CrS803Y.gif)
+
 ![](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.gif)
+
+
 
 ## Installation
 
