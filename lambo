@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+#### Check for project name argument.
+if [ $# -eq 0 ]
+  then
+    echo "Please supply a project name."
+    exit 1
+fi
+
 ## Error handling
 abort()
 {
