@@ -1,6 +1,4 @@
-![](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.jpg)
-
-# Lambo
+![Lambo](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.jpg)
 
 Super-powered `laravel new` for Laravel and Valet.
 
