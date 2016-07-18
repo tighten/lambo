@@ -18,11 +18,35 @@ set -e
 ## Start script
 
 PROJECTNAME=$1
+PROJECTPATH="."
+MESSAGE="Initial commit."
+
+while [[ $# -gt 1 ]]
+do
+    key="$1"
+
+    case $key in
+        -p|--path)
+            PROJECTPATH="$2"
+            shift
+            ;;
+        -m|--message)
+            MESSAGE="$2"
+            shift
+            ;;
+        *)
+            ;;
+    esac
+
+    shift
+done
+
+cd $PROJECTPATH
 laravel new $PROJECTNAME
 cd $PROJECTNAME
 git init
 git add .
-git commit -m "Initial commit."
+git commit -m "$MESSAGE"
 open "http://$PROJECTNAME.dev"
 echo "***********************"
 echo "You're ready to go! Remember to cd into $PROJECTNAME before you start editing."

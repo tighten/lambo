@@ -17,11 +17,24 @@ composer global require tightenco/lambo
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
 ```bash
-cd ~/Sites
 lambo superApplication
 ```
 
 This will `laravel new superApplication`, change into that directory, make an initial Git commit, and open your web browser to that app.
+
+### Arguments
+
+- `-p` or `--path` to specify where to install the application.
+
+  ```bash
+  lambo superApplication -p ~/Sites
+  ```
+
+- `-m` or `--message` to set the first commit message.
+
+  ```bash
+  lambo superApplication -m "This lambo runs fast!"
+  ```
 
 ## Requirements
 
