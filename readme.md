@@ -2,6 +2,8 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
+![](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.gif)
+
 ## Installation
 
 ```bash
