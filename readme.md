@@ -12,6 +12,12 @@ Super-powered `laravel new` for Laravel and Valet.
 composer global require tightenco/lambo
 ```
 
+## Upgrading 
+
+```bash
+composer global update tightenco/lambo
+```
+
 ## Usage
 
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
@@ -28,7 +34,7 @@ This will `laravel new superApplication`, change into that directory, make an in
 - `laravel new $PROJECTNAME`
 - `cd $PROJECTNAME`
 - Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
-- Replace the `.env` database credentials with the default Mac MYSQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
+- Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Open `$PROJECTNAME.dev` in your browser
 
 ## Requirements
