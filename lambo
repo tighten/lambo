@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#### Check for project name argument.
+### Check for project name argument
 if [ $# -eq 0 ]
   then
     echo "Please supply a project name."
@@ -25,14 +25,30 @@ set -e
 ## Start script
 
 PROJECTNAME=$1
+
+echo "
+***********************
+Creating new Laravel app $PROJECTNAME
+***********************
+"
+
 laravel new $PROJECTNAME
 cd $PROJECTNAME
 git init
 git add .
 git commit -m "Initial commit."
+
+# Update .env to point to this database with `root` username and blank pw,
+# like Mac MySQL defaults
+sed -i '' '/DB_DATABASE/s/homestead/$PROJECTNAME/' .env
+sed -i '' '/DB_USERNAME/s/homestead/root/' .env
+sed -i '' '/DB_PASSWORD/s/secret//' .env
+
 open "http://$PROJECTNAME.dev"
-echo "***********************"
-echo "You're ready to go! Remember to cd into $PROJECTNAME before you start editing."
+echo "
+
+***********************
+You're ready to go! Remember to cd into $PROJECTNAME before you start editing."
 
 # End script; disable error handling
 trap : 0
