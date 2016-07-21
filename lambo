@@ -32,7 +32,7 @@ Creating new Laravel app $PROJECTNAME
 ***********************
 "
 
-laravel new $PROJECTNAME
+composer create-project laravel/laravel $PROJECTNAME
 cd $PROJECTNAME
 git init
 git add .
