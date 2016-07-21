@@ -27,11 +27,11 @@ cd ~/Sites
 lambo superApplication
 ```
 
-This will `laravel new superApplication`, change into that directory, make an initial Git commit, and open your web browser to that app.
+This will `composer create-project laravel/laravel superApplication`, change into that directory, make an initial Git commit, and open your web browser to that app.
 
 ### What exactly does it do?
 
-- `laravel new $PROJECTNAME`
+- `composer create-project laravel/laravel $PROJECTNAME`
 - `cd $PROJECTNAME`
 - Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
 - Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
@@ -40,7 +40,7 @@ This will `laravel new superApplication`, change into that directory, make an in
 ## Requirements
 
 - Mac-only.
-- Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
+- Requires [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
 
 ## Acknowledgements
 
