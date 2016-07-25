@@ -22,9 +22,9 @@ abort()
 trap 'abort' 0
 
 set -e
-## Start script
 
-PROJECTNAME=$1
+
+## Start script
 
 echo "
 ***********************
@@ -32,11 +32,36 @@ Creating new Laravel app $PROJECTNAME
 ***********************
 "
 
+PROJECTNAME=$1
+PROJECTPATH="."
+MESSAGE="Initial commit."
+
+while [[ $# -gt 1 ]]
+do
+    key="$1"
+
+    case $key in
+        -p|--path)
+            PROJECTPATH="$2"
+            shift
+            ;;
+        -m|--message)
+            MESSAGE="$2"
+            shift
+            ;;
+        *)
+            ;;
+    esac
+
+    shift
+done
+
+cd $PROJECTPATH
 laravel new $PROJECTNAME
 cd $PROJECTNAME
 git init
 git add .
-git commit -m "Initial commit."
+git commit -m "$MESSAGE"
 
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults
@@ -45,10 +70,19 @@ sed -i '' '/DB_USERNAME/s/homestead/root/' .env
 sed -i '' '/DB_PASSWORD/s/secret//' .env
 
 open "http://$PROJECTNAME.dev"
+
+# @todo: Can we make this work with a ternary style assignment instead?
+if [ $PROJECTPATH == "." ]
+then
+    prettyPath="$PROJECTNAME"
+else
+    prettyPath="$PROJECTPATH/$PROJECTNAME"
+fi
+
 echo "
 
 ***********************
-You're ready to go! Remember to cd into $PROJECTNAME before you start editing."
+You're ready to go! Remember to cd into $prettyPath before you start editing."
 
 # End script; disable error handling
 trap : 0
