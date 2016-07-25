@@ -53,11 +53,17 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication -m "This lambo runs fast!"
   ```
 
-- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
+- `-e` or `--editor` to define your editor command. whatever is passed here will be run as `$editor .` after creating the project.
 
   ```bash
   # runs "subl ." in the project directory after creating the project
   lambo superApplication -e subl 
+  ```
+
+- `--develop` to choose the `develop` branch instead of `master`, getting the beta install
+
+  ```bash
+  lambo superApplication --develop
   ```
 
 ## Requirements
