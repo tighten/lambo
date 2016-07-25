@@ -44,7 +44,7 @@ This will `laravel new superApplication`, change into that directory, make an in
 - `-h` or `--help` to get the help dialog
 
   ```bash
-  lambo superApplication -h
+  lambo -h
   ```
 
 - `-p` or `--path` to specify where to install the application.
@@ -59,7 +59,7 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication -m "This lambo runs fast!"
   ```
 
-- `-e` or `--editor` to define your editor command. whatever is passed here will be run as `$editor .` after creating the project.
+- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
 
   ```bash
   # runs "subl ." in the project directory after creating the project
