@@ -19,29 +19,44 @@ abort()
     exit 1
 }
 
+quit()
+{
+    trap : 0
+    exit 0
+}
+
 trap 'abort' 0
 
 set -e
 
-
 ## Start script
-
-echo "
-***********************
-Creating new Laravel app $PROJECTNAME
-***********************
-"
 
 PROJECTNAME=$1
 PROJECTPATH="."
 MESSAGE="Initial commit."
+BRANCH=""
 EDITOR=""
 
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
     key="$1"
 
     case $key in
+        -h|--help)
+            echo " "
+            echo "Lambo: Super-powered Laravel new for Laravel and Valet"
+            echo "======================================================"
+            echo " "
+            echo "lambo myApplication [arguments]"
+            echo " "
+            echo "options:"
+            echo "-h, --help                 show brief help"
+            echo "-e, --editor EDITOR        specify an editor to run 'EDITOR .' with after"
+            echo "-m, --message \"message\"    customize the initial commit message"
+            echo "-p, --path PATH            customize the path in which the new project will be created"
+            echo "-d, --develop              use Composer to install on the develop branch" 
+            quit
+            ;;
         -p|--path)
             PROJECTPATH="$2"
             shift
@@ -54,6 +69,10 @@ do
             EDITOR="$2"
             shift
             ;;
+        -d|--develop)
+            BRANCH="develop"
+            shift
+            ;;
         *)
             ;;
     esac
@@ -61,8 +80,19 @@ do
     shift
 done
 
+echo "
+***********************************************
+Creating new Laravel app $PROJECTNAME
+***********************************************
+"
+
 cd $PROJECTPATH
-laravel new $PROJECTNAME
+if [ "$BRANCH" != "" ]
+then
+    composer create-project laravel/laravel $PROJECTNAME dev-$BRANCH
+else
+    laravel new $PROJECTNAME
+fi
 cd $PROJECTNAME
 git init
 git add .
@@ -70,7 +100,7 @@ git commit -m "$MESSAGE"
 
 if [ "$EDITOR" != "" ]
 then
-    eval "$EDITOR ."
+    $EDITOR .
 fi
 
 # Update .env to point to this database with `root` username and blank pw,
@@ -91,7 +121,8 @@ fi
 
 echo "
 
-***********************
+***********************************************
+
 You're ready to go! Remember to cd into $prettyPath before you start editing."
 
 # End script; disable error handling
