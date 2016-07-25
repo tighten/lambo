@@ -37,6 +37,20 @@ This will `laravel new superApplication`, change into that directory, make an in
 - Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Open `$PROJECTNAME.dev` in your browser
 
+### Optional Arguments
+
+- `-p` or `--path` to specify where to install the application.
+
+  ```bash
+  lambo superApplication -p ~/Sites
+  ```
+
+- `-m` or `--message` to set the first commit message.
+
+  ```bash
+  lambo superApplication -m "This lambo runs fast!"
+  ```
+
 ## Requirements
 
 - Mac-only.
