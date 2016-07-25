@@ -18,6 +18,8 @@ composer global require tightenco/lambo
 composer global update tightenco/lambo
 ```
 
+If this doesn't get you the latest version, check the file at `~/.composer/composer.json`. If your version spec for Lambo is `^0.1.#`, change it to be `~0.1`.
+
 ## Usage
 
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
