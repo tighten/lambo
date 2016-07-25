@@ -43,7 +43,7 @@ do
 
     case $key in
         -h|--help)
-            echo ""
+            echo " "
             echo "Lambo: Super-powered Laravel new for Laravel and Valet"
             echo "======================================================"
             echo " "
@@ -54,7 +54,7 @@ do
             echo "-e, --editor EDITOR        specify an editor to run 'EDITOR .' with after"
             echo "-m, --message \"message\"    customize the initial commit message"
             echo "-p, --path PATH            customize the path in which the new project will be created"
-            echo "---develop                 use Composer to install on the develop branch" 
+            echo "-d, --develop              use Composer to install on the develop branch" 
             quit
             ;;
         -p|--path)

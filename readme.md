@@ -41,6 +41,12 @@ This will `laravel new superApplication`, change into that directory, make an in
 
 ### Optional Arguments
 
+- `-h` or `--help` to get the help dialog
+
+  ```bash
+  lambo superApplication -h
+  ```
+
 - `-p` or `--path` to specify where to install the application.
 
   ```bash
@@ -60,7 +66,7 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication -e subl 
   ```
 
-- `--develop` to choose the `develop` branch instead of `master`, getting the beta install
+- `-d` or `--develop` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
   lambo superApplication --develop
