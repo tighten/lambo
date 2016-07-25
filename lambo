@@ -35,6 +35,7 @@ Creating new Laravel app $PROJECTNAME
 PROJECTNAME=$1
 PROJECTPATH="."
 MESSAGE="Initial commit."
+EDITOR=""
 
 while [[ $# -gt 1 ]]
 do
@@ -47,6 +48,10 @@ do
             ;;
         -m|--message)
             MESSAGE="$2"
+            shift
+            ;;
+        -e|--editor)
+            EDITOR="$2"
             shift
             ;;
         *)
@@ -62,6 +67,11 @@ cd $PROJECTNAME
 git init
 git add .
 git commit -m "$MESSAGE"
+
+if [ "$EDITOR" != "" ]
+then
+    eval "$EDITOR ."
+fi
 
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults
