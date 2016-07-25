@@ -44,7 +44,7 @@ This will `laravel new superApplication`, change into that directory, make an in
 - `-h` or `--help` to get the help dialog
 
   ```bash
-  lambo -h
+  lambo --help
   ```
 
 - `-p` or `--path` to specify where to install the application.
