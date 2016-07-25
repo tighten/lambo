@@ -27,7 +27,7 @@ quit()
 
 trap 'abort' 0
 
-set -e
+# set -e
 
 ## Start script
 
@@ -93,7 +93,7 @@ then
 else
     laravel new $PROJECTNAME
 fi
-cd $PROJECTNAME
+cd "$PROJECTNAME"
 git init
 git add .
 git commit -m "$MESSAGE"
