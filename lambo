@@ -82,7 +82,7 @@ done
 
 echo "
 ***********************************************
-Creating new Laravel app $PROJECTNAME
+Creating new Laravel app '$PROJECTNAME'
 ***********************************************
 "
 
@@ -113,13 +113,10 @@ sed -i '' '/DB_PASSWORD/s/secret//' .env
 # with `valet open`
 php -r "\$tld=json_decode(file_get_contents('$HOME/.valet/config.json'), true)['domain']; echo 'http://$PROJECTNAME.' . \$tld;" | xargs open
 
-# @todo: Can we make this work with a ternary style assignment instead?
-if [ $PROJECTPATH == "." ]
-then
-    prettyPath="$PROJECTNAME"
-else
-    prettyPath="$PROJECTPATH/$PROJECTNAME"
-fi
+case $PROJECTPATH in
+ ".") prettyPath="$PROJECTNAME" ;;
+ *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
+esac
 
 echo "
 
