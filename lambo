@@ -34,7 +34,7 @@ trap 'abort' 0
 PROJECTNAME=$1
 PROJECTPATH="."
 MESSAGE="Initial commit."
-BRANCH=""
+DEVELOP=false
 EDITOR=""
 
 while [[ $# -gt 0 ]]
@@ -70,7 +70,7 @@ do
             shift
             ;;
         -d|--develop)
-            BRANCH="develop"
+            DEVELOP=true
             shift
             ;;
         *)
@@ -87,9 +87,9 @@ Creating new Laravel app $PROJECTNAME
 "
 
 cd $PROJECTPATH
-if [ "$BRANCH" != "" ]
+if [ "$DEVELOP" = true ]
 then
-    composer create-project laravel/laravel $PROJECTNAME dev-$BRANCH
+    laravel new $PROJECTNAME --dev
 else
     laravel new $PROJECTNAME
 fi
