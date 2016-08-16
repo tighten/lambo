@@ -54,7 +54,7 @@ do
             echo "-e, --editor EDITOR        specify an editor to run 'EDITOR .' with after"
             echo "-m, --message \"message\"    customize the initial commit message"
             echo "-p, --path PATH            customize the path in which the new project will be created"
-            echo "-d, --develop              use Composer to install on the develop branch" 
+            echo "-d, --develop              use Composer to install on the develop branch"
             quit
             ;;
         -p|--path)
@@ -109,7 +109,9 @@ sed -i '' "/DB_DATABASE/s/homestead/$PROJECTNAME/" .env
 sed -i '' '/DB_USERNAME/s/homestead/root/' .env
 sed -i '' '/DB_PASSWORD/s/secret//' .env
 
-open "http://$PROJECTNAME.dev"
+# Open the domain using the Valet-specified TLD; avoids requiring sudo
+# with `valet open`
+php -r "\$tld=json_decode(file_get_contents('$HOME/.valet/config.json'), true)['domain']; echo 'http://$PROJECTNAME.' . \$tld;" | xargs open
 
 # @todo: Can we make this work with a ternary style assignment instead?
 if [ $PROJECTPATH == "." ]
