@@ -36,6 +36,7 @@ PROJECTPATH="."
 MESSAGE="Initial commit."
 DEVELOP=false
 EDITOR=""
+TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 
 while [[ $# -gt 0 ]]
 do
@@ -104,14 +105,13 @@ then
 fi
 
 # Update .env to point to this database with `root` username and blank pw,
-# like Mac MySQL defaults
+# like Mac MySQL defaults, and appropriate domain
 sed -i '' "/DB_DATABASE/s/homestead/$PROJECTNAME/" .env
 sed -i '' '/DB_USERNAME/s/homestead/root/' .env
 sed -i '' '/DB_PASSWORD/s/secret//' .env
+sed -i '' "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/" .env
 
-# Open the domain using the Valet-specified TLD; avoids requiring sudo
-# with `valet open`
-php -r "\$tld=json_decode(file_get_contents('$HOME/.valet/config.json'), true)['domain']; echo 'http://$PROJECTNAME.' . \$tld;" | xargs open
+open "http://$PROJECTNAME.$TLD"
 
 case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
@@ -122,7 +122,7 @@ echo "
 
 ***********************************************
 
-You're ready to go! Remember to cd into $prettyPath before you start editing."
+You're ready to go! Remember to cd into '$prettyPath' before you start editing."
 
 # End script; disable error handling
 trap : 0
