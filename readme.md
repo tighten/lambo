@@ -67,10 +67,10 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication -e subl 
   ```
 
-- `-d` or `--develop` to choose the `develop` branch instead of `master`, getting the beta install
+- `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
-  lambo superApplication --develop
+  lambo superApplication --dev
   ```
 
 ## Requirements

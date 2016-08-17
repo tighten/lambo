@@ -21,7 +21,7 @@ showhelp()
     echo "${green}  -e, --editor EDITOR${reset}        Specify an editor to run '${green}EDITOR .${reset}' with after"
     echo "${green}  -m, --message \"message\"${reset}    Customize the initial commit message"
     echo "${green}  -p, --path PATH${reset}            Customize the path in which the new project will be created"
-    echo "${green}  -d, --develop${reset}              Use Composer to install on the develop branch"
+    echo "${green}  -d, --dev${reset}                  Use Composer to install on the develop branch"
     quit
 }
 
@@ -81,7 +81,7 @@ do
             EDITOR="$2"
             shift
             ;;
-        -d|--develop)
+        -d|--develop|--dev)
             DEVELOP=true
             shift
             ;;
