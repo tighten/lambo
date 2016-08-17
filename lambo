@@ -1,13 +1,30 @@
 #!/usr/bin/env bash
 
-### Check for project name argument
-if [ $# -eq 0 ]
-  then
-    echo "Please supply a project name."
-    exit 1
-fi
+## Set up colors
+red=`tput setaf 1`
+green=`tput setaf 2`
+orange=`tput setaf 3`
+reset=`tput sgr0`
 
-## Error handling
+## Init functions
+showhelp()
+{
+    echo " "
+    echo "${green}Lambo: Super-powered '${orange}laravel new${green}' for Laravel and Valet"
+    echo "${reset}________________________________________________________"
+    echo " "
+    echo "${orange}Usage:"
+    echo "${reset}  lambo myApplication [arguments]"
+    echo " "
+    echo "${orange}Options:"
+    echo "${green}  -h, --help${reset}                 Show brief help"
+    echo "${green}  -e, --editor EDITOR${reset}        Specify an editor to run '${green}EDITOR .${reset}' with after"
+    echo "${green}  -m, --message \"message\"${reset}    Customize the initial commit message"
+    echo "${green}  -p, --path PATH${reset}            Customize the path in which the new project will be created"
+    echo "${green}  -d, --develop${reset}              Use Composer to install on the develop branch"
+    quit
+}
+
 abort()
 {
     echo >&2 '
@@ -25,9 +42,8 @@ quit()
     exit 0
 }
 
+## Set up error handling
 trap 'abort' 0
-
-# set -e
 
 ## Start script
 
@@ -38,25 +54,20 @@ DEVELOP=false
 EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 
+### Check for project name argument; if none passed, show help
+if [ $# -eq 0 ]
+    then
+        showhelp
+fi
+
+### Handle arguments
 while [[ $# -gt 0 ]]
 do
     key="$1"
 
     case $key in
         -h|--help)
-            echo " "
-            echo "Lambo: Super-powered Laravel new for Laravel and Valet"
-            echo "======================================================"
-            echo " "
-            echo "lambo myApplication [arguments]"
-            echo " "
-            echo "options:"
-            echo "-h, --help                 show brief help"
-            echo "-e, --editor EDITOR        specify an editor to run 'EDITOR .' with after"
-            echo "-m, --message \"message\"    customize the initial commit message"
-            echo "-p, --path PATH            customize the path in which the new project will be created"
-            echo "-d, --develop              use Composer to install on the develop branch"
-            quit
+            showhelp
             ;;
         -p|--path)
             PROJECTPATH="$2"
@@ -83,7 +94,7 @@ done
 
 echo "
 ***********************************************
-Creating new Laravel app '$PROJECTNAME'
+Creating new Laravel app ${green}$PROJECTNAME${reset}
 ***********************************************
 "
 
@@ -122,7 +133,7 @@ echo "
 
 ***********************************************
 
-You're ready to go! Remember to cd into '$prettyPath' before you start editing."
+You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
 
 # End script; disable error handling
 trap : 0
