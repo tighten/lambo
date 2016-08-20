@@ -122,14 +122,16 @@ if [ "$(uname)" == "Darwin" ]; then
     sed -i '' '/DB_USERNAME/s/homestead/root/' .env
     sed -i '' '/DB_PASSWORD/s/secret//' .env
     sed -i '' "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/" .env
+
+    open "http://$PROJECTNAME.$TLD"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     sed -i "/DB_DATABASE/s/homestead/$PROJECTNAME/" .env
     sed -i '/DB_USERNAME/s/homestead/root/' .env
     sed -i '/DB_PASSWORD/s/secret//' .env
     sed -i "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/" .env
-fi
 
-open "http://$PROJECTNAME.$TLD"
+    xdg-open "http://$PROJECTNAME.$TLD"
+fi
 
 case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
