@@ -117,12 +117,27 @@ fi
 
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults, and appropriate domain
-sed -i '' "/DB_DATABASE/s/homestead/$PROJECTNAME/" .env
-sed -i '' '/DB_USERNAME/s/homestead/root/' .env
-sed -i '' '/DB_PASSWORD/s/secret//' .env
-sed -i '' "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/" .env
+PROJECTURL="http://$PROJECTNAME.$TLD"
+sedCommands=(
+    "/DB_DATABASE/s/homestead/$PROJECTNAME/"
+    '/DB_USERNAME/s/homestead/root/'
+    '/DB_PASSWORD/s/secret//'
+    "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
+)
 
-open "http://$PROJECTNAME.$TLD"
+if [ "$(uname)" == "Darwin" ]; then
+    for sedCommand in "${sedCommands[@]}"
+    do
+        sed -i '' $sedCommand .env
+    done
+    open $PROJECTURL
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    for sedCommand in "${sedCommands[@]}"
+    do
+        sed -i $sedCommand .env
+    done
+    xdg-open $PROJECTURL
+fi
 
 case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
