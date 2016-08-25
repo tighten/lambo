@@ -75,8 +75,10 @@ This will `laravel new superApplication`, change into that directory, make an in
 
 ## Requirements
 
-- Mac-only.
+- Mac or Ubuntu.
 - Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
+
+> Ubuntu's valet instalation can be find [here](https://github.com/cpriego/valet-ubuntu)
 
 ## Acknowledgements
 
