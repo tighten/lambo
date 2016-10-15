@@ -12,7 +12,7 @@ Super-powered `laravel new` for Laravel and Valet.
 composer global require tightenco/lambo
 ```
 
-## Upgrading 
+## Upgrading
 
 ```bash
 composer global update tightenco/lambo
@@ -64,13 +64,19 @@ This will `laravel new superApplication`, change into that directory, make an in
 
   ```bash
   # runs "subl ." in the project directory after creating the project
-  lambo superApplication -e subl 
+  lambo superApplication -e subl
   ```
 
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
   lambo superApplication --dev
+  ```
+
+- `-a` or `--auth` to use Artisan to scaffold all of the routes and views you need for authentication
+
+  ```bash
+  lambo superApplication --auth
   ```
 
 ## Requirements
