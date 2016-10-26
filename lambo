@@ -118,7 +118,7 @@ fi
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults, and appropriate domain
 PROJECTURL="http://$PROJECTNAME.$TLD"
-DB_DATABASE=${PROJECTNAME/\-/\_}
+DB_DATABASE=$(echo $PROJECTNAME | sed 's/\-/\_/g')
 sedCommands=(
     "/DB_DATABASE/s/homestead/$DB_DATABASE/"
     '/DB_USERNAME/s/homestead/root/'
