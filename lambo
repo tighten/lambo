@@ -22,6 +22,7 @@ showhelp()
     echo "${green}  -m, --message \"message\"${reset}    Customize the initial commit message"
     echo "${green}  -p, --path PATH${reset}            Customize the path in which the new project will be created"
     echo "${green}  -d, --dev${reset}                  Use Composer to install on the develop branch"
+    echo "${green}  -a, --auth${reset}                 Use Artisan to scaffold all of the routes and views you need for authentication"
     quit
 }
 
@@ -51,6 +52,7 @@ PROJECTNAME=$1
 PROJECTPATH="."
 MESSAGE="Initial commit."
 DEVELOP=false
+AUTH=false
 EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 
@@ -85,6 +87,10 @@ do
             DEVELOP=true
             shift
             ;;
+        -a|--auth)
+            AUTH=true
+            shift
+            ;;
         *)
             ;;
     esac
@@ -106,6 +112,10 @@ else
     laravel new $PROJECTNAME
 fi
 cd "$PROJECTNAME"
+if [ "$AUTH" = true ]
+then
+    php artisan make:auth
+fi
 git init
 git add .
 git commit -m "$MESSAGE"
