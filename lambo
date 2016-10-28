@@ -112,10 +112,19 @@ else
     laravel new $PROJECTNAME
 fi
 cd "$PROJECTNAME"
+
+# check if yarn is executable, otherwise use npm
+if hash yarn 2>/dev/null; then
+    yarn
+else
+    npm install
+fi
+
 if [ "$AUTH" = true ]
 then
     php artisan make:auth
 fi
+
 git init
 git add .
 git commit -m "$MESSAGE"
