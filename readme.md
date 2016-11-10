@@ -79,6 +79,12 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication --auth
   ```
 
+- `-n` or `--node` to run `yarn` if installed, otherwise runs `npm install` after creating the project
+
+  ```bash
+  lambo superApplication --node
+  ```
+
 ## Requirements
 
 - Mac or Ubuntu.

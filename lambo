@@ -23,6 +23,7 @@ showhelp()
     echo "${green}  -p, --path PATH${reset}            Customize the path in which the new project will be created"
     echo "${green}  -d, --dev${reset}                  Use Composer to install on the develop branch"
     echo "${green}  -a, --auth${reset}                 Use Artisan to scaffold all of the routes and views you need for authentication"
+    echo "${green}  -n, --node${reset}                 Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     quit
 }
 
@@ -53,6 +54,7 @@ PROJECTPATH="."
 MESSAGE="Initial commit."
 DEVELOP=false
 AUTH=false
+NODE=false
 EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 
@@ -89,6 +91,9 @@ do
         -a|--auth)
             AUTH=true
             ;;
+        -n|--node)
+            NODE=true
+            ;;
         *)
             ;;
     esac
@@ -110,10 +115,23 @@ else
     laravel new $PROJECTNAME
 fi
 cd "$PROJECTNAME"
+
+if [ "$NODE" = true ]
+then
+    # check if yarn is executable, otherwise use npm
+    if hash yarn 2>/dev/null
+    then
+        yarn
+    else
+        npm install
+    fi
+fi
+
 if [ "$AUTH" = true ]
 then
     php artisan make:auth
 fi
+
 git init
 git add .
 git commit -m "$MESSAGE"
