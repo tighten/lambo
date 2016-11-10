@@ -93,7 +93,7 @@ do
             AUTH=true
             shift
             ;;
-        -n|--npm)
+        -n|--node)
             NODE=true
             shift
             ;;
