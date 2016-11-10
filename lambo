@@ -95,7 +95,6 @@ do
             ;;
         -n|--node)
             NODE=true
-            shift
             ;;
         *)
             ;;
