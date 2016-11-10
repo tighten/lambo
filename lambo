@@ -85,11 +85,9 @@ do
             ;;
         -d|--develop|--dev)
             DEVELOP=true
-            shift
             ;;
         -a|--auth)
             AUTH=true
-            shift
             ;;
         *)
             ;;
