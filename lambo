@@ -23,7 +23,7 @@ showhelp()
     echo "${green}  -p, --path PATH${reset}            Customize the path in which the new project will be created"
     echo "${green}  -d, --dev${reset}                  Use Composer to install on the develop branch"
     echo "${green}  -a, --auth${reset}                 Use Artisan to scaffold all of the routes and views you need for authentication"
-    echo "${green}  -n, --node${reset}                 Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project."
+    echo "${green}  -n, --node${reset}                 Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     quit
 }
 
