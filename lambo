@@ -147,9 +147,12 @@ PROJECTURL="http://$PROJECTNAME.$TLD"
 sedCommands=(
     "/DB_DATABASE/s/homestead/$PROJECTNAME/"
     '/DB_USERNAME/s/homestead/root/'
-    '/DB_PASSWORD/s/secret//'
     "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
 )
+
+if ![-e .env]; then
+    cp .env-example .env
+fi;
 
 if [ "$(uname)" == "Darwin" ]; then
     for sedCommand in "${sedCommands[@]}"
