@@ -151,6 +151,8 @@ sedCommands=(
     "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
 )
 
+mv .env.example .env
+
 if [ "$(uname)" == "Darwin" ]; then
     for sedCommand in "${sedCommands[@]}"
     do
