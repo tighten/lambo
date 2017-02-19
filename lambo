@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 ## Set up colors
-red=`tput setaf 1`
-green=`tput setaf 2`
-orange=`tput setaf 3`
-reset=`tput sgr0`
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+orange=$(tput setaf 3)
+reset=$(tput sgr0)
 
 ## Init functions
 showhelp()
@@ -107,14 +107,16 @@ Creating new Laravel app ${green}$PROJECTNAME${reset}
 ***********************************************
 "
 
-cd $PROJECTPATH
+cd "$PROJECTPATH" || exit
+
 if [ "$DEVELOP" = true ]
 then
-    laravel new $PROJECTNAME --dev
+    laravel new "$PROJECTNAME" --dev
 else
-    laravel new $PROJECTNAME
+    laravel new "$PROJECTNAME"
 fi
-cd "$PROJECTNAME"
+
+cd "$PROJECTNAME" || exit
 
 if [ "$NODE" = true ]
 then
@@ -154,15 +156,15 @@ sedCommands=(
 if [ "$(uname)" == "Darwin" ]; then
     for sedCommand in "${sedCommands[@]}"
     do
-        sed -i '' $sedCommand .env
+        sed -i '' "$sedCommand" .env
     done
-    open $PROJECTURL
+    open "$PROJECTURL"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     for sedCommand in "${sedCommands[@]}"
     do
-        sed -i $sedCommand .env
+        sed -i "$sedCommand" .env
     done
-    xdg-open $PROJECTURL
+    xdg-open "$PROJECTURL"
 fi
 
 case $PROJECTPATH in
