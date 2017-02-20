@@ -59,14 +59,12 @@ EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 
 ### Check for project name argument; if none passed, show help
-if [ $# -eq 0 ]
-    then
-        showhelp
+if [[ $# -eq 0 ]]; then
+    showhelp
 fi
 
 ### Handle arguments
-while [[ $# -gt 0 ]]
-do
+while [[ $# -gt 0 ]]; do
     key="$1"
 
     case $key in
@@ -109,8 +107,7 @@ Creating new Laravel app ${green}$PROJECTNAME${reset}
 
 cd "$PROJECTPATH" || exit
 
-if [ "$DEVELOP" = true ]
-then
+if [[ "$DEVELOP" = true ]]; then
     laravel new "$PROJECTNAME" --dev
 else
     laravel new "$PROJECTNAME"
@@ -118,19 +115,16 @@ fi
 
 cd "$PROJECTNAME" || exit
 
-if [ "$NODE" = true ]
-then
+if [[ "$NODE" = true ]]; then
     # check if yarn is executable, otherwise use npm
-    if hash yarn 2>/dev/null
-    then
+    if hash yarn 2>/dev/null; then
         yarn
     else
         npm install
     fi
 fi
 
-if [ "$AUTH" = true ]
-then
+if [[ "$AUTH" = true ]]; then
     php artisan make:auth
 fi
 
@@ -138,8 +132,7 @@ git init
 git add .
 git commit -m "$MESSAGE"
 
-if [ "$EDITOR" != "" ]
-then
+if [[ "$EDITOR" != "" ]]; then
     $EDITOR .
 fi
 
@@ -153,15 +146,13 @@ sedCommands=(
     "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
 )
 
-if [ "$(uname)" == "Darwin" ]; then
-    for sedCommand in "${sedCommands[@]}"
-    do
+if [[ "$(uname)" == "Darwin" ]]; then
+    for sedCommand in "${sedCommands[@]}"; do
         sed -i '' "$sedCommand" .env
     done
     open "$PROJECTURL"
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    for sedCommand in "${sedCommands[@]}"
-    do
+elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
+    for sedCommand in "${sedCommands[@]}"; do
         sed -i "$sedCommand" .env
     done
     xdg-open "$PROJECTURL"
