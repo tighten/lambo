@@ -163,11 +163,21 @@ case $PROJECTPATH in
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
 
-echo "
+if [[ "$SHELL" != "" ]]; then
+    exec "$SHELL"
 
-***********************************************
+    echo "
 
-You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
+    ***********************************************
+
+    You're ready to go!"
+else
+    echo "
+
+    ***********************************************
+
+    You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
+fi
 
 # End script; disable error handling
 trap : 0
