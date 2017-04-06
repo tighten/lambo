@@ -106,6 +106,21 @@ if [ -d "$PROJECTPATH/$PROJECTNAME" ]; then
   quit
 fi
 
+if ! hash php 2>/dev/null; then
+  echo "${red}PHP is not installed.${reset}"
+  quit
+fi
+
+if ! hash laravel 2>/dev/null; then
+  echo "${red}Laravel installer not installed.${reset}"
+  quit
+fi
+
+if ! hash git 2>/dev/null; then
+  echo "${red}Git not installed.${reset}"
+  quit
+fi
+
 echo "
 ***********************************************
 Creating new Laravel app ${green}$PROJECTNAME${reset}
