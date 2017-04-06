@@ -99,13 +99,13 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+cd "$PROJECTPATH" || exit
+
 echo "
 ***********************************************
 Creating new Laravel app ${green}$PROJECTNAME${reset}
 ***********************************************
 "
-
-cd "$PROJECTPATH" || exit
 
 if [[ "$DEVELOP" = true ]]; then
     laravel new "$PROJECTNAME" --dev
