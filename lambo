@@ -24,6 +24,7 @@ showhelp()
     echo "${green}  -d, --dev${reset}                  Use Composer to install on the develop branch"
     echo "${green}  -a, --auth${reset}                 Use Artisan to scaffold all of the routes and views you need for authentication"
     echo "${green}  -n, --node${reset}                 Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
+    echo "${green}  -l, --link${reset}                 Creates a Valet link to the project directory"
     quit
 }
 
@@ -57,6 +58,7 @@ AUTH=false
 NODE=false
 EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+LINK=false
 
 ### Check for project name argument; if none passed, show help
 if [[ $# -eq 0 ]]; then
@@ -91,6 +93,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--node)
             NODE=true
+            ;;
+        -l|--link)
+            LINK=true
             ;;
         *)
             ;;
@@ -145,6 +150,10 @@ sedCommands=(
     '/DB_PASSWORD/s/secret//'
     "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
 )
+
+if [[ "$LINK" = true ]]; then
+    valet link "$PROJECTNAME"
+fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
     for sedCommand in "${sedCommands[@]}"; do
