@@ -85,6 +85,14 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication --node
   ```
 
+### Config
+
+You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
+
+```bash
+lambo make-config
+```
+
 ## Requirements
 
 - Mac or Ubuntu.

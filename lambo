@@ -28,6 +28,35 @@ showhelp()
     quit
 }
 
+makeconfig()
+{
+    if [[ -f ~/.lambo/config ]]; then
+        echo "Config already exists."
+        quit
+    fi
+
+    if [[ ! -d ~/.lambo ]]; then
+      mkdir ~/.lambo
+    fi
+
+    echo '#!/usr/bin/env bash
+
+PROJECTPATH="."
+MESSAGE="Initial commit."
+DEVELOP=false
+AUTH=false
+NODE=false
+EDITOR=""
+LINK=false' > ~/.lambo/config
+
+    ## Open with editor if specified, otherwise use system default
+    if [[ $EDITOR ]]; then
+        $EDITOR ~/.lambo/config
+    else
+        open ~/.lambo/config
+    fi
+}
+
 abort()
 {
     echo >&2 '
@@ -59,6 +88,11 @@ NODE=false
 EDITOR=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
+
+### Load config if it exists
+if [[ -f ~/.lambo/config ]]; then
+    source ~/.lambo/config
+fi
 
 ### Check for project name argument; if none passed, show help
 if [[ $# -eq 0 ]]; then
@@ -103,6 +137,12 @@ while [[ $# -gt 0 ]]; do
 
     shift
 done
+
+### Check if user wants to set up a config file
+if [[ $1 == "make-config" ]]; then
+    makeconfig
+    quit
+fi
 
 if [ -d "$PROJECTPATH/$PROJECTNAME" ]; then
   echo "${red}Project directory $PROJECTPATH/$PROJECTNAME already exists.${reset}"
