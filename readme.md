@@ -67,6 +67,12 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo superApplication -e subl
   ```
 
+- `-b` or `--browser` to define which browser you want to open the project in.
+
+  ```bash
+  lambo superApplication -b "/Applications/Google Chrome Canary.app"
+  ```
+
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
