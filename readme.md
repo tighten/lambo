@@ -40,6 +40,8 @@ This will `laravel new superApplication`, change into that directory, make an in
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
 
+There are also a few optional behaviors based on the parameters you pass (or define in your config file).
+
 ### Optional Arguments
 
 - `-h` or `--help` to get the help dialog
@@ -89,6 +91,20 @@ This will `laravel new superApplication`, change into that directory, make an in
 
   ```bash
   lambo superApplication --node
+  ```
+
+### Commands
+
+- `make-config` creates a config file so you don't have to pass the parameters every time you use Lambo
+
+  ```bash
+  lambo make-config
+  ```
+
+- `edit-config` edits your config file
+
+  ```bash
+  lambo edit-config
   ```
 
 ### Config
