@@ -108,6 +108,12 @@ if [[ $# -eq 0 ]]; then
     showhelp
 fi
 
+### Check if user wants to set up a config file.
+if [[ $1 == "make-config" ]]; then
+    makeconfig
+    quit
+fi
+
 ### Handle arguments
 while [[ $# -gt 0 ]]; do
     key="$1"
@@ -151,11 +157,6 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-### Check if user wants to set up a config file.
-if [[ $1 == "make-config" ]]; then
-    makeconfig
-    quit
-fi
 
 if [ -d "$PROJECTPATH/$PROJECTNAME" ]; then
   echo "${red}Project directory $PROJECTPATH/$PROJECTNAME already exists.${reset}"
