@@ -55,13 +55,18 @@ CODEEDITOR=""
 BROWSER=""
 LINK=false' > ~/.lambo/config
 
+    edit ~/.lambo/config
+}
+
+edit()
+{
     ## Open with best editor 
     if [[ $CODEEDITOR ]]; then
-        $CODEEDITOR ~/.lambo/config
+        $CODEEDITOR $1 
     elif [[ $EDITOR ]]; then
-        $EDITOR ~/.lambo/config
+        $EDITOR $1 
     else
-        vim ~/.lambo/config
+        vim $1 
     fi
 }
 
