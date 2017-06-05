@@ -51,15 +51,17 @@ MESSAGE="Initial commit."
 DEVELOP=false
 AUTH=false
 NODE=false
-EDITOR=""
+CODEEDITOR=""
 BROWSER=""
 LINK=false' > ~/.lambo/config
 
-    ## Open with editor if specified, otherwise use system default
-    if [[ $EDITOR ]]; then
+    ## Open with best editor 
+    if [[ $CODEEDITOR ]]; then
+        $CODEEDITOR ~/.lambo/config
+    elif [[ $EDITOR ]]; then
         $EDITOR ~/.lambo/config
     else
-        open ~/.lambo/config
+        vim ~/.lambo/config
     fi
 }
 
@@ -91,7 +93,7 @@ MESSAGE="Initial commit."
 DEVELOP=false
 AUTH=false
 NODE=false
-EDITOR=""
+CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
@@ -123,7 +125,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -e|--editor)
-            EDITOR="$2"
+            CODEEDITOR="$2"
             shift
             ;;
         -b|--browser)
@@ -208,8 +210,8 @@ git init
 git add .
 git commit -m "$MESSAGE"
 
-if [[ "$EDITOR" != "" ]]; then
-    $EDITOR .
+if [[ "$CODEEDITOR" != "" ]]; then
+    $CODEEDITOR .
 fi
 
 # Update .env to point to this database with `root` username and blank pw,
