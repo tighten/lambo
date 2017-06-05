@@ -18,7 +18,8 @@ showhelp()
     echo " "
     echo "${orange}Commands (lambo COMMANDNAME):"
     echo " "
-    echo "${green}   make-config${reset}                  Generate config file  "
+    echo "${green}   make-config${reset}                  Generate config file"
+    echo "${green}   edit-config${reset}                  Edit config file"
     echo " "
     echo "${orange}Options (lambo myApplication OPTIONS):"
     echo "${green}  -h, --help${reset}                    Show brief help"
@@ -31,6 +32,18 @@ showhelp()
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
     quit
+}
+
+editconfig()
+{
+    if [[ ! -f ~/.lambo/config ]]; then
+        echo "Config does not exist; creating."
+
+        makeconfig
+        return 
+    fi
+
+    edit ~/.lambo/config
 }
 
 makeconfig()
@@ -116,6 +129,11 @@ fi
 ### Check if user wants to set up a config file.
 if [[ $1 == "make-config" ]]; then
     makeconfig
+    quit
+fi
+
+if [[ $1 == "edit-config" ]]; then
+    editconfig
     quit
 fi
 
