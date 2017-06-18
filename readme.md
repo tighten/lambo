@@ -50,29 +50,23 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo --help
   ```
 
-- `-p` or `--path` to specify where to install the application.
+- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
 
   ```bash
-  lambo superApplication -p ~/Sites
+  # runs "subl ." in the project directory after creating the project
+  lambo superApplication --editor subl
   ```
 
 - `-m` or `--message` to set the first commit message.
 
   ```bash
-  lambo superApplication -m "This lambo runs fast!"
+  lambo superApplication --message "This lambo runs fast!"
   ```
 
-- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
+- `-p` or `--path` to specify where to install the application.
 
   ```bash
-  # runs "subl ." in the project directory after creating the project
-  lambo superApplication -e subl
-  ```
-
-- `-b` or `--browser` to define which browser you want to open the project in.
-
-  ```bash
-  lambo superApplication -b "/Applications/Google Chrome Canary.app"
+  lambo superApplication --path ~/Sites
   ```
 
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
@@ -91,6 +85,18 @@ There are also a few optional behaviors based on the parameters you pass (or def
 
   ```bash
   lambo superApplication --node
+  ```
+
+- `-b` or `--browser` to define which browser you want to open the project in.
+
+  ```bash
+  lambo superApplication --browser "/Applications/Google Chrome Canary.app"
+  ```
+
+- `-l` or `--link` to create a Valet link to the project directory.
+
+  ```bash
+  lambo superApplication --link
   ```
 
 ### Commands
