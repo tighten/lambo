@@ -113,6 +113,18 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo edit-config
   ```
 
+- `make-after` creates a after file so you can run additional commands after Lambo finishes
+
+  ```bash
+  lambo make-after
+  ```
+
+- `edit-after` edits your after file
+
+  ```bash
+  lambo edit-after
+  ```
+
 ### Config
 
 You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
@@ -120,6 +132,31 @@ You can create a config file at `~/.lambo/config` rather than pass the same argu
 ```bash
 lambo make-config
 ```
+
+### After File
+
+You can create an after file at `~/.lambo/after` to run additional commands after you create a new project.
+
+```bash
+lambo make-after
+```
+
+The after file is a bash script so you can include any commands here such as installing additional composer dependencies
+```
+# Install additional composer dependencies as you would from the command line.
+echo "Installing Composer Dependencies"
+composer require tightenco/mailthief tightenco/quicksand
+```
+
+or copying additional files to your new project.
+
+```bash
+# To copy standard files to new lambo project place them in ~/.lambo/includes directory.
+echo "Copying Include Files"
+cp -R ~/.lambo/includes/ $PROJECTPATH
+```
+
+You also have access to variables from your config file such as `$PROJECTPATH` and `$CODEEDITOR`.
 
 ## Requirements
 

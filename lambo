@@ -21,6 +21,9 @@ showhelp()
     echo "${green}   make-config${reset}                  Generate config file"
     echo "${green}   edit-config${reset}                  Edit config file"
     echo " "
+    echo "${green}   make-after${reset}                  Generate after file"
+    echo "${green}   edit-after${reset}                  Edit after file"
+    echo " "
     echo "${orange}Options (lambo myApplication OPTIONS):"
     echo "${green}  -h, --help${reset}                    Show brief help"
     echo "${green}  -e, --editor EDITOR${reset}           Specify an editor to run '${green}EDITOR .${reset}' with after"
@@ -69,6 +72,43 @@ BROWSER=""
 LINK=false' > ~/.lambo/config
 
     edit ~/.lambo/config
+}
+
+editafter()
+{
+    if [[ ! -f ~/.lambo/after ]]; then
+        echo "after file does not exist; creating."
+
+        makeafter
+        return
+    fi
+
+    edit ~/.lambo/after
+}
+
+makeafter()
+{
+    if [[ -f ~/.lambo/after ]]; then
+        echo "after file already exists."
+        quit
+    fi
+
+    if [[ ! -d ~/.lambo ]]; then
+      mkdir ~/.lambo
+    fi
+
+    echo '#!/usr/bin/env bash
+
+# Install additional composer dependencies as you would from the command line.
+# echo "Installing Composer Dependencies"
+# composer require tightenco/mailthief tightenco/quicksand
+
+# To copy standard files to new lambo project place them in ~/.lambo/includes directory.
+# echo "Copying Include Files"
+# cp -R ~/.lambo/includes/ $PROJECTPATH
+' > ~/.lambo/after
+
+    edit ~/.lambo/after
 }
 
 edit()
@@ -134,6 +174,17 @@ fi
 
 if [[ $1 == "edit-config" ]]; then
     editconfig
+    quit
+fi
+
+### Check if user wants to set up a after file.
+if [[ $1 == "make-after" ]]; then
+    makeafter
+    quit
+fi
+
+if [[ $1 == "edit-after" ]]; then
+    editafter
     quit
 fi
 
@@ -272,6 +323,12 @@ case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
+
+### Load after file if it exists
+if [[ -f ~/.lambo/after ]]; then
+    echo "${green}Running additional commands...${reset}"
+    source ~/.lambo/after
+fi
 
 if [[ "$SHELL" != "" ]]; then
     exec "$SHELL"
