@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "laravel/installer": "^1.3"
+        "laravel/installer": ">=1.3.1"
     },
     "bin": [
         "lambo"
