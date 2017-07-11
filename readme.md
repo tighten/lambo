@@ -113,7 +113,7 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo edit-config
   ```
 
-- `make-after` creates a after file so you can run additional commands after Lambo finishes
+- `make-after` creates an "after" file so you can run additional commands after Lambo finishes
 
   ```bash
   lambo make-after
