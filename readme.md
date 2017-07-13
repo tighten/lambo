@@ -142,7 +142,8 @@ lambo make-after
 ```
 
 The after file is a bash script so you can include any commands here such as installing additional composer dependencies
-```
+
+```bash
 # Install additional composer dependencies as you would from the command line.
 echo "Installing Composer Dependencies"
 composer require tightenco/mailthief tightenco/quicksand
