@@ -69,7 +69,9 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-LINK=false' > ~/.lambo/config
+LINK=false
+MYSQL_USERNAME="homestead"
+MYSQL_PASSWORD="secret"' > ~/.lambo/config
 
     edit ~/.lambo/config
 }
@@ -160,6 +162,7 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
+MYSQL_USERNAME="root"
 
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
@@ -225,6 +228,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--node)
             NODE=true
+            ;;
+        -m|--mysql)
+            MYSQL=true
             ;;
         -l|--link)
             LINK=true
@@ -293,6 +299,14 @@ fi
 git init
 git add .
 git commit -m "$MESSAGE"
+
+if [[ "$MYSQL" = true ]]; then
+	if [[ "$MYSQL_PASSWORD" = true ]]; then
+		echo "CREATE DATABASE IF NOT EXISTS "$PROJECTNAME | mysql -u $MYSQL_USERNAME -p $MYSQL_PASSWORD
+	else
+		echo "CREATE DATABASE IF NOT EXISTS "$PROJECTNAME | mysql -u $MYSQL_USERNAME
+	fi
+fi
 
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults, and appropriate domain
