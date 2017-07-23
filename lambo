@@ -302,9 +302,9 @@ git commit -m "$MESSAGE"
 
 if [[ "$MYSQL" = true ]]; then
 	if [[ "$MYSQL_PASSWORD" = true ]]; then
-		echo "CREATE DATABASE "$PROJECTNAME | mysql -u $MYSQL_USERNAME -p $MYSQL_PASSWORD
+		echo "CREATE DATABASE IF NOT EXISTS "$PROJECTNAME | mysql -u $MYSQL_USERNAME -p $MYSQL_PASSWORD
 	else
-		echo "CREATE DATABASE "$PROJECTNAME | mysql -u $MYSQL_USERNAME
+		echo "CREATE DATABASE IF NOT EXISTS "$PROJECTNAME | mysql -u $MYSQL_USERNAME
 	fi
 fi
 
