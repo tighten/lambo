@@ -6,6 +6,9 @@ green=$(tput setaf 2)
 orange=$(tput setaf 3)
 reset=$(tput sgr0)
 
+## Terminal Editors
+TERMINAL_EDITORS=("vim" "vi" "nano" "pico" "ed" "emacs" "nvim")
+
 ## Init functions
 showhelp()
 {
@@ -37,13 +40,18 @@ showhelp()
     quit
 }
 
+isterminaleditor () {
+    for EDITOR in $TERMINAL_EDITORS; do [[ "$EDITOR" == "$CODEEDITOR" ]] && return 0; done
+    return 1
+}
+
 editconfig()
 {
     if [[ ! -f ~/.lambo/config ]]; then
         echo "Config does not exist; creating."
 
         makeconfig
-        return 
+        return
     fi
 
     edit ~/.lambo/config
@@ -109,7 +117,7 @@ makeafter()
 
 # To add a git commit after given modifications
 # echo "Committing after modifications to Git"
-# git add . 
+# git add .
 # git commit -am "Initialize Composer dependencies and additional files."
 ' > ~/.lambo/after
 
@@ -118,13 +126,13 @@ makeafter()
 
 edit()
 {
-    ## Open with best editor 
+    ## Open with best editor
     if [[ $CODEEDITOR ]]; then
-        $CODEEDITOR $1 
+        $CODEEDITOR $1
     elif [[ $EDITOR ]]; then
-        $EDITOR $1 
+        $EDITOR $1
     else
-        vim $1 
+        vim $1
     fi
 }
 
@@ -144,6 +152,8 @@ quit()
     trap : 0
     exit 0
 }
+
+
 
 ## Set up error handling
 trap 'abort' 0
@@ -274,7 +284,9 @@ fi
 cd "$PROJECTNAME" || exit
 
 if [[ "$CODEEDITOR" != "" ]]; then
-    $CODEEDITOR .
+    if ! isterminaleditor; then
+       $CODEEDITOR .
+   fi
 fi
 
 if [[ "$NODE" = true ]]; then
@@ -335,6 +347,12 @@ if [[ -f ~/.lambo/after ]]; then
     source ~/.lambo/after
 fi
 
+if [[ "$CODEEDITOR" != "" ]]; then
+    if isterminaleditor; then
+       $CODEEDITOR .
+   fi
+fi
+
 if [[ "$SHELL" != "" ]]; then
     exec "$SHELL"
 
@@ -350,6 +368,8 @@ else
 
     You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
 fi
+
+
 
 # End script; disable error handling
 trap : 0
