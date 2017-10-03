@@ -308,6 +308,9 @@ git commit -m "$MESSAGE"
 
 # Update .env to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults, and appropriate domain
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 sedCommands=(
     "/DB_DATABASE/s/homestead/$PROJECTNAME/"
