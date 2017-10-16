@@ -99,6 +99,14 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo superApplication --link
   ```
 
+- `-s` or `--presets` to provide a list of presets files to run located in ~/.lambo/presets/.
+
+  ```bash
+  lambo superApplication --presets "API"
+  or
+  lambo superApplication --presets "base,API"
+  ```
+
 ### Commands
 
 - `make-config` creates a config file so you don't have to pass the parameters every time you use Lambo
