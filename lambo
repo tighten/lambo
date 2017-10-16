@@ -37,6 +37,7 @@ showhelp()
     echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
+    echo "${green}  -s, --preset \"preset\"${reset}       Run a set of preset commands"
     quit
 }
 
@@ -170,6 +171,7 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
+PRESETS=""
 
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
@@ -238,6 +240,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -l|--link)
             LINK=true
+            ;;
+        -s|--presets)
+            PRESETS="$2"
             ;;
         *)
             ;;
@@ -349,6 +354,18 @@ if [[ -f ~/.lambo/after ]]; then
     echo "${green}Running additional commands...${reset}"
     source ~/.lambo/after
 fi
+
+### Load preset files if they exist
+IFS=',' read -ra PRESETS <<< "$PRESETS"
+
+for PRESET in "${PRESETS[@]}"; do
+    if [[ -f ~/.lambo/presets/$PRESET.sh ]]; then
+        echo "${green}Running $PRESET Preset...${reset}"
+        source "$HOME/.lambo/presets/$PRESET.sh"
+    else
+        echo "${red}Preset $PRESET not found. ${reset}"
+    fi
+done
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if isterminaleditor; then
