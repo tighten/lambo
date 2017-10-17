@@ -21,23 +21,23 @@ showhelp()
     echo " "
     echo "${orange}Commands (lambo COMMANDNAME):"
     echo " "
-    echo "${green}   make-config${reset}                  Generate config file"
-    echo "${green}   edit-config${reset}                  Edit config file"
+    echo "${green}   make-config${reset}                    Generate config file"
+    echo "${green}   edit-config${reset}                    Edit config file"
     echo " "
-    echo "${green}   make-after${reset}                   Generate after file"
-    echo "${green}   edit-after${reset}                   Edit after file"
+    echo "${green}   make-after${reset}                     Generate after file"
+    echo "${green}   edit-after${reset}                     Edit after file"
     echo " "
     echo "${orange}Options (lambo myApplication OPTIONS):"
-    echo "${green}  -h, --help${reset}                    Show brief help"
-    echo "${green}  -e, --editor EDITOR${reset}           Specify an editor to run '${green}EDITOR .${reset}' with after"
-    echo "${green}  -m, --message \"message\"${reset}       Customize the initial commit message"
-    echo "${green}  -p, --path PATH${reset}               Customize the path in which the new project will be created"
-    echo "${green}  -d, --dev${reset}                     Use Composer to install on the develop branch"
-    echo "${green}  -a, --auth${reset}                    Use Artisan to scaffold all of the routes and views you need for authentication"
-    echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
-    echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
-    echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
-    echo "${green}  -s, --preset \"preset\"${reset}       Run a set of preset commands"
+    echo "${green}  -h, --help${reset}                      Show brief help"
+    echo "${green}  -e, --editor EDITOR${reset}             Specify an editor to run '${green}EDITOR .${reset}' with after"
+    echo "${green}  -m, --message \"message\"${reset}         Customize the initial commit message"
+    echo "${green}  -p, --path PATH${reset}                 Customize the path in which the new project will be created"
+    echo "${green}  -d, --dev${reset}                       Use Composer to install on the develop branch"
+    echo "${green}  -a, --auth${reset}                      Use Artisan to scaffold all of the routes and views you need for authentication"
+    echo "${green}  -n, --node${reset}                      Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
+    echo "${green}  -b, --browser \"browser path\"${reset}    Opens site in specified browser"
+    echo "${green}  -l, --link${reset}                      Creates a Valet link to the project directory"
+    echo "${green}  -r, --recipes \"recipe1,recipe2\"${reset} Run a set of recipe files"
     quit
 }
 
@@ -171,7 +171,7 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
-PRESETS=""
+RECIPES=""
 
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
@@ -241,8 +241,8 @@ while [[ $# -gt 0 ]]; do
         -l|--link)
             LINK=true
             ;;
-        -s|--presets)
-            PRESETS="$2"
+        -r|--recipes)
+            RECIPES="$2"
             ;;
         *)
             ;;
@@ -356,14 +356,14 @@ if [[ -f ~/.lambo/after ]]; then
 fi
 
 ### Load preset files if they exist
-IFS=',' read -ra PRESETS <<< "$PRESETS"
+IFS=',' read -ra RECIPES <<< "$RECIPES"
 
-for PRESET in "${PRESETS[@]}"; do
-    if [[ -f ~/.lambo/presets/$PRESET.sh ]]; then
-        echo "${green}Running $PRESET Preset...${reset}"
-        source "$HOME/.lambo/presets/$PRESET.sh"
+for RECIPE in "${RECIPES[@]}"; do
+    if [[ -f ~/.lambo/recipes/$RECIPE.sh ]]; then
+        echo "${green}Running $RECIPE Recipe...${reset}"
+        source "$HOME/.lambo/recipes/$RECIPE.sh"
     else
-        echo "${red}Preset $PRESET not found. ${reset}"
+        echo "${red}Recipe $RECIPE not found. ${reset}"
     fi
 done
 
