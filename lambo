@@ -29,13 +29,13 @@ showhelp()
     echo " "
     echo "${orange}Options (lambo myApplication OPTIONS):"
     echo "${green}  -h, --help${reset}                    Show brief help"
-    echo "${green}  -e, --editor EDITOR${reset}           Specify an editor to run '${green}EDITOR .${reset}' with after"
-    echo "${green}  -m, --message \"message\"${reset}       Customize the initial commit message"
-    echo "${green}  -p, --path PATH${reset}               Customize the path in which the new project will be created"
+    echo "${green}  -e, --editor=EDITOR${reset}           Specify an editor to run '${green}EDITOR .${reset}' with after"
+    echo "${green}  -m, --message=\"message\"${reset}       Customize the initial commit message"
+    echo "${green}  -p, --path=PATH${reset}               Customize the path in which the new project will be created"
     echo "${green}  -d, --dev${reset}                     Use Composer to install on the develop branch"
     echo "${green}  -a, --auth${reset}                    Use Artisan to scaffold all of the routes and views you need for authentication"
     echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
-    echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
+    echo "${green}  -b, --browser=\"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
     quit
 }

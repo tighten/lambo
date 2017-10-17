@@ -54,19 +54,19 @@ There are also a few optional behaviors based on the parameters you pass (or def
 
   ```bash
   # runs "subl ." in the project directory after creating the project
-  lambo superApplication --editor subl
+  lambo superApplication --editor=subl
   ```
 
 - `-m` or `--message` to set the first commit message.
 
   ```bash
-  lambo superApplication --message "This lambo runs fast!"
+  lambo superApplication --message="This lambo runs fast!"
   ```
 
 - `-p` or `--path` to specify where to install the application.
 
   ```bash
-  lambo superApplication --path ~/Sites
+  lambo superApplication --path=~/Sites
   ```
 
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
@@ -90,7 +90,7 @@ There are also a few optional behaviors based on the parameters you pass (or def
 - `-b` or `--browser` to define which browser you want to open the project in.
 
   ```bash
-  lambo superApplication --browser "/Applications/Google Chrome Canary.app"
+  lambo superApplication --browser="/Applications/Google Chrome Canary.app"
   ```
 
 - `-l` or `--link` to create a Valet link to the project directory.
