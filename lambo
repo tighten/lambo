@@ -272,6 +272,16 @@ if ! hash git 2>/dev/null; then
   quit
 fi
 
+### Check if preset files exist
+IFS=',' read -ra RECIPES <<< "$RECIPES"
+
+for RECIPE in "${RECIPES[@]}"; do
+    if [[ ! -f ~/.lambo/recipes/$RECIPE.sh ]]; then
+        echo "${red}Recipe $RECIPE not found. ${reset}"
+        abort;
+    fi
+done
+
 cd "$PROJECTPATH" || exit
 
 echo "
@@ -355,16 +365,10 @@ if [[ -f ~/.lambo/after ]]; then
     source ~/.lambo/after
 fi
 
-### Load preset files if they exist
-IFS=',' read -ra RECIPES <<< "$RECIPES"
-
+### Load recipe files
 for RECIPE in "${RECIPES[@]}"; do
-    if [[ -f ~/.lambo/recipes/$RECIPE.sh ]]; then
-        echo "${green}Running $RECIPE Recipe...${reset}"
-        source "$HOME/.lambo/recipes/$RECIPE.sh"
-    else
-        echo "${red}Recipe $RECIPE not found. ${reset}"
-    fi
+    echo "${green}Running $RECIPE Recipe...${reset}"
+    source "$HOME/.lambo/recipes/$RECIPE.sh"
 done
 
 if [[ "$CODEEDITOR" != "" ]]; then
