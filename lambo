@@ -205,26 +205,28 @@ fi
 
 ### Handle arguments
 while [[ $# -gt 0 ]]; do
-    key="$1"
+    IFS='=' read -ra PARAM <<< "$1"
+    key="${PARAM[0]}"
+    value="${PARAM[1]}"
 
     case $key in
         -h|--help)
             showhelp
             ;;
         -p|--path)
-            PROJECTPATH="$2"
+            PROJECTPATH="$value"
             shift
             ;;
         -m|--message)
-            MESSAGE="$2"
+            MESSAGE="$value"
             shift
             ;;
         -e|--editor)
-            CODEEDITOR="$2"
+            CODEEDITOR="$value"
             shift
             ;;
         -b|--browser)
-            BROWSER="$2"
+            BROWSER="$value"
             shift
             ;;
         -d|--develop|--dev)
