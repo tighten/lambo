@@ -37,6 +37,7 @@ showhelp()
     echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
+    echo "${green}  -c, --createdb${reset}                Creates a MySQL database named {PROJECTNAME} using either default credentials, or credentials defined in the lambo config file"
     quit
 }
 
@@ -170,6 +171,10 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
+DB_USERNAME="root"
+DB_PASSWORD=""
+DB_HOST="127.0.0.1"
+DB_PORT="3306"
 
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
@@ -239,6 +244,9 @@ while [[ $# -gt 0 ]]; do
         -l|--link)
             LINK=true
             ;;
+        -c|--createdb)
+            CREATEDB=true
+            ;;
         *)
             ;;
     esac
@@ -298,6 +306,19 @@ if [[ "$NODE" = true ]]; then
     fi
 fi
 
+# Create a MySQL Database by passing in -c or --createdb
+# Defining MYSQL_PWD to avoid insecure password warning... user beware
+if [[ "$CREATEDB" = true ]]; then
+    echo "${green}Checking if a MySQL database named $PROJECTNAME already exists${reset}"
+    DBEXISTS=`MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST -e "SHOW DATABASES" | grep $PROJECTNAME`
+    if [ "$DBEXISTS" == "$PROJECTNAME" ]; then
+        echo "${orange}A MySQL database named $PROJECTNAME already exists; not creating it${reset}"
+    else
+        echo "${green}Creating a MySQL database named $PROJECTNAME on host $DB_HOST with user $DB_USERNAME${reset}"
+        echo "CREATE DATABASE IF NOT EXISTS $PROJECTNAME" | MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST
+    fi
+fi
+
 if [[ "$AUTH" = true ]]; then
     php artisan make:auth
 fi
@@ -314,8 +335,10 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 sedCommands=(
     "/DB_DATABASE/s/homestead/$PROJECTNAME/"
-    '/DB_USERNAME/s/homestead/root/'
-    '/DB_PASSWORD/s/secret//'
+    "/DB_USERNAME/s/homestead/$DB_USERNAME/"
+    "/DB_PASSWORD/s/secret/$DB_PASSWORD/"
+    "/DB_HOST/s/127.0.0.1/$DB_HOST/"
+    "/DB_PORT/s/3306/$DB_PORT/"
     "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
 )
 
