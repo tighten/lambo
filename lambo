@@ -37,7 +37,7 @@ showhelp()
     echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
-    echo "${green}  -c, --createdb${reset}                Creates a MySQL database named {PROJECTNAME} using either default credentials, or credentials defined in the lambo config file"
+    echo "${green}  -c, --createdb type${reset}           Creates a database named {PROJECTNAME} using default or lambo config credentials; type = mysql|sqlite"
     quit
 }
 
@@ -171,10 +171,12 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
+DB_CONNECTION="mysql"
 DB_USERNAME="root"
 DB_PASSWORD=""
 DB_HOST="127.0.0.1"
 DB_PORT="3306"
+DB_NAME="$PROJECTNAME"
 
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
@@ -245,7 +247,8 @@ while [[ $# -gt 0 ]]; do
             LINK=true
             ;;
         -c|--createdb)
-            CREATEDB=true
+            CREATEDB="$2"
+            shift
             ;;
         *)
             ;;
@@ -306,16 +309,27 @@ if [[ "$NODE" = true ]]; then
     fi
 fi
 
-# Create a MySQL Database by passing in -c or --createdb
+# Create a database by passing in -c or --createdb with sqlite or mysql
 # Defining MYSQL_PWD to avoid insecure password warning... user beware
-if [[ "$CREATEDB" = true ]]; then
-    echo "${green}Checking if a MySQL database named $PROJECTNAME already exists${reset}"
-    DBEXISTS=`MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST -e "SHOW DATABASES" | grep $PROJECTNAME`
-    if [ "$DBEXISTS" == "$PROJECTNAME" ]; then
-        echo "${orange}A MySQL database named $PROJECTNAME already exists; not creating it${reset}"
+if [[ "$CREATEDB" != "" ]]; then
+    if [[ "$CREATEDB" == "sqlite" ]]; then
+        echo "${green}Creating an SQLite database here: database/$PROJECTNAME.sqlite${reset}"
+        DB_CONNECTION="sqlite"
+        DB_NAME="database\/$PROJECTNAME.sqlite"
+        touch "database/$PROJECTNAME.sqlite"
+    elif [[ "$CREATEDB" == "mysql" ]]; then
+        echo "${green}Checking if a MySQL database named $PROJECTNAME already exists${reset}"
+        DBEXISTS=`MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST -e "SHOW DATABASES" | grep $PROJECTNAME`
+        DB_CONNECTION="mysql"
+        if [ "$DBEXISTS" == "$PROJECTNAME" ]; then
+            echo "${orange}A MySQL database named $PROJECTNAME already exists; not creating it${reset}"
+        else
+            echo "${green}Creating a MySQL database named $PROJECTNAME on host $DB_HOST with user $DB_USERNAME${reset}"
+            echo "CREATE DATABASE IF NOT EXISTS $PROJECTNAME" | MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST
+        fi
     else
-        echo "${green}Creating a MySQL database named $PROJECTNAME on host $DB_HOST with user $DB_USERNAME${reset}"
-        echo "CREATE DATABASE IF NOT EXISTS $PROJECTNAME" | MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST
+        echo "${red}Unknown database type ($CREATEDB) to create; did you mean sqlite or mysql?${reset}";
+        quit
     fi
 fi
 
@@ -334,7 +348,8 @@ if [ ! -f .env ]; then
 fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 sedCommands=(
-    "/DB_DATABASE/s/homestead/$PROJECTNAME/"
+    "/DB_CONNECTION/s/mysql/$DB_CONNECTION/"
+    "/DB_DATABASE/s/homestead/$DB_NAME/"
     "/DB_USERNAME/s/homestead/$DB_USERNAME/"
     "/DB_PASSWORD/s/secret/$DB_PASSWORD/"
     "/DB_HOST/s/127.0.0.1/$DB_HOST/"
