@@ -40,6 +40,8 @@ This will `laravel new superApplication`, change into that directory, make an in
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
 
+There are also a few optional behaviors based on the parameters you pass (or define in your config file).
+
 ### Optional Arguments
 
 - `-h` or `--help` to get the help dialog
@@ -48,23 +50,23 @@ This will `laravel new superApplication`, change into that directory, make an in
   lambo --help
   ```
 
-- `-p` or `--path` to specify where to install the application.
+- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
 
   ```bash
-  lambo superApplication -p ~/Sites
+  # runs "subl ." in the project directory after creating the project
+  lambo superApplication --editor subl
   ```
 
 - `-m` or `--message` to set the first commit message.
 
   ```bash
-  lambo superApplication -m "This lambo runs fast!"
+  lambo superApplication --message "This lambo runs fast!"
   ```
 
-- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
+- `-p` or `--path` to specify where to install the application.
 
   ```bash
-  # runs "subl ." in the project directory after creating the project
-  lambo superApplication -e subl
+  lambo superApplication --path ~/Sites
   ```
 
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
@@ -84,6 +86,78 @@ This will `laravel new superApplication`, change into that directory, make an in
   ```bash
   lambo superApplication --node
   ```
+
+- `-b` or `--browser` to define which browser you want to open the project in.
+
+  ```bash
+  lambo superApplication --browser "/Applications/Google Chrome Canary.app"
+  ```
+
+- `-l` or `--link` to create a Valet link to the project directory.
+
+  ```bash
+  lambo superApplication --link
+  ```
+
+### Commands
+
+- `make-config` creates a config file so you don't have to pass the parameters every time you use Lambo
+
+  ```bash
+  lambo make-config
+  ```
+
+- `edit-config` edits your config file
+
+  ```bash
+  lambo edit-config
+  ```
+
+- `make-after` creates an "after" file so you can run additional commands after Lambo finishes
+
+  ```bash
+  lambo make-after
+  ```
+
+- `edit-after` edits your after file
+
+  ```bash
+  lambo edit-after
+  ```
+
+### Config
+
+You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
+
+```bash
+lambo make-config
+```
+
+### After File
+
+You can create an after file at `~/.lambo/after` to run additional commands after you create a new project.
+
+```bash
+lambo make-after
+```
+
+The after file is a bash script so you can include any commands here such as installing additional composer dependencies
+
+```bash
+# Install additional composer dependencies as you would from the command line.
+echo "Installing Composer Dependencies"
+composer require tightenco/mailthief tightenco/quicksand
+```
+
+or copying additional files to your new project.
+
+```bash
+# To copy standard files to new lambo project place them in ~/.lambo/includes directory.
+echo "Copying Include Files"
+cp -R ~/.lambo/includes/ $PROJECTPATH
+```
+
+You also have access to variables from your config file such as `$PROJECTPATH` and `$CODEEDITOR`.
 
 ## Requirements
 
