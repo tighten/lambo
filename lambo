@@ -319,13 +319,13 @@ if [[ "$CREATEDB" != "" ]]; then
         touch "database/$PROJECTNAME.sqlite"
     elif [[ "$CREATEDB" == "mysql" ]]; then
         echo "${green}Checking if a MySQL database named $PROJECTNAME already exists${reset}"
-        DBEXISTS=`MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST -e "SHOW DATABASES" | grep $PROJECTNAME`
+        DBEXISTS=`MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST -e "SHOW DATABASES" | grep $DB_NAME`
         DB_CONNECTION="mysql"
-        if [ "$DBEXISTS" == "$PROJECTNAME" ]; then
-            echo "${orange}A MySQL database named $PROJECTNAME already exists; not creating it${reset}"
+        if [ "$DBEXISTS" == "$DB_NAME" ]; then
+            echo "${orange}A MySQL database named $DB_NAME already exists; not creating it${reset}"
         else
-            echo "${green}Creating a MySQL database named $PROJECTNAME on host $DB_HOST with user $DB_USERNAME${reset}"
-            echo "CREATE DATABASE IF NOT EXISTS $PROJECTNAME" | MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST
+            echo "${green}Creating a MySQL database named $DB_NAME on host $DB_HOST with user $DB_USERNAME${reset}"
+            echo "CREATE DATABASE IF NOT EXISTS $DB_NAME" | MYSQL_PWD=$DB_PASSWORD mysql -u$DB_USERNAME -P$DB_PORT -h$DB_HOST
         fi
     else
         echo "${red}Unknown database type ($CREATEDB) to create; did you mean sqlite or mysql?${reset}";
