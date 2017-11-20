@@ -316,7 +316,7 @@ perlCommands=(
     "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
     's/(DB_USERNAME=)(.*)/\1root/g'
     's/(DB_PASSWORD=)(.*)/\1/g'
-    "s/(APP_URL=)(.*)/\1$PROJECTNAME\.$TLD/g"
+    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
 if [[ "$LINK" = true ]]; then
