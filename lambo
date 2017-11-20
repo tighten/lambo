@@ -347,33 +347,32 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
-sedCommands=(
-    "/DB_CONNECTION/s/mysql/$DB_CONNECTION/"
-    "/DB_DATABASE/s/homestead/$DB_NAME/"
-    "/DB_USERNAME/s/homestead/$DB_USERNAME/"
-    "/DB_PASSWORD/s/secret/$DB_PASSWORD/"
-    "/DB_HOST/s/127.0.0.1/$DB_HOST/"
-    "/DB_PORT/s/3306/$DB_PORT/"
-    "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
+
+perlCommands=(
+    "s/(DB_CONNECTION=)(.*)/\1$DB_CONNECTION/g"
+    "s/(DB_HOST=)(.*)/\1$DB_HOST/g"
+    "s/(DB_PORT=)(.*)/\1$DB_PORT/g"
+    "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
+    's/(DB_USERNAME=)(.*)/\1root/g'
+    's/(DB_PASSWORD=)(.*)/\1/g'
+    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
 fi
 
+for perlCommand in "${perlCommands[@]}"; do
+    perl -pi -e "$perlCommand" ".env"
+done
+
 if [[ "$(uname)" == "Darwin" ]]; then
-    for sedCommand in "${sedCommands[@]}"; do
-        sed -i '' "$sedCommand" .env
-    done
     if [[ "$BROWSER" != "" ]]; then
         open -a "$BROWSER" "$PROJECTURL"
     else
         open "$PROJECTURL"
     fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    for sedCommand in "${sedCommands[@]}"; do
-        sed -i "$sedCommand" .env
-    done
     xdg-open "$PROJECTURL"
 fi
 
