@@ -312,30 +312,28 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
-sedCommands=(
-    "/DB_DATABASE/s/homestead/$PROJECTNAME/"
-    '/DB_USERNAME/s/homestead/root/'
-    '/DB_PASSWORD/s/secret//'
-    "/APP_URL/s/localhost/$PROJECTNAME\.$TLD/"
+perlCommands=(
+    "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
+    's/(DB_USERNAME=)(.*)/\1root/g'
+    's/(DB_PASSWORD=)(.*)/\1/g'
+    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
 fi
 
+for perlCommand in "${perlCommands[@]}"; do
+    perl -pi -e "$perlCommand" ".env"
+done
+
 if [[ "$(uname)" == "Darwin" ]]; then
-    for sedCommand in "${sedCommands[@]}"; do
-        sed -i '' "$sedCommand" .env
-    done
     if [[ "$BROWSER" != "" ]]; then
         open -a "$BROWSER" "$PROJECTURL"
     else
         open "$PROJECTURL"
     fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    for sedCommand in "${sedCommands[@]}"; do
-        sed -i "$sedCommand" .env
-    done
     xdg-open "$PROJECTURL"
 fi
 
