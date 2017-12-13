@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "laravel-zero/framework": "4.0.*"
+        "laravel-zero/framework": "4.0.*",
+        "tivie/php-os-detector": "^1.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
