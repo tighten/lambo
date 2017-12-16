@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use Illuminate\Filesystem;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Process\ExecutableFinder;
@@ -369,12 +370,7 @@ class NewCommand extends Command
         if ($type === 'sqlite') {
             $basedir = $this->projectpath.DIRECTORY_SEPARATOR.'database';
 
-            // @todo Could not find nice way to add (touch) an empty file here with Filesystem so am doing it manually
-            $process = new Process('touch database.sqlite');
-            $process->setWorkingDirectory($basedir);
-            $process->run();
-
-            $this->info($process->getOutput());
+            File::put($basedir . 'database.sqlite', '');
 
             $this->updateDotEnv([
                 'DB_CONNECTION' => 'sqlite',
