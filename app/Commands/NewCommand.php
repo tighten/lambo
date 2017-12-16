@@ -61,7 +61,7 @@ class NewCommand extends Command
     /**
      * Create a new command instance.
      */
-    public function __construct()
+    public function __construct(ExecutableFinder $finder)
     {
         parent::__construct();
 
@@ -69,6 +69,7 @@ class NewCommand extends Command
         $this->basepath = $this->cwd;
 
         $this->os = new \Tivie\OS\Detector();
+        $this->finder = $finder;
     }
 
     /**
@@ -81,8 +82,7 @@ class NewCommand extends Command
         $this->projectname = $this->argument('name');
         $this->projecturl = 'http://'.$this->projectname.'.dev';
 
-        $this->getAvailableTools();
-        if (! $this->tools['laravel']) {
+        if (! $this->hasTool('laravel')) {
             $this->error('Unable to find laravel installer so I must exit. One day I will use composer here instead of exiting.');
             exit;
         }
@@ -153,30 +153,20 @@ class NewCommand extends Command
         }
 
         if ($this->option('link')) {
-            if ($this->tools['valet']) {
+            if ($this->hasTool('valet')) {
                 if ($this->doValetLink()) {
                     $this->openBrowser();
                 }
             }
         }
 
-        if ($this->tools['git']) {
+        if ($this->hasTool('git')) {
             $this->doGit();
         }
 
         $this->openTextEditor();
 
         $this->info("You're ready to go! Remember to cd into '{$this->projectpath}' before you start editing.");
-    }
-
-    protected function getAvailableTools()
-    {
-        $finder = new ExecutableFinder();
-
-        $checks = ['yarn', 'npm', 'git', 'valet', 'laravel', 'composer'];
-        foreach ($checks as $check) {
-            $this->tools[$check] = $finder->find($check);
-        }
     }
 
     protected function setBasePath()
@@ -255,9 +245,9 @@ class NewCommand extends Command
     protected function doNodeOrYarn()
     {
         $command = '';
-        if ($this->tools['yarn']) {
+        if ($this->hasTool('yarn')) {
             $command = 'yarn';
-        } elseif ($this->tools['npm']) {
+        } elseif ($this->hasTool('npm')) {
             $command = 'npm install';
         }
 
@@ -299,7 +289,7 @@ class NewCommand extends Command
 
     protected function doValetLink()
     {
-        if (! $this->tools['valet']) {
+        if (! $this->hasTool('valet')) {
             $this->warn('Cannot find valet on your system so a valet link was not created.');
 
             return false;
@@ -327,7 +317,7 @@ class NewCommand extends Command
             $this->commitmessage = $this->option('message');
         }
 
-        if (! $this->tools['git']) {
+        if (! $this->hasTool('git')) {
             $this->info("Unable to find 'git' on the system so I cannot initialize a git repo in '{$this->projectpath}'");
 
             return false;
@@ -470,5 +460,14 @@ class NewCommand extends Command
             $process->run();
             $this->line($process->getOutput());
         }
+    }
+
+    protected function hasTool($tool)
+    {
+        if (! array_key_exists($tool, $this->tools)) {
+            $this->tools[$tool] = $this->finder->find($tool);
+        }
+
+        return $this->tools[$tool];
     }
 }
