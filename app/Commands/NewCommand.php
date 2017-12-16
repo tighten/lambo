@@ -7,6 +7,7 @@ use Symfony\Component\Process\Process;
 use LaravelZero\Framework\Commands\Command;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Tivie\OS\Detector;
 
 class NewCommand extends Command
 {
@@ -20,7 +21,7 @@ class NewCommand extends Command
                         {--a|auth : Run make:auth}
                         {--b|browser : Browser you want to open the project in}
                         {--c|createdb= : Create a database; pass in sqlite or mysql}
-                        {--d|dev  : Choose the dev branch instead of master}
+                        {--d|dev : Choose the dev branch instead of master}
                         {--e|editor= : Text editor to open the project in}
                         {--l|link : Create a Valet link to the project directory}
                         {--m|message= : Set the first commit message}
@@ -68,7 +69,7 @@ class NewCommand extends Command
         $this->cwd = getcwd();
         $this->basepath = $this->cwd;
 
-        $this->os = new \Tivie\OS\Detector();
+        $this->os = new Detector;
         $this->finder = $finder;
     }
 
@@ -244,7 +245,7 @@ class NewCommand extends Command
 
     protected function doNodeOrYarn()
     {
-        $command = '';
+        $command = null;
         if ($this->hasTool('yarn')) {
             $command = 'yarn';
         } elseif ($this->hasTool('npm')) {
@@ -369,7 +370,7 @@ class NewCommand extends Command
             return false;
         }
 
-        $this->info("Found editor $editor so an opening it now");
+        $this->info("Found editor $editor so am opening it now");
 
         $process = new Process("$editor .");
         $process->setWorkingDirectory($this->projectpath);
