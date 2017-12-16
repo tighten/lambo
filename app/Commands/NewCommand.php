@@ -219,28 +219,7 @@ class NewCommand extends Command
             'APP_URL' => $this->projecturl,
         ];
 
-        // @todo There has to be a better way; opening/closing a file 4x is wrong
-        foreach ($changes as $name => $newvalue) {
-            $this->replaceEnvVariable($name, $newvalue);
-        }
-    }
-
-    protected function replaceEnvVariable($name, $newvalue)
-    {
-        // @todo will .env always exist here? Check if not and copy over .env.example?
-        // @todo research a more official way to replace .env values... I could not find one
-        $contents = file_get_contents($this->projectpath.DIRECTORY_SEPARATOR.'.env');
-
-        $newcontents = $contents;
-        preg_match("@$name=(.*)@", $contents, $matches);
-        if (isset($matches[1])) {
-            // @todo sanitize new value and research .env guidelines
-            $newcontents = str_replace("$name=$matches[1]", "$name=$newvalue", $newcontents);
-        }
-
-        file_put_contents($this->projectpath.DIRECTORY_SEPARATOR.'.env', $newcontents);
-
-        return ($newcontents !== $contents) ? true : false;
+        return $this->updateDotEnv($changes);
     }
 
     protected function doNodeOrYarn()
@@ -397,9 +376,10 @@ class NewCommand extends Command
 
             $this->info($process->getOutput());
 
-            $this->replaceEnvVariable('DB_CONNECTION', 'sqlite');
-            // @todo Seems this must be a full path, true? Also, should we use a config/ file instead of .env?
-            $this->replaceEnvVariable('DB_DATABASE', $this->projectpath.'/database/database.sqlite');
+            $this->updateDotEnv([
+                'DB_CONNECTION' => 'sqlite',
+                'DB_DATABASE' => $this->projectpath.'/database/database.sqlite'
+            ]);
 
             return true;
         }
@@ -461,6 +441,63 @@ class NewCommand extends Command
             $process->run();
             $this->line($process->getOutput());
         }
+    }
+
+
+    /**
+     * @param $changes array of 'OPTIONNAME' => 'VALUE' pairs
+     * @return bool
+     */
+    function updateDotEnv($changes)
+    {
+        // We'll always write to this path
+        $envpath = $this->projectpath.DIRECTORY_SEPARATOR.'.env';
+        if (file_exists($envpath)) {
+            $lines = file($this->projectpath.DIRECTORY_SEPARATOR.'.env', FILE_IGNORE_NEW_LINES);
+        } else {
+            if (file_exists($this->projectpath.DIRECTORY_SEPARATOR.'.env.example')) {
+                $lines = file($this->projectpath.DIRECTORY_SEPARATOR.'.env.example', FILE_IGNORE_NEW_LINES);
+            } else {
+                $this->error('I could not find a valid .env or .env.example file to update; this is not good.');
+                return false;
+            }
+        }
+        $tracker = [];
+        foreach ($lines as $line) {
+
+            // Is it a key=value pair? And not a comment?
+            if (false !== strpos($line, '=') && '#' !== substr($line, 0, 1)) {
+
+                list($key) = explode('=', $line, 2);
+
+                // Track keys so we can append key=value pairs from $changes that don't exist currently
+                $tracker[$key] = true;
+
+                // Do we have an update for it?
+                if (array_key_exists($key, $changes)) {
+
+                    // Change it
+                    $out[] = $key . '=' . trim($changes[$key]);
+
+                } else {
+                    // Leave it
+                    $out[] = $line;
+                }
+
+            } else {
+                // Empty line or comment; leave it
+                $out[] = $line;
+            }
+        }
+
+        // If new key=value is not in .env then simply append it to the new .env for now
+        foreach ($changes as $key => $value) {
+            if (! array_key_exists($key, $tracker)) {
+                $out[] = $key . '=' . $value;
+            }
+        }
+
+        return file_put_contents($envpath, implode("\n", $out));
     }
 
     protected function hasTool($tool)
