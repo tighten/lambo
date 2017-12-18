@@ -132,22 +132,7 @@ class NewCommand extends Command
         }
 
         if ($this->option('createdb')) {
-            if (! in_array($this->option('createdb'), $this->dbtypes)) {
-                $this->info("You passed in '--createdb ".$this->option('createdb')."' but I do not understand");
-                $type = $this->anticipate('What type of database would you like to install? Options are '.implode(' or ', $this->dbtypes).'.', $this->dbtypes, $this->dbtypes[0]);
-            } else {
-                $type = $this->option('createdb');
-            }
-
-            if (! in_array($type, $this->dbtypes)) {
-                $this->alert("Now you're being silly. Entering $type, really? Okay, I won't create a database for you.");
-            } else {
-                $this->info("I am creating a new $type database");
-                if ($this->createDatabase($type)) {
-                    $this->info("I am executing 'php artisan migrate:fresh'");
-                    $this->migrateFresh();
-                }
-            }
+            $this->chooseDatabase($this->option('createdb'));
         }
 
         if ($this->option('node')) {
@@ -248,6 +233,27 @@ class NewCommand extends Command
         foreach ($iterator as $data) {
             $this->line($data);
         }
+    }
+
+    protected function chooseDatabase($dbtype)
+    {
+        if (! in_array($dbtype, $this->dbtypes)) {
+            $this->info("You passed in '--createdb '{$dbtype}' but I do not understand");
+            $type = $this->anticipate('What type of database would you like to install? Options are '.implode(' or ', $this->dbtypes) . '.', $this->dbtypes, $this->dbtypes[0]);
+        } else {
+            $type = $dbtype;
+        }
+
+        if (! in_array($type, $this->dbtypes)) {
+            $this->alert("Now you're being silly. Entering '$type', really? Okay, I won't create a database for you.");
+        } else {
+            $this->info("I am creating a new $type database");
+            if ($this->createDatabase($type)) {
+                $this->info("I am executing 'php artisan migrate:fresh'");
+                $this->migrateFresh();
+            }
+        }
+
     }
 
     protected function doAuth()
@@ -368,13 +374,13 @@ class NewCommand extends Command
     protected function createDatabase($type = 'sqlite')
     {
         if ($type === 'sqlite') {
-            $basedir = $this->projectpath . DIRECTORY_SEPARATOR . 'database';
+            $sqlitepath = $this->projectpath . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'database.sqlite';
 
-            File::put($basedir . 'database.sqlite', '');
+            File::put($sqlitepath, '');
 
             $this->updateDotEnv([
                 'DB_CONNECTION' => 'sqlite',
-                'DB_DATABASE' => $this->projectpath . '/database/database.sqlite',
+                'DB_DATABASE' => $sqlitepath,
             ]);
 
             return true;
