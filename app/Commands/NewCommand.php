@@ -2,12 +2,12 @@
 
 namespace App\Commands;
 
-use Illuminate\Filesystem;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Process\Process;
 use LaravelZero\Framework\Commands\Command;
-use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\Process;
 use Tivie\OS\Detector;
 
 class NewCommand extends Command
@@ -82,7 +82,7 @@ class NewCommand extends Command
     public function handle(): void
     {
         $this->projectname = $this->argument('name');
-        $this->projecturl = 'http://'.$this->projectname.'.dev';
+        $this->projecturl = 'http://' . $this->projectname . '.dev';
 
         if (! $this->hasTool('laravel')) {
             $this->error('Unable to find laravel installer so I must exit. One day I will use composer here instead of exiting.');
@@ -91,7 +91,7 @@ class NewCommand extends Command
 
         $this->setBasePath();
 
-        $this->projectpath = $this->basepath.DIRECTORY_SEPARATOR.$this->projectname;
+        $this->projectpath = $this->basepath . DIRECTORY_SEPARATOR . $this->projectname;
 
         if (is_dir($this->projectpath)) {
             if (! $this->askToAndRemoveProject()) {
@@ -191,7 +191,7 @@ class NewCommand extends Command
         $this->info("The directory '{$this->projectpath}' already exists.");
 
         if ($this->confirm("Shall I proceed by removing the following directory? {$this->projectpath}")) {
-            $fs = new Filesystem\Filesystem();
+            $fs = new Filesystem;
 
             // @todo Use laravel --force here instead of deleteDirectory()?
             if ($fs->deleteDirectory($this->projectpath)) {
@@ -217,7 +217,7 @@ class NewCommand extends Command
             'DB_DATABASE' => $this->projectname,
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => '',
-            'APP_URL' => $this->projecturl,
+            'APP_URL'     => $this->projecturl,
         ];
 
         return $this->updateDotEnv($changes);
@@ -327,7 +327,7 @@ class NewCommand extends Command
         if ($this->option('editor')) {
             $editor = $this->option('editor');
         } else {
-            $finder = new ExecutableFinder();
+            $finder = new ExecutableFinder;
             foreach ($this->editors_gui as $_editor) {
                 if ($finder->find($_editor)) {
                     $editor = $_editor;
@@ -352,7 +352,7 @@ class NewCommand extends Command
 
         $this->info("Found editor $editor so am opening it now");
 
-        $process = new Process("$editor .");
+        $process = new Process("{$editor} .");
         $process->setWorkingDirectory($this->projectpath);
 
         $process->setTty(true);
@@ -368,13 +368,13 @@ class NewCommand extends Command
     protected function createDatabase($type = 'sqlite')
     {
         if ($type === 'sqlite') {
-            $basedir = $this->projectpath.DIRECTORY_SEPARATOR.'database';
+            $basedir = $this->projectpath . DIRECTORY_SEPARATOR . 'database';
 
             File::put($basedir . 'database.sqlite', '');
 
             $this->updateDotEnv([
                 'DB_CONNECTION' => 'sqlite',
-                'DB_DATABASE' => $this->projectpath.'/database/database.sqlite'
+                'DB_DATABASE' => $this->projectpath . '/database/database.sqlite',
             ]);
 
             return true;
@@ -413,9 +413,9 @@ class NewCommand extends Command
 
         if ($this->os->isOSX()) {
             if ($browser === '') {
-                $command = 'open "'.$this->projecturl.'"';
+                $command = 'open "' . $this->projecturl . '"';
             } else {
-                $command = 'open -a "'.$browser.'" "'.$this->projecturl.'"';
+                $command = 'open -a "' . $browser . '" "' . $this->projecturl . '"';
             }
         }
 
@@ -424,9 +424,9 @@ class NewCommand extends Command
         }
 
         if ($this->os->isUnixLike()) {
-            $finder = new ExecutableFinder();
+            $finder = new ExecutableFinder;
             if ($finder->find('xdg-open')) {
-                $command = 'xdg-open "'.$this->projecturl.'"';
+                $command = 'xdg-open "' . $this->projecturl . '"';
             }
         }
 
@@ -444,15 +444,15 @@ class NewCommand extends Command
      * @param $changes array of 'OPTIONNAME' => 'VALUE' pairs
      * @return bool
      */
-    function updateDotEnv($changes)
+    public function updateDotEnv($changes)
     {
         // We'll always write to this path
         $envpath = $this->projectpath.DIRECTORY_SEPARATOR.'.env';
         if (file_exists($envpath)) {
-            $lines = file($this->projectpath.DIRECTORY_SEPARATOR.'.env', FILE_IGNORE_NEW_LINES);
+            $lines = file($this->projectpath.DIRECTORY_SEPARATOR . '.env', FILE_IGNORE_NEW_LINES);
         } else {
-            if (file_exists($this->projectpath.DIRECTORY_SEPARATOR.'.env.example')) {
-                $lines = file($this->projectpath.DIRECTORY_SEPARATOR.'.env.example', FILE_IGNORE_NEW_LINES);
+            if (file_exists($this->projectpath.DIRECTORY_SEPARATOR . '.env.example')) {
+                $lines = file($this->projectpath.DIRECTORY_SEPARATOR . '.env.example', FILE_IGNORE_NEW_LINES);
             } else {
                 $this->error('I could not find a valid .env or .env.example file to update; this is not good.');
                 return false;
