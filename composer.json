@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": ">=7.1",
+        "illuminate/database": "5.5.*",
         "laravel-zero/framework": "4.0.*",
         "tivie/php-os-detector": "^1.1"
     },
