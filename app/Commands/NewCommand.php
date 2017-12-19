@@ -134,12 +134,11 @@ class NewCommand extends Command
             $this->doNodeOrYarn();
         }
 
-        if ($this->option('link')) {
-            if ($this->hasTool('valet')) {
-                if ($this->doValetLink()) {
-                    $this->openBrowser();
-                }
+        if ($this->hasTool('valet')) {
+            if ($this->option('link')) {
+                $this->doValetLink();
             }
+            $this->openBrowser();
         }
 
         if ($this->hasTool('git')) {
