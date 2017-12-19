@@ -81,17 +81,12 @@ class NewCommand extends Command
      */
     public function handle(): void
     {
-        $this->projectname = $this->argument('name');
-        $this->projecturl = 'http://' . $this->projectname . '.dev';
+        $this->setup();
 
         if (! $this->hasTool('laravel')) {
             $this->error('Unable to find laravel installer so I must exit. One day I will use composer here instead of exiting.');
             exit;
         }
-
-        $this->setBasePath();
-
-        $this->projectpath = $this->basepath . DIRECTORY_SEPARATOR . $this->projectname;
 
         if (is_dir($this->projectpath)) {
             if (! $this->askToAndRemoveProject()) {
@@ -156,8 +151,12 @@ class NewCommand extends Command
         $this->info("You're ready to go! Remember to cd into '{$this->projectpath}' before you start editing.");
     }
 
-    protected function setBasePath()
+
+    protected function setup()
     {
+        $this->projectname = $this->argument('name');
+        $this->projecturl = 'http://' . $this->projectname . '.dev'; // @todo .dev is no longer good
+
         $this->basepath = $this->cwd;
         if ($this->option('path')) {
             $path = $this->option('path');
@@ -168,7 +167,7 @@ class NewCommand extends Command
             }
         }
 
-        return $this->basepath;
+        $this->projectpath = $this->basepath . DIRECTORY_SEPARATOR . $this->projectname;
     }
 
     protected function askToAndRemoveProject()
