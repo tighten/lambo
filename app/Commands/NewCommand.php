@@ -164,8 +164,8 @@ class NewCommand extends Command
         }
 
         $this->projecturl = 'http://' . $this->projectname . '.' . $this->tld;
-
         $this->basepath = $this->cwd;
+
         if ($this->option('path')) {
             $path = $this->option('path');
             if (is_dir($path)) {
@@ -246,7 +246,7 @@ class NewCommand extends Command
     {
         if (! in_array($dbtype, $this->dbtypes)) {
             $this->info("You passed in '--createdb '{$dbtype}' but I do not understand");
-            $type = $this->anticipate('What type of database would you like to install? Options are '.implode(' or ', $this->dbtypes) . '.', $this->dbtypes, $this->dbtypes[0]);
+            $type = $this->anticipate('What type of database would you like to install? Options are ' . implode(' or ', $this->dbtypes) . '.', $this->dbtypes, $this->dbtypes[0]);
         } else {
             $type = $dbtype;
         }
@@ -260,7 +260,6 @@ class NewCommand extends Command
                 $this->migrateFresh();
             }
         }
-
     }
 
     protected function doAuth()
@@ -460,7 +459,8 @@ class NewCommand extends Command
     public function updateDotEnv($changes)
     {
         // We'll always write to this path
-        $envpath = $this->projectpath.DIRECTORY_SEPARATOR.'.env';
+        $envpath = $this->projectpath . DIRECTORY_SEPARATOR . '.env';
+
         if (file_exists($envpath)) {
             $lines = file($this->projectpath.DIRECTORY_SEPARATOR . '.env', FILE_IGNORE_NEW_LINES);
         } else {
@@ -471,6 +471,7 @@ class NewCommand extends Command
                 return false;
             }
         }
+
         $tracker = [];
         foreach ($lines as $line) {
 
