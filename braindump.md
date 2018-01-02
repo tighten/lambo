@@ -14,6 +14,7 @@
 - `new` action is required now e.g., `lambo coolApp $args` vs `lambo new coolApp $args`
 - Now browser only opens if valet is installed
 - -c,--createdb is new
+- text editor selection is different, and now includes GUI editors (document me)
 
 ### Open Browser
 
