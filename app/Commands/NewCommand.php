@@ -20,7 +20,7 @@ class NewCommand extends Command
     protected $signature = 'new
                         {name : Name of the Laravel project}
                         {--a|auth : Run make:auth}
-                        {--b|browser : Browser you want to open the project in}
+                        {--b|browser= : Browser you want to open the project in}
                         {--c|createdb= : Create a database; pass in sqlite or mysql}
                         {--d|dev : Choose the dev branch instead of master}
                         {--e|editor= : Text editor to open the project in}
