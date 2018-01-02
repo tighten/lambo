@@ -49,6 +49,8 @@ class NewCommand extends Command
 
     protected $tools = [];
 
+    protected $tld = 'dev';
+
     protected $dbtypes = ['sqlite', 'mysql'];
 
     protected $os = null;
@@ -154,7 +156,14 @@ class NewCommand extends Command
     protected function setup()
     {
         $this->projectname = $this->argument('name');
-        $this->projecturl = 'http://' . $this->projectname . '.dev'; // @todo .dev is no longer good
+
+        if ($this->hasTool('valet')) {
+            if ($tld = json_decode(File::get($_SERVER['HOME'] . '/.valet/config.json'))->domain) {
+                $this->tld = $tld;
+            }
+        }
+
+        $this->projecturl = 'http://' . $this->projectname . '.' . $this->tld;
 
         $this->basepath = $this->cwd;
         if ($this->option('path')) {
