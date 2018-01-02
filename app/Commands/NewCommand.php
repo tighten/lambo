@@ -104,10 +104,10 @@ class NewCommand extends Command
             $branch = '';
         }
 
-        $command = "laravel new {$this->projectname}$branch";
+        $command = "laravel new {$this->projectname}{$branch}";
 
         $this->info("Creating a new project named {$this->projectname}");
-        $this->info("Executing command '$command' in directory {$this->basepath}");
+        $this->info("Executing command '{$command}' in directory {$this->basepath}");
 
         $process = new Process($command);
         $process->setWorkingDirectory($this->basepath);
@@ -171,7 +171,7 @@ class NewCommand extends Command
             if (is_dir($path)) {
                 $this->basepath = $path;
             } else {
-                $this->warn("Your defined '--path $path' is not a directory, so I am skipping it and using '{$this->basepath}' instead.");
+                $this->warn("Your defined '--path {$path}' is not a directory, so I am skipping it and using '{$this->basepath}' instead.");
             }
         }
 
@@ -230,7 +230,7 @@ class NewCommand extends Command
             return false;
         }
 
-        $this->info("Executing $command now; in {$this->projectpath}");
+        $this->info("Executing {$command} now; in {$this->projectpath}");
 
         $process = new Process($command);
         $process->setWorkingDirectory($this->projectpath);
@@ -252,9 +252,9 @@ class NewCommand extends Command
         }
 
         if (! in_array($type, $this->dbtypes)) {
-            $this->alert("Now you're being silly. Entering '$type', really? Okay, I won't create a database for you.");
+            $this->alert("Now you're being silly. Entering '{$type}', really? Okay, I won't create a database for you.");
         } else {
-            $this->info("I am creating a new $type database");
+            $this->info("I am creating a new {$type} database");
             if ($this->createDatabase($type)) {
                 $this->info("I am executing 'php artisan migrate:fresh'");
                 $this->migrateFresh();
@@ -444,7 +444,7 @@ class NewCommand extends Command
         }
 
         if (isset($command)) {
-            $this->info("Opening in your browser now by executing '$command'");
+            $this->info("Opening in your browser now by executing '{$command}'");
             $process = new Process($command);
             $process->setWorkingDirectory($this->cwd);
             $process->run();
