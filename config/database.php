@@ -9,12 +9,12 @@ return [
     /*
      * If true, migrations commands will be available.
      */
-    'with-migrations' => true,
+    'with-migrations' => false,
 
     /*
      * If true, seeds commands will be available.
      */
-    'with-seeds' => true,
+    'with-seeds' => false,
 
     /*
      * Here goes the application database connection configuration. By
@@ -24,7 +24,7 @@ return [
     'connections' => [
         'sqlite' => [
             'driver' => 'sqlite',
-            'database' => __DIR__.'/../database/database.sqlite',
+            'database' => __DIR__ . '/../database/database.sqlite',
         ],
         'mysql' => [
             'driver'    => 'mysql',
