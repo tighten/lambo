@@ -314,9 +314,6 @@ class NewCommand extends Command
             return false;
         }
 
-        $process = new Process('dummy command');
-        $process->setWorkingDirectory($this->projectpath);
-
         $commands = [
             'git init',
             'git add .',
@@ -324,7 +321,8 @@ class NewCommand extends Command
         ];
 
         foreach ($commands as $command) {
-            $process->setCommandLine($command);
+            $process = new Process($command);
+            $process->setWorkingDirectory($this->projectpath);
             $process->run();
             $this->line($process->getOutput());
         }
