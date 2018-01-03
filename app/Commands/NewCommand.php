@@ -222,9 +222,7 @@ class NewCommand extends Command
             $command = 'yarn';
         } elseif ($this->hasTool('npm')) {
             $command = 'npm install';
-        }
-
-        if (empty($command)) {
+        } else {
             $this->error('Either yarn or npm are required');
 
             return false;
@@ -334,26 +332,31 @@ class NewCommand extends Command
         return true;
     }
 
+    protected function getDefaultEditor()
+    {
+        $finder = new ExecutableFinder;
+
+        foreach ($this->editors_gui as $editor) {
+            if ($finder->find($editor)) {
+                return $editor;
+            }
+        }
+
+        foreach ($this->editors_terminal as $editor) {
+            if ($finder->find($editor)) {
+                return $editor;
+            }
+        }
+
+        return '';
+    }
+
     protected function openTextEditor()
     {
         if ($this->option('editor')) {
             $editor = $this->option('editor');
         } else {
-            $finder = new ExecutableFinder;
-            foreach ($this->editors_gui as $_editor) {
-                if ($finder->find($_editor)) {
-                    $editor = $_editor;
-                    break;
-                }
-            }
-            if (empty($editor)) {
-                foreach ($this->editors_terminal as $_editor) {
-                    if ($finder->find($_editor)) {
-                        $editor = $_editor;
-                        break;
-                    }
-                }
-            }
+            $editor = $this->getDefaultEditor();
         }
 
         if (empty($editor)) {
