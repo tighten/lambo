@@ -434,8 +434,9 @@ class NewCommand extends Command
             }
         }
 
+        // @todo test this
         if ($this->os->isWindowsLike()) {
-            $command = '';
+            $command = 'start ' . $this->projecturl;
         }
 
         if ($this->os->isUnixLike()) {
@@ -445,13 +446,11 @@ class NewCommand extends Command
             }
         }
 
-        if (isset($command)) {
-            $this->info("Opening in your browser now by executing '{$command}'");
-            $process = new Process($command);
-            $process->setWorkingDirectory($this->cwd);
-            $process->run();
-            $this->line($process->getOutput());
-        }
+        $this->info("Opening in your browser now by executing '{$command}'");
+        $process = new Process($command);
+        $process->setWorkingDirectory($this->cwd);
+        $process->run();
+        $this->line($process->getOutput());
     }
 
 
