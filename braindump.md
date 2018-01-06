@@ -34,6 +34,7 @@
 ### TODO
 
 - Add tests
+- Fix path to allow ~ for home
 - Test on Windows and Linux
 - Refactor most code logic from `NewCommand.php` into separate classes
 - Use laravel --force instead of deleteDirectory()?

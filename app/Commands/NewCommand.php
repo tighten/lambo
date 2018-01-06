@@ -78,7 +78,7 @@ class NewCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         $this->setup();
 
@@ -93,7 +93,7 @@ class NewCommand extends Command
             $branch = ' --dev';
         }
 
-        $this->info("Creating a new project named {$this->projectname}");
+        $this->info("\nCreating a new project named {$this->projectname}\n");
 
         $this->runCommand("laravel new {$this->projectname}{$branch}", $this->basepath);
 
@@ -151,7 +151,7 @@ class NewCommand extends Command
             if (is_dir($path)) {
                 $this->basepath = $path;
             } else {
-                $this->warn("Your defined '--path {$path}' is not a directory; skipping it and using '{$this->basepath}' instead.");
+                $this->warn("Your defined path '{$path}' is not a directory; skipping it and using '{$this->basepath}' instead.");
             }
         }
 
@@ -180,7 +180,7 @@ class NewCommand extends Command
     protected function runCommand($command, $path = null, $iterator = false)
     {
         $path = $path ?: $this->projectpath;
-        $this->line("Executing '{$command}' in '{$path}'");
+        $this->line("Executing '{$command}' in '{$path}'\n");
 
         $process = new Process($command);
         $process->setWorkingDirectory($path);
@@ -215,8 +215,8 @@ class NewCommand extends Command
     {
         $this->info("The directory '{$this->projectpath}' already exists.");
 
-        if (! $this->confirm("Shall I proceed by removing the following directory? {$this->projectpath}")) {
-            $this->error("You have chosen to not remove the '{$this->projectpath}' directory so I must exit.");
+        if (! $this->confirm("Proceed by removing the following directory? {$this->projectpath}")) {
+            $this->error("You have chosen to not remove the '{$this->projectpath}' directory; quitting.");
 
             return false;
         }
@@ -412,7 +412,7 @@ class NewCommand extends Command
             $command = 'start ' . $this->projecturl;
         }
 
-        if ($this->os->isUnixLike()) {
+        if ($this->os->isUnixLike() && ! $this->os->isOSX()) {
             $finder = new ExecutableFinder;
 
             if ($finder->find('xdg-open')) {
@@ -422,8 +422,6 @@ class NewCommand extends Command
                 return;
             }
         }
-
-        $this->info("Opening in your browser now by executing '{$command}'");
 
         $this->runCommand($command, $this->cwd);
     }
@@ -439,6 +437,8 @@ class NewCommand extends Command
 
             copy($envpath . '.example', $envpath);
         }
+
+        return true;
     }
 
     /**
