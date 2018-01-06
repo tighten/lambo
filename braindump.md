@@ -36,6 +36,11 @@
 - Add tests
 - Test on Windows and Linux
 - Refactor most code logic from `NewCommand.php` into separate classes
+- Use laravel --force instead of deleteDirectory()?
+- Move .env vars into config?
+- Get mysql database working
+- Double-check opening non-GUI editors like VIM happens at the right time (at the end of the stack so it doesn't stop operation)
+
 
 ### Scratchpad
 

@@ -18,16 +18,16 @@ class NewCommand extends Command
      * @var string
      */
     protected $signature = 'new
-                        {name : Name of the Laravel project}
-                        {--a|auth : Run make:auth}
-                        {--b|browser= : Browser you want to open the project in}
-                        {--c|createdb= : Create a database; pass in sqlite or mysql}
-                        {--d|dev : Choose the dev branch instead of master}
-                        {--e|editor= : Text editor to open the project in}
-                        {--l|link : Create a Valet link to the project directory}
-                        {--m|message= : Set the first commit message}
-                        {--y|node : Set to execute yarn or npm install}
-                        {--p|path= : Base path for the installation, otherwise CWD is used}';
+        {name : Name of the Laravel project}
+        {--a|auth : Run make:auth}
+        {--b|browser= : Browser you want to open the project in}
+        {--c|createdb= : Create a database; pass in sqlite or mysql}
+        {--d|dev : Choose the dev branch instead of master}
+        {--e|editor= : Editor to open the project in}
+        {--l|link : Create a Valet link to the project directory}
+        {--m|message= : Set the first commit message}
+        {--y|node : Set to execute yarn or npm install}
+        {--p|path= : Base path for the installation, otherwise CWD is used}';
 
     protected $projectname = '';
 
@@ -39,8 +39,6 @@ class NewCommand extends Command
 
     protected $basepath = '';
 
-    protected $commitmessage = 'Initial commit.';
-
     protected $editors_terminal = ['vim', 'vi', 'nano', 'pico', 'ed', 'emacs', 'nvim'];
 
     protected $editors_gui = ['pstorm', 'subl', 'atom', 'textmate', 'geany'];
@@ -49,7 +47,7 @@ class NewCommand extends Command
 
     protected $tools = [];
 
-    protected $tld = 'dev';
+    protected $tld = 'test';
 
     protected $dbtypes = ['sqlite', 'mysql'];
 
@@ -65,14 +63,13 @@ class NewCommand extends Command
     /**
      * Create a new command instance.
      */
-    public function __construct(ExecutableFinder $finder)
+    public function __construct(ExecutableFinder $finder, Detector $detector)
     {
         parent::__construct();
 
         $this->cwd = getcwd();
-        $this->basepath = $this->cwd;
 
-        $this->os = new Detector;
+        $this->os = $detector;
         $this->finder = $finder;
     }
 
@@ -81,51 +78,33 @@ class NewCommand extends Command
      *
      * @return mixed
      */
-    public function handle(): void
+    public function handle()
     {
         $this->setup();
 
-        if (! $this->hasTool('laravel')) {
-            $this->error('Unable to find laravel installer so I must exit. One day I will use composer here instead of exiting.');
-            exit;
-        }
+        $this->checkForRequiredTools();
 
-        if (is_dir($this->projectpath)) {
-            if (! $this->askToAndRemoveProject()) {
-                $this->error('Goodbye!');
-                exit;
-            }
-        }
+        $this->checkForExistingProjectInPath();
+
+        $branch = '';
 
         if ($this->option('dev')) {
             $this->warn('The laravel installation will use the latest developmental branch by passing in --dev');
             $branch = ' --dev';
-        } else {
-            $branch = '';
         }
-
-        $command = "laravel new {$this->projectname}{$branch}";
 
         $this->info("Creating a new project named {$this->projectname}");
-        $this->info("Executing command '{$command}' in directory {$this->basepath}");
 
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->basepath);
-        $process->run();
+        $this->runCommand("laravel new {$this->projectname}{$branch}", $this->basepath);
 
-        if (! $process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        $this->info('Updating .env in the new application.');
 
-        // @todo Determine why the above outputs before this point; so the following getOutput() call does nothing
-        $this->line($process->getOutput());
-
-        if ($this->replaceEnvVariables()) {
-            $this->info('I replaced .env variables in your new Laravel application');
+        if (! $this->replaceEnvVariables()) {
+            $this->error('Failure updating .env.');
         }
 
         if ($this->option('auth')) {
-            $this->doAuth();
+            $this->runCommand('php artisan make:auth');
         }
 
         if ($this->option('createdb')) {
@@ -140,6 +119,7 @@ class NewCommand extends Command
             if ($this->option('link')) {
                 $this->doValetLink();
             }
+
             $this->openBrowser();
         }
 
@@ -151,7 +131,6 @@ class NewCommand extends Command
 
         $this->info("You're ready to go! Remember to cd into '{$this->projectpath}' before you start editing.");
     }
-
 
     protected function setup()
     {
@@ -168,56 +147,107 @@ class NewCommand extends Command
 
         if ($this->option('path')) {
             $path = $this->option('path');
+
             if (is_dir($path)) {
                 $this->basepath = $path;
             } else {
-                $this->warn("Your defined '--path {$path}' is not a directory, so I am skipping it and using '{$this->basepath}' instead.");
+                $this->warn("Your defined '--path {$path}' is not a directory; skipping it and using '{$this->basepath}' instead.");
             }
         }
 
         $this->projectpath = $this->basepath . DIRECTORY_SEPARATOR . $this->projectname;
     }
 
+    protected function checkForRequiredTools()
+    {
+        if (! $this->hasTool('laravel')) {
+            $this->error('Cannot find Laravel installer; exiting.');
+
+            exit;
+        }
+    }
+
+    protected function checkForExistingProjectInPath()
+    {
+        if (is_dir($this->projectpath)) {
+            if (! $this->askToAndRemoveProject()) {
+                $this->error('Goodbye!');
+                exit;
+            }
+        }
+    }
+
+    protected function runCommand($command, $path = null, $iterator = false)
+    {
+        $path = $path ?: $this->projectpath;
+        $this->line("Executing '{$command}' in '{$path}'");
+
+        $process = new Process($command);
+        $process->setWorkingDirectory($path);
+
+        if (! $iterator) {
+            $process->run();
+
+            if (! $process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+
+            $this->line($process->getOutput());
+
+            return;
+        }
+
+        $process->start();
+
+        $iterator = $process->getIterator($process::ITER_SKIP_ERR | $process::ITER_KEEP_OUTPUT);
+
+        foreach ($iterator as $data) {
+            $this->line($data);
+        }
+    }
+
+    protected function runIteratorCommand($command, $path = null)
+    {
+        return $this->runCommand($command, $path, $iterator = true);
+    }
+
     protected function askToAndRemoveProject()
     {
         $this->info("The directory '{$this->projectpath}' already exists.");
 
-        if ($this->confirm("Shall I proceed by removing the following directory? {$this->projectpath}")) {
-            $fs = new Filesystem;
-
-            // @todo Use laravel --force here instead of deleteDirectory()?
-            if ($fs->deleteDirectory($this->projectpath)) {
-                $this->info("I removed the following directory: {$this->projectpath}");
-
-                return true;
-            } else {
-                $this->error("I was unable to remove the '{$this->projectpath}' directory so I must exit.");
-
-                return false;
-            }
-        } else {
+        if (! $this->confirm("Shall I proceed by removing the following directory? {$this->projectpath}")) {
             $this->error("You have chosen to not remove the '{$this->projectpath}' directory so I must exit.");
 
             return false;
         }
+
+        $fs = new Filesystem;
+
+        if (! $fs->deleteDirectory($this->projectpath)) {
+            $this->error("I was unable to remove the '{$this->projectpath}' directory so I must exit.");
+
+            return false;
+        }
+
+        $this->info("I removed the following directory: {$this->projectpath}");
+
+        return true;
     }
 
     protected function replaceEnvVariables()
     {
-        // @todo make this a configuration option
-        $changes = [
+        return $this->updateDotEnv([
             'DB_DATABASE' => $this->projectname,
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => '',
-            'APP_URL'     => $this->projecturl,
-        ];
-
-        return $this->updateDotEnv($changes);
+            'APP_URL' => $this->projecturl,
+        ]);
     }
 
     protected function doNodeOrYarn()
     {
         $command = null;
+
         if ($this->hasTool('yarn')) {
             $command = 'yarn';
         } elseif ($this->hasTool('npm')) {
@@ -228,16 +258,7 @@ class NewCommand extends Command
             return false;
         }
 
-        $this->info("Executing {$command} now; in {$this->projectpath}");
-
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->projectpath);
-        $process->start();
-
-        $iterator = $process->getIterator($process::ITER_SKIP_ERR | $process::ITER_KEEP_OUTPUT);
-        foreach ($iterator as $data) {
-            $this->line($data);
-        }
+        $this->runIteratorCommand($command, $this->projectpath);
     }
 
     protected function chooseDatabase($dbtype)
@@ -253,78 +274,42 @@ class NewCommand extends Command
             $this->alert("Now you're being silly. Entering '{$type}', really? Okay, I won't create a database for you.");
         } else {
             $this->info("I am creating a new {$type} database");
+
             if ($this->createDatabase($type)) {
-                $this->info("I am executing 'php artisan migrate:fresh'");
-                $this->migrateFresh();
+                $this->runCommand('php artisan migrate:fresh');
             }
         }
-    }
-
-    protected function doAuth()
-    {
-        $command = 'php artisan make:auth';
-
-        $this->info("Executing $command");
-
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->projectpath);
-
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        $this->line($process->getOutput());
     }
 
     protected function doValetLink()
     {
         if (! $this->hasTool('valet')) {
-            $this->warn('Cannot find valet on your system so a valet link was not created.');
+            $this->warn('Cannot find Valet on your system; a Valet link was not created.');
 
             return false;
         }
 
-        $command = "valet link {$this->projectname}";
-        $this->info("Linking valet by executing '$command' in {$this->basepath}");
-
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->projectpath);
-
-        $process->run();
-
-        if (! $process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        $this->line($process->getOutput());
-        return true;
+        $this->runCommand("valet link {$this->projectname}");
     }
 
     protected function doGit()
     {
-        if ($this->option('message')) {
-            $this->commitmessage = $this->option('message');
-        }
-
         if (! $this->hasTool('git')) {
-            $this->info("Unable to find 'git' on the system so I cannot initialize a git repo in '{$this->projectpath}'");
+            $this->info("Unable to find 'git' on the system; cannot initialize a git repo.");
 
             return false;
         }
 
+        $commitMessage = $this->option('message') ?: 'Initial commit.';
+
         $commands = [
             'git init',
             'git add .',
-            'git commit -m "'.str_replace('"', '\"', $this->commitmessage).'"',
+            'git commit -m "' . str_replace('"', '\"', $commitMessage) . '"',
         ];
 
         foreach ($commands as $command) {
-            $process = new Process($command);
-            $process->setWorkingDirectory($this->projectpath);
-            $process->run();
-            $this->line($process->getOutput());
+            $this->runCommand($command);
         }
 
         return true;
@@ -358,12 +343,10 @@ class NewCommand extends Command
         }
 
         if (empty($editor)) {
-            $this->warn('Unable to find a text editor to open, skipping this step.');
-
-            return false;
+            return $this->warn('Unable to find a text editor.');
         }
 
-        $this->info("Found editor $editor so am opening it now");
+        $this->info("Opening {$editor}.");
 
         $process = new Process("{$editor} .");
         $process->setWorkingDirectory($this->projectpath);
@@ -374,8 +357,6 @@ class NewCommand extends Command
         if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-
-        return true;
     }
 
     protected function createDatabase($type = 'sqlite')
@@ -394,6 +375,11 @@ class NewCommand extends Command
         }
 
         if ($type === 'mysql') {
+            $this->warn('The MySQL type is not yet implemented yet.');
+
+            return false;
+
+            /*
             // @todo Offer ways to create users here, one user per db? Auto-generate passwords or always use the same?
 
             // @todo sanitize this name
@@ -401,28 +387,18 @@ class NewCommand extends Command
 
             // @todo determine how to do this, either try root/'' or use custom config
             //
-            $this->warn('The MySQL type is not yet implemented, sorry about that.');
+
+            */
         }
 
         return false;
     }
 
-    protected function migrateFresh()
-    {
-        $process = new Process('php artisan migrate:fresh');
-        $process->setWorkingDirectory($this->projectpath);
-        $process->run();
-        $this->line($process->getOutput());
-    }
-
     protected function openBrowser()
     {
-        $this->info('Attempting to find a browser to open this in.');
+        $this->info('Attempting to find a browser.');
 
-        $browser = '';
-        if ($this->option('browser')) {
-            $browser = $this->option('browser');
-        }
+        $browser = $this->option('browser') ?: '';
 
         if ($this->os->isOSX()) {
             if ($browser === '') {
@@ -432,52 +408,58 @@ class NewCommand extends Command
             }
         }
 
-        // @todo test this
         if ($this->os->isWindowsLike()) {
             $command = 'start ' . $this->projecturl;
         }
 
         if ($this->os->isUnixLike()) {
             $finder = new ExecutableFinder;
+
             if ($finder->find('xdg-open')) {
                 $command = 'xdg-open "' . $this->projecturl . '"';
+            } else {
+                $this->error("Can't find xdg-open; skipping browser step.");
+                return;
             }
         }
 
         $this->info("Opening in your browser now by executing '{$command}'");
-        $process = new Process($command);
-        $process->setWorkingDirectory($this->cwd);
-        $process->run();
-        $this->line($process->getOutput());
+
+        $this->runCommand($command, $this->cwd);
     }
 
+    protected function ensureDotEnvExists($envpath)
+    {
+        if (! file_exists($envpath)) {
+            if (! file_exists($envpath . '.example')) {
+                $this->error('No valid .env or .env.example files; skipping .env work.');
+
+                return false;
+            }
+
+            copy($envpath . '.example', $envpath);
+        }
+    }
 
     /**
      * @param $changes array of 'OPTIONNAME' => 'VALUE' pairs
      * @return bool
      */
-    public function updateDotEnv($changes)
+    public function updateDotEnv(array $changes)
     {
-        // We'll always write to this path
         $envpath = $this->projectpath . DIRECTORY_SEPARATOR . '.env';
 
-        if (file_exists($envpath)) {
-            $lines = file($this->projectpath.DIRECTORY_SEPARATOR . '.env', FILE_IGNORE_NEW_LINES);
-        } else {
-            if (file_exists($this->projectpath.DIRECTORY_SEPARATOR . '.env.example')) {
-                $lines = file($this->projectpath.DIRECTORY_SEPARATOR . '.env.example', FILE_IGNORE_NEW_LINES);
-            } else {
-                $this->error('I could not find a valid .env or .env.example file to update; this is not good.');
-                return false;
-            }
+        if (! $this->ensureDotEnvExists($envpath)) {
+            return false;
         }
 
-        $tracker = [];
-        foreach ($lines as $line) {
+        $lines = file($envpath, FILE_IGNORE_NEW_LINES);
 
+        $tracker = [];
+
+        foreach ($lines as $line) {
             // Is it a key=value pair? And not a comment?
             if (false !== strpos($line, '=') && '#' !== substr($line, 0, 1)) {
-
                 list($key) = explode('=', $line, 2);
 
                 // Track keys so we can append key=value pairs from $changes that don't exist currently
