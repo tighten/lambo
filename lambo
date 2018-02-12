@@ -320,7 +320,9 @@ perlCommands=(
 )
 
 if [[ "$LINK" = true ]]; then
-    valet secure "$PROJECTNAME"
+    if [[ "$TLD" == 'dev' ]]; then
+        valet secure "$PROJECTNAME"
+    fi
     valet link "$PROJECTNAME"
 fi
 
