@@ -175,6 +175,10 @@ ui_package_exists() {
     composer show | grep laravel/ui >/dev/null
 }
 
+createdatabase()
+{
+    mysql --user=$DBUSER --password=$BDPASSWORD -e "CREATE DATABASE IF NOT EXISTS $PROJECTNAME;"
+}
 
 
 ## Set up error handling
@@ -200,7 +204,9 @@ else
     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 fi
 LINK=false
-
+CREATEDATABASE=false
+DBUSER=root
+BDPASSWORD=
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
     source ~/.lambo/config
@@ -399,10 +405,10 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 
 perlCommands=(
-    "s/(?'var'DB_DATABASE=)(.*)/$+{var}$PROJECTNAME/g"
-    "s/(?'var'DB_USERNAME=)(.*)/$+{var}$DB_USERNAME/g"
-    "s/(?'var'DB_PASSWORD=)(.*)/$+{var}$DB_PASSWORD/g"
-    "s/(?'var'APP_URL=)(.*)/$+{var}http:\/\/$PROJECTNAME.$TLD/g"
+    "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
+    "s/(DB_USERNAME=)(.*)/\1$DBUSER/g"
+    "s/(DB_PASSWORD=)(.*)/\1$BDPASSWORD/g"
+    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
 for perlCommand in "${perlCommands[@]}"; do
@@ -448,6 +454,12 @@ case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
+
+### Create database if config is set to true
+if [[ "$CREATEDATABASE" = true ]]; then
+    echo "${green}Creating database...${reset}"
+    createdatabase
+fi
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if isterminaleditor; then
