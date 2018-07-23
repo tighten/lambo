@@ -177,7 +177,7 @@ ui_package_exists() {
 
 createdatabase()
 {
-    mysql --user=$DBUSER --password=$DBPASSWORD -e "CREATE DATABASE IF NOT EXISTS $PROJECTNAME;"
+    mysql --user=$DBUSER --password=$DBPASSWORD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
 }
 
 
@@ -204,6 +204,7 @@ else
     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 fi
 LINK=false
+DBNAME="${PROJECTNAME//[-]/_}"
 CREATEDATABASE=false
 DBUSER=root
 DBPASSWORD=
@@ -405,7 +406,7 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 
 perlCommands=(
-    "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
+    "s/(DB_DATABASE=)(.*)/\1$DBNAME/g"
     "s/(DB_USERNAME=)(.*)/\1$DBUSER/g"
     "s/(DB_PASSWORD=)(.*)/\1$DBPASSWORD/g"
     "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
