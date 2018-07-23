@@ -177,7 +177,7 @@ ui_package_exists() {
 
 createdatabase()
 {
-    mysql --user=$DBUSER --password=$BDPASSWORD -e "CREATE DATABASE IF NOT EXISTS $PROJECTNAME;"
+    mysql --user=$DBUSER --password=$DBPASSWORD -e "CREATE DATABASE IF NOT EXISTS $PROJECTNAME;"
 }
 
 
@@ -206,7 +206,7 @@ fi
 LINK=false
 CREATEDATABASE=false
 DBUSER=root
-BDPASSWORD=
+DBPASSWORD=
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
     source ~/.lambo/config
@@ -407,7 +407,7 @@ PROJECTURL="http://$PROJECTNAME.$TLD"
 perlCommands=(
     "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
     "s/(DB_USERNAME=)(.*)/\1$DBUSER/g"
-    "s/(DB_PASSWORD=)(.*)/\1$BDPASSWORD/g"
+    "s/(DB_PASSWORD=)(.*)/\1$DBPASSWORD/g"
     "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
