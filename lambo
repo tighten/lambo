@@ -77,7 +77,10 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-LINK=false' > ~/.lambo/config
+LINK=false
+CREATEDATABASE=false
+DBUSER=root
+DBPASSWORD=' > ~/.lambo/config
 
     edit ~/.lambo/config
 }
@@ -153,6 +156,10 @@ quit()
     exit 0
 }
 
+createdatabase()
+{
+    mysql --user=$DBUSER --password=$DBPASSWORD -e "CREATE DATABASE IF NOT EXISTS $PROJECTNAME;"
+}
 
 
 ## Set up error handling
@@ -170,7 +177,9 @@ CODEEDITOR=""
 BROWSER=""
 TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 LINK=false
-
+CREATEDATABASE=false
+DBUSER=root
+DBPASSWORD=
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
     source ~/.lambo/config
@@ -314,8 +323,8 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 perlCommands=(
     "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
-    's/(DB_USERNAME=)(.*)/\1root/g'
-    's/(DB_PASSWORD=)(.*)/\1/g'
+    "s/(DB_USERNAME=)(.*)/\1$DBUSER/g"
+    "s/(DB_PASSWORD=)(.*)/\1$DBPASSWORD/g"
     "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
@@ -341,6 +350,13 @@ case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
+
+### Create database if config is set to true
+if [[ "$CREATEDATABASE" = true ]]; then
+    echo "${green}Creating database...${reset}"
+    createdatabase
+fi
+
 
 ### Load after file if it exists
 if [[ -f ~/.lambo/after ]]; then
