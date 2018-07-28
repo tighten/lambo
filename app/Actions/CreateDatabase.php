@@ -33,10 +33,10 @@ class CreateDatabase extends BaseAction
     {
         $hostDbKeyPrefix = 'database.connections.host_database';
 
-        config()->set("{$hostDbKeyPrefix}.host",        config('lambo.db_host'));
-        config()->set("{$hostDbKeyPrefix}.port",        config('lambo.db_port'));
-        config()->set("{$hostDbKeyPrefix}.username",    config('lambo.db_username'));
-        config()->set("{$hostDbKeyPrefix}.password",    config('lambo.db_password'));
+        config()->set("{$hostDbKeyPrefix}.host", config('lambo.db_host'));
+        config()->set("{$hostDbKeyPrefix}.port", config('lambo.db_port'));
+        config()->set("{$hostDbKeyPrefix}.username", config('lambo.db_username'));
+        config()->set("{$hostDbKeyPrefix}.password", config('lambo.db_password'));
     }
 
     /**

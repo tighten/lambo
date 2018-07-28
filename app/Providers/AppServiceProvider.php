@@ -56,7 +56,6 @@ class AppServiceProvider extends ServiceProvider
 //            $this->mergeConfigFrom($filePath, 'lambo-after');
 
             $this->app['config']->set('lambo-after', array_merge(config('lambo-after'), require $filePath));
-
         }
     }
 }

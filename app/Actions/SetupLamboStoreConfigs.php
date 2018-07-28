@@ -72,7 +72,7 @@ class SetupLamboStoreConfigs extends BaseAction
             return;
         }
 
-        $dbName = str_replace('-','_', $projectName);
+        $dbName = str_replace('-', '_', $projectName);
 
         config()->set('lambo-store.db_name', $dbName);
     }

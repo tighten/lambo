@@ -26,7 +26,6 @@ class CreateMySQLDatabaseService
 
     public function handle(): void
     {
-
         $this->console->alert('Creating database...');
 
         $dbName = config('lambo-store.db_name');

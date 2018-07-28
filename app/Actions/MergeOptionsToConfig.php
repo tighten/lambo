@@ -11,7 +11,6 @@ class MergeOptionsToConfig extends BaseAction
         collect($this->console->options())
             ->intersectByKeys($this->availableOptions())
             ->each(function ($item, $key) {
-
                 if ($item === 'true') {
                     $item = true;
                 } elseif ($item === 'false') {

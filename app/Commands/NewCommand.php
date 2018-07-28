@@ -6,7 +6,6 @@ use App\Actions\OpenBrowser;
 use App\Actions\InitializeGit;
 use App\Actions\AfterCommands;
 use App\Actions\CreateDatabase;
-use App\Actions\ProjectCredentialsAndConfigs;
 use App\Actions\RunVerifications;
 use App\Actions\DisplayLamboLogo;
 use App\Actions\MergeOptionsToConfig;
@@ -16,6 +15,7 @@ use App\Actions\PromptForCustomization;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Actions\DisplayCurrentConfiguration;
+use App\Actions\ProjectCredentialsAndConfigs;
 
 class NewCommand extends Command
 {

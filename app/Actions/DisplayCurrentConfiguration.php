@@ -23,8 +23,7 @@ class DisplayCurrentConfiguration extends BaseAction
                 $item = '(empty)';
             }
 
-            if ($key === 'db_password')
-            {
+            if ($key === 'db_password') {
                 $item = '[***password***]';
             }
 
