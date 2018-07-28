@@ -10,7 +10,7 @@ class CreateNewApplication extends BaseAction
     {
         $dev = config('lambo.dev', false);
 
-        $projectName = $this->console->projectName;
+        $projectName = config('lambo-store.project_name');
 
         $directory = config('lambo-store.install_path');
 

@@ -2,12 +2,12 @@
 
 namespace App\Support;
 
-use LaravelZero\Framework\Commands\Command;
+use App\Commands\NewCommand;
 
 abstract class BaseAction
 {
     /**
-     * @var Command
+     * @var NewCommand
      */
     protected $console;
 
@@ -19,10 +19,10 @@ abstract class BaseAction
     /**
      * BaseAction constructor.
      *
-     * @param Command $console
+     * @param NewCommand $console
      * @param ShellCommand $shell
      */
-    public function __construct(Command $console, ShellCommand $shell)
+    public function __construct(NewCommand $console, ShellCommand $shell)
     {
         $this->console = $console;
 

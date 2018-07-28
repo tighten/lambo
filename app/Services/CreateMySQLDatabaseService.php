@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\DB;
 use LaravelZero\Framework\Commands\Command;
 
-class CreateDatabaseService
+class CreateMySQLDatabaseService
 {
     /**
      * @var \Illuminate\Database\ConnectionInterface
@@ -26,27 +26,28 @@ class CreateDatabaseService
 
     public function handle(): void
     {
+
         $this->console->alert('Creating database...');
 
-        $appName = $this->console->argument('appName');
+        $dbName = config('lambo-store.db_name');
 
         $databases = $this->connection->select('SHOW DATABASES');
 
-        $exists = collect($databases)->filter(function ($item, $key) use ($appName) {
-            return $item->Database === $appName;
+        $exists = collect($databases)->filter(function ($item, $key) use ($dbName) {
+            return $item->Database === $dbName;
         })->count();
 
         if ($exists) {
-            $this->console->error('Database existed already!');
+            $this->console->error('Database already existed! It was left as we found it.');
             return;
         }
 
-        $this->connection->statement("CREATE DATABASE IF NOT EXISTS {$appName}");
+        $this->connection->statement("CREATE DATABASE IF NOT EXISTS {$dbName}");
 
         $databases = $this->connection->select('SHOW DATABASES');
 
-        $checkExists = collect($databases)->filter(function ($item, $key) use ($appName) {
-            return $item->Database === $appName;
+        $checkExists = collect($databases)->filter(function ($item, $key) use ($dbName) {
+            return $item->Database === $dbName;
         })->count();
 
         if ($checkExists) {

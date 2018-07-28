@@ -2,16 +2,17 @@
 
 namespace App\Commands;
 
-use App\Support\ShellCommand;
+use App\Actions\OpenBrowser;
 use App\Actions\InitializeGit;
+use App\Actions\AfterCommands;
+use App\Actions\CreateDatabase;
+use App\Actions\ProjectCredentialsAndConfigs;
 use App\Actions\RunVerifications;
 use App\Actions\DisplayLamboLogo;
 use App\Actions\MergeOptionsToConfig;
 use App\Actions\CreateNewApplication;
-use App\Services\AfterCommandsService;
 use App\Actions\SetupLamboStoreConfigs;
 use App\Actions\PromptForCustomization;
-use App\Services\CreateDatabaseService;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Actions\DisplayCurrentConfiguration;
@@ -43,27 +44,17 @@ class NewCommand extends Command
      */
     protected $description = 'Creates a fresh Laravel application';
 
-    public $projectName;
-
     public $currentWorkingDir;
-
-    /**
-     * @var ShellCommand
-     */
-    private $shellCommand;
 
     /**
      * LaravelNewCommand constructor.
      *
-     * @param ShellCommand $shellCommand
      */
-    public function __construct(ShellCommand $shellCommand)
+    public function __construct()
     {
         parent::__construct();
 
         $this->currentWorkingDir = getcwd();
-
-        $this->shellCommand = $shellCommand;
     }
 
     /**
@@ -94,11 +85,16 @@ class NewCommand extends Command
 
         $this->action(InitializeGit::class);
 
-//        $this->createDatabase();
+        $this->action(CreateDatabase::class);
 
-        $this->afterCommands();
+        /**
+         * @TODO implement action(ProjectCredentialsAndConfigs::class);
+         */
+//        $this->action(ProjectCredentialsAndConfigs::class);
 
-        $this->shellCommand->inDirectory($dir = $this->projectName, 'valet open');
+        $this->action(AfterCommands::class);
+
+        $this->action(OpenBrowser::class);
     }
 
     /**
@@ -110,27 +106,6 @@ class NewCommand extends Command
     {
         app($actionClass, ['console' => $this])();
     }
-
-
-    /**
-     * Create the database, if opted-in
-     */
-    public function createDatabase(): void
-    {
-        if (config('lambo.create_database')) {
-            app()->make(CreateDatabaseService::class, ['console' => $this])->handle();
-        }
-    }
-
-    /**
-     * Run the after commands
-     */
-    protected function afterCommands(): void
-    {
-        resolve(AfterCommandsService::class)->handle();
-    }
-
-
 
     /**
      * Define the command's schedule.

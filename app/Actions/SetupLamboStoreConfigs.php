@@ -8,16 +8,35 @@ class SetupLamboStoreConfigs extends BaseAction
 {
     public function __invoke()
     {
-        $this->console->projectName = $this->console->argument('projectName');
-
-        config()->set('lambo-store.project_name', $this->console->argument('projectName'));
+        $this->projectName();
 
         $this->installPath();
 
+        $this->projectPath();
+
+        $this->dbName();
+
         $this->checkStore();
+
+        if ($manualTest = false) {
+            dd(config('lambo-store'));
+        }
     }
 
-    protected function installPath()
+    /**
+     * Stores the Project Name.
+     *
+     */
+    protected function projectName(): void
+    {
+        config()->set('lambo-store.project_name', $this->console->argument('projectName'));
+    }
+
+    /**
+     * Stores the installation path.
+     *
+     */
+    protected function installPath(): void
     {
         $configInstallPath = config('lambo.path', false);
 
@@ -26,6 +45,36 @@ class SetupLamboStoreConfigs extends BaseAction
         } else {
             config()->set('lambo-store.install_path', $configInstallPath);
         }
+    }
+
+    /**
+     * Stores the project path.
+     *
+     */
+    protected function projectPath(): void
+    {
+        $installPath = config('lambo-store.install_path', false);
+
+        $projectPath = str_finish($installPath, '/') . config('lambo-store.project_name');
+
+        config()->set('lambo-store.project_path', $projectPath);
+    }
+
+    /**
+     * Sets the database name
+     *
+     */
+    protected function dbName(): void
+    {
+        $projectName = config('lambo-store.project_name');
+
+        if (!$projectName) {
+            return;
+        }
+
+        $dbName = str_replace('-','_', $projectName);
+
+        config()->set('lambo-store.db_name', $dbName);
     }
 
     /**
