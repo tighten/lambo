@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\MakeAuth;
 use App\Actions\OpenBrowser;
 use App\Actions\InitializeGit;
 use App\Actions\AfterCommands;
@@ -80,6 +81,7 @@ class NewCommand extends Command
         $this->action(InitializeGit::class);
         $this->action(CreateDatabase::class);
         $this->action(UpdateDotEnvFile::class);
+        $this->action(MakeAuth::class);
         $this->action(AfterCommands::class);
         $this->action(OpenBrowser::class);
         $this->action(OpenEditor::class);
