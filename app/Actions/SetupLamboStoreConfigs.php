@@ -14,6 +14,8 @@ class SetupLamboStoreConfigs extends BaseAction
 
         $this->projectPath();
 
+        $this->projectUrl();
+
         $this->dbName();
 
         $this->checkStore();
@@ -45,6 +47,17 @@ class SetupLamboStoreConfigs extends BaseAction
         } else {
             config()->set('lambo-store.install_path', $configInstallPath);
         }
+    }
+
+    /**
+     * Stores the project url.
+     *
+     */
+    protected function projectUrl(): void
+    {
+        $url = 'http://' . config('lambo-store.project_name') . str_start(config('lambo.tld'), '.');
+
+        config()->set('lambo-store.project_url', $url);
     }
 
     /**

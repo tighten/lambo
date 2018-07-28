@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Lambo Store has the variables that are calculated/obtained, and not in the exposed, editable config file.
+ *
+ */
+
 return [
 
     /*
@@ -31,6 +36,16 @@ return [
     |
     */
     'project_name' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Project Url
+    |--------------------------------------------------------------------------
+    |
+    | Project url
+    |
+    */
+    'project_url' => false,
 
     /*
     |--------------------------------------------------------------------------

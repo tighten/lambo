@@ -9,6 +9,9 @@ class MergeOptionsToConfig extends BaseAction
     public function __invoke()
     {
         collect($this->console->options())
+            ->reject(function ($item, $key) {
+                return $item === null;
+            })
             ->intersectByKeys($this->availableOptions())
             ->each(function ($item, $key) {
                 if ($item === 'true') {

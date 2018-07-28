@@ -15,7 +15,7 @@ use App\Actions\PromptForCustomization;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Actions\DisplayCurrentConfiguration;
-use App\Actions\ProjectCredentialsAndConfigs;
+use App\Actions\UpdateDotEnvFile;
 
 class NewCommand extends Command
 {
@@ -65,35 +65,21 @@ class NewCommand extends Command
     public function handle(): void
     {
         $this->action(DisplayLamboLogo::class);
-
         $this->action(RunVerifications::class);
-
         /**
-         * Base config is loaded and merged with ~/.lambo/config.php in the \App\Providers\AppServiceProvider
-         * And then gets overridden here with existing inline options
+         * Base config is loaded and merged with ~/.lambo/config.php in \App\Providers\AppServiceProvider
+         * and then gets overridden here with existing inline options
          *
          */
         $this->action(MergeOptionsToConfig::class);
-
         $this->action(DisplayCurrentConfiguration::class);
-
         $this->action(PromptForCustomization::class);
-
         $this->action(SetupLamboStoreConfigs::class);
-
         $this->action(CreateNewApplication::class);
-
         $this->action(InitializeGit::class);
-
         $this->action(CreateDatabase::class);
-
-        /**
-         * @TODO implement action(ProjectCredentialsAndConfigs::class);
-         */
-//        $this->action(ProjectCredentialsAndConfigs::class);
-
+        $this->action(UpdateDotEnvFile::class);
         $this->action(AfterCommands::class);
-
         $this->action(OpenBrowser::class);
     }
 
