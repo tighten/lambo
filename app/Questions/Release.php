@@ -30,5 +30,4 @@ class Release extends BaseQuestion
             exit(1);
         }
     }
-
 }

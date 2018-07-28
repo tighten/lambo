@@ -9,5 +9,4 @@ namespace App\Support;
  */
 class QuestionAnswered
 {
-
 }

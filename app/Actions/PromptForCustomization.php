@@ -11,8 +11,7 @@ class PromptForCustomization extends BaseAction
         $customizeQuestion = 'Would you like to (R)un with current config, or (C)ustomize? Or (E)xit.';
 
         $answer = false;
-        while(!collect(['c','C','r','R','e','E'])->contains($answer))
-        {
+        while (!collect(['c','C','r','R','e','E'])->contains($answer)) {
             $answer = $this->console->ask($customizeQuestion);
 
             if (collect(['e','E'])->contains($answer)) {

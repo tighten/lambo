@@ -40,7 +40,7 @@ class MakeConfigFileCommand extends Command
 
         File::put($filePath, File::get(base_path('/stubs/config.stub')));
 
-        if (File::exists($filePath)){
+        if (File::exists($filePath)) {
             $this->info("File successfully created at [{$filePath}]");
         } else {
             $this->error("Error creating file [{$filePath}]");

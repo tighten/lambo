@@ -23,8 +23,7 @@ class SetupLamboStoreConfigs extends BaseAction
 
         if (collect([false, null])->contains($configInstallPath)) {
             config()->set('lambo-store.install_path', $this->console->currentWorkingDir);
-        }
-        else {
+        } else {
             config()->set('lambo-store.install_path', $configInstallPath);
         }
     }
@@ -39,9 +38,8 @@ class SetupLamboStoreConfigs extends BaseAction
 
         $exit = false;
 
-        foreach ($store as $key => $value)
-        {
-            if (!$value){
+        foreach ($store as $key => $value) {
+            if (!$value) {
                 $this->console->error("Error, could not set value for {$key}");
                 $exit = true;
             }

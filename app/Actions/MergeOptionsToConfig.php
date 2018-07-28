@@ -12,11 +12,9 @@ class MergeOptionsToConfig extends BaseAction
             ->intersectByKeys($this->availableOptions());
 
         $options->each(function ($item, $key) {
-
             if ($item === 'true') {
                 $item = true;
-            }
-            elseif ($item === 'false') {
+            } elseif ($item === 'false') {
                 $item = false;
             }
 

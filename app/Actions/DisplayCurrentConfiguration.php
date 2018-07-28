@@ -15,7 +15,6 @@ class DisplayCurrentConfiguration extends BaseAction
         $rows = collect($rows)->filter(function ($item, $key) {
             return $key !== 'after';
         })->map(function ($item, $key) {
-
             if (is_bool($item)) {
                 $item = $item ? 'true' : 'false';
             }

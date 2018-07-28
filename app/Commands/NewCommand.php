@@ -2,18 +2,18 @@
 
 namespace App\Commands;
 
-use App\Actions\InitializeGit;
 use App\Support\ShellCommand;
+use App\Actions\InitializeGit;
 use App\Actions\RunVerifications;
 use App\Actions\DisplayLamboLogo;
 use App\Actions\MergeOptionsToConfig;
 use App\Actions\CreateNewApplication;
 use App\Services\AfterCommandsService;
+use App\Actions\SetupLamboStoreConfigs;
 use App\Actions\PromptForCustomization;
 use App\Services\CreateDatabaseService;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Actions\SetupLamboStoreConfigs;
 use App\Actions\DisplayCurrentConfiguration;
 
 class NewCommand extends Command
@@ -120,7 +120,6 @@ class NewCommand extends Command
         if (config('lambo.create_database')) {
             app()->make(CreateDatabaseService::class, ['console' => $this])->handle();
         }
-
     }
 
     /**

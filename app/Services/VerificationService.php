@@ -26,8 +26,7 @@ class VerificationService
             } catch (\LogicException $exception) {
                 $console->error($exception->getMessage());
                 exit(1);
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 $console->error($exception->getMessage());
                 exit(1);
             }

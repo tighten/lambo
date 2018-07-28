@@ -28,5 +28,4 @@ abstract class BaseAction
 
         $this->shell = $shell;
     }
-
 }

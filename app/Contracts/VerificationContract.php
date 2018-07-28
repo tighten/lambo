@@ -17,5 +17,4 @@ interface VerificationContract
      * @return bool
      */
     public function handle(): bool;
-
 }

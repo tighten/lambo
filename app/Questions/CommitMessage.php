@@ -23,5 +23,4 @@ class CommitMessage extends BaseQuestion
 
         $this->answer($this->subject, $commitMessage);
     }
-
 }

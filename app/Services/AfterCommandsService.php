@@ -20,10 +20,8 @@ class AfterCommandsService
     {
         $commands = config('lambo.after.commands', []);
 
-        foreach ($commands as $command)
-        {
+        foreach ($commands as $command) {
             $this->shellCommand->inCurrentWorkingDir($command);
         }
     }
-
 }

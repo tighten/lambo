@@ -35,5 +35,4 @@ abstract class BaseQuestion implements QuestionContract
     {
         return $this->questionsService->answer($key, $value);
     }
-
 }

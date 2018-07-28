@@ -52,10 +52,8 @@ class QuestionsService
      */
     public function handle($command): void
     {
-        foreach (static::questions as $question)
-        {
+        foreach (static::questions as $question) {
             app()->make($question)->handle($command);
         }
     }
-
 }

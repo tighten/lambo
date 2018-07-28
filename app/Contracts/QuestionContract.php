@@ -15,5 +15,4 @@ interface QuestionContract
      * @return QuestionAnswered
      */
     public function answer(string $key, $value): QuestionAnswered;
-
 }

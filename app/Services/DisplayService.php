@@ -28,13 +28,10 @@ class DisplayService
      */
     public function displayLamboLogo(): void
     {
-        foreach (explode("\n", $this->lamboLogo) as $line)
-        {
+        foreach (explode("\n", $this->lamboLogo) as $line) {
             $this->console->info($line);
         }
 
         $this->console->alert("Super-powered 'laravel new' with Laravel and Valet.");
     }
-
-
 }

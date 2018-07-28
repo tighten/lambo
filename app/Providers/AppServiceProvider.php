@@ -33,13 +33,13 @@ class AppServiceProvider extends ServiceProvider
 
         $filePath = $homeFolder . '/.lambo/config.php';
 
-        if (File::exists($filePath)){
+        if (File::exists($filePath)) {
             $this->mergeConfigFrom($filePath, 'lambo');
         }
 
         $filePath = $homeFolder . '/.lambo/after.php';
 
-        if (File::exists($filePath)){
+        if (File::exists($filePath)) {
             $this->mergeConfigFrom($filePath, 'lambo.after');
         }
     }

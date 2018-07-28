@@ -30,11 +30,10 @@ class Editor extends BaseQuestion
 
         $editorKeyChoice = $command->choice('Open in editor?', $options->keys()->all(), $default = 0);
 
-        $editor = $options->first(function($value, $key) use ($editorKeyChoice) {
-                return $key === $editorKeyChoice;
-            });
+        $editor = $options->first(function ($value, $key) use ($editorKeyChoice) {
+            return $key === $editorKeyChoice;
+        });
 
         $this->answer($this->subject, $editor);
     }
-
 }
