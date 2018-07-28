@@ -6,7 +6,7 @@ use App\Services\QuestionsService;
 use App\Contracts\QuestionContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-class BaseQuestion implements QuestionContract
+abstract class BaseQuestion implements QuestionContract
 {
     /**
      * @var ExecutableFinder
@@ -31,7 +31,7 @@ class BaseQuestion implements QuestionContract
      * @param $value
      * @return QuestionAnswered
      */
-    public function answer($key, $value): QuestionAnswered
+    public function answer(string $key, $value): QuestionAnswered
     {
         return $this->questionsService->answer($key, $value);
     }

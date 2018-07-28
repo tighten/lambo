@@ -17,7 +17,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | First commit message
+    | Commit message
     |--------------------------------------------------------------------------
     |
     | The editor command name to open in the project directory after
@@ -26,7 +26,7 @@ return [
     | Option: string
     |
     */
-    'first_commit_message' => 'Initial commit.',
+    'message' => 'Initial commit.',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     | Options: boolean
     |
     */
-    'valet_link' => false,
+    'link' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     | Options: false, 'mysql', 'sqlite'
     |
     */
-    'create_database' => false,
+    'database' => false,
 
     /*
     |--------------------------------------------------------------------------

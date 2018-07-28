@@ -2,16 +2,19 @@
 
 namespace App\Commands;
 
-use App\Services\DisplayService;
-use function is_bool;
-use function is_string;
+use App\Actions\InitializeGit;
 use App\Support\ShellCommand;
-use App\Services\QuestionsService;
-use App\Services\VerificationService;
+use App\Actions\RunVerifications;
+use App\Actions\DisplayLamboLogo;
+use App\Actions\MergeOptionsToConfig;
+use App\Actions\CreateNewApplication;
 use App\Services\AfterCommandsService;
+use App\Actions\PromptForCustomization;
 use App\Services\CreateDatabaseService;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use App\Actions\SetupLamboStoreConfigs;
+use App\Actions\DisplayCurrentConfiguration;
 
 class NewCommand extends Command
 {
@@ -22,7 +25,15 @@ class NewCommand extends Command
      */
     protected $signature = 'new 
         {projectName : Name of the Laravel project}
-        {--dev : Choose the dev branch instead of master}
+        {--dev : Choose the dev branch instead of master.}
+        {--editor= : The editor command. Use false for none.}
+        {--message= : Set the first commit message.}
+        {--path= : Specify where to install the application.}
+        {--auth : Use Artisan to scaffold all of the routes and views you need for authentication.}
+        {--node= : Run yarn if installed, otherwise runs npm install after creating the project.}
+        {--browser= : Define which browser you want to open the project in.}
+        {--link : Create a Valet link to the project directory.}
+        {--database= : Create a database with Project Name. Options: false, mysql, sqlite}
         ';
 
     /**
@@ -34,7 +45,7 @@ class NewCommand extends Command
 
     public $projectName;
 
-    public $dev;
+    public $currentWorkingDir;
 
     /**
      * @var ShellCommand
@@ -50,6 +61,8 @@ class NewCommand extends Command
     {
         parent::__construct();
 
+        $this->currentWorkingDir = getcwd();
+
         $this->shellCommand = $shellCommand;
     }
 
@@ -60,22 +73,26 @@ class NewCommand extends Command
      */
     public function handle(): void
     {
-        $this->displayLamboLogo();
+        $this->action(DisplayLamboLogo::class);
 
-        $this->runVerifications();
-
-        $this->showConfigs();
-
-        $this->promptForCustomization();
+        $this->action(RunVerifications::class);
 
         /**
-         * TODO on setup, merge config with loaded ~/.lambo/config and interactive options
+         * Base config is loaded and merged with ~/.lambo/config.php in the \App\Providers\AppServiceProvider
+         * And then gets overridden here with existing inline options
+         *
          */
-        $this->setUp();
+        $this->action(MergeOptionsToConfig::class);
 
-        $this->installNewApplication();
+        $this->action(DisplayCurrentConfiguration::class);
 
-        $this->initializeGit();
+        $this->action(PromptForCustomization::class);
+
+        $this->action(SetupLamboStoreConfigs::class);
+
+        $this->action(CreateNewApplication::class);
+
+        $this->action(InitializeGit::class);
 
 //        $this->createDatabase();
 
@@ -85,61 +102,15 @@ class NewCommand extends Command
     }
 
     /**
-     * Run the verifications service
+     * Invoke an Action Class
      *
+     * @param $actionClass
      */
-    protected function runVerifications(): void
+    public function action($actionClass): void
     {
-        resolve(VerificationService::class)->handle($this);
+        app($actionClass, ['console' => $this])();
     }
 
-    /**
-     * Setup
-     *
-     */
-    protected function setUp(): void
-    {
-        $this->projectName = $this->argument('projectName');
-        $this->dev = $this->option('dev');
-    }
-
-    /**
-     * The "laravel new" command, and wether if should require the dev branch or not
-     *
-     */
-    protected function installNewApplication(): void
-    {
-        if ($this->dev) {
-            $this->info('Creating application from dev branch.');
-            $this->shellCommand->inCurrentWorkingDir("laravel new {$this->projectName} --dev");
-        } else {
-            $this->info('Creating application from release branch.');
-            $this->shellCommand->inCurrentWorkingDir("laravel new {$this->projectName}");
-        }
-    }
-
-    /**
-     * Initialize Git
-     *
-     */
-    protected function initializeGit(): void
-    {
-        $showOutput = false;
-
-        $this->shellCommand->inDirectory($this->projectName, 'git init', $showOutput);
-        $this->shellCommand->inDirectory($this->projectName, 'git add .', $showOutput);
-        $this->shellCommand->inDirectory($this->projectName, 'git commit -m "Initial commit"', $showOutput);
-
-        $this->info('Git repository initialized.');
-    }
-
-    /**
-     * Questions or defaults
-     */
-    public function questions(): void
-    {
-        app()->make(QuestionsService::class)->handle($this);
-    }
 
     /**
      * Create the database, if opted-in
@@ -160,58 +131,7 @@ class NewCommand extends Command
         resolve(AfterCommandsService::class)->handle();
     }
 
-    /**
-     * Show current config
-     */
-    protected function showConfigs(): void
-    {
-        $rows = config('lambo', []);
 
-        $rows = collect($rows)->filter(function ($item, $key) {
-            return $key !== 'after';
-        })->map(function ($item, $key) {
-
-            if (is_bool($item)) {
-                $item = $item ? 'true' : 'false';
-            }
-
-            if (is_string($item) && $item === '') {
-                $item = '(empty)';
-            }
-
-            return [
-                'Configuration' => $key,
-                'Value' => $item,
-            ];
-        })->all();
-
-        $this->table(['Configuration', 'Value'], $rows);
-    }
-
-    /**
-     * Display Lambo Logo
-     *
-     */
-    protected function displayLamboLogo(): void
-    {
-        app()->make(DisplayService::class,['console' => $this])->displayLamboLogo();
-    }
-
-    /**
-     * Prompt for customization
-     */
-    public function promptForCustomization()
-    {
-        $customizeQuestion = 'Would you like to (R)un with current config, or (C)ustomize?';
-        $answer = false;
-        while(!collect(['c','C','r','R'])->contains($answer))
-        {
-            $answer = $this->ask($customizeQuestion);
-            if (collect(['c','C'])->contains($answer)) {
-                $this->questions();
-            }
-        }
-    }
 
     /**
      * Define the command's schedule.

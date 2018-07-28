@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 
-class InspiringCommandTest extends TestCase
+class VerificationTest extends TestCase
 {
     /**
      * A basic test example.
