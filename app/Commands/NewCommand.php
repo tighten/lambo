@@ -6,6 +6,7 @@ use App\Actions\OpenBrowser;
 use App\Actions\InitializeGit;
 use App\Actions\AfterCommands;
 use App\Actions\CreateDatabase;
+use App\Actions\OpenEditor;
 use App\Actions\RunVerifications;
 use App\Actions\DisplayLamboLogo;
 use App\Actions\MergeOptionsToConfig;
@@ -81,6 +82,7 @@ class NewCommand extends Command
         $this->action(UpdateDotEnvFile::class);
         $this->action(AfterCommands::class);
         $this->action(OpenBrowser::class);
+        $this->action(OpenEditor::class);
     }
 
     /**
