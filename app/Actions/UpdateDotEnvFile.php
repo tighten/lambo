@@ -27,6 +27,12 @@ class UpdateDotEnvFile extends BaseAction
      */
     protected $fileLines;
 
+    /**
+     * UpdateDotEnvFile constructor.
+     *
+     * @param NewCommand $console
+     * @param ShellCommand $shell
+     */
     public function __construct(NewCommand $console, ShellCommand $shell)
     {
         parent::__construct($console, $shell);

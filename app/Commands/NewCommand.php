@@ -3,21 +3,22 @@
 namespace App\Commands;
 
 use App\Actions\MakeAuth;
+use App\Actions\OpenEditor;
 use App\Actions\OpenBrowser;
 use App\Actions\InitializeGit;
 use App\Actions\AfterCommands;
 use App\Actions\CreateDatabase;
-use App\Actions\OpenEditor;
 use App\Actions\RunVerifications;
 use App\Actions\DisplayLamboLogo;
+use App\Actions\UpdateDotEnvFile;
 use App\Actions\MergeOptionsToConfig;
 use App\Actions\CreateNewApplication;
 use App\Actions\SetupLamboStoreConfigs;
 use App\Actions\PromptForCustomization;
+use App\Actions\InstallNodeDependencies;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Actions\DisplayCurrentConfiguration;
-use App\Actions\UpdateDotEnvFile;
 
 class NewCommand extends Command
 {
@@ -83,6 +84,7 @@ class NewCommand extends Command
         $this->action(UpdateDotEnvFile::class);
         $this->action(MakeAuth::class);
         $this->action(AfterCommands::class);
+        $this->action(InstallNodeDependencies::class);
         $this->action(OpenBrowser::class);
         $this->action(OpenEditor::class);
     }
