@@ -38,6 +38,7 @@ class NewCommand extends Command
         {--node= : Run yarn if installed, otherwise runs npm install after creating the project.}
         {--browser= : Define which browser you want to open the project in.}
         {--link : Create a Valet link to the project directory.}
+        {--tld= : The top level domain for the local server.}
         {--database= : Create a database with Project Name. Options: false, mysql, sqlite}
         ';
 
