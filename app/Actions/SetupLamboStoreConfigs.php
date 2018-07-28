@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use LogicException;
 use App\Support\BaseAction;
+use Illuminate\Support\Facades\File;
 
 class SetupLamboStoreConfigs extends BaseAction
 {
@@ -10,7 +12,12 @@ class SetupLamboStoreConfigs extends BaseAction
     {
         $this->projectName();
 
-        $this->installPath();
+        try {
+            $this->installPath();
+        }catch (LogicException $exception) {
+            $this->console->error($exception->getMessage());
+            exit(1);
+        }
 
         $this->projectPath();
 
@@ -45,7 +52,23 @@ class SetupLamboStoreConfigs extends BaseAction
         if (collect([false, null])->contains($configInstallPath)) {
             config()->set('lambo-store.install_path', $this->console->currentWorkingDir);
         } else {
-            config()->set('lambo-store.install_path', $configInstallPath);
+
+            if (starts_with($configInstallPath, '~')){
+                // Path starts with '~', so it's relative to the HOME folder
+                $installPath = str_replace('~', $_SERVER['HOME'], $configInstallPath);
+            } elseif (starts_with($configInstallPath, '/')){
+                // Path starts with '~', so it's an absolute path
+                $installPath = $configInstallPath;
+            } else {
+                // Path is relative to the working dir
+                $installPath = str_finish($this->console->currentWorkingDir, '/') . $configInstallPath;
+            }
+
+            if (!File::isDirectory($installPath)) {
+                throw new LogicException("Directory {$installPath} doesn't exist.");
+            }
+
+            config()->set('lambo-store.install_path', $installPath);
         }
     }
 
