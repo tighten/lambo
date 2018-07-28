@@ -1,1 +1,7 @@
-vendor/
+/vendor
+/.idea
+/.vscode
+/.vagrant
+.env
+/database/database.sqlite
+/.php_cs.cache

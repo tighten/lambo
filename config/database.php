@@ -1,39 +1,36 @@
 <?php
 
-/*
- * Here goes the illuminate/database component configuration. Once
- * installed, the configuration below is used to configure your
- * database component.
- */
 return [
-    /*
-     * If true, migrations commands will be available.
-     */
-    'with-migrations' => false,
 
     /*
-     * If true, seeds commands will be available.
-     */
-    'with-seeds' => false,
-
-    /*
-     * Here goes the application database connection configuration. By
-     * default, we use `sqlite` as a driver. Feel free to use another
-     * driver, be sure to check the database component documentation.
-     */
+    |--------------------------------------------------------------------------
+    | Default Database Connection Name
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify which of the database connections below you wish
+    | to use as your default connection for all database work. Of course
+    | you may use many connections at once using the Database library.
+    |
+    */
     'connections' => [
-        'sqlite' => [
+        'default' => [
             'driver' => 'sqlite',
-            'database' => __DIR__ . '/../database/database.sqlite',
+            'database' => database_path('database.sqlite'),
         ],
-        'mysql' => [
-            'driver'    => 'mysql',
-            'database'  => '',
-            'username'  => 'root',
-            'password'  => '',
+        'host_database' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', null),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix'    => '',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
     ],
+
 ];

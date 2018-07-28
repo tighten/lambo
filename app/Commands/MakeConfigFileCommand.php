@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Commands;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Console\Scheduling\Schedule;
+use LaravelZero\Framework\Commands\Command;
+
+class MakeConfigFileCommand extends Command
+{
+    /**
+     * The signature of the command.
+     *
+     * @var string
+     */
+    protected $signature = 'make:config';
+
+    /**
+     * The description of the command.
+     *
+     * @var string
+     */
+    protected $description = "Creates a config file so you don't have to pass the parameters every time you use Lambo";
+
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function handle(): void
+    {
+        $homeFolder = $_SERVER['HOME'];
+
+        $filePath = $homeFolder . '/.lambo/config.php';
+
+        if (File::exists($filePath)) {
+            $this->error("Config file already exists at [{$filePath}].");
+            exit(1);
+        }
+
+        File::put($filePath, File::get(base_path('/stubs/config.php')));
+
+        if (File::exists($filePath)){
+            $this->info("File successfully created at [{$filePath}]");
+        } else {
+            $this->error("Error creating file [{$filePath}]");
+        }
+    }
+
+    /**
+     * Define the command's schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     *
+     * @return void
+     */
+    public function schedule(Schedule $schedule): void
+    {
+        // $schedule->command(static::class)->everyMinute();
+    }
+}
