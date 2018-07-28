@@ -117,7 +117,6 @@ class UpdateDotEnvFile extends BaseAction
     protected function performReplaces(): void
     {
         $this->fileLines->transform(function ($item, $key) {
-
             $parts = explode('=', $item, 2);
 
             // Line doesn't contain an equal sign (=), return same
@@ -139,7 +138,6 @@ class UpdateDotEnvFile extends BaseAction
 
             return $item;
         });
-
     }
 
     /**

@@ -73,6 +73,5 @@ class InstallNodeDependencies extends BaseAction
             $this->console->error("Config is set to node=true, but couldn't find yarn nor npm");
             return;
         }
-
     }
 }
