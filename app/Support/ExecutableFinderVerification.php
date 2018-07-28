@@ -4,9 +4,10 @@ namespace App\Support;
 
 use LogicException;
 use function get_class;
+use App\Contracts\VerificationContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-abstract class ExecutableFinderVerification
+abstract class ExecutableFinderVerification implements VerificationContract
 {
     /**
      * @var string

@@ -13,7 +13,7 @@ class MakeConfigFileCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:config';
+    protected $signature = 'make:config {--force : Force overwrite existing "after" file}';
 
     /**
      * The description of the command.
@@ -33,12 +33,12 @@ class MakeConfigFileCommand extends Command
 
         $filePath = $homeFolder . '/.lambo/config.php';
 
-        if (File::exists($filePath)) {
+        if (File::exists($filePath) && !$this->option('force')) {
             $this->error("Config file already exists at [{$filePath}].");
             exit(1);
         }
 
-        File::put($filePath, File::get(base_path('/stubs/config.php')));
+        File::put($filePath, File::get(base_path('/stubs/config.stub')));
 
         if (File::exists($filePath)){
             $this->info("File successfully created at [{$filePath}]");

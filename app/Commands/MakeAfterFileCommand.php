@@ -13,7 +13,7 @@ class MakeAfterFileCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:after';
+    protected $signature = 'make:after {--force : Force overwrite existing "after" file}';
 
     /**
      * The description of the command.
@@ -33,12 +33,12 @@ class MakeAfterFileCommand extends Command
 
         $filePath = $homeFolder . '/.lambo/after.php';
 
-        if (File::exists($filePath)) {
+        if (File::exists($filePath) && !$this->option('force')) {
             $this->error("Config file already exists at [{$filePath}].");
             exit(1);
         }
 
-        File::put($filePath, File::get(base_path('/stubs/after.php')));
+        File::put($filePath, File::get(base_path('/stubs/after.stub')));
 
         if (File::exists($filePath)){
             $this->info("File successfully created at [{$filePath}]");

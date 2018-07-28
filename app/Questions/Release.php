@@ -19,7 +19,7 @@ class Release extends BaseQuestion
      */
     public function handle(Command $command): void
     {
-        $releaseOrDevBranch = $command->choice('Release or Dev branch?', ['Release', 'Dev'], $default = 0, $attempts = 3);
+        $releaseOrDevBranch = $command->choice('Release or Dev branch?', ['Release', 'Dev'], $default = 0);
 
         if ($releaseOrDevBranch === 'Release') {
             $this->answer($this->subject, false);

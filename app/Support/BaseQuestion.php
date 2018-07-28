@@ -2,11 +2,11 @@
 
 namespace App\Support;
 
-
 use App\Services\QuestionsService;
+use App\Contracts\QuestionContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-class BaseQuestion
+class BaseQuestion implements QuestionContract
 {
     /**
      * @var ExecutableFinder
@@ -29,10 +29,11 @@ class BaseQuestion
      *
      * @param $key
      * @param $value
+     * @return QuestionAnswered
      */
-    public function answer($key, $value): void
+    public function answer($key, $value): QuestionAnswered
     {
-        $this->questionsService->answer($key, $value);
+        return $this->questionsService->answer($key, $value);
     }
 
 }

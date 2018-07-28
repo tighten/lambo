@@ -28,7 +28,7 @@ class Editor extends BaseQuestion
             return $this->finder->find($item) !== null;
         });
 
-        $editorKeyChoice = $command->choice('Open in editor?', $options->keys()->all(), $default = 0, $attempts = 3);
+        $editorKeyChoice = $command->choice('Open in editor?', $options->keys()->all(), $default = 0);
 
         $editor = $options->first(function($value, $key) use ($editorKeyChoice) {
                 return $key === $editorKeyChoice;

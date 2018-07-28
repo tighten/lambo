@@ -2,6 +2,9 @@
 
 namespace App\Commands;
 
+use App\Services\DisplayService;
+use function is_bool;
+use function is_string;
 use App\Support\ShellCommand;
 use App\Services\QuestionsService;
 use App\Services\VerificationService;
@@ -57,10 +60,17 @@ class NewCommand extends Command
      */
     public function handle(): void
     {
+        $this->displayLamboLogo();
+
         $this->runVerifications();
 
-        $this->questions();
+        $this->showConfigs();
 
+        $this->promptForCustomization();
+
+        /**
+         * TODO on setup, merge config with loaded ~/.lambo/config and interactive options
+         */
         $this->setUp();
 
         $this->installNewApplication();
@@ -78,7 +88,7 @@ class NewCommand extends Command
      * Run the verifications service
      *
      */
-    protected function runVerifications():void
+    protected function runVerifications(): void
     {
         resolve(VerificationService::class)->handle($this);
     }
@@ -87,23 +97,22 @@ class NewCommand extends Command
      * Setup
      *
      */
-    protected function setUp():void
+    protected function setUp(): void
     {
-        $this->projectName  = $this->argument('projectName');
-        $this->dev          = $this->option('dev');
+        $this->projectName = $this->argument('projectName');
+        $this->dev = $this->option('dev');
     }
 
     /**
      * The "laravel new" command, and wether if should require the dev branch or not
      *
      */
-    protected function installNewApplication():void
+    protected function installNewApplication(): void
     {
         if ($this->dev) {
             $this->info('Creating application from dev branch.');
             $this->shellCommand->inCurrentWorkingDir("laravel new {$this->projectName} --dev");
-        }
-        else {
+        } else {
             $this->info('Creating application from release branch.');
             $this->shellCommand->inCurrentWorkingDir("laravel new {$this->projectName}");
         }
@@ -113,11 +122,15 @@ class NewCommand extends Command
      * Initialize Git
      *
      */
-    protected function initializeGit():void
+    protected function initializeGit(): void
     {
-        $this->shellCommand->inDirectory($this->projectName, 'git init');
-        $this->shellCommand->inDirectory($this->projectName, 'git add .', true);
-        $this->shellCommand->inDirectory($this->projectName, 'git commit -m "Initial commit"', true);
+        $showOutput = false;
+
+        $this->shellCommand->inDirectory($this->projectName, 'git init', $showOutput);
+        $this->shellCommand->inDirectory($this->projectName, 'git add .', $showOutput);
+        $this->shellCommand->inDirectory($this->projectName, 'git commit -m "Initial commit"', $showOutput);
+
+        $this->info('Git repository initialized.');
     }
 
     /**
@@ -145,6 +158,59 @@ class NewCommand extends Command
     protected function afterCommands(): void
     {
         resolve(AfterCommandsService::class)->handle();
+    }
+
+    /**
+     * Show current config
+     */
+    protected function showConfigs(): void
+    {
+        $rows = config('lambo', []);
+
+        $rows = collect($rows)->filter(function ($item, $key) {
+            return $key !== 'after';
+        })->map(function ($item, $key) {
+
+            if (is_bool($item)) {
+                $item = $item ? 'true' : 'false';
+            }
+
+            if (is_string($item) && $item === '') {
+                $item = '(empty)';
+            }
+
+            return [
+                'Configuration' => $key,
+                'Value' => $item,
+            ];
+        })->all();
+
+        $this->table(['Configuration', 'Value'], $rows);
+    }
+
+    /**
+     * Display Lambo Logo
+     *
+     */
+    protected function displayLamboLogo(): void
+    {
+        app()->make(DisplayService::class,['console' => $this])->displayLamboLogo();
+    }
+
+    /**
+     * Prompt for customization
+     */
+    public function promptForCustomization()
+    {
+        $customizeQuestion = 'Would you like to (R)un with current config, or (C)ustomize?';
+        $answer = false;
+        while(!collect(['c','C','r','R'])->contains($answer))
+        {
+            $answer = $this->ask($customizeQuestion);
+            if (collect(['c','C'])->contains($answer)) {
+                $this->questions();
+            }
+        }
     }
 
     /**

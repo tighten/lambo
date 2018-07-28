@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Questions\CommitMessage;
 use App\Questions\Editor;
 use App\Questions\Release;
+use App\Questions\CommitMessage;
+use App\Support\QuestionAnswered;
 
 class QuestionsService
 {
@@ -35,10 +36,13 @@ class QuestionsService
      *
      * @param string $key
      * @param $value
+     * @return QuestionAnswered
      */
-    public function answer(string $key, $value): void
+    public function answer(string $key, $value): QuestionAnswered
     {
         $this->answers->put($key, $value);
+
+        return new QuestionAnswered();
     }
 
     /**

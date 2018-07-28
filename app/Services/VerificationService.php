@@ -37,6 +37,6 @@ class VerificationService
             }
         }
 
-        $console->info('Verifications OK!');
+//        $console->info('Verifications OK!');
     }
 }
