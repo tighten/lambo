@@ -16,6 +16,7 @@ use App\Actions\CreateNewApplication;
 use App\Actions\SetupLamboStoreConfigs;
 use App\Actions\PromptForCustomization;
 use App\Actions\InstallNodeDependencies;
+use App\Actions\ValetLink;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 use App\Actions\DisplayCurrentConfiguration;
@@ -85,6 +86,7 @@ class NewCommand extends Command
         $this->action(MakeAuth::class);
         $this->action(AfterCommands::class);
         $this->action(InstallNodeDependencies::class);
+        $this->action(ValetLink::class);
         $this->action(OpenBrowser::class);
         $this->action(OpenEditor::class);
     }
