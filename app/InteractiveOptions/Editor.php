@@ -15,19 +15,12 @@ class Editor extends BaseInteractiveOption
     protected $key = 'editor';
 
     /**
-     * The chosen value, or retrieved input.
-     *
-     * @string
-     */
-    protected $value;
-
-    /**
      * Performs interactively.
      *
      * @param $console
-     * @return null|string
+     * @return BaseInteractiveOption
      */
-    public function perform(NewCommand $console): ?string
+    public function perform(NewCommand $console): BaseInteractiveOption
     {
         $options = collect([
             'pstorm'    => 'PHPStorm',
@@ -39,16 +32,12 @@ class Editor extends BaseInteractiveOption
             return $this->finder->find($key) !== null;
         })->put('false', 'Do not open.');
 
-        $value = $console
-            ->menu('Choose the editor to open in', $options->all())
+        $menuTitle = 'Choose the editor to open in';
+
+        $this->value = $console
+            ->menu($menuTitle, $options->all())
             ->open();
 
-        if ($value === null) {
-            return null;
-        }
-
-        $this->setLamboConfig($this->key, $value);
-
-        return $value;
+        return $this;
     }
 }

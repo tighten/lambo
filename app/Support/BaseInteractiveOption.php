@@ -8,32 +8,47 @@ use Symfony\Component\Process\ExecutableFinder;
 abstract class BaseInteractiveOption implements InteractiveOptionContract
 {
     /**
-     * The finder
+     * Option value.
+     *
+     * @var string
+     */
+    protected $value;
+
+    /**
+     * The finder.
      *
      * @var ExecutableFinder
      */
     protected $finder;
 
+    /**
+     * BaseInteractiveOption constructor.
+     *
+     * @param ExecutableFinder $finder
+     */
     public function __construct(ExecutableFinder $finder)
     {
         $this->finder = $finder;
     }
 
     /**
-     * Store the answer in the singleton store.
+     * Option key
      *
-     * @param $key
-     * @param $value
-     * @return void
+     * @return string
      */
-    public function setLamboConfig(string $key, $value): void
+    public function key(): string
     {
-        if ($value === 'true') {
-            $value = true;
-        } elseif ($value === 'false') {
-            $value = false;
-        }
-
-        config()->set("lambo.{$key}", $value);
+        return $this->key;
     }
+
+    /**
+     * Option value
+     *
+     * @return string
+     */
+    public function value(): string
+    {
+        return $this->value;
+    }
+
 }

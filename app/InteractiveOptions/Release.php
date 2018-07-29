@@ -2,32 +2,37 @@
 
 namespace App\InteractiveOptions;
 
+use App\Commands\NewCommand;
 use App\Support\BaseInteractiveOption;
-use LaravelZero\Framework\Commands\Command;
 
 class Release extends BaseInteractiveOption
 {
     /**
+     * Option key.
+     *
      * @var string
      */
-    protected $subject = 'dev';
+    protected $key = 'dev';
 
     /**
-     * Handle the question.
+     * Performs interactively.
      *
-     * @param $command
+     * @param $console
+     * @return BaseInteractiveOption
      */
-    public function handle(Command $command): void
+    public function perform(NewCommand $console): BaseInteractiveOption
     {
-        $releaseOrDevBranch = $command->choice('Release or Dev branch?', ['Release', 'Dev'], $default = 0);
+        $options = [
+            'false'   => 'Nope, I want the stable.',
+            'true'    => 'I like living on the edge, take me to dev branch',
+        ];
 
-        if ($releaseOrDevBranch === 'Release') {
-            $this->answer($this->subject, false);
-        } elseif ($releaseOrDevBranch === 'Dev') {
-            $this->answer($this->subject, true);
-        } else {
-            $this->$command("Don't know what to do with such option.");
-            exit(1);
-        }
+        $menuTitle = "Do you want to Laravel's dev branch?";
+
+        $this->value = $console
+            ->menu($menuTitle, $options)
+            ->open();
+
+        return $this;
     }
 }

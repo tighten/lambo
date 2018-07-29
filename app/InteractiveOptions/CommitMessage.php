@@ -2,25 +2,28 @@
 
 namespace App\InteractiveOptions;
 
+use App\Commands\NewCommand;
 use App\Support\BaseInteractiveOption;
-use LaravelZero\Framework\Commands\Command;
 
 class CommitMessage extends BaseInteractiveOption
 {
     /**
+     * Option key.
+     *
      * @var string
      */
-    protected $subject = 'commitMessage';
+    protected $key = 'message';
 
     /**
-     * Handle the question.
+     * Performs the option interactively.
      *
-     * @param $command
+     * @param NewCommand $console
+     * @return BaseInteractiveOption
      */
-    public function handle(Command $command): void
+    public function perform(NewCommand $console): BaseInteractiveOption
     {
-        $commitMessage= $command->ask('Commit message?', 'Initial commit.');
+        $this->value = $console->anticipate('What should be the commit message?', ['Initial commit.']);
 
-        $this->answer($this->subject, $commitMessage);
+        return $this;
     }
 }

@@ -5,6 +5,8 @@ namespace App\Interactive;
 use App\Commands\NewCommand;
 use Illuminate\Support\Collection;
 use App\InteractiveOptions\Editor;
+use App\InteractiveOptions\Release;
+use App\InteractiveOptions\CommitMessage;
 
 class OptionManager
 {
@@ -41,10 +43,20 @@ class OptionManager
     {
         $this->interactiveMenuOptions = collect([
             [
+                'key'   => 'release',
+                'label' => 'The Laravel branch to use, dev or stable',
+                'class' => Release::class,
+            ],
+            [
                 'key'   => 'editor',
                 'label' => 'Editor - to open project after installation',
                 'class' => Editor::class,
-            ]
+            ],
+            [
+                'key'   => 'message',
+                'label' => 'The commit message',
+                'class' => CommitMessage::class,
+            ],
         ]);
     }
 
@@ -82,6 +94,32 @@ class OptionManager
     {
         $option = $this->interactiveMenuOptions->firstWhere('key', $optionKey);
 
-        return app($option['class'])->perform($console);
+        $option = app($option['class'])->perform($console);
+
+        if ($option->value() === null) {
+            return null;
+        }
+
+        $this->setLamboConfig($option->key(), $option->value());
+
+        return $option->value();
+    }
+
+    /**
+     * Changes the key to value in Lambo config.
+     *
+     * @param string $key
+     * @param $value
+     * @return void
+     */
+    public function setLamboConfig(string $key, $value): void
+    {
+        if ($value === 'true') {
+            $value = true;
+        } elseif ($value === 'false') {
+            $value = false;
+        }
+
+        config()->set("lambo.{$key}", $value);
     }
 }
