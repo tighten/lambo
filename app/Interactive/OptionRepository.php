@@ -2,11 +2,14 @@
 
 namespace App\Interactive;
 
+use App\InteractiveOptions\Auth;
+use App\InteractiveOptions\Browser;
 use App\InteractiveOptions\Path;
 use Illuminate\Support\Collection;
 use App\InteractiveOptions\Editor;
 use App\InteractiveOptions\Release;
 use App\InteractiveOptions\CommitMessage;
+use App\InteractiveOptions\NodeDependencies;
 
 class OptionRepository
 {
@@ -27,7 +30,7 @@ class OptionRepository
     }
 
     /**
-     * The interactive options
+     * The interactive options.
      *
      * @return Collection
      */
@@ -54,11 +57,26 @@ class OptionRepository
                 'label' => 'The Laravel branch to use, dev or stable',
                 'class' => Release::class,
             ],
+            [
+                'key'   => 'auth',
+                'label' => "Laravel's Auth scaffolding (auth:make)",
+                'class' => Auth::class,
+            ],
+            [
+                'key'   => 'node',
+                'label' => 'Install Node dependencies',
+                'class' => NodeDependencies::class,
+            ],
+            [
+                'key'   => 'browser',
+                'label' => 'Open the project in the browser',
+                'class' => Browser::class,
+            ],
         ]);
     }
 
     /**
-     * Returns he interactive options
+     * Returns the interactive options.
      *
      * @return Collection
      */
