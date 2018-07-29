@@ -2,9 +2,9 @@
 
 namespace App\Interactive;
 
-use App\Options\Editor;
 use App\Commands\NewCommand;
 use Illuminate\Support\Collection;
+use App\InteractiveOptions\Editor;
 
 class OptionManager
 {

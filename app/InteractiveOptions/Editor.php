@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Options;
+namespace App\InteractiveOptions;
 
 use App\Support\BaseOption;
 use App\Commands\NewCommand;
