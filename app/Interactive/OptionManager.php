@@ -15,13 +15,6 @@ class OptionManager
     protected $interactiveMenuOptions;
 
     /**
-     * Available Lambo config options.
-     *
-     * @var Collection
-     */
-    protected $availableConfigOptions;
-
-    /**
      * The interactive options repository.
      *
      * @var OptionRepository
@@ -36,7 +29,6 @@ class OptionManager
     public function __construct(OptionRepository $optionRepository)
     {
         $this->optionRepository = $optionRepository;
-        $this->hydrateAvailableConfigOptions();
         $this->hydrateInteractiveMenuOptions();
     }
 
@@ -48,16 +40,6 @@ class OptionManager
     public function hydrateInteractiveMenuOptions(): void
     {
         $this->interactiveMenuOptions = $this->optionRepository->get();
-    }
-
-    /**
-     * Hydrate the available config options.
-     *
-     * @return void
-     */
-    protected function hydrateAvailableConfigOptions(): void
-    {
-        $this->availableConfigOptions = collect(config('lambo'))->keys();
     }
 
     /**

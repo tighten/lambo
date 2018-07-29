@@ -11,11 +11,27 @@ use App\InteractiveOptions\CommitMessage;
 class OptionRepository
 {
     /**
+     * Available Lambo config options.
+     *
+     * @var Collection
+     */
+    protected $availableConfigOptions;
+
+    /**
+     * OptionRepository constructor.
+     *
+     */
+    public function __construct()
+    {
+        $this->hydrateAvailableConfigOptions();
+    }
+
+    /**
      * The interactive options
      *
      * @return Collection
      */
-    public function get(): Collection
+    public function interactiveOptions(): Collection
     {
         return collect([
             [
@@ -34,10 +50,33 @@ class OptionRepository
                 'class' => Path::class,
             ],
             [
-                'key'   => 'release',
+                'key'   => 'dev',
                 'label' => 'The Laravel branch to use, dev or stable',
                 'class' => Release::class,
             ],
         ]);
+    }
+
+    /**
+     * Returns he interactive options
+     *
+     * @return Collection
+     */
+    public function get(): Collection
+    {
+        return $this->interactiveOptions()
+            ->filter(function ($item, $key) {
+                return $this->availableConfigOptions->contains($item['key']);
+            });
+    }
+
+    /**
+     * Hydrate the available config options.
+     *
+     * @return void
+     */
+    protected function hydrateAvailableConfigOptions(): void
+    {
+        $this->availableConfigOptions = collect(config('lambo'))->keys();
     }
 }
