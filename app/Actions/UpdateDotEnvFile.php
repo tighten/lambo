@@ -59,6 +59,10 @@ class UpdateDotEnvFile extends BaseAction
 
         $this->performReplaces();
 
+        if (config('lambo.database') === 'sqlite') {
+            $this->commentKeysForSqlite();
+        }
+
         $this->save();
     }
 
@@ -138,6 +142,22 @@ class UpdateDotEnvFile extends BaseAction
 
             return $item;
         });
+    }
+
+    /**
+     * Remove Keys For Sqlite
+     *
+     * @throws LogicException
+     */
+    protected function commentKeysForSqlite(): void
+    {
+        $this->fileLines = $this->fileLines
+            ->transform(function ($item, $key) {
+                if (str_contains($item, ['DB_DATABASE','DB_HOST','DB_PORT','DB_USERNAME','DB_PASSWORD'])) {
+                    return "#{$item}";
+                }
+                return $item;
+            });
     }
 
     /**

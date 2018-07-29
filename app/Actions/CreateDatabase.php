@@ -58,6 +58,7 @@ class CreateDatabase extends BaseAction
      */
     protected function createSqliteDatabase():void
     {
-        throw new \Exception('Implement me!');
+        $this->console->info('Creating sqlite file.');
+        $this->shell->inDirectory(config('lambo-store.project_path'), 'touch database/database.sqlite');
     }
 }
