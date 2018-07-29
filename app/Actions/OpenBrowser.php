@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class OpenBrowser extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Opens the project in the browser.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $this->console->info('Opening browser.');
         $this->shell->inDirectory(config('lambo-store.project_path'), 'valet open');

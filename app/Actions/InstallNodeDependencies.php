@@ -9,6 +9,9 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class InstallNodeDependencies extends BaseAction
 {
+    /**
+     * @var ExecutableFinder
+     */
     protected $finder;
 
     /**
@@ -27,8 +30,9 @@ class InstallNodeDependencies extends BaseAction
     /**
      * Install Node dependencies.
      *
+     * @return void
      */
-    public function __invoke()
+    public function __invoke(): void
     {
         $directory = config('lambo-store.project_path');
 

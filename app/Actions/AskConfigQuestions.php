@@ -7,7 +7,12 @@ use App\Services\QuestionsService;
 
 class AskConfigQuestions extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Ask the configuration questions.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         resolve(QuestionsService::class)->handle($this->console);
     }

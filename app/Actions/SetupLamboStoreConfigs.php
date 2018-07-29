@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\File;
 
 class SetupLamboStoreConfigs extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Sets the configurations needed in Lambo Store.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $this->projectName();
 
@@ -33,7 +38,7 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Stores the Project Name.
+     * Sets the Project Name.
      *
      */
     protected function projectName(): void
@@ -42,8 +47,9 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Stores the installation path.
+     * Sets the installation path.
      *
+     * @return void
      */
     protected function installPath(): void
     {
@@ -72,8 +78,9 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Stores the project url.
+     * Sets the project url.
      *
+     * @return void
      */
     protected function projectUrl(): void
     {
@@ -83,8 +90,9 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Stores the project path.
+     * Sets the project path.
      *
+     * @return void
      */
     protected function projectPath(): void
     {
@@ -96,8 +104,9 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Sets the database name
+     * Sets the database name.
      *
+     * @return void
      */
     protected function dbName(): void
     {
@@ -115,6 +124,7 @@ class SetupLamboStoreConfigs extends BaseAction
     /**
      * Performs a check that all needed values in the Lambo Store where successfully set.
      *
+     * @return void
      */
     protected function checkStore(): void
     {

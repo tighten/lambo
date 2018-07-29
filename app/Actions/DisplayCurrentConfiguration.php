@@ -8,7 +8,12 @@ use App\Support\BaseAction;
 
 class DisplayCurrentConfiguration extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Displays current configuration.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $rows = config('lambo', []);
 

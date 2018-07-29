@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\DB;
 
 class CreateDatabase extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Creates the database.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $lamboDatabase = config('lambo.database');
 
@@ -28,6 +33,7 @@ class CreateDatabase extends BaseAction
     /**
      * Set database host configuration.
      *
+     * @return void
      */
     protected function setDatabaseHostConfigs(): void
     {
@@ -42,11 +48,12 @@ class CreateDatabase extends BaseAction
     /**
      * Creates the MySQL Database
      *
+     * @return void
      */
     protected function createMySQLDatabase():void
     {
         try {
-            $this->console->alert('Creating database...');
+            $this->console->info('Creating database...');
 
             $connection = DB::connection('host_database');
 
@@ -59,7 +66,7 @@ class CreateDatabase extends BaseAction
             })->count();
 
             if ($exists) {
-                $this->console->error('Database already existed! It was left as we found it.');
+                $this->console->alert('Database already existed! It was left as we found it.');
                 return;
             }
 
@@ -85,6 +92,7 @@ class CreateDatabase extends BaseAction
     /**
      * Creates the Sqlite Database
      *
+     * @return void
      */
     protected function createSqliteDatabase():void
     {

@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class CreateNewApplication extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Creates the new application.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $dev = config('lambo.dev', false);
 

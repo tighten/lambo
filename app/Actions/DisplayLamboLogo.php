@@ -15,7 +15,12 @@ class DisplayLamboLogo extends BaseAction
                                        
 ";
 
-    public function __invoke()
+    /**
+     * Displays the Lambo logo.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         foreach (explode("\n", $this->lamboLogo) as $line) {
             $this->console->info($line);

@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class OpenEditor extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Opens the project in the configured editor.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $directory = config('lambo-store.project_path');
 

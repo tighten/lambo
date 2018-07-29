@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class AfterCommands extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Perform the After Commands in Project Directory.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $directory  = config('lambo-store.project_path');
 

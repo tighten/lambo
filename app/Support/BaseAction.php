@@ -3,8 +3,9 @@
 namespace App\Support;
 
 use App\Commands\NewCommand;
+use App\Contracts\ActionContract;
 
-abstract class BaseAction
+abstract class BaseAction implements ActionContract
 {
     /**
      * @var NewCommand

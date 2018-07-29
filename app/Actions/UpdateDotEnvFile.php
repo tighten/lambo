@@ -13,16 +13,22 @@ use Illuminate\Support\Facades\File;
 class UpdateDotEnvFile extends BaseAction
 {
     /**
+     * The .env file path.
+     *
      * @var string
      */
     protected $filePath;
 
     /**
+     * The replaces to be made, by key-value.
+     *
      * @var Collection
      */
     protected $replaces;
 
     /**
+     * The .env file lines.
+     *
      * @var Collection
      */
     protected $fileLines;
@@ -41,12 +47,20 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Run the substitutions.
+     * Runs the substitutions.
      *
+     * @return void
      */
-    public function __invoke()
+    public function __invoke(): void
     {
-        $this->filePath = str_finish(config('lambo-store.project_path'), '/') . '.env';
+        $filePath = str_finish(config('lambo-store.project_path'), '/') . '.env';
+
+        if (File::exists($filePath)) {
+            $this->filePath = $filePath;
+        } else {
+            $this->console->error("Couldn't find .env file in: [{$filePath}]");
+            return;
+        }
 
         $this->hydrateReplaces();
 
@@ -67,8 +81,9 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Hydrate replaces
+     * Hydrate replaces.
      *
+     * @return void
      */
     protected function hydrateReplaces(): void
     {
@@ -98,7 +113,7 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Hydrates the file lines collection
+     * Hydrates the file lines collection.
      *
      * @throws LogicException
      */
@@ -115,8 +130,9 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Perform the replaces
+     * Perform the replaces.
      *
+     * @return void
      */
     protected function performReplaces(): void
     {
@@ -145,9 +161,9 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Remove Keys For Sqlite
+     * Comments keys for Sqlite on .env file.
      *
-     * @throws LogicException
+     * @return void
      */
     protected function commentKeysForSqlite(): void
     {
@@ -161,9 +177,9 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Save the changes
+     * Save the changes.
      *
-     * @throws LogicException
+     * @return void
      */
     protected function save(): void
     {

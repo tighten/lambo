@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class MergeOptionsToConfig extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Merges command inline options to the current Lambo configuration.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         collect($this->console->options())
             ->reject(function ($item, $key) {
@@ -24,6 +29,11 @@ class MergeOptionsToConfig extends BaseAction
             });
     }
 
+    /**
+     * Returns available options in Lambo config.
+     *
+     * @return array
+     */
     protected function availableOptions(): array
     {
         return collect(config('lambo'))->all();

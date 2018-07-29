@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class ValetLink extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Performs the Valet Link command.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $directory = config('lambo-store.project_path');
 

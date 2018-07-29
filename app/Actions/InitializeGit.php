@@ -6,7 +6,12 @@ use App\Support\BaseAction;
 
 class InitializeGit extends BaseAction
 {
-    public function __invoke()
+    /**
+     * Initializes the Git Repository.
+     *
+     * @return void
+     */
+    public function __invoke(): void
     {
         $showOutput = false;
 
