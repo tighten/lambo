@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Services\QuestionsService;
 use Illuminate\Support\Facades\File;
+use App\Actions\CustomizeConfigRuntime;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,11 +22,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         /**
-         * @TODO After adopting config strategy,most likely this singleton can be abandoned
-         *      We may selectively change a config value from the launch options, and storing it's value
-         *      right away in the config.
+         * @TODO Still needed to assess if the performance improvement is significant
          */
-        $this->app->singleton(QuestionsService::class, QuestionsService::class);
+        $this->app->singleton(CustomizeConfigRuntime::class, CustomizeConfigRuntime::class);
     }
 
     /**

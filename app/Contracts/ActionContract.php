@@ -2,7 +2,6 @@
 
 namespace App\Contracts;
 
-
 interface ActionContract
 {
     /**

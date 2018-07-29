@@ -4,10 +4,12 @@ namespace App\Actions;
 
 use App\Support\BaseAction;
 
-class MergeOptionsToConfig extends BaseAction
+class MergeInlineOptionsToConfig extends BaseAction
 {
     /**
-     * Merges command inline options to the current Lambo configuration.
+     * Merges command inline options to the current Lambo configuration. As usual, the config
+     * gets loaded and merged with ~/.lambo/config.php in App\Providers\AppServiceProvider
+     * and then gets overridden here with the user options provided at the command line.
      *
      * @return void
      */

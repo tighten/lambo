@@ -20,13 +20,13 @@ class PromptForCustomization extends BaseAction
             $answer = $this->console->ask($customizeQuestion);
 
             if (collect(['e','E'])->contains($answer)) {
-                $this->console->info('Bye. Come back soon to build something awesome!');
+                $this->console->info("\nBye. Come back soon to build something awesome!\n");
                 exit(1);
             }
 
             if (collect(['c','C'])->contains($answer)) {
                 $this->console->alert('Still not all questions are implemented.');
-                app(AskConfigQuestions::class, ['console' => $this->console])();
+                app(CustomizeConfigRuntime::class, ['console' => $this->console])();
             }
         }
     }
