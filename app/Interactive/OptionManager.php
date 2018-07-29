@@ -4,6 +4,7 @@ namespace App\Interactive;
 
 use App\Commands\NewCommand;
 use Illuminate\Support\Collection;
+use App\Support\BaseInteractiveOption;
 
 class OptionManager
 {
@@ -60,21 +61,21 @@ class OptionManager
      *
      * @param string $optionKey
      * @param NewCommand $console
-     * @return string
+     * @return BaseInteractiveOption
      */
-    public function perform(string $optionKey, NewCommand $console): ?string
+    public function perform(string $optionKey, NewCommand $console): BaseInteractiveOption
     {
         $option = $this->interactiveMenuOptions->firstWhere('key', $optionKey);
 
         $option = app($option['class'])->perform($console);
 
         if ($option->value() === null) {
-            return null;
+            return $option;
         }
 
         $this->setLamboConfig($option->key(), $option->value());
 
-        return $option->value();
+        return $option;
     }
 
     /**

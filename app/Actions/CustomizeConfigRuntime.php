@@ -22,11 +22,14 @@ class CustomizeConfigRuntime extends BaseAction
         [$message, $level ] = $nothingChanged;
 
         if ($option !== null) {
-            $value = Options::perform($option, $this->console);
+            $selection = Options::perform($option, $this->console);
 
-            if ($value !== null) {
-                $message = "You have set the configuration [{$option}] to: {$value}";
-                $level = 'info';
+            if ($selection->value() !== null) {
+                $message    = "You have set the configuration [{$option}] to: {$selection->value()}";
+                $level      = 'info';
+            } else {
+                $message    = $selection->message();
+                $level      = $selection->messageLevel();
             }
         }
 

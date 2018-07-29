@@ -22,6 +22,20 @@ abstract class BaseInteractiveOption implements InteractiveOptionContract
     protected $finder;
 
     /**
+     * Message for the initial screen.
+     *
+     * @var string
+     */
+    protected $message;
+
+    /**
+     * Message level for the initial screen.
+     *
+     * @var string
+     */
+    protected $messageLevel = 'info';
+
+    /**
      * BaseInteractiveOption constructor.
      *
      * @param ExecutableFinder $finder
@@ -49,5 +63,25 @@ abstract class BaseInteractiveOption implements InteractiveOptionContract
     public function value(): ?string
     {
         return $this->value;
+    }
+
+    /**
+     * Returns the message for initial screen.
+     *
+     * @return string
+     */
+    public function message(): ?string
+    {
+        return $this->message;
+    }
+
+    /**
+     * Returns the message level.
+     *
+     * @return string
+     */
+    public function messageLevel(): string
+    {
+        return $this->messageLevel;
     }
 }
