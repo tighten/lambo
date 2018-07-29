@@ -46,7 +46,7 @@ abstract class BaseInteractiveOption implements InteractiveOptionContract
      *
      * @return string
      */
-    public function value(): string
+    public function value(): ?string
     {
         return $this->value;
     }
