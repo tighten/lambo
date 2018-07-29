@@ -2,10 +2,10 @@
 
 namespace App\InteractiveOptions;
 
-use App\Support\BaseOption;
+use App\Support\BaseInteractiveOption;
 use LaravelZero\Framework\Commands\Command;
 
-class CommitMessage extends BaseOption
+class CommitMessage extends BaseInteractiveOption
 {
     /**
      * @var string

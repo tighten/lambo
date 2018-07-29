@@ -2,10 +2,10 @@
 
 namespace App\InteractiveOptions;
 
-use App\Support\BaseOption;
 use App\Commands\NewCommand;
+use App\Support\BaseInteractiveOption;
 
-class Editor extends BaseOption
+class Editor extends BaseInteractiveOption
 {
     /**
      * Option key.

@@ -5,7 +5,7 @@ namespace App\Support;
 use App\Contracts\OptionContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-abstract class BaseOption implements OptionContract
+abstract class BaseInteractiveOption implements OptionContract
 {
     /**
      * The finder

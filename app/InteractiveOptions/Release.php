@@ -2,10 +2,10 @@
 
 namespace App\InteractiveOptions;
 
-use App\Support\BaseOption;
+use App\Support\BaseInteractiveOption;
 use LaravelZero\Framework\Commands\Command;
 
-class Release extends BaseOption
+class Release extends BaseInteractiveOption
 {
     /**
      * @var string
