@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Questions;
+namespace App\Options;
 
-use App\Support\BaseQuestion;
+use App\Support\BaseOption;
 use LaravelZero\Framework\Commands\Command;
 
-class Release extends BaseQuestion
+class Release extends BaseOption
 {
     /**
      * @var string

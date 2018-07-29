@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interactive\OptionManager;
 use Illuminate\Support\Facades\File;
+use Illuminate\Foundation\AliasLoader;
 use App\Actions\CustomizeConfigRuntime;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,27 +12,35 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
+     *
+     * @return void
      */
     public function boot(): void
     {
-        $this->registerConfig();
+        $this->configFiles();
     }
 
     /**
      * Register any application services.
+     *
+     * @return void
      */
     public function register(): void
     {
-        /**
-         * @TODO Still needed to assess if the performance improvement is significant
-         */
         $this->app->singleton(CustomizeConfigRuntime::class, CustomizeConfigRuntime::class);
+
+        $this->app->singleton(OptionManager::class, OptionManager::class);
+        $this->app->alias(OptionManager::class, 'options');
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Options', OptionManager::class);
     }
 
     /**
-     * Register config
+     * Apply config files
+     *
+     * @return void
      */
-    protected function registerConfig(): void
+    protected function configFiles(): void
     {
         $homeFolder = $_SERVER['HOME'];
 

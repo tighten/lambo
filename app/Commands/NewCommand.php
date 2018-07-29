@@ -106,6 +106,7 @@ class NewCommand extends Command
         $this->action(DisplayCurrentConfiguration::class);
 
         if ($message !== null) {
+            $this->info('');
             switch ($level) {
                 case 'error':
                     $this->error($message);

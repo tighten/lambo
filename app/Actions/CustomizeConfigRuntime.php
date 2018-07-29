@@ -2,33 +2,11 @@
 
 namespace App\Actions;
 
+use App\Facades\Options;
 use App\Support\BaseAction;
-use App\Commands\NewCommand;
-use App\Support\ShellCommand;
-use Illuminate\Support\Collection;
 
 class CustomizeConfigRuntime extends BaseAction
 {
-    /**
-     * Available Lambo config options.
-     *
-     * @var Collection
-     */
-    protected $availableOptions;
-
-    /**
-     * CustomizeConfigRuntime constructor.
-     *
-     * @param NewCommand $console
-     * @param ShellCommand $shell
-     */
-    public function __construct(NewCommand $console, ShellCommand $shell)
-    {
-        parent::__construct($console, $shell);
-
-        $this->hydrateAvailableOptions();
-    }
-
     /**
      * Customize the configuration in runtime.
      *
@@ -36,32 +14,22 @@ class CustomizeConfigRuntime extends BaseAction
      */
     public function __invoke(): void
     {
-        $option = $this->console->menu('Change configuration value', $this->availableOptions->all())->open();
+        $option = $this->console
+            ->menu('Change configuration value', Options::interactiveMenuOptions())
+            ->open();
 
-        /**
-         * @TODO Implement (or refactoring) the App\Questions classes, so that boolean options, or string input, etc
-         *
-         */
+        $nothingChanged = ['Nothing was changed. Ready to go?', 'alert'];
+        [$message, $level ] = $nothingChanged;
 
-        $message = "You have chosen the option: [{$option}]. Runtime changes still not implemented.";
-        $level = 'alert';
+        if ($option !== null) {
+            $value = Options::perform($option, $this->console);
+
+            if ($value !== null) {
+                $message = "You have set the configuration [{$option}] to: {$value}";
+                $level = 'info';
+            }
+        }
 
         $this->console->initialScreen($message, $level);
-    }
-
-    /**
-     * Hydrate the available options.
-     *
-     * @return void
-     */
-    protected function hydrateAvailableOptions(): void
-    {
-        $this->availableOptions = collect(config('lambo'))
-            ->mapWithKeys(function ($item, $key) {
-                $keyTitle = str_replace('_', ' ', $key);
-                $keyTitle = ucwords($keyTitle);
-
-                return [$key => $keyTitle];
-            });
     }
 }
