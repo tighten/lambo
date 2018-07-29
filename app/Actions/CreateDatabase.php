@@ -77,7 +77,6 @@ class CreateDatabase extends BaseAction
             }
 
             $this->console->error('Could not create database!');
-
         } catch (\Exception $exception) {
             $this->console->error("Error creating database: {$exception->getMessage()}");
         }
