@@ -6,5 +6,4 @@ use App\Contracts\VerificationContract;
 
 abstract class BaseVerification implements VerificationContract
 {
-
 }

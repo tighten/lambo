@@ -19,8 +19,6 @@ class ExamplePasses extends BaseVerification
      */
     public function handle(): bool
     {
-        throw new Exception("olaa");
-        
-        return false;
+        return true;
     }
 }
