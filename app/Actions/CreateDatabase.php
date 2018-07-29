@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\Support\BaseAction;
-use App\Services\CreateMySQLDatabaseService;
+use Illuminate\Support\Facades\DB;
 
 class CreateDatabase extends BaseAction
 {
@@ -46,7 +46,38 @@ class CreateDatabase extends BaseAction
     protected function createMySQLDatabase():void
     {
         try {
-            app()->make(CreateMySQLDatabaseService::class, ['console' => $this->console])->handle();
+            $this->console->alert('Creating database...');
+
+            $connection = DB::connection('host_database');
+
+            $dbName = config('lambo-store.db_name');
+
+            $databases = $connection->select('SHOW DATABASES');
+
+            $exists = collect($databases)->filter(function ($item, $key) use ($dbName) {
+                return $item->Database === $dbName;
+            })->count();
+
+            if ($exists) {
+                $this->console->error('Database already existed! It was left as we found it.');
+                return;
+            }
+
+            $connection->statement("CREATE DATABASE IF NOT EXISTS {$dbName}");
+
+            $databases = $connection->select('SHOW DATABASES');
+
+            $checkExists = collect($databases)->filter(function ($item, $key) use ($dbName) {
+                return $item->Database === $dbName;
+            })->count();
+
+            if ($checkExists) {
+                $this->console->info('Database successfully created');
+                return;
+            }
+
+            $this->console->error('Could not create database!');
+
         } catch (\Exception $exception) {
             $this->console->error("Error creating database: {$exception->getMessage()}");
         }
