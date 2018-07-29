@@ -3,6 +3,7 @@
 namespace App\Interactive;
 
 use App\Commands\NewCommand;
+use App\InteractiveOptions\Path;
 use Illuminate\Support\Collection;
 use App\InteractiveOptions\Editor;
 use App\InteractiveOptions\Release;
@@ -43,11 +44,6 @@ class OptionManager
     {
         $this->interactiveMenuOptions = collect([
             [
-                'key'   => 'release',
-                'label' => 'The Laravel branch to use, dev or stable',
-                'class' => Release::class,
-            ],
-            [
                 'key'   => 'editor',
                 'label' => 'Editor - to open project after installation',
                 'class' => Editor::class,
@@ -56,6 +52,16 @@ class OptionManager
                 'key'   => 'message',
                 'label' => 'The commit message',
                 'class' => CommitMessage::class,
+            ],
+            [
+                'key'   => 'path',
+                'label' => 'Installation path',
+                'class' => Path::class,
+            ],
+            [
+                'key'   => 'release',
+                'label' => 'The Laravel branch to use, dev or stable',
+                'class' => Release::class,
             ],
         ]);
     }
