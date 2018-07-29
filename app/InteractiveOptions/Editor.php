@@ -33,6 +33,7 @@ class Editor extends BaseInteractiveOption
             'pstorm'    => 'PHPStorm',
             'subl'      => 'Sublime Text',
             'sublime'   => 'Sublime-Text',
+            'code'      => 'Visual Studio Code',
             'yadayada'  => 'Nonexisting',
         ])->filter(function ($item, $key) {
             return $this->finder->find($key) !== null;
