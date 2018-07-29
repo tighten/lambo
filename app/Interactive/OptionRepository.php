@@ -3,11 +3,14 @@
 namespace App\Interactive;
 
 use App\InteractiveOptions\Auth;
-use App\InteractiveOptions\Browser;
+use App\InteractiveOptions\CreateDatabase;
 use App\InteractiveOptions\Path;
+use App\InteractiveOptions\TopLevelDomain;
 use Illuminate\Support\Collection;
 use App\InteractiveOptions\Editor;
+use App\InteractiveOptions\Browser;
 use App\InteractiveOptions\Release;
+use App\InteractiveOptions\ValetLink;
 use App\InteractiveOptions\CommitMessage;
 use App\InteractiveOptions\NodeDependencies;
 
@@ -71,6 +74,21 @@ class OptionRepository
                 'key'   => 'browser',
                 'label' => 'Open the project in the browser',
                 'class' => Browser::class,
+            ],
+            [
+                'key'   => 'link',
+                'label' => 'Valet link',
+                'class' => ValetLink::class,
+            ],
+            [
+                'key'   => 'tld',
+                'label' => 'Top Level Domain',
+                'class' => TopLevelDomain::class,
+            ],
+            [
+                'key'   => 'database',
+                'label' => 'Create a new database',
+                'class' => CreateDatabase::class,
             ],
         ]);
     }
