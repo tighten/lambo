@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface OptionContract
+interface InteractiveOptionContract
 {
     /**
      * Changes the key to value in Lambo config

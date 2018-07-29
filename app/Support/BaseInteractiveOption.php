@@ -2,10 +2,10 @@
 
 namespace App\Support;
 
-use App\Contracts\OptionContract;
+use App\Contracts\InteractiveOptionContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-abstract class BaseInteractiveOption implements OptionContract
+abstract class BaseInteractiveOption implements InteractiveOptionContract
 {
     /**
      * The finder
