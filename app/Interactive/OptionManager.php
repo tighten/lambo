@@ -3,11 +3,7 @@
 namespace App\Interactive;
 
 use App\Commands\NewCommand;
-use App\InteractiveOptions\Path;
 use Illuminate\Support\Collection;
-use App\InteractiveOptions\Editor;
-use App\InteractiveOptions\Release;
-use App\InteractiveOptions\CommitMessage;
 
 class OptionManager
 {
@@ -26,11 +22,20 @@ class OptionManager
     protected $availableConfigOptions;
 
     /**
+     * The interactive options repository.
+     *
+     * @var OptionRepository
+     */
+    protected $optionRepository;
+
+    /**
      * QuestionPerformer constructor.
      *
+     * @param OptionRepository $optionRepository
      */
-    public function __construct()
+    public function __construct(OptionRepository $optionRepository)
     {
+        $this->optionRepository = $optionRepository;
         $this->hydrateAvailableConfigOptions();
         $this->hydrateInteractiveMenuOptions();
     }
@@ -42,28 +47,7 @@ class OptionManager
      */
     public function hydrateInteractiveMenuOptions(): void
     {
-        $this->interactiveMenuOptions = collect([
-            [
-                'key'   => 'editor',
-                'label' => 'Editor - to open project after installation',
-                'class' => Editor::class,
-            ],
-            [
-                'key'   => 'message',
-                'label' => 'The commit message',
-                'class' => CommitMessage::class,
-            ],
-            [
-                'key'   => 'path',
-                'label' => 'Installation path',
-                'class' => Path::class,
-            ],
-            [
-                'key'   => 'release',
-                'label' => 'The Laravel branch to use, dev or stable',
-                'class' => Release::class,
-            ],
-        ]);
+        $this->interactiveMenuOptions = $this->optionRepository->get();
     }
 
     /**

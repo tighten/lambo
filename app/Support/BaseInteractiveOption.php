@@ -50,5 +50,4 @@ abstract class BaseInteractiveOption implements InteractiveOptionContract
     {
         return $this->value;
     }
-
 }
