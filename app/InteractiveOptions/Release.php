@@ -22,12 +22,12 @@ class Release extends BaseInteractiveOption
      */
     public function perform(NewCommand $console): BaseInteractiveOption
     {
+        $menuTitle = "Do you want to Laravel's dev branch?";
+
         $options = [
             'false'   => 'Nope, I want the stable.',
             'true'    => 'I like living on the edge, take me to dev branch',
         ];
-
-        $menuTitle = "Do you want to Laravel's dev branch?";
 
         $this->value = $console
             ->menu($menuTitle, $options)

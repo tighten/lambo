@@ -22,6 +22,8 @@ class Editor extends BaseInteractiveOption
      */
     public function perform(NewCommand $console): BaseInteractiveOption
     {
+        $menuTitle = 'Choose the editor to open in';
+
         $options = collect([
             'pstorm'    => 'PHPStorm',
             'subl'      => 'Sublime Text',
@@ -31,8 +33,6 @@ class Editor extends BaseInteractiveOption
         ])->filter(function ($item, $key) {
             return $this->finder->find($key) !== null;
         })->put('false', 'Do not open.');
-
-        $menuTitle = 'Choose the editor to open in';
 
         $this->value = $console
             ->menu($menuTitle, $options->all())
