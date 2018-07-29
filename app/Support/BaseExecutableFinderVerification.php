@@ -7,20 +7,24 @@ use function get_class;
 use App\Contracts\VerificationContract;
 use Symfony\Component\Process\ExecutableFinder;
 
-abstract class ExecutableFinderVerification implements VerificationContract
+abstract class BaseExecutableFinderVerification implements VerificationContract
 {
     /**
+     * The executable to be found.
+     *
      * @var string
      */
     protected $executable;
 
     /**
+     * The finder.
+     *
      * @var ExecutableFinder
      */
     protected $finder;
 
     /**
-     * GitInstalled constructor.
+     * BaseExecutableFinderVerification constructor.
      *
      * @param ExecutableFinder $finder
      */
@@ -40,9 +44,7 @@ abstract class ExecutableFinderVerification implements VerificationContract
      */
     public function handle(): bool
     {
-        $find = $this->finder->find($this->executable);
-
-        if ($find === null) {
+        if ($this->finder->find($this->executable) === null) {
             throw new LogicException(ucwords($this->executable) . ' not installed ['. get_class($this) .'].');
         }
 

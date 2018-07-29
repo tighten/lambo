@@ -3,8 +3,10 @@
 namespace App\Actions;
 
 use App\Support\BaseAction;
+use App\Verifications\ExamplePasses;
 use App\Verifications\GitInstalled;
 use App\Verifications\ValetInstalled;
+use App\Verifications\LaravelInstallerInstalled;
 
 class RunVerifications extends BaseAction
 {
@@ -14,8 +16,10 @@ class RunVerifications extends BaseAction
      * @var array
      */
     protected $verifications = [
-        ValetInstalled::class,
+        LaravelInstallerInstalled::class,
         GitInstalled::class,
+        ValetInstalled::class,
+        ExamplePasses::class,
     ];
 
     /**
@@ -27,15 +31,17 @@ class RunVerifications extends BaseAction
     {
         foreach ($this->verifications as $verification) {
             try {
-                resolve($verification)->handle();
+                $passes = resolve($verification)->handle();
             } catch (\LogicException $exception) {
+                $this->console->error("Verification {$verification} failed.");
                 $this->console->error($exception->getMessage());
                 exit(1);
             } catch (\Exception $exception) {
+                $this->console->error("Verification {$verification} failed.");
                 $this->console->error($exception->getMessage());
                 exit(1);
             }
-            if (!$verification) {
+            if (!$passes) {
                 $this->console->error("Verification {$verification} failed.");
                 exit(1);
             }

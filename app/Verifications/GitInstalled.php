@@ -2,12 +2,12 @@
 
 namespace App\Verifications;
 
-use App\Support\ExecutableFinderVerification;
+use App\Support\BaseExecutableFinderVerification;
 
-class GitInstalled extends ExecutableFinderVerification
+class GitInstalled extends BaseExecutableFinderVerification
 {
     /**
-     * The executable to be verified.
+     * The executable to be found.
      *
      * @var string
      */
