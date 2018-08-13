@@ -18,19 +18,19 @@ class CustomizeConfigRuntime extends BaseAction
             ->menu('Change configuration value', Options::interactiveMenuOptions())
             ->open();
 
-        $nothingChanged = ['Nothing was changed. Ready to go?', 'alert'];
-        [$message, $level ] = $nothingChanged;
+        if ($option === null) {
+            $this->console->initialScreen('Nothing was changed. Ready to go?', 'alert');
+            return;
+        }
 
-        if ($option !== null) {
-            $selection = Options::perform($option, $this->console);
+        $selection = Options::perform($option, $this->console);
 
-            if ($selection->value() !== null) {
-                $message    = "You have set the configuration [{$option}] to: {$selection->value()}";
-                $level      = 'info';
-            } else {
-                $message    = $selection->message();
-                $level      = $selection->messageLevel();
-            }
+        if ($selection->value() !== null) {
+            $message = "You have set the configuration [{$option}] to: {$selection->value()}";
+            $level = 'info';
+        } else {
+            $message = $selection->message();
+            $level = $selection->messageLevel();
         }
 
         $this->console->initialScreen($message, $level);

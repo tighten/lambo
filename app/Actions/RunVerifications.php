@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use Exception;
+use LogicException;
 use App\Support\BaseAction;
 use App\Verifications\ExamplePasses;
 use App\Verifications\GitInstalled;
@@ -32,16 +34,16 @@ class RunVerifications extends BaseAction
         foreach ($this->verifications as $verification) {
             try {
                 $passes = resolve($verification)->handle();
-            } catch (\LogicException $exception) {
+            } catch (LogicException $exception) {
                 $this->console->error("Verification {$verification} failed.");
                 $this->console->error($exception->getMessage());
                 exit(1);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->console->error("Verification {$verification} failed.");
                 $this->console->error($exception->getMessage());
                 exit(1);
             }
-            if (!$passes) {
+            if (! $passes) {
                 $this->console->error("Verification {$verification} failed.");
                 exit(1);
             }

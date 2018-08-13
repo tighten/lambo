@@ -30,16 +30,6 @@ class OptionManager
     public function __construct(OptionRepository $optionRepository)
     {
         $this->optionRepository = $optionRepository;
-        $this->hydrateInteractiveMenuOptions();
-    }
-
-    /**
-     * Hydrate interactive menu options.
-     *
-     * @return void
-     */
-    public function hydrateInteractiveMenuOptions(): void
-    {
         $this->interactiveMenuOptions = $this->optionRepository->get();
     }
 
@@ -52,7 +42,7 @@ class OptionManager
     {
         return $this->interactiveMenuOptions
             ->mapWithKeys(function ($item, $key) {
-                return [ $item['key'] => $item['label'] ];
+                return [$item['key'] => $item['label']];
             })->all();
     }
 

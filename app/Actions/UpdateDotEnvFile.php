@@ -47,7 +47,7 @@ class UpdateDotEnvFile extends BaseAction
     }
 
     /**
-     * Runs the substitutions.
+     * Run the substitutions.
      *
      * @return void
      */
@@ -88,18 +88,18 @@ class UpdateDotEnvFile extends BaseAction
     protected function hydrateReplaces(): void
     {
         $replaces = [
-            'APP_NAME'      => config('lambo-store.project_name'),
-            'APP_URL'       => config('lambo-store.project_url'),
+            'APP_NAME' => config('lambo-store.project_name'),
+            'APP_URL' => config('lambo-store.project_url'),
         ];
 
         if (config('lambo.database') === 'mysql') {
             $replaces = array_merge($replaces, [
                 'DB_CONNECTION' => config('lambo.database'),
-                'DB_DATABASE'   => config('lambo-store.db_name'),
-                'DB_HOST'       => config('lambo.db_host'),
-                'DB_PORT'       => config('lambo.db_port'),
-                'DB_USERNAME'   => config('lambo.db_username'),
-                'DB_PASSWORD'   => config('lambo.db_password'),
+                'DB_DATABASE' => config('lambo-store.db_name'),
+                'DB_HOST' => config('lambo.db_host'),
+                'DB_PORT' => config('lambo.db_port'),
+                'DB_USERNAME' => config('lambo.db_username'),
+                'DB_PASSWORD' => config('lambo.db_password'),
             ]);
         }
 
@@ -147,9 +147,7 @@ class UpdateDotEnvFile extends BaseAction
             [$envKey, $envVal] = $parts;
 
             // Find a replace for the key
-            $replace = $this->replaces->first(function ($item, $key) use ($envKey) {
-                return $key === $envKey;
-            });
+            $replace = $this->replaces->get($envKey);
 
             // If found, assign it, else return same
             if ($replace !== null) {
@@ -169,7 +167,7 @@ class UpdateDotEnvFile extends BaseAction
     {
         $this->fileLines
             ->transform(function ($item, $key) {
-                if (str_contains($item, ['DB_DATABASE','DB_HOST','DB_PORT','DB_USERNAME','DB_PASSWORD'])) {
+                if (str_contains($item, ['DB_DATABASE', 'DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD'])) {
                     return "#{$item}";
                 }
                 return $item;

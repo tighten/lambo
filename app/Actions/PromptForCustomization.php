@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use function in_array;
 use App\Support\BaseAction;
 
 class PromptForCustomization extends BaseAction
@@ -16,16 +17,15 @@ class PromptForCustomization extends BaseAction
         $customizeQuestion = 'Would you like to (R)un with current config, or (C)ustomize? Or (E)xit.';
 
         $answer = false;
-        while (!collect(['c','C','r','R','e','E'])->contains($answer)) {
-            $answer = $this->console->ask($customizeQuestion);
+        while (! in_array($answer, ['c','r','e'])) {
+            $answer = strtolower($this->console->ask($customizeQuestion, 'r'));
 
-            if (collect(['e','E'])->contains($answer)) {
+            if ($answer === 'e') {
                 $this->console->info("\nBye. Come back soon to build something awesome!\n");
                 exit(1);
             }
 
-            if (collect(['c','C'])->contains($answer)) {
-                $this->console->alert('Still not all questions are implemented.');
+            if ($answer === 'c') {
                 app(CustomizeConfigRuntime::class, ['console' => $this->console])();
             }
         }

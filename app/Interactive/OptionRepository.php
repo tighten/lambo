@@ -41,52 +41,52 @@ class OptionRepository
     {
         return collect([
             [
-                'key'   => 'editor',
+                'key' => 'editor',
                 'label' => 'Editor - to open project after installation',
                 'class' => Editor::class,
             ],
             [
-                'key'   => 'message',
+                'key' => 'message',
                 'label' => 'The commit message',
                 'class' => CommitMessage::class,
             ],
             [
-                'key'   => 'path',
+                'key' => 'path',
                 'label' => 'Installation path',
                 'class' => Path::class,
             ],
             [
-                'key'   => 'dev',
+                'key' => 'dev',
                 'label' => 'The Laravel branch to use, dev or stable',
                 'class' => Release::class,
             ],
             [
-                'key'   => 'auth',
+                'key' => 'auth',
                 'label' => "Laravel's Auth scaffolding (auth:make)",
                 'class' => Auth::class,
             ],
             [
-                'key'   => 'node',
+                'key' => 'node',
                 'label' => 'Install Node dependencies',
                 'class' => NodeDependencies::class,
             ],
             [
-                'key'   => 'browser',
+                'key' => 'browser',
                 'label' => 'Open the project in the browser',
                 'class' => Browser::class,
             ],
             [
-                'key'   => 'link',
+                'key' => 'link',
                 'label' => 'Valet link',
                 'class' => ValetLink::class,
             ],
             [
-                'key'   => 'tld',
+                'key' => 'tld',
                 'label' => 'Top Level Domain',
                 'class' => TopLevelDomain::class,
             ],
             [
-                'key'   => 'database',
+                'key' => 'database',
                 'label' => 'Create a new database',
                 'class' => CreateDatabase::class,
             ],

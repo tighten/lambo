@@ -22,7 +22,7 @@ class TopLevelDomain extends BaseInteractiveOption
      */
     public function perform(NewCommand $console): BaseInteractiveOption
     {
-        $question = "What should be the commit message? .tld or tld - We've got you covered.";
+        $question = "What should be the TLD? .tld or tld - We've got you covered.";
 
         $this->value = $console->anticipate($question, ['test','app','dev','wip']);
 

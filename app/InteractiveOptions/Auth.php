@@ -25,8 +25,8 @@ class Auth extends BaseInteractiveOption
         $menuTitle = "Perform Laravel's Auth scaffolding (auth:make)";
 
         $options = [
-            'true'    => 'Yes',
-            'false'   => 'No',
+            'true' => 'Yes',
+            'false' => 'No',
         ];
 
         $this->value = $console

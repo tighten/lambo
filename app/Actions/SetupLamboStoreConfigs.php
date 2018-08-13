@@ -9,80 +9,77 @@ use Illuminate\Support\Facades\File;
 class SetupLamboStoreConfigs extends BaseAction
 {
     /**
-     * Sets the configurations needed in Lambo Store.
+     * Set the configurations needed in Lambo Store.
      *
      * @return void
      */
     public function __invoke(): void
     {
-        $this->projectName();
+        $this->setProjectName();
 
         try {
-            $this->installPath();
+            $this->setInstallPath();
         } catch (LogicException $exception) {
             $this->console->error($exception->getMessage());
             exit(1);
         }
 
-        $this->projectPath();
+        $this->setProjectPath();
 
-        $this->projectUrl();
+        $this->setProjectUrl();
 
-        $this->dbName();
+        $this->setDbName();
 
         $this->checkStore();
-
-        if ($manualTest = false) {
-            dd(config('lambo-store'));
-        }
     }
 
     /**
-     * Sets the Project Name.
+     * Set the Project Name.
      *
      */
-    protected function projectName(): void
+    protected function setProjectName(): void
     {
         config()->set('lambo-store.project_name', $this->console->argument('projectName'));
     }
 
     /**
-     * Sets the installation path.
+     * Set the installation path.
      *
      * @return void
      */
-    protected function installPath(): void
+    protected function setInstallPath(): void
     {
         $configInstallPath = config('lambo.path', false);
 
-        if (collect([false, null])->contains($configInstallPath)) {
+        if (! $configInstallPath) {
             config()->set('lambo-store.install_path', $this->console->currentWorkingDir);
-        } else {
-            if (starts_with($configInstallPath, '~')) {
-                // Path starts with '~', so it's relative to the HOME folder
-                $installPath = str_replace('~', $_SERVER['HOME'], $configInstallPath);
-            } elseif (starts_with($configInstallPath, '/')) {
-                // Path starts with '~', so it's an absolute path
-                $installPath = $configInstallPath;
-            } else {
-                // Path is relative to the working dir
-                $installPath = str_finish($this->console->currentWorkingDir, '/') . $configInstallPath;
-            }
-
-            if (!File::isDirectory($installPath)) {
-                throw new LogicException("Directory {$installPath} doesn't exist.");
-            }
-
-            config()->set('lambo-store.install_path', $installPath);
+            return;
         }
+
+        if (starts_with($configInstallPath, '~')) {
+            // Path starts with '~', so it's relative to the HOME folder
+            $installPath = str_replace('~', $_SERVER['HOME'], $configInstallPath);
+        } elseif (starts_with($configInstallPath, '/')) {
+            // Path starts with '~', so it's an absolute path
+            $installPath = $configInstallPath;
+        } else {
+            // Path is relative to the working dir
+            $installPath = str_finish($this->console->currentWorkingDir, '/') . $configInstallPath;
+        }
+
+        if (! File::isDirectory($installPath)) {
+            throw new LogicException("Directory {$installPath} doesn't exist.");
+        }
+
+        config()->set('lambo-store.install_path', $installPath);
     }
 
     /**
-     * Sets the project url.
+     * Set the project url.
      *
      * @return void
      */
-    protected function projectUrl(): void
+    protected function setProjectUrl(): void
     {
         $url = 'http://' . config('lambo-store.project_name') . str_start(config('lambo.tld'), '.');
 
@@ -90,11 +87,11 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Sets the project path.
+     * Set the project path.
      *
      * @return void
      */
-    protected function projectPath(): void
+    protected function setProjectPath(): void
     {
         $installPath = config('lambo-store.install_path', false);
 
@@ -104,17 +101,13 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Sets the database name.
+     * Set the database name.
      *
      * @return void
      */
-    protected function dbName(): void
+    protected function setDbName(): void
     {
         $projectName = config('lambo-store.project_name');
-
-        if (!$projectName) {
-            return;
-        }
 
         $dbName = str_replace('-', '_', $projectName);
 
@@ -122,7 +115,7 @@ class SetupLamboStoreConfigs extends BaseAction
     }
 
     /**
-     * Performs a check that all needed values in the Lambo Store where successfully set.
+     * Perform a check that all needed values in the Lambo Store were successfully set.
      *
      * @return void
      */

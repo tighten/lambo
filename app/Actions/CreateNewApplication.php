@@ -13,13 +13,13 @@ class CreateNewApplication extends BaseAction
      */
     public function __invoke(): void
     {
-        $dev = config('lambo.dev', false);
+        $isDev = config('lambo.dev', false);
 
         $projectName = config('lambo-store.project_name');
 
         $directory = config('lambo-store.install_path');
 
-        if ($dev) {
+        if ($isDev) {
             $this->console->info('Creating application from dev branch.');
             $this->shell->inDirectory($directory, "laravel new {$projectName} --dev");
         } else {

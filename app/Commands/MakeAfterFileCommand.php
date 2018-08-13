@@ -29,13 +29,17 @@ class MakeAfterFileCommand extends Command
      */
     public function handle(): void
     {
-        $homeFolder = $_SERVER['HOME'];
+        $destinationFolder = $_SERVER['HOME'] . '/.lambo';
 
-        $filePath = $homeFolder . '/.lambo/after.php';
+        $filePath = $destinationFolder . '/after.php';
 
         if (File::exists($filePath) && !$this->option('force')) {
             $this->error("Config file already exists at [{$filePath}].");
             exit(1);
+        }
+
+        if (! File::isDirectory($destinationFolder)) {
+            File::makeDirectory($destinationFolder);
         }
 
         File::put($filePath, File::get(base_path('/stubs/after.stub')));
@@ -45,17 +49,5 @@ class MakeAfterFileCommand extends Command
         } else {
             $this->error("Error creating file [{$filePath}]");
         }
-    }
-
-    /**
-     * Define the command's schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     *
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
     }
 }

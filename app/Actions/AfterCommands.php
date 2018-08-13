@@ -13,11 +13,9 @@ class AfterCommands extends BaseAction
      */
     public function __invoke(): void
     {
-        $directory  = config('lambo-store.project_path');
+        $directory = config('lambo-store.project_path');
 
-        $commands   = config('lambo-after.commands');
-
-        foreach ($commands as $command) {
+        foreach (config('lambo-after.commands') as $command) {
             $this->shell->inDirectory($directory, $command);
         }
     }

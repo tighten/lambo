@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Exception;
 use App\Support\BaseAction;
 use Illuminate\Support\Facades\DB;
 
@@ -14,18 +15,18 @@ class CreateDatabase extends BaseAction
      */
     public function __invoke(): void
     {
-        $lamboDatabase = config('lambo.database');
+        $databaseType = config('lambo.database');
 
-        if ($lamboDatabase === false) {
+        if ($databaseType === false) {
             return;
         }
 
-        if ($lamboDatabase === 'mysql') {
+        if ($databaseType === 'mysql') {
             $this->setDatabaseHostConfigs();
             $this->createMySQLDatabase();
         }
 
-        if ($lamboDatabase === 'sqlite') {
+        if ($databaseType === 'sqlite') {
             $this->createSqliteDatabase();
         }
     }
@@ -50,7 +51,7 @@ class CreateDatabase extends BaseAction
      *
      * @return void
      */
-    protected function createMySQLDatabase():void
+    protected function createMySQLDatabase(): void
     {
         try {
             $this->console->info('Creating database...');
@@ -61,11 +62,9 @@ class CreateDatabase extends BaseAction
 
             $databases = $connection->select('SHOW DATABASES');
 
-            $exists = collect($databases)->filter(function ($item, $key) use ($dbName) {
-                return $item->Database === $dbName;
-            })->count();
+            $matchingCount = collect($databases)->where('Database', $dbName)->count();
 
-            if ($exists) {
+            if ($matchingCount > 0) {
                 $this->console->alert('Database already existed! It was left as we found it.');
                 return;
             }
@@ -74,17 +73,15 @@ class CreateDatabase extends BaseAction
 
             $databases = $connection->select('SHOW DATABASES');
 
-            $checkExists = collect($databases)->filter(function ($item, $key) use ($dbName) {
-                return $item->Database === $dbName;
-            })->count();
+            $matchingCount = collect($databases)->where('Database', $dbName)->count();
 
-            if ($checkExists) {
+            if ($matchingCount) {
                 $this->console->info('Database successfully created');
                 return;
             }
 
             $this->console->error('Could not create database!');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->console->error("Error creating database: {$exception->getMessage()}");
         }
     }

@@ -24,16 +24,9 @@ class Browser extends BaseInteractiveOption
     {
         $menuTitle = 'Open the project in the browser?';
 
-        /**
-         * @TODO With the app container, or the contained executable, can't be found.
-         */
         $options = collect([
-            'false'                                                             => 'No, thanks',
-            'true'                                                              => 'Yes. With valet open command',
-            '/Applications/Firefox.app/Contents/MacOS/firefox'                  => 'Firefox',
-            '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'    => 'Google Chrome',
-            '/Applications/Safari.app/Contents/MacOS/Safari'                    => 'Safari',
-            '/Applications/Opera.app/Contents/MacOS/Opera'                      => 'Opera',
+            'false' => 'No, thanks.',
+            'true' => 'Yes.',
         ])->filter(function ($item, $key) {
             return $this->finder->find($key) !== null;
         })->put('false', 'Do not open.');

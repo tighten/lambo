@@ -43,7 +43,7 @@ class InstallNodeDependencies extends BaseAction
         }
 
         if ($node === 'npm') {
-            if (!$this->finder->find($node)) {
+            if (! $this->finder->find($node)) {
                 $this->console->error("Provided [{$node}] for installation, but couldn't find its executable.");
                 return;
             }
