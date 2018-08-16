@@ -113,7 +113,7 @@ makeafter()
 
 # To copy standard files to new lambo project place them in ~/.lambo/includes directory.
 # echo "Copying Include Files"
-# cp -R ~/.lambo/includes/ $PROJECTPATH
+# cp -R ~/.lambo/includes/ $PROJECTPATH/$PROJECTNAME
 
 # To add a git commit after given modifications
 # echo "Committing after modifications to Git"
@@ -285,7 +285,7 @@ cd "$PROJECTNAME" || exit
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if ! isterminaleditor; then
-       $CODEEDITOR .
+       $CODEEDITOR $PROJECTPATH/$PROJECTNAME
    fi
 fi
 
@@ -350,7 +350,7 @@ fi
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if isterminaleditor; then
-       $CODEEDITOR .
+       $CODEEDITOR $PROJECTPATH/$PROJECTNAME
    fi
 fi
 
