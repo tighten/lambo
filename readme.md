@@ -38,6 +38,8 @@ This will `laravel new superApplication`, change into that directory, make an in
 - Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
 - Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
+- Replace the `.env` `APP_NAME` with `$PROJECTNAME`
+- Set Project Name and Description in composer.json to `$PROJECTNAME` 
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
 
 There are also a few optional behaviors based on the parameters you pass (or define in your config file).
