@@ -319,13 +319,14 @@ perlCommands=(
     "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
+for perlCommand in "${perlCommands[@]}"; do
+    perl -pi -e "$perlCommand" ".env.example"
+    perl -pi -e "$perlCommand" ".env"
+done
+
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
 fi
-
-for perlCommand in "${perlCommands[@]}"; do
-    perl -pi -e "$perlCommand" ".env"
-done
 
 if [[ "$(uname)" == "Darwin" ]]; then
     if [[ "$BROWSER" != "" ]]; then
