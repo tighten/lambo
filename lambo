@@ -108,15 +108,21 @@ makeafter()
     echo '#!/usr/bin/env bash
 
 # Install additional composer dependencies as you would from the command line.
-# echo "Installing Composer Dependencies"
+# echo "
+# Installing Composer Dependencies
+# "
 # composer require tightenco/mailthief tightenco/quicksand
 
 # To copy standard files to new lambo project place them in ~/.lambo/includes directory.
-# echo "Copying Include Files"
+# echo "
+# Copying Include Files
+# "
 # cp -R ~/.lambo/includes/ $PROJECTPATH
 
 # To add a git commit after given modifications
-# echo "Committing after modifications to Git"
+# echo "
+# Committing after modifications to Git
+# "
 # git add .
 # git commit -am "Initialize Composer dependencies and additional files."
 ' > ~/.lambo/after
@@ -168,7 +174,11 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+if [[ -f ~/.config/valet/config.json ]]; then
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->domain;")
+else
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+fi
 LINK=false
 
 ### Load config if it exists
@@ -290,6 +300,9 @@ if [[ "$CODEEDITOR" != "" ]]; then
 fi
 
 if [[ "$NODE" = true ]]; then
+    echo "
+${green}Installing NPM dependencies...${reset}
+    "
     # check if yarn is executable, otherwise use npm
     if hash yarn 2>/dev/null; then
         yarn
@@ -345,7 +358,9 @@ esac
 
 ### Load after file if it exists
 if [[ -f ~/.lambo/after ]]; then
-    echo "${green}Running additional commands...${reset}"
+    echo "
+${green}Running additional commands...${reset}
+    "
     source ~/.lambo/after
 fi
 
@@ -360,15 +375,16 @@ if [[ "$SHELL" != "" ]]; then
 
     echo "
 
-    ***********************************************
+***********************************************
 
-    You're ready to go!"
+You're ready to go!
+"
 else
     echo "
 
-    ***********************************************
+***********************************************
 
-    You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
+You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
 fi
 
 
