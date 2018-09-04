@@ -174,7 +174,11 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+if [[ -f ~/.config/valet/config.json ]]; then
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->domain;")
+else
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+fi
 LINK=false
 
 ### Load config if it exists
