@@ -39,7 +39,7 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setProjectName(): void
     {
-        config()->set('lambo-store.project_name', $this->console->argument('projectName'));
+        config()->set('lambo.store.project_name', $this->console->argument('projectName'));
     }
 
     /**
@@ -49,10 +49,10 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setInstallPath(): void
     {
-        $configInstallPath = config('lambo.path', false);
+        $configInstallPath = config('lambo.config.path', false);
 
         if (! $configInstallPath) {
-            config()->set('lambo-store.install_path', $this->console->currentWorkingDir);
+            config()->set('lambo.store.install_path', $this->console->currentWorkingDir);
             return;
         }
 
@@ -71,7 +71,7 @@ class SetupLamboStoreConfigs extends BaseAction
             throw new LogicException("Directory {$installPath} doesn't exist.");
         }
 
-        config()->set('lambo-store.install_path', $installPath);
+        config()->set('lambo.store.install_path', $installPath);
     }
 
     /**
@@ -81,9 +81,9 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setProjectUrl(): void
     {
-        $url = 'http://' . config('lambo-store.project_name') . str_start(config('lambo.tld'), '.');
+        $url = 'http://' . config('lambo.store.project_name') . str_start(config('lambo.tld'), '.');
 
-        config()->set('lambo-store.project_url', $url);
+        config()->set('lambo.store.project_url', $url);
     }
 
     /**
@@ -93,11 +93,11 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setProjectPath(): void
     {
-        $installPath = config('lambo-store.install_path', false);
+        $installPath = config('lambo.store.install_path', false);
 
-        $projectPath = str_finish($installPath, '/') . config('lambo-store.project_name');
+        $projectPath = str_finish($installPath, '/') . config('lambo.store.project_name');
 
-        config()->set('lambo-store.project_path', $projectPath);
+        config()->set('lambo.store.project_path', $projectPath);
     }
 
     /**
@@ -107,11 +107,11 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setDbName(): void
     {
-        $projectName = config('lambo-store.project_name');
+        $projectName = config('lambo.store.project_name');
 
         $dbName = str_replace('-', '_', $projectName);
 
-        config()->set('lambo-store.db_name', $dbName);
+        config()->set('lambo.store.db_name', $dbName);
     }
 
     /**
@@ -121,7 +121,7 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function checkStore(): void
     {
-        $store = config('lambo-store', [ 'default' => false ]);
+        $store = config('lambo.store', [ 'default' => false ]);
 
         $exit = false;
 

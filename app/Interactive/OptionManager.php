@@ -83,6 +83,6 @@ class OptionManager
             $value = false;
         }
 
-        config()->set("lambo.{$key}", $value);
+        config()->set("lambo.config.{$key}", $value);
     }
 }

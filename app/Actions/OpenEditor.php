@@ -13,9 +13,9 @@ class OpenEditor extends BaseAction
      */
     public function __invoke(): void
     {
-        $directory = config('lambo-store.project_path');
+        $directory = config('lambo.store.project_path');
 
-        $editor = config('lambo.editor');
+        $editor = config('lambo.config.editor');
 
         if ($editor !== false) {
             $this->console->info("Opening project with editor: {$editor}");

@@ -15,9 +15,9 @@ class CreateNewApplication extends BaseAction
     {
         $isDev = config('lambo.dev', false);
 
-        $projectName = config('lambo-store.project_name');
+        $projectName = config('lambo.store.project_name');
 
-        $directory = config('lambo-store.install_path');
+        $directory = config('lambo.store.install_path');
 
         if ($isDev) {
             $this->console->info('Creating application from dev branch.');

@@ -34,9 +34,9 @@ class InstallNodeDependencies extends BaseAction
      */
     public function __invoke(): void
     {
-        $directory = config('lambo-store.project_path');
+        $directory = config('lambo.store.project_path');
 
-        $node = config('lambo.node');
+        $node = config('lambo.config.node');
 
         if ($node === false) {
             return;

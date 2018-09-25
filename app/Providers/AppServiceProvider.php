@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
              */
 //            $this->mergeConfigFrom($filePath, 'lambo');
 
-            $this->app['config']->set('lambo', array_merge(config('lambo'), require $filePath));
+            $this->app['config']->set('lambo.config', array_merge(config('lambo.config'), require $filePath));
         }
 
         $filePath = $homeFolder . '/.lambo/after.php';
@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
              */
 //            $this->mergeConfigFrom($filePath, 'lambo-after');
 
-            $this->app['config']->set('lambo-after', array_merge(config('lambo-after'), require $filePath));
+            $this->app['config']->set('lambo.after', array_merge(config('lambo.after'), require $filePath));
         }
     }
 }

@@ -15,7 +15,7 @@ class CreateDatabase extends BaseAction
      */
     public function __invoke(): void
     {
-        $databaseType = config('lambo.database');
+        $databaseType = config('lambo.config.database');
 
         if ($databaseType === false) {
             return;
@@ -40,10 +40,10 @@ class CreateDatabase extends BaseAction
     {
         $hostDbKeyPrefix = 'database.connections.host_database';
 
-        config()->set("{$hostDbKeyPrefix}.host", config('lambo.db_host'));
-        config()->set("{$hostDbKeyPrefix}.port", config('lambo.db_port'));
-        config()->set("{$hostDbKeyPrefix}.username", config('lambo.db_username'));
-        config()->set("{$hostDbKeyPrefix}.password", config('lambo.db_password'));
+        config()->set("{$hostDbKeyPrefix}.host", config('lambo.config.db_host'));
+        config()->set("{$hostDbKeyPrefix}.port", config('lambo.config.db_port'));
+        config()->set("{$hostDbKeyPrefix}.username", config('lambo.config.db_username'));
+        config()->set("{$hostDbKeyPrefix}.password", config('lambo.config.db_password'));
     }
 
     /**
@@ -58,7 +58,7 @@ class CreateDatabase extends BaseAction
 
             $connection = DB::connection('host_database');
 
-            $dbName = config('lambo-store.db_name');
+            $dbName = config('lambo.store.db_name');
 
             $databases = $connection->select('SHOW DATABASES');
 
@@ -94,6 +94,6 @@ class CreateDatabase extends BaseAction
     protected function createSqliteDatabase():void
     {
         $this->console->info('Creating sqlite file.');
-        $this->shell->inDirectory(config('lambo-store.project_path'), 'touch database/database.sqlite');
+        $this->shell->inDirectory(config('lambo.store.project_path'), 'touch database/database.sqlite');
     }
 }

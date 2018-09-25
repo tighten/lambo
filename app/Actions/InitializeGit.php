@@ -15,8 +15,8 @@ class InitializeGit extends BaseAction
     {
         $showOutput = false;
 
-        $gitMessage = config('lambo.message');
-        $directory = config('lambo-store.project_path');
+        $gitMessage = config('lambo.config.gitMessage');
+        $directory = config('lambo.store.project_path');
 
         $this->shell->inDirectory($directory, 'git init', $showOutput);
         $this->shell->inDirectory($directory, 'git add .', $showOutput);

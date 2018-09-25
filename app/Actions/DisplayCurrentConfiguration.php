@@ -2,8 +2,6 @@
 
 namespace App\Actions;
 
-use function is_bool;
-use function is_string;
 use App\Support\BaseAction;
 
 class DisplayCurrentConfiguration extends BaseAction
@@ -15,7 +13,7 @@ class DisplayCurrentConfiguration extends BaseAction
      */
     public function __invoke(): void
     {
-        $rows = config('lambo', []);
+        $rows = config('lambo.config', []);
 
         $rows = collect($rows)->reject(function ($item, $key) {
             return $key === 'after';
@@ -59,7 +57,7 @@ class DisplayCurrentConfiguration extends BaseAction
      * @param $key
      * @return string
      */
-    protected function translateItemValueToDisplay($item, $key): string
+    protected function translateItemValueToDisplay($item, $key)
     {
         if (is_bool($item)) {
             $item = $item ? 'true' : 'false';

@@ -13,9 +13,9 @@ class MakeAuth extends BaseAction
      */
     public function __invoke(): void
     {
-        $directory = config('lambo-store.project_path');
+        $directory = config('lambo.store.project_path');
 
-        $makeAuth = config('lambo.auth');
+        $makeAuth = config('lambo.config.auth');
 
         if ($makeAuth !== false) {
             $this->console->info('Scaffolding authentication...');

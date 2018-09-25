@@ -27,7 +27,7 @@ class MergeInlineOptionsToConfig extends BaseAction
                     $item = false;
                 }
 
-                config()->set("lambo.{$key}", $item);
+                config()->set("lambo.config.{$key}", $item);
             });
     }
 
@@ -38,6 +38,6 @@ class MergeInlineOptionsToConfig extends BaseAction
      */
     protected function availableOptions(): array
     {
-        return collect(config('lambo'))->all();
+        return collect(config('lambo.config'))->all();
     }
 }

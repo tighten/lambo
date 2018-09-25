@@ -113,6 +113,6 @@ class OptionRepository
      */
     protected function hydrateAvailableConfigOptions(): void
     {
-        $this->availableConfigOptions = collect(config('lambo'))->keys();
+        $this->availableConfigOptions = collect(config('lambo.config'))->keys();
     }
 }

@@ -13,9 +13,9 @@ class ValetLink extends BaseAction
      */
     public function __invoke(): void
     {
-        $directory = config('lambo-store.project_path');
+        $directory = config('lambo.store.project_path');
 
-        $valetLink = config('lambo.link');
+        $valetLink = config('lambo.config.link');
 
         if ($valetLink !== false) {
             $this->console->info('Registering Valet Link...');

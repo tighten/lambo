@@ -53,7 +53,7 @@ class UpdateDotEnvFile extends BaseAction
      */
     public function __invoke(): void
     {
-        $filePath = str_finish(config('lambo-store.project_path'), '/') . '.env';
+        $filePath = str_finish(config('lambo.store.project_path'), '/') . '.env';
 
         if (File::exists($filePath)) {
             $this->filePath = $filePath;
@@ -73,7 +73,7 @@ class UpdateDotEnvFile extends BaseAction
 
         $this->performReplaces();
 
-        if (config('lambo.database') === 'sqlite') {
+        if (config('lambo.config.database') === 'sqlite') {
             $this->commentKeysForSqlite();
         }
 
@@ -88,24 +88,24 @@ class UpdateDotEnvFile extends BaseAction
     protected function hydrateReplaces(): void
     {
         $replaces = [
-            'APP_NAME' => config('lambo-store.project_name'),
-            'APP_URL' => config('lambo-store.project_url'),
+            'APP_NAME' => config('lambo.store.project_name'),
+            'APP_URL' => config('lambo.store.project_url'),
         ];
 
         if (config('lambo.database') === 'mysql') {
             $replaces = array_merge($replaces, [
-                'DB_CONNECTION' => config('lambo.database'),
-                'DB_DATABASE' => config('lambo-store.db_name'),
-                'DB_HOST' => config('lambo.db_host'),
-                'DB_PORT' => config('lambo.db_port'),
-                'DB_USERNAME' => config('lambo.db_username'),
-                'DB_PASSWORD' => config('lambo.db_password'),
+                'DB_CONNECTION' => config('lambo.config.database'),
+                'DB_DATABASE' => config('lambo.store.db_name'),
+                'DB_HOST' => config('lambo.config.db_host'),
+                'DB_PORT' => config('lambo.config.db_port'),
+                'DB_USERNAME' => config('lambo.config.db_username'),
+                'DB_PASSWORD' => config('lambo.config.db_password'),
             ]);
         }
 
         if (config('lambo.database') === 'sqlite') {
             $replaces = array_merge($replaces, [
-                'DB_CONNECTION' => config('lambo.database'),
+                'DB_CONNECTION' => config('lambo.config.database'),
             ]);
         }
 
