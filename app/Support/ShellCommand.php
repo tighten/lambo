@@ -26,7 +26,12 @@ class ShellCommand
      */
     public function inCurrentWorkingDir(string $command, bool $showOutput = true): void
     {
-        $execute = app()->make(Process::class, ['commandline' => $command]);
+        $execute = app()->make(Process::class, [
+            'commandline' => $command,
+            'cwd' => null,
+            'env' => null,
+            'timeout' => null]  // <-- The important one, not to timeout (say: composer install or yarn run dev
+        );
 
         $execute->run(function ($type, $buffer) use ($showOutput) {
             if (Process::ERR === $type) {
