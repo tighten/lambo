@@ -33,8 +33,8 @@ return [
     | Path
     |--------------------------------------------------------------------------
     |
-    | Specify where to install the application. Setting it
-    | to false will use the current working directory.
+    | Where to install the application. Setting it to
+    | false will use the current working directory.
     |
     | Options: boolean | string
     | Example: '~/Sites'
@@ -47,8 +47,7 @@ return [
     | Dev Release
     |--------------------------------------------------------------------------
     |
-    | Here yoy may choose the develop branch instead of master,
-    | getting the beta install.
+    | Whether to use the develop branch instead of master.
     |
     | Option: boolean
     |
@@ -60,8 +59,8 @@ return [
     | Auth scaffolding
     |--------------------------------------------------------------------------
     |
-    | Whether to use Artisan to scaffold all of the
-    | routes and views you need for authentication.
+    | Whether to run Artisan's auth:make command to
+    | scaffold authentication routes and views.
     |
     | Option: boolean
     |
@@ -141,9 +140,9 @@ return [
     | The credentials for the database host connection.
     |
     */
-    'db_host'      => '127.0.0.1',
-    'db_port'      => '3306',
-    'db_username'  => 'root',
-    'db_password'  => '',
+    'db_host' => '127.0.0.1',
+    'db_port' => '3306',
+    'db_username' => 'root',
+    'db_password' => '',
 
 ];

@@ -13,12 +13,9 @@ class DisplayCurrentConfiguration extends BaseAction
      */
     public function __invoke(): void
     {
-        $rows = config('lambo.config', []);
-
-        $rows = collect($rows)->reject(function ($item, $key) {
+        $rows = collect(config('lambo.config', []))->reject(function ($item, $key) {
             return $key === 'after';
         })->map(function ($item, $key) {
-
             $item = $this->translateItemValueToDisplay($item, $key);
 
             return [

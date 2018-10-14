@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\DB;
 class CreateDatabase extends BaseAction
 {
     /**
+     * Represent the host database service, without a selected
+     * database. This is to be able to create a new database.
+     *
+     * @var string
+     */
+    protected $hostDatabase = 'host_database';
+
+    /**
      * Creates the database.
      *
      * @return void
@@ -38,7 +46,7 @@ class CreateDatabase extends BaseAction
      */
     protected function setDatabaseHostConfigs(): void
     {
-        $hostDbKeyPrefix = 'database.connections.host_database';
+        $hostDbKeyPrefix = "database.connections.{$this->hostDatabase}";
 
         config()->set("{$hostDbKeyPrefix}.host", config('lambo.config.db_host'));
         config()->set("{$hostDbKeyPrefix}.port", config('lambo.config.db_port'));
@@ -56,7 +64,7 @@ class CreateDatabase extends BaseAction
         try {
             $this->console->info('Creating database...');
 
-            $connection = DB::connection('host_database');
+            $connection = DB::connection($this->hostDatabase);
 
             $dbName = config('lambo.store.db_name');
 
@@ -69,7 +77,7 @@ class CreateDatabase extends BaseAction
                 return;
             }
 
-            $connection->statement("CREATE DATABASE IF NOT EXISTS {$dbName}");
+            $connection->statement("CREATE DATABASE IF NOT EXISTS `{$dbName}`");
 
             $databases = $connection->select('SHOW DATABASES');
 
