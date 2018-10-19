@@ -175,9 +175,9 @@ NODE=false
 CODEEDITOR=""
 BROWSER=""
 if [[ -f ~/.config/valet/config.json ]]; then
-    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->domain;")
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->tld;")
 else
-    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+    TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->tld;")
 fi
 LINK=false
 
