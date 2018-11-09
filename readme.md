@@ -99,6 +99,12 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo superApplication --link
   ```
 
+- `-s` or `--secure` to secure the Valet site using https.
+
+  ```bash
+  lambo superApplication --secure
+  ```
+
 ### Commands
 
 - `make-config` creates a config file so you don't have to pass the parameters every time you use Lambo
