@@ -37,6 +37,7 @@ showhelp()
     echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
+    echo "${green}  -s, --secure${reset}                  Generate and use https with Valet"
     quit
 }
 
@@ -249,6 +250,9 @@ while [[ $# -gt 0 ]]; do
         -l|--link)
             LINK=true
             ;;
+        -s|--secure)
+            SECURE=true
+            ;;
         *)
             ;;
     esac
@@ -339,6 +343,10 @@ done
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
+fi
+
+if [[ "$SECURE" = true ]]; then
+    valet secure "$PROJECTNAME"
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
