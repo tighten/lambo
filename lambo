@@ -38,6 +38,8 @@ showhelp()
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
     echo "${green}  -s, --secure${reset}                  Generate and use https with Valet"
+    echo "${green}  --dbuser${reset}                      Specify the database user"
+    echo "${green}  --dbpassword${reset}                  Specify the database password"
     quit
 }
 
@@ -78,7 +80,9 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-LINK=false' > ~/.lambo/config
+LINK=false
+DB_USERNAME=""
+DB_PASSWORD=""' > ~/.lambo/config
 
     edit ~/.lambo/config
 }
@@ -175,6 +179,8 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
+DB_USERNAME="root"
+DB_PASSWORD="secret"
 if [[ -f ~/.config/valet/config.json ]]; then
     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->tld;")
 else
@@ -253,6 +259,14 @@ while [[ $# -gt 0 ]]; do
         -s|--secure)
             SECURE=true
             ;;
+        --dbuser)
+            DB_USERNAME="$2"
+            shift
+            ;;
+        --dbpassword)
+            DB_PASSWORD="$2"
+            shift
+            ;;
         *)
             ;;
     esac
@@ -319,6 +333,14 @@ if [[ "$AUTH" = true ]]; then
     php artisan make:auth
 fi
 
+if [[ "$DB_USERNAME" != "" ]]; then
+    $DB_USERNAME .
+fi
+
+if [[ "$DB_PASSWORD" != "" ]]; then
+    $DB_PASSWORD .
+fi
+
 git init
 git add .
 git commit -m "$MESSAGE"
@@ -331,8 +353,8 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 perlCommands=(
     "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
-    's/(DB_USERNAME=)(.*)/\1root/g'
-    's/(DB_PASSWORD=)(.*)/\1/g'
+    "s/(DB_USERNAME=)(.*)/\1$DB_USERNAME/g"
+    "s/(DB_PASSWORD=)(.*)/\1$DB_PASSWORD/g"
     "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
 )
 
