@@ -179,8 +179,8 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
-DB_USERNAME="root"
-DB_PASSWORD="secret"
+DB_USERNAME=""
+DB_PASSWORD=""
 if [[ -f ~/.config/valet/config.json ]]; then
     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->tld;")
 else
@@ -331,14 +331,6 @@ fi
 
 if [[ "$AUTH" = true ]]; then
     php artisan make:auth
-fi
-
-if [[ "$DB_USERNAME" != "" ]]; then
-    $DB_USERNAME .
-fi
-
-if [[ "$DB_PASSWORD" != "" ]]; then
-    $DB_PASSWORD .
 fi
 
 git init
