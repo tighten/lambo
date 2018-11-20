@@ -81,7 +81,7 @@ NODE=false
 CODEEDITOR=""
 BROWSER=""
 LINK=false
-DB_USERNAME=""
+DB_USERNAME="root"
 DB_PASSWORD=""' > ~/.lambo/config
 
     edit ~/.lambo/config
