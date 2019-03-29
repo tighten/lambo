@@ -1,376 +1,53 @@
-#!/usr/bin/env bash
-
-## Set up colors
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-orange=$(tput setaf 3)
-reset=$(tput sgr0)
-
-## Terminal Editors
-TERMINAL_EDITORS=("vim" "vi" "nano" "pico" "ed" "emacs" "nvim")
-
-## Init functions
-showhelp()
-{
-    echo " "
-    echo "${green}Lambo: Super-powered '${orange}laravel new${green}' for Laravel and Valet"
-    echo "${reset}________________________________________________________"
-    echo " "
-    echo "${orange}Usage:"
-    echo "${reset}  lambo myApplication [arguments]"
-    echo " "
-    echo "${orange}Commands (lambo COMMANDNAME):"
-    echo " "
-    echo "${green}   make-config${reset}                  Generate config file"
-    echo "${green}   edit-config${reset}                  Edit config file"
-    echo " "
-    echo "${green}   make-after${reset}                   Generate after file"
-    echo "${green}   edit-after${reset}                   Edit after file"
-    echo " "
-    echo "${orange}Options (lambo myApplication OPTIONS):"
-    echo "${green}  -h, --help${reset}                    Show brief help"
-    echo "${green}  -e, --editor EDITOR${reset}           Specify an editor to run '${green}EDITOR .${reset}' with after"
-    echo "${green}  -m, --message \"message\"${reset}       Customize the initial commit message"
-    echo "${green}  -p, --path PATH${reset}               Customize the path in which the new project will be created"
-    echo "${green}  -d, --dev${reset}                     Use Composer to install on the develop branch"
-    echo "${green}  -a, --auth${reset}                    Use Artisan to scaffold all of the routes and views you need for authentication"
-    echo "${green}  -n, --node${reset}                    Runs '${green}yarn${reset}' if installed, otherwise runs '${green}npm install${reset}' after creating the project"
-    echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
-    echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
-    quit
-}
-
-isterminaleditor () {
-    for EDITOR in $TERMINAL_EDITORS; do [[ "$EDITOR" == "$CODEEDITOR" ]] && return 0; done
-    return 1
-}
-
-editconfig()
-{
-    if [[ ! -f ~/.lambo/config ]]; then
-        echo "Config does not exist; creating."
-
-        makeconfig
-        return
-    fi
-
-    edit ~/.lambo/config
-}
-
-makeconfig()
-{
-    if [[ -f ~/.lambo/config ]]; then
-        echo "Config already exists."
-        quit
-    fi
-
-    if [[ ! -d ~/.lambo ]]; then
-      mkdir ~/.lambo
-    fi
-
-    echo '#!/usr/bin/env bash
-
-PROJECTPATH="."
-MESSAGE="Initial commit."
-DEVELOP=false
-AUTH=false
-NODE=false
-CODEEDITOR=""
-BROWSER=""
-LINK=false' > ~/.lambo/config
-
-    edit ~/.lambo/config
-}
-
-editafter()
-{
-    if [[ ! -f ~/.lambo/after ]]; then
-        echo "after file does not exist; creating."
-
-        makeafter
-        return
-    fi
-
-    edit ~/.lambo/after
-}
-
-makeafter()
-{
-    if [[ -f ~/.lambo/after ]]; then
-        echo "after file already exists."
-        quit
-    fi
-
-    if [[ ! -d ~/.lambo ]]; then
-      mkdir ~/.lambo
-    fi
-
-    echo '#!/usr/bin/env bash
-
-# Install additional composer dependencies as you would from the command line.
-# echo "Installing Composer Dependencies"
-# composer require tightenco/mailthief tightenco/quicksand
-
-# To copy standard files to new lambo project place them in ~/.lambo/includes directory.
-# echo "Copying Include Files"
-# cp -R ~/.lambo/includes/ $PROJECTPATH
-
-# To add a git commit after given modifications
-# echo "Committing after modifications to Git"
-# git add .
-# git commit -am "Initialize Composer dependencies and additional files."
-' > ~/.lambo/after
-
-    edit ~/.lambo/after
-}
-
-edit()
-{
-    ## Open with best editor
-    if [[ $CODEEDITOR ]]; then
-        $CODEEDITOR $1
-    elif [[ $EDITOR ]]; then
-        $EDITOR $1
-    else
-        vim $1
-    fi
-}
-
-abort()
-{
-    echo >&2 '
-***********************************************
-*** There was an error running this script. ***
-***********************************************
-'
-    echo "An error occurred. Exiting..." >&2
-    exit 1
-}
-
-quit()
-{
-    trap : 0
-    exit 0
-}
-
-
-
-## Set up error handling
-trap 'abort' 0
-
-## Start script
-
-PROJECTNAME=$1
-PROJECTPATH="."
-MESSAGE="Initial commit."
-DEVELOP=false
-AUTH=false
-NODE=false
-CODEEDITOR=""
-BROWSER=""
-TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
-LINK=false
-
-### Load config if it exists
-if [[ -f ~/.lambo/config ]]; then
-    source ~/.lambo/config
-fi
-
-### Check for project name argument; if none passed, show help
-if [[ $# -eq 0 ]]; then
-    showhelp
-fi
-
-### Check if user wants to set up a config file.
-if [[ $1 == "make-config" ]]; then
-    makeconfig
-    quit
-fi
-
-if [[ $1 == "edit-config" ]]; then
-    editconfig
-    quit
-fi
-
-### Check if user wants to set up a after file.
-if [[ $1 == "make-after" ]]; then
-    makeafter
-    quit
-fi
-
-if [[ $1 == "edit-after" ]]; then
-    editafter
-    quit
-fi
-
-### Handle arguments
-while [[ $# -gt 0 ]]; do
-    key="$1"
-
-    case $key in
-        -h|--help)
-            showhelp
-            ;;
-        -p|--path)
-            PROJECTPATH="$2"
-            shift
-            ;;
-        -m|--message)
-            MESSAGE="$2"
-            shift
-            ;;
-        -e|--editor)
-            CODEEDITOR="$2"
-            shift
-            ;;
-        -b|--browser)
-            BROWSER="$2"
-            shift
-            ;;
-        -d|--develop|--dev)
-            DEVELOP=true
-            ;;
-        -a|--auth)
-            AUTH=true
-            ;;
-        -n|--node)
-            NODE=true
-            ;;
-        -l|--link)
-            LINK=true
-            ;;
-        *)
-            ;;
-    esac
-
-    shift
-done
-
-
-if [ -d "$PROJECTPATH/$PROJECTNAME" ]; then
-  echo "${red}Project directory $PROJECTPATH/$PROJECTNAME already exists.${reset}"
-  quit
-fi
-
-if ! hash php 2>/dev/null; then
-  echo "${red}PHP is not installed.${reset}"
-  quit
-fi
-
-if ! hash laravel 2>/dev/null; then
-  echo "${red}Laravel installer not installed.${reset}"
-  quit
-fi
-
-if ! hash git 2>/dev/null; then
-  echo "${red}Git not installed.${reset}"
-  quit
-fi
-
-cd "$PROJECTPATH" || exit
-
-echo "
-***********************************************
-Creating new Laravel app ${green}$PROJECTNAME${reset}
-***********************************************
-"
-
-if [[ "$DEVELOP" = true ]]; then
-    laravel new "$PROJECTNAME" --dev
-else
-    laravel new "$PROJECTNAME"
-fi
-
-cd "$PROJECTNAME" || exit
-
-if [[ "$CODEEDITOR" != "" ]]; then
-    if ! isterminaleditor; then
-       $CODEEDITOR .
-   fi
-fi
-
-if [[ "$NODE" = true ]]; then
-    # check if yarn is executable, otherwise use npm
-    if hash yarn 2>/dev/null; then
-        yarn
-    else
-        npm install
-    fi
-fi
-
-if [[ "$AUTH" = true ]]; then
-    php artisan make:auth
-fi
-
-git init
-git add .
-git commit -m "$MESSAGE"
-
-# Update .env to point to this database with `root` username and blank pw,
-# like Mac MySQL defaults, and appropriate domain
-if [ ! -f .env ]; then
-    cp .env.example .env
-fi
-PROJECTURL="http://$PROJECTNAME.$TLD"
-perlCommands=(
-    "s/(DB_DATABASE=)(.*)/\1$PROJECTNAME/g"
-    's/(DB_USERNAME=)(.*)/\1root/g'
-    's/(DB_PASSWORD=)(.*)/\1/g'
-    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
-)
-
-if [[ "$LINK" = true ]]; then
-    valet link "$PROJECTNAME"
-fi
-
-for perlCommand in "${perlCommands[@]}"; do
-    perl -pi -e "$perlCommand" ".env"
-done
-
-if [[ "$(uname)" == "Darwin" ]]; then
-    if [[ "$BROWSER" != "" ]]; then
-        open -a "$BROWSER" "$PROJECTURL"
-    else
-        open "$PROJECTURL"
-    fi
-elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    xdg-open "$PROJECTURL"
-fi
-
-case $PROJECTPATH in
- ".") prettyPath="$PROJECTNAME" ;;
- *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
-esac
-
-### Load after file if it exists
-if [[ -f ~/.lambo/after ]]; then
-    echo "${green}Running additional commands...${reset}"
-    source ~/.lambo/after
-fi
-
-if [[ "$CODEEDITOR" != "" ]]; then
-    if isterminaleditor; then
-       $CODEEDITOR .
-   fi
-fi
-
-if [[ "$SHELL" != "" ]]; then
-    exec "$SHELL"
-
-    echo "
-
-    ***********************************************
-
-    You're ready to go!"
-else
-    echo "
-
-    ***********************************************
-
-    You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
-fi
-
-
-
-# End script; disable error handling
-trap : 0
+#!/usr/bin/env php
+<?php
+
+define('LARAVEL_START', microtime(true));
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader
+| for our application. We just need to utilize it! We'll require it
+| into the script here so that we do not have to worry about the
+| loading of any our classes "manually". Feels great to relax.
+|
+*/
+
+$autoloader = require file_exists(__DIR__.'/vendor/autoload.php') ?  __DIR__.'/vendor/autoload.php' : __DIR__.'/../../autoload.php';
+
+$app = require_once __DIR__.'/bootstrap/app.php';
+
+/*
+|--------------------------------------------------------------------------
+| Run The Artisan Application
+|--------------------------------------------------------------------------
+|
+| When we run the console application, the current CLI command will be
+| executed in this console and the response sent back to a terminal
+| or another output device for the developers. Here goes nothing!
+|
+*/
+
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+/*
+|--------------------------------------------------------------------------
+| Shutdown The Application
+|--------------------------------------------------------------------------
+|
+| Once Artisan has finished running, we will fire off the shutdown events
+| so that any final work may be done by the application before we shut
+| down the process. This is the last thing to happen to the request.
+|
+*/
+
+$kernel->terminate($input, $status);
+
+exit($status);
