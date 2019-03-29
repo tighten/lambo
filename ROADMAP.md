@@ -39,6 +39,13 @@ like other apps do (Valet,Yarn) `~/.config/lambo/config`
 
 - Config file in php (return array), or json or .env or .ini?? :)
 
+- Command to export config files
+
+- Having or not an After file.. For example, I have an alias in my shell `barry` that installs barryvdh -> laravel-ide-helper and laravel-debugbar :)
+    And as such, there are some stuff, like user recipes that could be handy
+    Well, this is a feature that we can think after a first release, right??
+        
+
 - Maybe there should be Verifications (PreRunning), and Verifications (On running)
     This goes for example, when i decide yarn/npm... there was no verification for it
     Also cant be pre verification, because we don't know which will choose.
