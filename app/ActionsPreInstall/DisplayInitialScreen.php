@@ -2,6 +2,7 @@
 
 namespace App\ActionsPreInstall;
 
+use App\Facades\OptionManager;
 use App\Support\BaseAction;
 
 class DisplayInitialScreen extends BaseAction
@@ -23,6 +24,8 @@ class DisplayInitialScreen extends BaseAction
 
         $this->console->action(DisplayLamboLogo::class);
 
+        $this->displayCurrentConfig();
+
         if ($message !== null) {
             $this->info('');
             switch ($level) {
@@ -38,5 +41,17 @@ class DisplayInitialScreen extends BaseAction
         }
 
         $this->console->action(PromptForCustomization::class);
+    }
+
+    /**
+     * Displays a table with the current configuration values.
+     *
+     * @return void
+     */
+    private function displayCurrentConfig(): void
+    {
+        $options = OptionManager::optionValuesForDisplay();
+
+        $this->console->table(['Option', 'Value'], $options);
     }
 }

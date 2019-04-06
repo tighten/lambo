@@ -16,6 +16,7 @@ class PromptForCustomization extends BaseAction
     public function __invoke(): void
     {
         $answer = false;
+
         while (! in_array($answer, ['c','r','e'])) {
             $answer = strtolower($this->console->ask(self::CUSTOMISE_QUESTION, 'r'));
 
@@ -31,9 +32,6 @@ class PromptForCustomization extends BaseAction
             if ($answer === 'r') {
                 config()->set('lambo.store.install', true);
             }
-
-            $this->console->warn('install está a ' . (string) config('lambo.store.install') );
-
         }
     }
 }

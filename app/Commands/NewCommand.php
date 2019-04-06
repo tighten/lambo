@@ -15,6 +15,7 @@ use App\ActionsOnInstall\ValetLink;
 use App\ActionsPreInstall\DisplayInitialScreen;
 use App\ActionsPreInstall\MergeInlineOptionsToConfig;
 use App\ActionsPreInstall\RunVerifications;
+use App\Facades\OptionManager;
 use LaravelZero\Framework\Commands\Command;
 
 class NewCommand extends Command
@@ -73,12 +74,14 @@ class NewCommand extends Command
 
         // TODO Load `config` and `after` files, overloading existing.
 
+        OptionManager::load();
+
         if ($this->option('custom')) {
             $this->initialScreen();
-            // TODO on config screen, options will be listed
+
             // TODO ConfigOptionItems only appear if verification possible eg: having 6 editors possible, but user just has 3
             // TODO remove config: lambo.store, replace with a Singleton (with state).
-            // TODO Maybe lambo.config, may flatetenize folder to config/lambo.php
+            // TODO Maybe lambo.config, may flatten folder to config/lambo.php
         }
 
         if (! config('lambo.store.install')) {
