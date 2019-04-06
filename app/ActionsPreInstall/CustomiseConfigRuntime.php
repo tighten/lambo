@@ -5,6 +5,7 @@ namespace App\ActionsPreInstall;
 use App\Contracts\OptionContract;
 use App\Support\BaseAction;
 use App\Facades\OptionManager;
+use App\Support\OptionValue;
 
 class CustomiseConfigRuntime extends BaseAction
 {
@@ -43,8 +44,23 @@ class CustomiseConfigRuntime extends BaseAction
      *
      * @param OptionContract $option
      */
-    private function performOption($option)
+    private function performOption($option): void
     {
-        dd("customizing", $option);
+        /** @var OptionContract $option */
+        $choices = $option->getOptionValues()
+            ->map(function (OptionValue $item, $key) {
+                return $item->getTitle();
+            })
+            ->values()
+            ->all();
+
+        $choice = $this->console->choice($option->displayDescription(), $choices);
+
+        $choiceOptionValue = $option->getOptionValues()
+            ->first(function (OptionValue $item, $key) use ($choice) {
+                return $item->getTitle() === $choice;
+            });
+
+        $option->setOptionValue($choiceOptionValue);
     }
 }

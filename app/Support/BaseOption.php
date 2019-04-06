@@ -44,4 +44,9 @@ abstract class BaseOption implements OptionContract
     {
         throw new DomainException('Implement method in Option class.');
     }
+
+    public function getOptionValues(): \Illuminate\Support\Collection
+    {
+        return $this->optionValues;
+    }
 }
