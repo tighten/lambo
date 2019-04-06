@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Commands\NewCommand;
 use App\Contracts\OptionContract;
 use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder;
@@ -48,11 +49,19 @@ class OptionManager
     /**
      * Loads configuration, to all the options.
      *
+     * @param NewCommand $console
      * @return void
      */
-    public function load(): void
+    public function loadOptions(NewCommand $console): void
     {
+        foreach ($this->options as $option) {
+            /** @var OptionContract $option */
 
+            if (! $option->bootStartingValue()) {
+                $console->error("Initialized config {$option->getTitle()} is not with acceptable value.");
+
+            }
+        }
     }
 
     /**
@@ -97,9 +106,11 @@ class OptionManager
             ->all();
     }
 
-    public function performOptionByTitle($console)
+    public function getOptionByTitle(string $title): OptionContract
     {
-
-
+        return $this->options->first(function ($item, $key) use ($title) {
+            /** @var OptionContract $item */
+            return $item->getTitle() === $title;
+        });
     }
 }

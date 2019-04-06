@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\ActionsPreInstall\CustomiseConfigRuntime;
 use App\ActionsPreInstall\PromptForCustomization;
 use App\Support\ShellCommand;
 use Tests\TestCase;
@@ -60,7 +61,7 @@ class InitialConfigurationsTest extends TestCase
             '--custom' => true,
         ])
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'c')
-            ->expectsQuestion('Which configuration to setup?',0)
+            ->expectsQuestion('Which configuration to setup?', CustomiseConfigRuntime::EXIT_MESSAGE)
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'e')
             ->assertExitCode(0)
             ->run();

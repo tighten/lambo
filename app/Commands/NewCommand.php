@@ -74,7 +74,7 @@ class NewCommand extends Command
 
         // TODO Load `config` and `after` files, overloading existing.
 
-        OptionManager::load();
+        OptionManager::loadOptions($this);
 
         if ($this->option('custom')) {
             $this->initialScreen();

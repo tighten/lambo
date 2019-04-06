@@ -12,5 +12,7 @@ interface OptionContract
 
     public function displayValue(): string;
 
-    public function getValue();
+    public function getOptionValue();
+
+    public function bootStartingValue(): bool;
 }
