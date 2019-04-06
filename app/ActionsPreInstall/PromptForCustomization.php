@@ -7,6 +7,8 @@ use App\Support\BaseAction;
 
 class PromptForCustomization extends BaseAction
 {
+    public const CUSTOMIZE_QUESTION = 'Would you like to (R)un with current config, or (C)ustomize? Or (E)xit.';
+
     /**
      * Prompts the user for runtime customization.
      *
@@ -14,11 +16,9 @@ class PromptForCustomization extends BaseAction
      */
     public function __invoke(): void
     {
-        $customizeQuestion = 'Would you like to (R)un with current config, or (C)ustomize? Or (E)xit.';
-
         $answer = false;
         while (! in_array($answer, ['c','r','e'])) {
-            $answer = strtolower($this->console->ask($customizeQuestion, 'r'));
+            $answer = strtolower($this->console->ask(self::CUSTOMIZE_QUESTION, 'r'));
 
             if ($answer === 'e') {
                 $this->console->info("\nBye. Come back soon to build something awesome!\n");
