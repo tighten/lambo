@@ -21,12 +21,19 @@ class PromptForCustomization extends BaseAction
 
             if ($answer === 'e') {
                 $this->console->info("\nBye. Come back soon to build something awesome!\n");
-                exit(1);
+                config()->set('lambo.store.install', false);
             }
 
             if ($answer === 'c') {
                 app(CustomizeConfigRuntime::class, ['console' => $this->console])();
             }
+
+            if ($answer === 'r') {
+                config()->set('lambo.store.install', true);
+            }
+
+            $this->console->warn('install está a ' . (string) config('lambo.store.install') );
+
         }
     }
 }

@@ -14,9 +14,9 @@ class CustomizeConfigRuntime extends BaseAction
     public function __invoke(): void
     {
         $choices = [
-            'auth' => 'Auth scaffolding',
-            'browser' => 'Open the browser on your new application.',
-            'commit_message' => 'Customize the first commit message',
+            'Auth scaffolding',
+            'Open the browser on your new application.',
+            'Customize the first commit message',
         ];
 
         $title = 'Which configuration to setup?';

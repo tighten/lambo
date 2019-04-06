@@ -12,9 +12,8 @@ use App\ActionsOnInstall\OpenEditor;
 use App\ActionsOnInstall\SetupLamboStoreConfigs;
 use App\ActionsOnInstall\UpdateDotEnvFile;
 use App\ActionsOnInstall\ValetLink;
-use App\ActionsPreInstall\DisplayLamboLogo;
+use App\ActionsPreInstall\DisplayInitialScreen;
 use App\ActionsPreInstall\MergeInlineOptionsToConfig;
-use App\ActionsPreInstall\PromptForCustomization;
 use App\ActionsPreInstall\RunVerifications;
 use LaravelZero\Framework\Commands\Command;
 
@@ -27,6 +26,7 @@ class NewCommand extends Command
      */
     protected $signature = 'new 
         {projectName : Name of the Laravel project}
+        {--c|custom : Customize config options.}
         {--dev : Choose the dev branch instead of master.}
         {--editor= : The editor command. Use false for none.}
         {--message= : Set the first commit message.}
@@ -66,14 +66,20 @@ class NewCommand extends Command
      */
     public function handle(): void
     {
+        config()->set('lambo.store.install', true);
+
         $this->action(MergeInlineOptionsToConfig::class);
         $this->action(RunVerifications::class);
 
-        $this->initialScreen();
+        // TODO Load `config` and `after` files
 
-        /*
-         * It will reach here where (R)un selection is made on the initial screen.
-         */
+        if ($this->option('custom')) {
+            $this->initialScreen();
+        }
+
+        if (! config('lambo.store.install')) {
+            return;
+        }
 
         $this->action(SetupLamboStoreConfigs::class);
         $this->action(CreateNewApplication::class);
@@ -96,29 +102,9 @@ class NewCommand extends Command
      */
     public function initialScreen(?string $message = null, ?string $level = 'info'): void
     {
-        $emptySpace = '';
-        foreach (range(1, 15) as $i) {
-            $emptySpace .= PHP_EOL;
-        }
-        $this->info($emptySpace);
+        $initialScreen = app(DisplayInitialScreen::class, ['console' => $this]);
 
-        $this->action(DisplayLamboLogo::class);
-
-        if ($message !== null) {
-            $this->info('');
-            switch ($level) {
-                case 'error':
-                    $this->error($message);
-                    break;
-                case 'alert':
-                    $this->alert($message);
-                    break;
-                default:
-                    $this->info($message);
-            }
-        }
-
-        $this->action(PromptForCustomization::class);
+        $initialScreen($message, $level);
     }
 
     /**

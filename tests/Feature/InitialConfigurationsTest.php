@@ -12,14 +12,75 @@ class InitialConfigurationsTest extends TestCase
     public function projectNameSetCorrectly(): void
     {
         /** @var \Mockery\MockInterface $shellCommand */
-        $shellCommand = $this->mock(ShellCommand::class);
-
-        $shellCommand->shouldReceive('inDirectory');
+        $shellCommand = $this->spy(ShellCommand::class);
 
         $this->artisan('new', ['projectName' => 'blog'])
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'r')
-            ->assertExitCode(0);
+            ->run();
+
+        $shellCommand->shouldHaveReceived('inDirectory')
+            ->withArgs([
+                config('lambo.store.install_path'),
+                'laravel new blog'
+            ]);
 
         $this->assertEquals('blog', config('lambo.store.project_name'));
+    }
+
+    /** @test */
+    public function canInitConfigurationAndLookAtConfigsAndRunInstallation(): void
+    {
+        /** @var \Mockery\MockInterface $shellCommand */
+        $shellCommand = $this->spy(ShellCommand::class);
+
+        $this->artisan('new', [
+            'projectName' => 'blog',
+            '--custom' => true,
+        ])
+            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'r')
+            ->assertExitCode(0)
+            ->run();
+
+        $shellCommand->shouldHaveReceived('inDirectory')
+            ->withArgs([
+                config('lambo.store.install_path'),
+                'laravel new blog'
+            ]);
+
+        $this->assertEquals('blog', config('lambo.store.project_name'));
+    }
+
+    /** @test */
+    public function canInitConfigurationAndCustomizeAndRunExit(): void
+    {
+        /** @var \Mockery\MockInterface $shellCommand */
+        $shellCommand = $this->spy(ShellCommand::class);
+
+        $this->artisan('new', [
+            'projectName' => 'blog',
+            '--custom' => true,
+        ])
+            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'c')
+            ->expectsQuestion('Which configuration to setup?',0)
+            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'r')
+            ->assertExitCode(0)
+            ->run();
+
+        $shellCommand->shouldNotHaveReceived('inDirectory');
+    }
+
+    /** @test */
+    public function canInitConfigurationAndLookAtConfigsAndLeave(): void
+    {
+        /** @var \Mockery\MockInterface $shellCommand */
+        $shellCommand = $this->spy(ShellCommand::class);
+
+        $this->artisan('new', [
+                'projectName' => 'blog',
+                '--custom' => true,
+            ])
+            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'e')
+            ->assertExitCode(0);
+
+        $shellCommand->shouldNotHaveReceived('inDirectory');
     }
 }
