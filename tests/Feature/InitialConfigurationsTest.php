@@ -61,7 +61,7 @@ class InitialConfigurationsTest extends TestCase
         ])
             ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'c')
             ->expectsQuestion('Which configuration to setup?',0)
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'r')
+            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'e')
             ->assertExitCode(0)
             ->run();
 
