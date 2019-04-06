@@ -9,8 +9,8 @@ class DevBranch extends BaseOption
 {
     public function bootOptionValues(): void
     {
-        $this->addOptionValue('Yes', true);
         $this->addOptionValue('No', false);
+        $this->addOptionValue('Yes', true);
     }
 
     public function getKey(): string

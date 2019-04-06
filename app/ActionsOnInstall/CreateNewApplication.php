@@ -2,6 +2,7 @@
 
 namespace App\ActionsOnInstall;
 
+use App\Facades\OptionManager;
 use App\Support\BaseAction;
 
 class CreateNewApplication extends BaseAction
@@ -13,7 +14,7 @@ class CreateNewApplication extends BaseAction
      */
     public function __invoke(): void
     {
-        $isDev = config('lambo.dev', false);
+        $isDev = OptionManager::getOption('dev')->getOptionValue();
 
         $projectName = config('lambo.store.project_name');
 

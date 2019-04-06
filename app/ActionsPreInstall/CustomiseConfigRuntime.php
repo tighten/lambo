@@ -11,6 +11,8 @@ class CustomiseConfigRuntime extends BaseAction
 {
     public const EXIT_MESSAGE = 'Exit without changes.';
 
+    public const CUSTOMISATION_QUESTION = 'Exit without changes.';
+
     /**
      * Customise the configuration in runtime.
      *
@@ -25,9 +27,7 @@ class CustomiseConfigRuntime extends BaseAction
             $choices
         );
 
-        $title = 'Which configuration to setup?';
-
-        $choice = $this->console->choice($title, $choices);
+        $choice = $this->console->choice(self::CUSTOMISATION_QUESTION, $choices);
 
         if ($choice === static::EXIT_MESSAGE) {
             $this->console->initialScreen('Nothing was changed. Ready to go?', 'alert');

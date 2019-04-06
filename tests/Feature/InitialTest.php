@@ -7,7 +7,7 @@ use App\ActionsPreInstall\PromptForCustomization;
 use App\Support\ShellCommand;
 use Tests\TestCase;
 
-class InitialConfigurationsTest extends TestCase
+class InitialTest extends TestCase
 {
     /** @test */
     public function projectNameSetCorrectly(): void
@@ -34,9 +34,9 @@ class InitialConfigurationsTest extends TestCase
         $shellCommand = $this->spy(ShellCommand::class);
 
         $this->artisan('new', [
-            'projectName' => 'blog',
-            '--custom' => true,
-        ])
+                'projectName' => 'blog',
+                '--custom' => true,
+            ])
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'r')
             ->assertExitCode(0)
             ->run();
@@ -57,11 +57,11 @@ class InitialConfigurationsTest extends TestCase
         $shellCommand = $this->spy(ShellCommand::class);
 
         $this->artisan('new', [
-            'projectName' => 'blog',
-            '--custom' => true,
-        ])
+                'projectName' => 'blog',
+                '--custom' => true,
+            ])
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'c')
-            ->expectsQuestion('Which configuration to setup?', CustomiseConfigRuntime::EXIT_MESSAGE)
+            ->expectsQuestion(CustomiseConfigRuntime::CUSTOMISATION_QUESTION, CustomiseConfigRuntime::EXIT_MESSAGE)
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'e')
             ->assertExitCode(0)
             ->run();
