@@ -7,7 +7,7 @@ use App\Support\BaseAction;
 class DisplayInitialScreen extends BaseAction
 {
     /**
-     * Displays the Initial screen, showing current config, and ability to customize.
+     * Displays the Initial screen, showing current config, and ability to customise.
      *
      * @param string|null $message
      * @param string|null $level

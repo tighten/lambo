@@ -36,7 +36,7 @@ class InitialConfigurationsTest extends TestCase
             'projectName' => 'blog',
             '--custom' => true,
         ])
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'r')
+            ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'r')
             ->assertExitCode(0)
             ->run();
 
@@ -59,9 +59,9 @@ class InitialConfigurationsTest extends TestCase
             'projectName' => 'blog',
             '--custom' => true,
         ])
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'c')
+            ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'c')
             ->expectsQuestion('Which configuration to setup?',0)
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'e')
+            ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'e')
             ->assertExitCode(0)
             ->run();
 
@@ -78,7 +78,7 @@ class InitialConfigurationsTest extends TestCase
                 'projectName' => 'blog',
                 '--custom' => true,
             ])
-            ->expectsQuestion(PromptForCustomization::CUSTOMIZE_QUESTION, 'e')
+            ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'e')
             ->assertExitCode(0);
 
         $shellCommand->shouldNotHaveReceived('inDirectory');

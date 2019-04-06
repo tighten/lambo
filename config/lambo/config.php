@@ -10,10 +10,10 @@ return [
     | The editor command name to open in the project directory after
     | creating the project. You may set to false not to open any.
     |
-    | Option: string
+    | Option: string | false
     |
     */
-    'editor' => 'pstorm',
+    'editor' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     | Options: boolean, 'yarn', 'npm'
     |
     */
-    'node' => true,
+    'node' => false,
 
     /*
     |--------------------------------------------------------------------------

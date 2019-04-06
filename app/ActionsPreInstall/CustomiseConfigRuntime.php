@@ -4,10 +4,10 @@ namespace App\ActionsPreInstall;
 
 use App\Support\BaseAction;
 
-class CustomizeConfigRuntime extends BaseAction
+class CustomiseConfigRuntime extends BaseAction
 {
     /**
-     * Customize the configuration in runtime.
+     * Customise the configuration in runtime.
      *
      * @return void
      */
@@ -16,7 +16,7 @@ class CustomizeConfigRuntime extends BaseAction
         $choices = [
             'Auth scaffolding',
             'Open the browser on your new application.',
-            'Customize the first commit message',
+            'Customise the first commit message',
         ];
 
         $title = 'Which configuration to setup?';

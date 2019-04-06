@@ -26,7 +26,7 @@ class NewCommand extends Command
      */
     protected $signature = 'new 
         {projectName : Name of the Laravel project}
-        {--c|custom : Customize config options.}
+        {--c|custom : Customise config options.}
         {--dev : Choose the dev branch instead of master.}
         {--editor= : The editor command. Use false for none.}
         {--message= : Set the first commit message.}
@@ -71,15 +71,21 @@ class NewCommand extends Command
         $this->action(MergeInlineOptionsToConfig::class);
         $this->action(RunVerifications::class);
 
-        // TODO Load `config` and `after` files
+        // TODO Load `config` and `after` files, overloading existing.
 
         if ($this->option('custom')) {
             $this->initialScreen();
+            // TODO on config screen, options will be listed
+            // TODO ConfigOptionItems only appear if verification possible eg: having 6 editors possible, but user just has 3
+            // TODO remove config: lambo.store, replace with a Singleton (with state).
+            // TODO Maybe lambo.config, may flatetenize folder to config/lambo.php
         }
 
         if (! config('lambo.store.install')) {
             return;
         }
+
+        // TODO Run verifications that we only know as ConfigOptions. Example: yarn/npm/editor available
 
         $this->action(SetupLamboStoreConfigs::class);
         $this->action(CreateNewApplication::class);
