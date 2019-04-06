@@ -11,6 +11,11 @@ class DevBranch extends BaseOption
         return 'dev';
     }
 
+    public function getTitle(): string
+    {
+        return 'Dev Branch';
+    }
+
     public function displayDescription(): string
     {
         return 'Use development branch?';

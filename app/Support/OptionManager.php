@@ -55,13 +55,35 @@ class OptionManager
 
     }
 
+    /**
+     * Get a specific option, by key.
+     *
+     * @param string $key
+     * @return OptionContract
+     */
     public function getOption(string $key): OptionContract
     {
         return $this->options->get($key);
     }
 
     /**
-     * Current option description and values ready to display.
+     * Every current option to customise.
+     *
+     * @return array
+     */
+    public function optionValuesForCustomisationMenu(): array
+    {
+        return $this->options
+            ->map(function ($item, $key) {
+                /** @var OptionContract $item */
+                return $item->getTitle();
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Every current option description and values ready to display.
      *
      * @return array
      */
@@ -70,8 +92,14 @@ class OptionManager
         return $this->options
             ->map(function ($item, $key) {
                 /** @var OptionContract $item */
-                return [$item->displayDescription(), $item->displayValue()];
+                return [$item->getTitle(), $item->displayDescription(), $item->displayValue()];
             })
             ->all();
+    }
+
+    public function performOptionByTitle($console)
+    {
+
+
     }
 }

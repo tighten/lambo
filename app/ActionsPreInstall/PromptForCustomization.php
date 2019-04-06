@@ -21,7 +21,7 @@ class PromptForCustomization extends BaseAction
             $answer = strtolower($this->console->ask(self::CUSTOMISE_QUESTION, 'r'));
 
             if ($answer === 'e') {
-                $this->console->info("\nBye. Come back soon to build something awesome!\n");
+                $this->console->info("Bye. Come back soon to build something awesome!\n");
                 config()->set('lambo.store.install', false);
             }
 

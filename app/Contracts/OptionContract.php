@@ -6,6 +6,8 @@ interface OptionContract
 {
     public function getKey(): string;
 
+    public function getTitle(): string;
+
     public function displayDescription(): string;
 
     public function displayValue(): string;

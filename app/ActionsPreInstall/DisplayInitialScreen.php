@@ -27,16 +27,16 @@ class DisplayInitialScreen extends BaseAction
         $this->displayCurrentConfig();
 
         if ($message !== null) {
-            $this->info('');
+            $this->console->info('');
             switch ($level) {
                 case 'error':
-                    $this->error($message);
+                    $this->console->error($message);
                     break;
                 case 'alert':
-                    $this->alert($message);
+                    $this->console->alert($message);
                     break;
                 default:
-                    $this->info($message);
+                    $this->console->info($message);
             }
         }
 
@@ -52,6 +52,6 @@ class DisplayInitialScreen extends BaseAction
     {
         $options = OptionManager::optionValuesForDisplay();
 
-        $this->console->table(['Option', 'Value'], $options);
+        $this->console->table(['Option', 'Description', 'Value'], $options);
     }
 }
