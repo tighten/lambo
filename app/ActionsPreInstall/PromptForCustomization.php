@@ -2,7 +2,6 @@
 
 namespace App\ActionsPreInstall;
 
-use function in_array;
 use App\Support\BaseAction;
 
 class PromptForCustomization extends BaseAction
