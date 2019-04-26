@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\ActionsOnInstall\ChangeDirectory;
 use App\ActionsOnInstall\CreateDatabase;
 use App\ActionsOnInstall\CreateNewApplication;
 use App\ActionsOnInstall\InitializeGit;
@@ -25,7 +26,7 @@ class NewCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'new 
+    protected $signature = 'new
         {projectName : Name of the Laravel project}
         {--c|custom : Customise config options.}
         {--dev : Choose the dev branch instead of master.}
@@ -100,6 +101,7 @@ class NewCommand extends Command
         $this->action(ValetLink::class);
         $this->action(OpenBrowser::class);
         $this->action(OpenEditor::class);
+        $this->action(ChangeDirectory::class);
     }
 
     /**
