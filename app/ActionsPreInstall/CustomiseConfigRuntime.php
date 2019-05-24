@@ -30,13 +30,13 @@ class CustomiseConfigRuntime extends BaseAction
         $choice = $this->console->choice(self::CUSTOMISATION_QUESTION, $choices);
 
         if ($choice === static::EXIT_MESSAGE) {
-            $this->console->initialScreen('Nothing was changed. Ready to go?', 'alert');
+            $this->console->customizeConfig('Nothing was changed. Ready to go?', 'alert');
             return;
         }
 
         $this->performOption(OptionManager::getOptionByTitle($choice));
 
-        $this->console->initialScreen();
+        $this->console->customizeConfig();
     }
 
     /**
