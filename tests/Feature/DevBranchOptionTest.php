@@ -14,12 +14,8 @@ class DevBranchOptionTest extends TestCase
     /** @test */
     public function canSetDevBranchToTrueOnLaunch(): void
     {
-        $this->artisan('new', [
-            'projectName' => 'blog',
-            '--dev' => true,
-        ])
-            ->assertExitCode(0)
-            ->run();
+        $this->artisan('new blog --dev')
+            ->assertExitCode(0);
 
         $dev = OptionManager::getOption('dev')->getOptionValue();
 
@@ -33,14 +29,10 @@ class DevBranchOptionTest extends TestCase
     }
 
     /** @test */
-    public function canSetDevBranchToFalseOnLaunch(): void
+    public function devBranchDefaultsToFalseOnLaunch(): void
     {
-        $this->artisan('new', [
-                'projectName' => 'blog',
-                '--dev' => false,
-            ])
-            ->assertExitCode(0)
-            ->run();
+        $this->artisan('new blog')
+            ->assertExitCode(0);
 
         $dev = OptionManager::getOption('dev')->getOptionValue();
 
@@ -58,31 +50,23 @@ class DevBranchOptionTest extends TestCase
     {
         $devBranchOption = new DevBranch();
 
-        $this->artisan('new', [
-                'projectName' => 'blog',
-                '--custom' => true,
-            ])
+        $this->artisan('new blog --custom')
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'c')
             ->expectsQuestion(CustomiseConfigRuntime::CUSTOMISATION_QUESTION, $devBranchOption->getTitle())
             ->expectsQuestion($devBranchOption->displayDescription(), 'No')
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'r')
-            ->assertExitCode(0)
-            ->run();
+            ->assertExitCode(0);
 
         $dev = OptionManager::getOption('dev')->getOptionValue();
 
         $this->assertEquals(false, $dev);
 
-        $this->artisan('new', [
-            'projectName' => 'blog',
-            '--custom' => true,
-        ])
+        $this->artisan('new blog --custom')
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'c')
             ->expectsQuestion(CustomiseConfigRuntime::CUSTOMISATION_QUESTION, $devBranchOption->getTitle())
             ->expectsQuestion($devBranchOption->displayDescription(), 'Yes')
             ->expectsQuestion(PromptForCustomization::CUSTOMISE_QUESTION, 'r')
-            ->assertExitCode(0)
-            ->run();
+            ->assertExitCode(0);
 
         $dev = OptionManager::getOption('dev')->getOptionValue();
 
