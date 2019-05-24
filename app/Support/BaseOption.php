@@ -14,7 +14,7 @@ abstract class BaseOption implements OptionContract
     /** @var \Illuminate\Support\Collection  */
     protected $optionValues;
 
-    protected $values;
+    protected $values = [];
 
     public function __construct()
     {
