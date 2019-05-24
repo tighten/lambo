@@ -14,9 +14,6 @@ class DevBranchOptionTest extends TestCase
     /** @test */
     public function canSetDevBranchToTrueOnLaunch(): void
     {
-        /** @var \Mockery\MockInterface $shellCommand */
-        $shellCommand = $this->spy(ShellCommand::class);
-
         $this->artisan('new', [
             'projectName' => 'blog',
             '--dev' => true,
@@ -28,7 +25,7 @@ class DevBranchOptionTest extends TestCase
 
         $this->assertEquals(true, $dev);
 
-        $shellCommand->shouldHaveReceived('inDirectory')
+        $this->shellCommand->shouldHaveReceived('inDirectory')
             ->withArgs([
                 config('lambo.store.install_path'),
                 'laravel new blog --dev'
@@ -38,9 +35,6 @@ class DevBranchOptionTest extends TestCase
     /** @test */
     public function canSetDevBranchToFalseOnLaunch(): void
     {
-        /** @var \Mockery\MockInterface $shellCommand */
-        $shellCommand = $this->spy(ShellCommand::class);
-
         $this->artisan('new', [
                 'projectName' => 'blog',
                 '--dev' => false,
@@ -52,7 +46,7 @@ class DevBranchOptionTest extends TestCase
 
         $this->assertEquals(false, $dev);
 
-        $shellCommand->shouldHaveReceived('inDirectory')
+        $this->shellCommand->shouldHaveReceived('inDirectory')
             ->withArgs([
                 config('lambo.store.install_path'),
                 'laravel new blog'
@@ -62,9 +56,6 @@ class DevBranchOptionTest extends TestCase
     /** @test */
     public function canChooseDevBranchInteractively(): void
     {
-        /** @var \Mockery\MockInterface $shellCommand */
-        $this->spy(ShellCommand::class);
-
         $devBranchOption = new DevBranch();
 
         $this->artisan('new', [
@@ -97,6 +88,4 @@ class DevBranchOptionTest extends TestCase
 
         $this->assertEquals(true, $dev);
     }
-
-
 }
