@@ -76,10 +76,16 @@ abstract class BaseOption implements OptionContract
 
     public function bootStartingValue(): bool
     {
+        // Select from one of the existing options
         $this->optionValue = $this->optionValues->first(function ($item, $key) {
             /** @var OptionValue $item */
             return $item->getValue() === config('lambo.config.' . $this->key);
         });
+
+        // If the option still is not set, instantiate a new option
+        if (! $this->optionValue) {
+            $this->optionValue = new OptionValue($this->title, config('lambo.config.' . $this->key));
+        }
 
         return $this->optionValue !== null;
     }
