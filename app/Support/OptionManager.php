@@ -59,7 +59,6 @@ class OptionManager
 
             if (! $option->bootStartingValue()) {
                 $console->error("Initialized config {$option->getTitle()} is not with acceptable value.");
-
             }
         }
     }
