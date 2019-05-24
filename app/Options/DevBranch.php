@@ -3,38 +3,17 @@
 namespace App\Options;
 
 use App\Support\BaseOption;
-use App\Support\OptionValue;
 
 class DevBranch extends BaseOption
 {
-    public function bootOptionValues(): void
-    {
-        $this->addOptionValue('No', false);
-        $this->addOptionValue('Yes', true);
-    }
+    protected $key = 'dev';
 
-    public function getKey(): string
-    {
-        return 'dev';
-    }
+    protected $title = 'Dev Branch';
 
-    public function getTitle(): string
-    {
-        return 'Dev Branch';
-    }
+    protected $description = 'Use development branch?';
 
-    public function displayDescription(): string
-    {
-        return 'Use development branch?';
-    }
-
-    public function bootStartingValue(): bool
-    {
-        $this->optionValue = $this->optionValues->first(function ($item, $key) {
-            /** @var OptionValue $item */
-            return $item->getValue() === config('lambo.config.dev');
-        });
-
-        return $this->optionValue !== null;
-    }
+    protected $values = [
+        'No' => false,
+        'Yes' => true,
+    ];
 }
