@@ -13,7 +13,7 @@ use App\ActionsOnInstall\OpenEditor;
 use App\ActionsOnInstall\SetupLamboStoreConfigs;
 use App\ActionsOnInstall\UpdateDotEnvFile;
 use App\ActionsOnInstall\ValetLink;
-use App\ActionsPreInstall\DisplayInitialScreen;
+use App\ActionsPreInstall\DisplayConfigScreen;
 use App\ActionsPreInstall\MergeInlineOptionsToConfig;
 use App\ActionsPreInstall\RunVerifications;
 use App\Facades\OptionManager;
@@ -78,7 +78,7 @@ class NewCommand extends Command
         OptionManager::loadOptions($this);
 
         if ($this->option('custom')) {
-            $this->initialScreen();
+            $this->customizeConfig();
 
             // TODO ConfigOptionItems only appear if verification possible eg: having 6 editors possible, but user just has 3
             // TODO remove config: lambo.store, replace with a Singleton (with state).
@@ -111,11 +111,11 @@ class NewCommand extends Command
      * @param string $level
      * @return void
      */
-    public function initialScreen(?string $message = null, ?string $level = 'info'): void
+    public function customizeConfig(?string $message = null, ?string $level = 'info'): void
     {
-        $initialScreen = app(DisplayInitialScreen::class, ['console' => $this]);
+        $configScreen = app(DisplayConfigScreen::class, ['console' => $this]);
 
-        $initialScreen($message, $level);
+        $configScreen($message, $level);
     }
 
     /**

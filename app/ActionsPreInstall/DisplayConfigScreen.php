@@ -5,7 +5,7 @@ namespace App\ActionsPreInstall;
 use App\Facades\OptionManager;
 use App\Support\BaseAction;
 
-class DisplayInitialScreen extends BaseAction
+class DisplayConfigScreen extends BaseAction
 {
     /**
      * Displays the Initial screen, showing current config, and ability to customise.
