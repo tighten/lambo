@@ -37,6 +37,10 @@ abstract class BaseOption implements OptionContract
 
     public function displayValue(): string
     {
+        if (! $this->optionValue) {
+            return '';
+        }
+
         return $this->optionValue->getTitle();
     }
 
