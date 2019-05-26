@@ -274,7 +274,6 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-
 if [ -d "$PROJECTPATH/$PROJECTNAME" ]; then
   echo "${red}Project directory $PROJECTPATH/$PROJECTNAME already exists.${reset}"
   quit
@@ -337,6 +336,10 @@ fi
 # like Mac MySQL defaults, and appropriate domain
 
 PROJECTURL="http://$PROJECTNAME.$TLD"
+
+if [ -f .env ]; then
+    cp .env .env.example
+fi
 
 perlCommands=(
     "s/(?'var'DB_DATABASE=)(.*)/$+{var}$PROJECTNAME/g"
