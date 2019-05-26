@@ -333,16 +333,15 @@ if [[ "$AUTH" = true ]]; then
     php artisan make:auth
 fi
 
-git init
-git add .
-git commit -m "$MESSAGE"
-
-# Update .env to point to this database with `root` username and blank pw,
-# like Mac MySQL defaults, and appropriate domain
 if [ ! -f .env ]; then
     cp .env.example .env
 fi
+
+# Update .env to point to this database with `root` username and blank pw,
+# like Mac MySQL defaults, and appropriate domain
+
 PROJECTURL="http://$PROJECTNAME.$TLD"
+
 perlCommands=(
     "s/(?'var'DB_DATABASE=)(.*)/$+{var}$PROJECTNAME/g"
     "s/(?'var'DB_USERNAME=)(.*)/$+{var}$DB_USERNAME/g"
@@ -351,9 +350,14 @@ perlCommands=(
 )
 
 for perlCommand in "${perlCommands[@]}"; do
-    perl -pi -e "$perlCommand" ".env.example"
     perl -pi -e "$perlCommand" ".env"
 done
+
+cp .env .env.example
+
+git init
+git add .
+git commit -m "$MESSAGE"
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
@@ -363,6 +367,15 @@ if [[ "$SECURE" = true ]]; then
     valet secure "$PROJECTNAME"
 fi
 
+### Load after file if it exists
+if [[ -f ~/.lambo/after ]]; then
+    echo "
+${green}Running additional commands...${reset}
+    "
+    source ~/.lambo/after
+fi
+
+### Open the browser
 if [[ "$(uname)" == "Darwin" ]]; then
     if [[ "$BROWSER" != "" ]]; then
         open -a "$BROWSER" "$PROJECTURL"
@@ -377,14 +390,6 @@ case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
-
-### Load after file if it exists
-if [[ -f ~/.lambo/after ]]; then
-    echo "
-${green}Running additional commands...${reset}
-    "
-    source ~/.lambo/after
-fi
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if isterminaleditor; then
@@ -408,8 +413,6 @@ else
 
 You're ready to go! Remember to cd into '${green}$prettyPath${reset}' before you start editing."
 fi
-
-
 
 # End script; disable error handling
 trap : 0
