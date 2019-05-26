@@ -333,11 +333,7 @@ if [[ "$AUTH" = true ]]; then
     php artisan make:auth
 fi
 
-if [ ! -f .env ]; then
-    cp .env.example .env
-fi
-
-# Update .env to point to this database with `root` username and blank pw,
+# Update .env.example to point to this database with `root` username and blank pw,
 # like Mac MySQL defaults, and appropriate domain
 
 PROJECTURL="http://$PROJECTNAME.$TLD"
@@ -350,10 +346,10 @@ perlCommands=(
 )
 
 for perlCommand in "${perlCommands[@]}"; do
-    perl -pi -e "$perlCommand" ".env"
+    perl -pi -e "$perlCommand" ".env.example"
 done
 
-cp .env .env.example
+cp .env.example .env
 
 git init
 git add .
