@@ -337,10 +337,6 @@ fi
 
 PROJECTURL="http://$PROJECTNAME.$TLD"
 
-if [ -f .env ]; then
-    cp .env .env.example
-fi
-
 perlCommands=(
     "s/(?'var'DB_DATABASE=)(.*)/$+{var}$PROJECTNAME/g"
     "s/(?'var'DB_USERNAME=)(.*)/$+{var}$DB_USERNAME/g"
@@ -353,6 +349,8 @@ for perlCommand in "${perlCommands[@]}"; do
 done
 
 cp .env.example .env
+
+php artisan key:generate --ansi
 
 git init
 git add .
