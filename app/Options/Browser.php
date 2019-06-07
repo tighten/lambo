@@ -14,5 +14,6 @@ class Browser extends BaseOption
 
     protected $values = [
         'None' => false,
+        'System Default' => true,
     ];
 }
