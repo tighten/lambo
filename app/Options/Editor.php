@@ -13,6 +13,7 @@ class Editor extends BaseOption
     protected $description = 'The project will open in this editor';
 
     protected $values = [
+        'None' => false,
         'Sublime' => 'subl',
     ];
 }
