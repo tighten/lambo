@@ -84,7 +84,8 @@ abstract class BaseOption implements OptionContract
 
         // If the option still is not set, instantiate a new option
         if (! $this->optionValue) {
-            $this->optionValue = new OptionValue('', config('lambo.config.' . $this->key));
+            $value = config('lambo.config.' . $this->key);
+            $this->optionValue = new OptionValue($value, $value);
         }
 
         return $this->optionValue !== null;
