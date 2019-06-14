@@ -10,7 +10,7 @@ class Path extends BaseOption
 
     protected $title = 'Path';
 
-    protected $description = 'The project will install to this path';
+    protected $description = 'The path to install the project to';
 
     protected $values = [
         'Current Directory' => false,

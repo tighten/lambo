@@ -10,7 +10,7 @@ class Auth extends BaseOption
 
     protected $title = 'Auth';
 
-    protected $description = 'Whether to run the auth:make command to scaffold authentication routes and views.';
+    protected $description = 'Whether to scaffold authentication routes and views';
 
     protected $values = [
         'Yes' => true,

@@ -10,7 +10,7 @@ class Browser extends BaseOption
 
     protected $title = 'Browser';
 
-    protected $description = 'The project will open in this browser';
+    protected $description = 'The browser to open the project in';
 
     protected $values = [
         'None' => false,

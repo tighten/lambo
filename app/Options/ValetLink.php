@@ -10,7 +10,7 @@ class ValetLink extends BaseOption
 
     protected $title = 'Valet Link';
 
-    protected $description = 'Whether create a Valet link to the project directory';
+    protected $description = 'Whether to create a Valet link to the project directory';
 
     protected $values = [
         'Yes' => true,

@@ -10,7 +10,7 @@ class CommitMessage extends BaseOption
 
     protected $title = 'Commit Message';
 
-    protected $description = 'Commit message for the initial commit';
+    protected $description = 'The commit message for the initial commit';
 
     protected $values = [
         'None' => false,

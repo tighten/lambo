@@ -10,7 +10,7 @@ class DevBranch extends BaseOption
 
     protected $title = 'Dev Branch';
 
-    protected $description = 'Use development branch?';
+    protected $description = 'Whether to use the Laravel development branch';
 
     protected $values = [
         'No' => false,

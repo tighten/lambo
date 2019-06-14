@@ -10,10 +10,11 @@ class Database extends BaseOption
 
     protected $title = 'Database';
 
-    protected $description = 'Create a database with Project Name';
+    protected $description = 'The database type to create with the project name';
 
     protected $values = [
-        'Yes' => true,
-        'No' => false,
+        'MySQL' => 'mysql',
+        'Sqlite' => 'sqlite',
+        'Neither' => false,
     ];
 }

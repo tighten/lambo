@@ -10,7 +10,7 @@ class Editor extends BaseOption
 
     protected $title = 'Editor';
 
-    protected $description = 'The project will open in this editor';
+    protected $description = 'The editor to open the project in';
 
     protected $values = [
         'None' => false,
