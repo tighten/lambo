@@ -31,7 +31,7 @@ class NewCommand extends Command
         {--c|custom : Customise config options.}
         {--dev : Choose the dev branch instead of master.}
         {--editor= : The editor command. Use false for none.}
-        {--message= : Set the first commit message.}
+        {--commit= : Set the first commit message.}
         {--path= : Specify where to install the application.}
         {--auth : Use Artisan to scaffold all of the routes and views you need for authentication.}
         {--node= : Run yarn if installed, otherwise runs npm install after creating the project.}
@@ -90,7 +90,6 @@ class NewCommand extends Command
         }
 
         // TODO Run verifications that we only know as ConfigOptions. Example: yarn/npm/editor available
-
         $this->action(SetupLamboStoreConfigs::class);
         $this->action(CreateNewApplication::class);
         $this->action(InitializeGit::class);

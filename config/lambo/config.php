@@ -26,7 +26,7 @@ return [
     | Option: string
     |
     */
-    'gitMessage' => 'Initial commit.',
+    'commit' => 'Initial commit.',
 
     /*
     |--------------------------------------------------------------------------
