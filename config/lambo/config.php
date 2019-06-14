@@ -130,7 +130,7 @@ return [
     | Options: false, 'mysql', 'sqlite'
     |
     */
-    'database' => true,
+    'database' => false,
 
     /*
     |--------------------------------------------------------------------------
