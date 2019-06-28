@@ -13,9 +13,12 @@ class OpenBrowser extends BaseAction
      */
     public function __invoke(): void
     {
+        $this->console->info('Opening browser.');
+
         if (config('lambo.config.browser') === true) {
-            $this->console->info('Opening browser.');
             $this->shell->inDirectory(config('lambo.store.project_path'), 'valet open');
+        } else {
+            $this->shell->inCurrentWorkingDir('open ' . escapeshellarg(config('lambo.store.project_url')) . ' -a' . str_replace(' ', '\ ', config('lambo.config.browser')));
         }
     }
 }
