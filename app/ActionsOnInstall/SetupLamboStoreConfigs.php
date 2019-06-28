@@ -81,7 +81,7 @@ class SetupLamboStoreConfigs extends BaseAction
      */
     protected function setProjectUrl(): void
     {
-        $url = 'http://' . config('lambo.store.project_name') . str_start(config('lambo.tld'), '.');
+        $url = 'http://' . config('lambo.store.project_name') . str_start(config('lambo.config.tld'), '.');
 
         config()->set('lambo.store.project_url', $url);
     }
