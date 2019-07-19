@@ -2,9 +2,9 @@
 
 namespace App\ActionsOnInstall;
 
-use Exception;
 use App\Support\BaseAction;
-use Illuminate\Support\Facades\DB;
+use DB;
+use Exception;
 
 class CreateDatabase extends BaseAction
 {
