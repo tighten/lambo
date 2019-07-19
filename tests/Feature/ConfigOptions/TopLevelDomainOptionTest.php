@@ -15,5 +15,7 @@ class TopLevelDomainOptionTest extends TestCase
         $option = OptionManager::getOption('tld')->getOptionValue();
 
         $this->assertEquals('.local', $option);
+        $this->assertEquals('.local', config('lambo.config.tld'));
+        $this->assertEquals('http://blog.local', config('lambo.store.project_url'));
     }
 }
