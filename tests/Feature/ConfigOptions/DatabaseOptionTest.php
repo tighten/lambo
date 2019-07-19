@@ -5,7 +5,7 @@ namespace App\Feature;
 use App\Facades\OptionManager;
 use Tests\TestCase;
 
-class DatabaseTest extends TestCase
+class DatabaseOptionTest extends TestCase
 {
     /** @test */
     function setting_the_database_config_at_runtime()

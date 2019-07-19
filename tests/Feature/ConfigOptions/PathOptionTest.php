@@ -5,7 +5,7 @@ namespace App\Feature;
 use App\Facades\OptionManager;
 use Tests\TestCase;
 
-class PathTest extends TestCase
+class PathOptionTest extends TestCase
 {
     /** @test */
     function setting_the_install_path_at_runtime()

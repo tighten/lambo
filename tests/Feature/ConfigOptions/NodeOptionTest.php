@@ -5,7 +5,7 @@ namespace App\Feature;
 use App\Facades\OptionManager;
 use Tests\TestCase;
 
-class NodeTest extends TestCase
+class NodeOptionTest extends TestCase
 {
     /** @test */
     function setting_the_node_config_at_runtime()

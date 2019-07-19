@@ -5,7 +5,7 @@ namespace App\Feature;
 use App\Facades\OptionManager;
 use Tests\TestCase;
 
-class TopLevelDomainTest extends TestCase
+class TopLevelDomainOptionTest extends TestCase
 {
     /** @test */
     function setting_the_tld_config_at_runtime()
