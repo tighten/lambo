@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "730a95eef5df0b01bcdd659fca4636b7",
+    "content-hash": "9deb15adc2bde10170f3395d0882bedc",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -580,16 +580,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.8.9",
+            "version": "v5.8.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "e275519c58246cc4011c798f9b0a0f83aae2aab7"
+                "reference": "60fdf2cd0fe8092947f42add1681c34fa252af33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/e275519c58246cc4011c798f9b0a0f83aae2aab7",
-                "reference": "e275519c58246cc4011c798f9b0a0f83aae2aab7",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/60fdf2cd0fe8092947f42add1681c34fa252af33",
+                "reference": "60fdf2cd0fe8092947f42add1681c34fa252af33",
                 "shasum": ""
             },
             "require": {
@@ -637,7 +637,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2019-04-01T19:02:05+00:00"
+            "time": "2019-08-06T08:53:24+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
