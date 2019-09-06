@@ -113,21 +113,21 @@ There are also a few optional behaviors based on the parameters you pass (or def
   
  - `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
 
-  ```bash
-  lambo superApplication --vue
-  ```
+    ```bash
+    lambo superApplication --vue
+    ```
   
  - `--bootstrap` to set the frontend to Bootstrap
 
-  ```bash
-  lambo superApplication --bootstrap
-  ```
+    ```bash
+    lambo superApplication --bootstrap
+    ```
   
  - `--react` to set the frontend to React
 
-  ```bash
-  lambo superApplication --react
-  ```
+    ```bash
+    lambo superApplication --react
+    ```
 
 ### Commands
 
