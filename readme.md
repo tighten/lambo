@@ -8,8 +8,14 @@ Super-powered `laravel new` for Laravel and Valet.
 
 ## Installation
 
+### For Laravel >= 6
 ```bash
 composer global require tightenco/lambo
+```
+
+### For Laravel 5.*
+```bash
+composer global require tightenco/lambo:"^0.4.7"
 ```
 
 ## Upgrading
@@ -103,6 +109,24 @@ There are also a few optional behaviors based on the parameters you pass (or def
 
   ```bash
   lambo superApplication --secure
+  ```
+  
+ - `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
+
+  ```bash
+  lambo superApplication --vue
+  ```
+  
+ - `--bootstrap` to set the frontend to Bootstrap
+
+  ```bash
+  lambo superApplication --bootstrap
+  ```
+  
+ - `--react` to set the frontend to React
+
+  ```bash
+  lambo superApplication --react
   ```
 
 ### Commands
