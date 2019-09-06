@@ -40,6 +40,9 @@ showhelp()
     echo "${green}  -s, --secure${reset}                  Generate and use https with Valet"
     echo "${green}  --dbuser${reset}                      Specify the database user"
     echo "${green}  --dbpassword${reset}                  Specify the database password"
+    echo "${green}  --vue${reset}                          Specify Vue as the frontend"
+    echo "${green}  --bootstrap${reset}                    Specify Bootstrap as the frontend"
+    echo "${green}  --react${reset}                        Specify React as the frontend"
     quit
 }
 
@@ -81,6 +84,7 @@ NODE=false
 CODEEDITOR=""
 BROWSER=""
 LINK=false
+FRONTEND="vue"
 DB_USERNAME="root"
 DB_PASSWORD=""' > ~/.lambo/config
 
@@ -164,6 +168,10 @@ quit()
     exit 0
 }
 
+ui_package_exists() {
+    composer show | grep laravel/ui >/dev/null
+}
+
 
 
 ## Set up error handling
@@ -179,6 +187,7 @@ AUTH=false
 NODE=false
 CODEEDITOR=""
 BROWSER=""
+FRONTEND="vue"
 DB_USERNAME="root"
 DB_PASSWORD=""
 if [[ -f ~/.config/valet/config.json ]]; then
@@ -267,6 +276,18 @@ while [[ $# -gt 0 ]]; do
             DB_PASSWORD="$2"
             shift
             ;;
+        --vue)
+            FRONTEND="vue"
+            shift
+            ;;
+        --bootstrap)
+            FRONTEND="bootstrap"
+            shift
+            ;;
+        --react)
+            FRONTEND="react"
+            shift
+            ;;
         *)
             ;;
     esac
@@ -316,6 +337,28 @@ if [[ "$CODEEDITOR" != "" ]]; then
    fi
 fi
 
+if [[ "$FRONTEND" != "" ]]; then
+    composer require laravel/ui
+    if [[ "$FRONTEND" = "bootstrap" ]]; then
+        php artisan ui bootstrap
+    fi
+    if [[ "$FRONTEND" = "vue" ]]; then
+        php artisan ui vue
+    fi
+    if [[ "$FRONTEND" = "react" ]]; then
+        php artisan ui react
+    fi
+fi
+
+if [[ "$AUTH" = true ]]; then
+    # check to see if the ui package is already included
+    if ! ui_package_exists; then
+        composer require laravel/ui
+    fi
+    
+    php artisan ui:auth
+fi
+
 if [[ "$NODE" = true ]]; then
     echo "
 ${green}Installing NPM dependencies...${reset}
@@ -326,10 +369,6 @@ ${green}Installing NPM dependencies...${reset}
     else
         npm install
     fi
-fi
-
-if [[ "$AUTH" = true ]]; then
-    php artisan make:auth
 fi
 
 # Update .env.example to point to this database with `root` username and blank pw,
