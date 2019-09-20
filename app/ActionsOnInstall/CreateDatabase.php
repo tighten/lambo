@@ -9,14 +9,6 @@ use Exception;
 class CreateDatabase extends BaseAction
 {
     /**
-     * Represent the host database service, without a selected
-     * database. This is to be able to create a new database.
-     *
-     * @var string
-     */
-    protected $hostDatabase = 'host_database';
-
-    /**
      * Creates the database.
      *
      * @return void
@@ -46,12 +38,13 @@ class CreateDatabase extends BaseAction
      */
     protected function setDatabaseHostConfigs(): void
     {
-        $hostDbKeyPrefix = "database.connections.{$this->hostDatabase}";
-
-        config()->set("{$hostDbKeyPrefix}.host", config('lambo.config.db_host'));
-        config()->set("{$hostDbKeyPrefix}.port", config('lambo.config.db_port'));
-        config()->set("{$hostDbKeyPrefix}.username", config('lambo.config.db_username'));
-        config()->set("{$hostDbKeyPrefix}.password", config('lambo.config.db_password'));
+        config([
+            'database.default' => 'mysql',
+            'database.connections.mysql.host' => config('lambo.config.db_host'),
+            'database.connections.mysql.port' => config('lambo.config.db_port'),
+            'database.connections.mysql.username' => config('lambo.config.db_username'),
+            'database.connections.mysql.password' => config('lambo.config.db_password'),
+        ]);
     }
 
     /**
@@ -64,11 +57,9 @@ class CreateDatabase extends BaseAction
         try {
             $this->console->info('Creating database...');
 
-            $connection = DB::connection($this->hostDatabase);
-
             $dbName = config('lambo.store.db_name');
 
-            $databases = $connection->select('SHOW DATABASES');
+            $databases = DB::select('SHOW DATABASES');
 
             $matchingCount = collect($databases)->where('Database', $dbName)->count();
 
@@ -77,9 +68,9 @@ class CreateDatabase extends BaseAction
                 return;
             }
 
-            $connection->statement("CREATE DATABASE IF NOT EXISTS `{$dbName}`");
+            DB::statement("CREATE DATABASE IF NOT EXISTS `{$dbName}`");
 
-            $databases = $connection->select('SHOW DATABASES');
+            $databases = DB::select('SHOW DATABASES');
 
             $matchingCount = collect($databases)->where('Database', $dbName)->count();
 
