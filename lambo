@@ -12,9 +12,14 @@ TERMINAL_EDITORS=("vim" "vi" "nano" "pico" "ed" "emacs" "nvim")
 ## Init functions
 showhelp()
 {
-    echo " "
-    echo "${green}Lambo: Super-powered '${orange}laravel new${green}' for Laravel and Valet"
-    echo "${reset}________________________________________________________"
+    printf "${green}"
+    echo '    __                    __        
+   / /   ____ _____ ___  / /_  ____ 
+  / /   / __ `/ __ `__ \/ __ \/ __ \
+ / /___/ /_/ / / / / / / /_/ / /_/ /
+/_____/\__,_/_/ /_/ /_/_.___/\____/ 
+                                    '
+    echo "${green}Lambo:${reset} Super-powered '${orange}laravel new${reset}' for Laravel and Valet"
     echo " "
     echo "${orange}Usage:"
     echo "${reset}  lambo myApplication [arguments]"
@@ -39,11 +44,12 @@ showhelp()
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
     echo "${green}  -s, --secure${reset}                  Generate and use https with Valet"
     echo "${green}  -q, --quiet${reset}                   Use muffler (quiet mode)"
+    echo "${green}  --create-db${reset}                   Create a new MySql database"
     echo "${green}  --dbuser${reset}                      Specify the database user"
     echo "${green}  --dbpassword${reset}                  Specify the database password"
-    echo "${green}  --vue${reset}                          Specify Vue as the frontend"
-    echo "${green}  --bootstrap${reset}                    Specify Bootstrap as the frontend"
-    echo "${green}  --react${reset}                        Specify React as the frontend"
+    echo "${green}  --vue${reset}                         Specify Vue as the frontend"
+    echo "${green}  --bootstrap${reset}                   Specify Bootstrap as the frontend"
+    echo "${green}  --react${reset}                       Specify React as the frontend"
     quit
 }
 
@@ -88,6 +94,7 @@ BROWSER=""
 LINK=false
 SECURE=false
 FRONTEND="vue"
+CREATE_DATABASE=false
 DB_USERNAME="root"
 DB_PASSWORD=""' > ~/.lambo/config
 
@@ -171,13 +178,18 @@ quit()
     exit 0
 }
 
-ui_package_exists() {
+ui_package_exists()
+{
     composer show | grep laravel/ui >/dev/null
 }
 
 createdatabase()
 {
-    mysql --user=$DBUSER --password=$DBPASSWORD -e "CREATE DATABASE IF NOT EXISTS $DBNAME;"
+    if hash mysql 2>/dev/null; then
+        mysql --user=$DB_USERNAME --password=$DB_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;"
+    else
+        echo "${red}MySql is not installed. Skipping this step...${reset}"
+    fi
 }
 
 
@@ -196,6 +208,8 @@ NODE=false
 CODEEDITOR=""
 BROWSER=""
 FRONTEND="vue"
+DB_DATABASE="${PROJECTNAME//[-]/_}"
+CREATE_DATABASE=false
 DB_USERNAME="root"
 DB_PASSWORD=""
 if [[ -f ~/.config/valet/config.json ]]; then
@@ -204,10 +218,7 @@ else
     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
 fi
 LINK=false
-DBNAME="${PROJECTNAME//[-]/_}"
-CREATEDATABASE=false
-DBUSER=root
-DBPASSWORD=
+
 ### Load config if it exists
 if [[ -f ~/.lambo/config ]]; then
     source ~/.lambo/config
@@ -278,6 +289,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -s|--secure)
             SECURE=true
+            ;;
+        --create-db)
+            CREATE_DATABASE=true
             ;;
         --dbuser)
             DB_USERNAME="$2"
@@ -406,10 +420,10 @@ fi
 PROJECTURL="http://$PROJECTNAME.$TLD"
 
 perlCommands=(
-    "s/(DB_DATABASE=)(.*)/\1$DBNAME/g"
-    "s/(DB_USERNAME=)(.*)/\1$DBUSER/g"
-    "s/(DB_PASSWORD=)(.*)/\1$DBPASSWORD/g"
-    "s/(APP_URL=)(.*)/\1http:\/\/$PROJECTNAME.$TLD/g"
+    "s/(?'var'DB_DATABASE=)(.*)/$+{var}$DB_DATABASE/g"
+    "s/(?'var'DB_USERNAME=)(.*)/$+{var}$DB_USERNAME/g"
+    "s/(?'var'DB_PASSWORD=)(.*)/$+{var}$DB_PASSWORD/g"
+    "s/(?'var'APP_URL=)(.*)/$+{var}http:\/\/$PROJECTNAME.$TLD/g"
 )
 
 for perlCommand in "${perlCommands[@]}"; do
@@ -430,6 +444,14 @@ fi
 
 if [[ "$SECURE" = true ]]; then
     valet secure "$PROJECTNAME"
+fi
+
+### Create database if config is set to true
+if [[ "$CREATE_DATABASE" = true ]]; then
+    echo "
+${green}Creating database...${reset}
+    "
+    createdatabase
 fi
 
 ### Load after file if it exists
@@ -455,12 +477,6 @@ case $PROJECTPATH in
  ".") prettyPath="$PROJECTNAME" ;;
  *) prettyPath="$PROJECTPATH/$PROJECTNAME" ;;
 esac
-
-### Create database if config is set to true
-if [[ "$CREATEDATABASE" = true ]]; then
-    echo "${green}Creating database...${reset}"
-    createdatabase
-fi
 
 if [[ "$CODEEDITOR" != "" ]]; then
     if isterminaleditor; then

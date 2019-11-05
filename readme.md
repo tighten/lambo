@@ -46,6 +46,8 @@ This will `laravel new superApplication`, change into that directory, make an in
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
 
+Note that, in case your `$PROJECTNAME` has dashes (`-`) in it, they will be replaced with underscores (`_`) in the database name.
+
 There are also a few optional behaviors based on the parameters you pass (or define in your config file).
 
 ### Optional Arguments
@@ -112,24 +114,43 @@ There are also a few optional behaviors based on the parameters you pass (or def
   ```bash
   lambo superApplication --secure
   ```
-  
- - `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
 
-    ```bash
-    lambo superApplication --vue
-    ```
-  
- - `--bootstrap` to set the frontend to Bootstrap
+- `--create-db` create a new MySql database which has the same name as your project.
+  This requires `mysql` command to be available on your system.
 
-    ```bash
-    lambo superApplication --bootstrap
-    ```
-  
- - `--react` to set the frontend to React
+  ```bash
+  lambo superApplication --create-db
+  ```
 
-    ```bash
-    lambo superApplication --react
-    ```
+- `--dbuser` specify the database username.
+
+  ```bash
+  lambo superApplication --dbuser USER
+  ```
+
+- `--dbpassword` specify the database password.
+
+  ```bash
+  lambo superApplication --dbpassword SECRET
+  ```
+
+- `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
+
+  ```bash
+  lambo superApplication --vue
+  ```
+  
+- `--bootstrap` to set the frontend to Bootstrap
+
+  ```bash
+  lambo superApplication --bootstrap
+  ```
+  
+- `--react` to set the frontend to React
+
+  ```bash
+  lambo superApplication --react
+  ```
 
 ### Commands
 
@@ -157,12 +178,18 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo edit-after
   ```
 
-### Config
+### Config File
 
 You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
 
 ```bash
 lambo make-config
+```
+
+If you wish to edit your config file later on you can always use the edit command:
+
+```bash
+lambo edit-config
 ```
 
 ### After File
@@ -193,10 +220,11 @@ You also have access to variables from your config file such as `$PROJECTPATH` a
 
 ## Requirements
 
-- Mac or Ubuntu.
+- Mac or Linux.
+- [Git](https://git-scm.com).
 - Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
 
-> An Ubuntu fork of Valet can be find [here](https://github.com/cpriego/valet-ubuntu)
+> A Linux fork of Valet can be found [here](https://github.com/cpriego/valet-linux)
 
 ## Acknowledgements
 
