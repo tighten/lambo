@@ -75,6 +75,8 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo superApplication --path ~/Sites
   ```
 
+- `-q` or `--quiet` use quiet/silent mode for `git`, `yarn`/`npm` and laravel installer.
+
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
