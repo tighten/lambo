@@ -38,6 +38,7 @@ showhelp()
     echo "${green}  -b, --browser \"browser path\"${reset}  Opens site in specified browser"
     echo "${green}  -l, --link${reset}                    Creates a Valet link to the project directory"
     echo "${green}  -s, --secure${reset}                  Generate and use https with Valet"
+    echo "${green}  -q, --quiet${reset}                   Use muffler (quiet mode)"
     echo "${green}  --dbuser${reset}                      Specify the database user"
     echo "${green}  --dbpassword${reset}                  Specify the database password"
     echo "${green}  --vue${reset}                          Specify Vue as the frontend"
@@ -78,6 +79,7 @@ makeconfig()
 
 PROJECTPATH="."
 MESSAGE="Initial commit."
+QUIET=false
 DEVELOP=false
 AUTH=false
 NODE=false
@@ -179,6 +181,7 @@ trap 'abort' 0
 
 ## Start script
 
+QUIET=false
 PROJECTNAME=$1
 PROJECTPATH="."
 MESSAGE="Initial commit."
@@ -288,6 +291,9 @@ while [[ $# -gt 0 ]]; do
             FRONTEND="react"
             shift
             ;;
+        -q|--quiet)
+            QUIET=true
+            ;;
         *)
             ;;
     esac
@@ -323,10 +329,18 @@ Creating new Laravel app ${green}$PROJECTNAME${reset}
 ***********************************************
 "
 
-if [[ "$DEVELOP" = true ]]; then
-    laravel new "$PROJECTNAME" --dev
+if [[ "$QUIET" = true ]]; then
+    QUIET="--quiet"
+    SILENT="--silent"
 else
-    laravel new "$PROJECTNAME"
+    QUIET=""
+    SILENT=""
+fi
+
+if [[ "$DEVELOP" = true ]]; then
+    laravel new "$PROJECTNAME" "$QUIET" --dev
+else
+    laravel new "$PROJECTNAME" "$QUIET"
 fi
 
 cd "$PROJECTNAME" || exit
@@ -338,7 +352,11 @@ if [[ "$CODEEDITOR" != "" ]]; then
 fi
 
 if [[ "$FRONTEND" != "" ]]; then
-    composer require laravel/ui
+    echo "
+${green}Installing ${orange}laravel/ui${green}...${reset}
+    "
+    composer require laravel/ui "$QUIET"
+
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
     fi
@@ -353,7 +371,10 @@ fi
 if [[ "$AUTH" = true ]]; then
     # check to see if the ui package is already included
     if ! ui_package_exists; then
-        composer require laravel/ui
+        echo "
+${green}Installing ${orange}laravel/ui${green}...${reset}
+    "
+        composer require laravel/ui "$QUIET"
     fi
     
     php artisan ui:auth
@@ -365,9 +386,9 @@ ${green}Installing NPM dependencies...${reset}
     "
     # check if yarn is executable, otherwise use npm
     if hash yarn 2>/dev/null; then
-        yarn
+        yarn "$SILENT"
     else
-        npm install
+        npm install "$SILENT"
     fi
 fi
 
@@ -393,7 +414,7 @@ php artisan key:generate --ansi
 
 git init
 git add .
-git commit -m "$MESSAGE"
+git commit -m "$MESSAGE" "$QUIET"
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
@@ -419,7 +440,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
         open "$PROJECTURL"
     fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    xdg-open "$PROJECTURL"
+    xdg-open "$PROJECTURL" &> /dev/null
 fi
 
 case $PROJECTPATH in
@@ -434,14 +455,13 @@ if [[ "$CODEEDITOR" != "" ]]; then
 fi
 
 if [[ "$SHELL" != "" ]]; then
-    exec "$SHELL"
-
     echo "
 
 ***********************************************
 
 You're ready to go!
 "
+    exec "$SHELL"
 else
     echo "
 
