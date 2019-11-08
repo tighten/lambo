@@ -86,6 +86,7 @@ NODE=false
 CODEEDITOR=""
 BROWSER=""
 LINK=false
+SECURE=false
 FRONTEND="vue"
 DB_USERNAME="root"
 DB_PASSWORD=""' > ~/.lambo/config
