@@ -476,10 +476,14 @@ fi
 
 ### Open the browser
 if [[ "$(uname)" == "Darwin" ]]; then
-    if [[ "$BROWSER" != "" ]]; then
-        open -a "$BROWSER" "$PROJECTURL"
+    if [[ "$BROWSER" = false ]]; then
+        shift
     else
-        open "$PROJECTURL"
+        if [[ "$BROWSER" != "" ]]; then
+            open -a "$BROWSER" "$PROJECTURL"
+        else
+            open "$PROJECTURL"
+        fi
     fi
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     xdg-open "$PROJECTURL" &> /dev/null
