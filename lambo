@@ -13,11 +13,11 @@ TERMINAL_EDITORS=("vim" "vi" "nano" "pico" "ed" "emacs" "nvim")
 showhelp()
 {
     printf "${green}"
-    echo '    __                    __        
-   / /   ____ _____ ___  / /_  ____ 
+    echo '    __                    __
+   / /   ____ _____ ___  / /_  ____
   / /   / __ `/ __ `__ \/ __ \/ __ \
  / /___/ /_/ / / / / / / /_/ / /_/ /
-/_____/\__,_/_/ /_/ /_/_.___/\____/ 
+/_____/\__,_/_/ /_/ /_/_.___/\____/
                                     '
     echo "${green}Lambo:${reset} Super-powered '${orange}laravel new${reset}' for Laravel and Valet"
     echo " "
@@ -352,7 +352,7 @@ Creating new Laravel app ${green}$PROJECTNAME${reset}
 "
 
 if [[ "$QUIET" = true ]]; then
-    QUIET="--quiet"
+    QUIET=" --quiet"
     SILENT="--silent"
 else
     QUIET=""
@@ -360,9 +360,9 @@ else
 fi
 
 if [[ "$DEVELOP" = true ]]; then
-    laravel new "$PROJECTNAME" "$QUIET" --dev
+    laravel new "$PROJECTNAME""$QUIET" --dev
 else
-    laravel new "$PROJECTNAME" "$QUIET"
+    laravel new "$PROJECTNAME""$QUIET"
 fi
 
 cd "$PROJECTNAME" || exit
@@ -377,7 +377,7 @@ if [[ "$FRONTEND" != "" ]]; then
     echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-    composer require laravel/ui "$QUIET"
+    composer require laravel/ui"$QUIET"
 
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
@@ -396,9 +396,9 @@ if [[ "$AUTH" = true ]]; then
         echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-        composer require laravel/ui "$QUIET"
+        composer require laravel/ui"$QUIET"
     fi
-    
+
     php artisan ui:auth
 fi
 
@@ -436,7 +436,7 @@ php artisan key:generate --ansi
 
 git init
 git add .
-git commit -m "$MESSAGE" "$QUIET"
+git commit -m "$MESSAGE""$QUIET"
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
