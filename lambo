@@ -352,17 +352,20 @@ Creating new Laravel app ${green}$PROJECTNAME${reset}
 "
 
 if [[ "$QUIET" = true ]]; then
-    QUIET=" --quiet"
+    QUIET="--quiet"
     SILENT="--silent"
 else
     QUIET=""
     SILENT=""
 fi
 
+    echo "
+${green}Running the Laravel installer...${reset}
+    "
 if [[ "$DEVELOP" = true ]]; then
-    laravel new "$PROJECTNAME""$QUIET" --dev
+    laravel new "$PROJECTNAME" "$QUIET" --dev
 else
-    laravel new "$PROJECTNAME""$QUIET"
+    laravel new "$PROJECTNAME" "$QUIET"
 fi
 
 cd "$PROJECTNAME" || exit
@@ -377,7 +380,7 @@ if [[ "$FRONTEND" != "" ]]; then
     echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-    composer require laravel/ui"$QUIET"
+    composer require laravel/ui "$QUIET"
 
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
@@ -396,7 +399,7 @@ if [[ "$AUTH" = true ]]; then
         echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-        composer require laravel/ui"$QUIET"
+        composer require laravel/ui "$QUIET"
     fi
 
     php artisan ui:auth
@@ -436,7 +439,7 @@ php artisan key:generate --ansi
 
 git init
 git add .
-git commit -m "$MESSAGE""$QUIET"
+git commit -m "$MESSAGE" "$QUIET"
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
