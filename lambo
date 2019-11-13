@@ -364,17 +364,9 @@ ${green}Running the Laravel installer...${reset}
     "
 # @todo figure out why this is necessary--why does "$QUIET_FLAG" throw a fit with laravel new when it's empty?
 if [[ "$DEVELOP" = true ]]; then
-    if [[ "$QUIET" = true ]]; then
-        laravel new "$PROJECTNAME" --quiet --dev
-    else
-        laravel new "$PROJECTNAME" --dev
-    fi
+    laravel new "$PROJECTNAME" $QUIET_FLAG --dev
 else
-    if [[ "$QUIET" = true ]]; then
-        laravel new "$PROJECTNAME" --quiet
-    else
-        laravel new "$PROJECTNAME"
-    fi
+    laravel new "$PROJECTNAME" $QUIET_FLAG
 fi
 
 cd "$PROJECTNAME" || exit
@@ -389,7 +381,7 @@ if [[ "$FRONTEND" != "" ]]; then
     echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-    composer require laravel/ui "$QUIET_FLAG"
+    composer require laravel/ui $QUIET_FLAG
 
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
@@ -408,7 +400,7 @@ if [[ "$AUTH" = true ]]; then
         echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-        composer require laravel/ui "$QUIET_FLAG"
+        composer require laravel/ui $QUIET_FLAG
     fi
 
     php artisan ui:auth
@@ -420,9 +412,9 @@ ${green}Installing NPM dependencies...${reset}
     "
     # check if yarn is executable, otherwise use npm
     if hash yarn 2>/dev/null; then
-        yarn "$SILENT_FLAG"
+        yarn $SILENT_FLAG
     else
-        npm install "$SILENT_FLAG"
+        npm install $SILENT_FLAG
     fi
 fi
 
@@ -448,7 +440,7 @@ php artisan key:generate --ansi
 
 git init
 git add .
-git commit -m "$MESSAGE" "$QUIET_FLAG"
+git commit -m "$MESSAGE" $QUIET_FLAG
 
 if [[ "$LINK" = true ]]; then
     valet link "$PROJECTNAME"
