@@ -367,7 +367,6 @@ if [[ "$AUTH" = true ]]; then
     # @todo figure out why this is necessary--why does "$QUIET_FLAG" throw a fit with laravel new when it's empty?
     if [[ "$DEVELOP" = true ]]; then
         laravel new "$PROJECTNAME" $QUIET_FLAG --dev --auth
-        echo "${orange} auth->true"
     else
         laravel new "$PROJECTNAME" $QUIET_FLAG --auth
     fi
