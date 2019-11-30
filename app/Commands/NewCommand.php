@@ -2,6 +2,9 @@
 
 namespace App\Commands;
 
+use App\Actions\OpenEditor;
+use App\Actions\CustomizeDotEnv;
+use App\Actions\InstallNpmDependencies;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\VerifyDependencies;
 use LaravelZero\Framework\Commands\Command;

@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class CustomizeDotEnv
@@ -10,26 +11,37 @@ class CustomizeDotEnv
     {
         $filePath = config('lambo.store.project_path') . '/' . '.env.example';
 
-        $file = File::get($filePath);
+        $file = collect(explode("\n", File::get($filePath)));
 
-        dd($file); // test --how do we get them as array of lines
+        $file->transform(function ($item, $key) {
+            $parts = explode('=', $item, 2);
 
-        foreach ($this->replaceArray() as $key => $value) {
-            // make the change
-        }
+            // Line doesn't contain an equal sign (=), return same
+            if (count($parts) < 2) {
+                return $item;
+            }
 
-        // save the change
+            [$envKey, $envVal] = $parts;
+
+            $replace = $this->value($envKey, $envVal);
+
+            return "{$envKey}={$replace}";
+        });
+
+        File::put($filePath, $file->implode("\n"));
     }
 
-    public function replaceArray()
+    public function value($key, $fallback)
     {
-        return [
+        $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
-            'APP_URL' => config('lambo.store.project_url'),
+            'APP_URL' => 'http://' . config('lambo.store.project_url'),
             'DB_DATABASE' => $this->databaseify(config('lambo.store.project_name')),
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => null,
         ];
+
+        return Arr::get($replacements, $key, $fallback);
     }
 
     public function databaseify($name)
