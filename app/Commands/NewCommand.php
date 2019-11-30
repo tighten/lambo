@@ -26,8 +26,9 @@ class NewCommand extends Command
 
         app(VerifyDependencies::class)();
         app(RunLaravelInstaller::class)();
-        // @todo open editor
-        // @todo npm install
+        app(OpenEditor::class)();
+        app(CustomizeDotEnv::class)();
+        app(InstallNpmDependencies::class)();
         // @todo update .env.example and re-copy it to .env
         // @todo php artisan key:generate
         // @todo git init, add ., commit -m
@@ -42,8 +43,21 @@ class NewCommand extends Command
             return $this;
         });
 
+        $tld = 'test';
+// @todo get tld
+
+        //if [[ -f ~/.config/valet/config.json ]]; then
+//     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->tld;")
+// else
+//     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
+// fi
+
         config()->set('lambo.store', [
+            'install_path' => getcwd(),
+            'tld' => $tld,
             'project_name' => $this->argument('projectName'),
+            'project_path' => getcwd() . '/' . $this->argument('projectName'),
+            'project_url' => $this->argument('projectName') . '.' . $tld,
         ]);
     }
 
