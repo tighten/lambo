@@ -9,19 +9,31 @@ use LaravelZero\Framework\Commands\Command;
 class NewCommand extends Command
 {
     protected $signature = 'new
-        {projectName : Name of the Laravel project}
+        {projectName? : Name of the Laravel project}
     ';
 
     protected $description = 'Creates a fresh Laravel application';
 
     public function handle()
     {
+        if (! $this->argument('projectName')) {
+            dd('@todo show help here;');
+        }
+
         $this->setConfig();
 
         $this->fancyNotice('Creating a Laravel app ' . $this->argument('projectName'));
 
         app(VerifyDependencies::class)();
         app(RunLaravelInstaller::class)();
+        // @todo open editor
+        // @todo npm install
+        // @todo update .env.example and re-copy it to .env
+        // @todo php artisan key:generate
+        // @todo git init, add ., commit -m
+        // @todo valet secure
+        // @todo open browser
+        // @todo cd into it
     }
 
     public function setConfig()
