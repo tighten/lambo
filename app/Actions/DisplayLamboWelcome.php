@@ -10,8 +10,11 @@ class DisplayLamboWelcome
    / /    / _` || '_ ` _ \ | '_ \  / _ \
   / /___ | (_| || | | | | || |_) || (_) |
   \____/  \__,_||_| |_| |_||_.__/  \___/
-
 ";
+
+    protected $welcomeText = "
+<info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.
+Version :version:";
 
     public function __invoke()
     {
@@ -20,6 +23,9 @@ class DisplayLamboWelcome
             app('console')->info($line . " ");
         }
 
-        app('console')->alert("Super-powered 'laravel new' with Laravel and Valet.");
+        foreach (explode("\n", $this->welcomeText) as $line) {
+            // Extra space on the end fixes an issue with console when it ends with backslash
+            app('console')->info($line . " ");
+        }
     }
 }

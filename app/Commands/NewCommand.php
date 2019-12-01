@@ -67,7 +67,7 @@ class NewCommand extends Command
 
     public function getTld()
     {
-        $home = config('user_home_dir');
+        $home = config('home_dir');
 
         if (File::exists($home . '/.config/valet/config.json')) {
             return json_decode(File::get($home . '/.config/valet/config.json'))->tld;

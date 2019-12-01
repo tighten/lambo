@@ -16,7 +16,7 @@ class CustomizeDotEnv
         $file->transform(function ($item) {
             $parts = explode('=', $item, 2);
 
-            // Line doesn't contain an equal sign (=), return same
+            // Line doesn't contain an equal sign (=); return without modification
             if (count($parts) < 2) {
                 return $item;
             }
@@ -47,7 +47,6 @@ class CustomizeDotEnv
 
     public function databaseify($name)
     {
-        // @todo
-        return $name;
+        return str_replace('-', '_', $name);
     }
 }
