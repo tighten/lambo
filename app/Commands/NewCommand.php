@@ -4,6 +4,8 @@ namespace App\Commands;
 
 use App\Actions\OpenEditor;
 use App\Actions\CustomizeDotEnv;
+use App\Actions\GenerateAppKey;
+use App\Actions\InitializeGitRepo;
 use App\Actions\InstallNpmDependencies;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\VerifyDependencies;
@@ -32,9 +34,8 @@ class NewCommand extends Command
         app(OpenEditor::class)();
         app(CustomizeDotEnv::class)();
         app(InstallNpmDependencies::class)();
-        // @todo update .env.example and re-copy it to .env
-        // @todo php artisan key:generate
-        // @todo git init, add ., commit -m
+        app(GenerateAppKey::class)();
+        app(InitializeGitRepo::class)();
         // @todo valet secure
         // @todo open browser
         // @todo cd into it

@@ -13,7 +13,7 @@ class CustomizeDotEnv
 
         $file = collect(explode("\n", File::get($filePath)));
 
-        $file->transform(function ($item, $key) {
+        $file->transform(function ($item) {
             $parts = explode('=', $item, 2);
 
             // Line doesn't contain an equal sign (=), return same
@@ -29,6 +29,7 @@ class CustomizeDotEnv
         });
 
         File::put($filePath, $file->implode("\n"));
+        File::put(str_replace('.env.example', 'env', $filePath), $file->implode("\n"));
     }
 
     public function value($key, $fallback)
