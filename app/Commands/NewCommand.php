@@ -2,12 +2,16 @@
 
 namespace App\Commands;
 
-use App\Actions\OpenEditor;
 use App\Actions\CustomizeDotEnv;
+use App\Actions\DisplayHelpScreen;
+use App\Actions\DisplayLamboWelcome;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
 use App\Actions\InstallNpmDependencies;
+use App\Actions\OpenInBrowser;
+use App\Actions\OpenInEditor;
 use App\Actions\RunLaravelInstaller;
+use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
 use LaravelZero\Framework\Commands\Command;
 
@@ -21,23 +25,25 @@ class NewCommand extends Command
 
     public function handle()
     {
-        if (! $this->argument('projectName')) {
-            dd('@todo show help here;');
-        }
-
         $this->setConfig();
 
-        $this->fancyNotice('Creating a Laravel app ' . $this->argument('projectName'));
+        app(DisplayLamboWelcome::class)();
+
+        if (! $this->argument('projectName')) {
+            app(DisplayHelpScreen::class)();
+        }
+
+        $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
 
         app(VerifyDependencies::class)();
         app(RunLaravelInstaller::class)();
-        app(OpenEditor::class)();
+        app(OpenInEditor::class)();
         app(CustomizeDotEnv::class)();
         app(GenerateAppKey::class)();
         app(InitializeGitRepo::class)();
         app(InstallNpmDependencies::class)();
-        // @todo valet secure
-        // @todo open browser
+        app(ValetSecure::class)();
+        app(OpenInBrowser::class)();
         // @todo cd into it
     }
 
@@ -63,12 +69,5 @@ class NewCommand extends Command
             'project_path' => getcwd() . '/' . $this->argument('projectName'),
             'project_url' => $this->argument('projectName') . '.' . $tld,
         ]);
-    }
-
-    public function fancyNotice($message)
-    {
-        $this->info('***********************************************');
-        $this->info($message);
-        $this->info('***********************************************');
     }
 }

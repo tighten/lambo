@@ -4,7 +4,7 @@ namespace App\Actions;
 
 use App\Shell;
 
-class OpenEditor
+class OpenInEditor
 {
     public function __invoke()
     {
