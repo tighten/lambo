@@ -13,6 +13,7 @@ use App\Actions\OpenInEditor;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
+use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
 class NewCommand extends Command
@@ -53,14 +54,7 @@ class NewCommand extends Command
             return $this;
         });
 
-        $tld = 'test';
-// @todo get tld
-
-        //if [[ -f ~/.config/valet/config.json ]]; then
-//     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.config/valet/config.json'))->tld;")
-// else
-//     TLD=$(php -r "echo json_decode(file_get_contents('$HOME/.valet/config.json'))->domain;")
-// fi
+        $tld = $this->getTld();
 
         config()->set('lambo.store', [
             'install_path' => getcwd(),
@@ -69,5 +63,16 @@ class NewCommand extends Command
             'project_path' => getcwd() . '/' . $this->argument('projectName'),
             'project_url' => $this->argument('projectName') . '.' . $tld,
         ]);
+    }
+
+    public function getTld()
+    {
+        $home = config('user_home_dir');
+
+        if (File::exists($home . '/.config/valet/config.json')) {
+            return json_decode(File::get($home . '/.config/valet/config.json'))->tld;
+        }
+
+        return json_decode(File::get($home . '/.valet/config.json'))->domain;
     }
 }
