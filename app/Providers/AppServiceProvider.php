@@ -14,7 +14,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         config()->set([
-            // @todo re-work this to work on windows machines
             'home_dir' => posix_getpwuid(posix_getuid())['dir'],
         ]);
     }

@@ -45,17 +45,14 @@ class DisplayHelpScreen
     public function __invoke()
     {
         foreach (explode("\n", $this->helpText) as $line) {
-            // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console')->line($line . " ");
+            app('console')->line($line);
         }
 
-        // @todo line up
         foreach ($this->options as $option => $description) {
             $spaces = $this->makeSpaces(strlen($option));
             app('console')->line("  <info>{$option}</info>{$spaces}{$description}");
         }
 
-        // @todo line up
         foreach ($this->flags as $flag => $description) {
             $spaces = $this->makeSpaces(strlen($flag));
             app('console')->line("  <info>{$flag}</info>{$spaces}{$description}");
