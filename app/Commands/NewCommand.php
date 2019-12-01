@@ -33,9 +33,9 @@ class NewCommand extends Command
         app(RunLaravelInstaller::class)();
         app(OpenEditor::class)();
         app(CustomizeDotEnv::class)();
-        app(InstallNpmDependencies::class)();
         app(GenerateAppKey::class)();
         app(InitializeGitRepo::class)();
+        app(InstallNpmDependencies::class)();
         // @todo valet secure
         // @todo open browser
         // @todo cd into it

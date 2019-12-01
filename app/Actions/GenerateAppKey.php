@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\Shell;
+
 class GenerateAppKey
 {
     public function __invoke()
