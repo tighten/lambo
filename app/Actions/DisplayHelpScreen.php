@@ -42,11 +42,6 @@ class DisplayHelpScreen
         "--react" => "Specify React as the frontend",
     ];
 
-    public function __construct()
-    {
-        $this->helpText = str_replace(':version:', config('app.version'), $this->helpText);
-    }
-
     public function __invoke()
     {
         foreach (explode("\n", $this->helpText) as $line) {

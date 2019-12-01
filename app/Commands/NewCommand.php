@@ -32,6 +32,7 @@ class NewCommand extends Command
 
         if (! $this->argument('projectName')) {
             app(DisplayHelpScreen::class)();
+            exit;
         }
 
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));

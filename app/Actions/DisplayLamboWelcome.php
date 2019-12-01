@@ -16,6 +16,11 @@ class DisplayLamboWelcome
 <info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.
 Version :version:";
 
+    public function __construct()
+    {
+        $this->welcomeText = str_replace(':version:', config('app.version'), $this->welcomeText);
+    }
+
     public function __invoke()
     {
         foreach (explode("\n", $this->lamboLogo) as $line) {

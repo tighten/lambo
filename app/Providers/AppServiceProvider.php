@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     {
         config()->set([
             // @todo re-work this to work on windows machines
-            'user_home_dir' => posix_getpwuid(posix_getuid())['dir'],
+            'home_dir' => posix_getpwuid(posix_getuid())['dir'],
         ]);
     }
 
