@@ -11,6 +11,7 @@ class DisplayHelpScreen
   lambo new myApplication [arguments]
 
 <comment>Commands (lambo COMMANDNAME):</comment>
+   <info>lambo:help</info>                   Display this screen
    <info>make-config</info>                  Generate config file
    <info>edit-config</info>                  Edit config file
 
