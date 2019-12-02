@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
 class HelpCommand extends Command
