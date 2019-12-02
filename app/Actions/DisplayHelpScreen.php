@@ -55,8 +55,6 @@ class DisplayHelpScreen
 
     public function makeSpaces($count)
     {
-        return collect(range(1, $this->indent - $count))->map(function () {
-            return ' ';
-        })->implode('');
+        return str_repeat(" ", $this->indent - $count);
     }
 }
