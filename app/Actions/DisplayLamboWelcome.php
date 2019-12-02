@@ -5,20 +5,18 @@ namespace App\Actions;
 class DisplayLamboWelcome
 {
     protected $lamboLogo = "
-     __                     _
-    / /    __ _  _ __ ___  | |__    ___
-   / /    / _` || '_ ` _ \ | '_ \  / _ \
-  / /___ | (_| || | | | | || |_) || (_) |
-  \____/  \__,_||_| |_| |_||_.__/  \___/
-";
+     __                    __               :version:
+    / /   ____ _____ ___  / /_  ____
+   / /   / __ `/ __ `__ \/ __ \/ __ \
+  / /___/ /_/ / / / / / / /_/ / /_/ /
+ /_____/\__,_/_/ /_/ /_/_.___/\____/";
 
     protected $welcomeText = "
-<info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.
-Version :version:";
+<info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.";
 
     public function __construct()
     {
-        $this->welcomeText = str_replace(':version:', config('app.version'), $this->welcomeText);
+        $this->lamboLogo = str_replace(':version:', config('app.version'), $this->lamboLogo);
     }
 
     public function __invoke()
@@ -30,7 +28,7 @@ Version :version:";
 
         foreach (explode("\n", $this->welcomeText) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console')->info($line . " ");
+            app('console')->line($line . " ");
         }
     }
 }
