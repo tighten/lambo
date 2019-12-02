@@ -9,7 +9,7 @@ use LaravelZero\Framework\Commands\Command;
 
 class HelpCommand extends Command
 {
-    protected $signature = 'lambo:help';
+    protected $signature = 'help-screen';
     protected $description = 'Show help';
 
     public function handle()

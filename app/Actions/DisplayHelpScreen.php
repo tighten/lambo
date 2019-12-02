@@ -11,7 +11,8 @@ class DisplayHelpScreen
   lambo new myApplication [arguments]
 
 <comment>Commands (lambo COMMANDNAME):</comment>
-   <info>lambo:help</info>                   Display this screen
+   <info>help-screen</info>                  Display this screen
+
    <info>make-config</info>                  Generate config file
    <info>edit-config</info>                  Edit config file
 
@@ -21,21 +22,17 @@ class DisplayHelpScreen
 <comment>Options (lambo new myApplication OPTIONS):</comment>";
 
     protected $options = [
-        "-h, --help" => "Show brief help",
         "-e, --editor EDITOR" => "Specify an editor to run <info>'EDITOR .'</info> with after",
         "-m, --message \"message\"" => "Customize the initial commit message",
         "-p, --path PATH" => "Customize the path in which the new project will be created",
-        "-d, --dev" => "Use Composer to install on the develop branch",
-        "-a, --auth" => "Use Artisan to scaffold all of the routes and views you need for authentication",
-        "-n, --node" => "Runs <info>'npm install'</info> after creating the project",
-        "-b, --browser \"browser path\"" => "Opens site in specified browser",
-        "-l, --link" => "Creates a Valet link to the project directory",
+        "-d, --dev" => "Install Laravel using the develop branch",
+        "-a, --auth" => "Scaffold the routes and views for basic Laravel auth",
+        "-n, --node" => "Run <info>'npm install'</info> after creating the project",
+        "-b, --browser \"browser path\"" => "Open the site in the specified browser",
+        "-l, --link" => "Create a Valet link to the project directory",
         "-s, --secure" => "Generate and use https with Valet",
         "-q, --quiet" => "Use muffler (quiet mode)",
-    ];
-
-    protected $flags = [
-        "--create-db" => "Create a new MySql database",
+        "--create-db" => "Create a new MySQL database",
         "--dbuser" => "Specify the database user",
         "--dbpassword" => "Specify the database password",
         "--vue" => "Specify Vue as the frontend",
@@ -53,22 +50,12 @@ class DisplayHelpScreen
             $spaces = $this->makeSpaces(strlen($option));
             app('console')->line("  <info>{$option}</info>{$spaces}{$description}");
         }
-
-        foreach ($this->flags as $flag => $description) {
-            $spaces = $this->makeSpaces(strlen($flag));
-            app('console')->line("  <info>{$flag}</info>{$spaces}{$description}");
-        }
     }
 
     public function makeSpaces($count)
     {
-        // @todo there must be a more elegant way
-        $string = '';
-
-        for ($i = 1; $i <= $this->indent - $count; $i++) {
-            $string .= ' ';
-        }
-
-        return $string;
+        return collect(range(1, $this->indent - $count))->map(function () {
+            return ' ';
+        })->implode('');
     }
 }
