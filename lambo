@@ -362,11 +362,20 @@ fi
     echo "
 ${green}Running the Laravel installer...${reset}
     "
-# @todo figure out why this is necessary--why does "$QUIET_FLAG" throw a fit with laravel new when it's empty?
-if [[ "$DEVELOP" = true ]]; then
-    laravel new "$PROJECTNAME" $QUIET_FLAG --dev
+
+if [[ "$AUTH" = true ]]; then
+    # @todo figure out why this is necessary--why does "$QUIET_FLAG" throw a fit with laravel new when it's empty?
+    if [[ "$DEVELOP" = true ]]; then
+        laravel new "$PROJECTNAME" $QUIET_FLAG --dev --auth
+    else
+        laravel new "$PROJECTNAME" $QUIET_FLAG --auth
+    fi
 else
-    laravel new "$PROJECTNAME" $QUIET_FLAG
+    if [[ "$DEVELOP" = true ]]; then
+        laravel new "$PROJECTNAME" $QUIET_FLAG --dev
+    else
+        laravel new "$PROJECTNAME" $QUIET_FLAG
+    fi
 fi
 
 cd "$PROJECTNAME" || exit
@@ -392,18 +401,6 @@ ${green}Installing ${orange}laravel/ui${green}...${reset}
     if [[ "$FRONTEND" = "react" ]]; then
         php artisan ui react
     fi
-fi
-
-if [[ "$AUTH" = true ]]; then
-    # check to see if the ui package is already included
-    if ! ui_package_exists; then
-        echo "
-${green}Installing ${orange}laravel/ui${green}...${reset}
-    "
-        composer require laravel/ui $QUIET_FLAG
-    fi
-
-    php artisan ui:auth
 fi
 
 if [[ "$NODE" = true ]]; then
