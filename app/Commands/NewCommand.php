@@ -13,16 +13,39 @@ use App\Actions\OpenInEditor;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
+use App\Options;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
 class NewCommand extends Command
 {
-    protected $signature = 'new
-        {projectName? : Name of the Laravel project}
-    ';
-
+    protected $signature;
     protected $description = 'Creates a fresh Laravel application';
+
+    public function __construct()
+    {
+        $this->signature = $this->buildSignature();
+
+        parent::__construct();
+    }
+
+    public function buildSignature()
+    {
+        return collect((new Options)->all())->reduce(function ($carry, $option) {
+            return $carry . $this->buildSignatureOption($option);
+        }, "new\n{projectName? : Name of the Laravel project}");
+    }
+
+    public function buildSignatureOption($option)
+    {
+        $call = isset($option['short']) ? ($option['short'] . '|' . $option['long']) : $option['long'];
+
+        if (isset($option['param_description'])) {
+            $call .= '=';
+        }
+
+        return "\n{--{$call} : {$option['cli_description']}}";
+    }
 
     public function handle()
     {

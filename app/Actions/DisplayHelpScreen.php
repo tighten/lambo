@@ -39,13 +39,15 @@ class DisplayHelpScreen
 
     public function createCliStringForOption($option)
     {
-        $flag = '--' . $option['long'];
-
         if (isset($option['short'])) {
-            $flag = '-' . $option['short'] . ', ' . $flag;
+            $flag = '-' . $option['short'] . ', --' . $option['long'];
+        } else {
+            $flag = '    --' . $option['long'];
         }
 
-        $flag .= Arr::get($option, 'param_description', '');
+        if (isset($option['param_description'])) {
+            $flag .= '=' . $option['param_description'];
+        }
 
         $spaces = $this->makeSpaces(strlen($flag));
         $description = $option['cli_description'];
