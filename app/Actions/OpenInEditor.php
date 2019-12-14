@@ -10,6 +10,12 @@ class OpenInEditor
     {
         app('console')->info('Opening your editor.');
 
-        (new Shell)->execInProject("code .");
+        (new Shell)->execInProject($this->editor() . " .");
+    }
+
+    public function editor()
+    {
+        // For when we allow it to be customized
+        return 'code';
     }
 }

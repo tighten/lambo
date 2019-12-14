@@ -12,8 +12,14 @@ class InitializeGitRepo
 
         $shell->execInProject('git init');
         $shell->execInProject('git add .');
-        $shell->execInProject('git commit -m "Initial commit."');
+        $shell->execInProject('git commit -m "' . $this->gitCommit() . '"');
 
         app('console')->info('Git repository initialized.');
+    }
+
+    public function gitCommit()
+    {
+        // For when we allow it to be customized...
+        return 'Initial commit.';
     }
 }
