@@ -9,11 +9,17 @@ class CustomizeDotEnv
 {
     public function __invoke()
     {
-        $filePath = config('lambo.store.project_path') . '/' . '.env.example';
+        $filePath = config('lambo.store.project_path') . '/.env.example';
 
-        $file = collect(explode("\n", File::get($filePath)));
+        $output = $this->customize(File::get($filePath));
 
-        $file->transform(function ($item) {
+        File::put($filePath, $output);
+        File::put(str_replace('.env.example', 'env', $filePath), $output);
+    }
+
+    public function customize($contents)
+    {
+        return collect(explode("\n", $contents))->transform(function ($item) {
             $parts = explode('=', $item, 2);
 
             // Line doesn't contain an equal sign (=); return without modification
@@ -26,10 +32,7 @@ class CustomizeDotEnv
             $replace = $this->value($envKey, $envVal);
 
             return "{$envKey}={$replace}";
-        });
-
-        File::put($filePath, $file->implode("\n"));
-        File::put(str_replace('.env.example', 'env', $filePath), $file->implode("\n"));
+        })->implode("\n");
     }
 
     public function value($key, $fallback)
@@ -37,7 +40,7 @@ class CustomizeDotEnv
         $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
             'APP_URL' => 'http://' . config('lambo.store.project_url'),
-            'DB_DATABASE' => $this->databaseify(config('lambo.store.project_name')),
+            'DB_DATABASE' => $this->renameForDatabase(config('lambo.store.project_name')),
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => null,
         ];
@@ -45,7 +48,7 @@ class CustomizeDotEnv
         return Arr::get($replacements, $key, $fallback);
     }
 
-    public function databaseify($name)
+    public function renameForDatabase($name)
     {
         return str_replace('-', '_', $name);
     }
