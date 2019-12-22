@@ -14,7 +14,7 @@ class CustomizeDotEnv
         $output = $this->customize(File::get($filePath));
 
         File::put($filePath, $output);
-        File::put(str_replace('.env.example', 'env', $filePath), $output);
+        File::put(str_replace('.env.example', '.env', $filePath), $output);
     }
 
     public function customize($contents)
