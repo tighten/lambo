@@ -16,7 +16,7 @@ class Options
             'short' => 'm',
             'long' => 'message',
             'param_description' => '"message"',
-            'cli_description' => "Customize the initial commit message",
+            'cli_description' => "Customize the initial commit message (wrap with quotes!)",
         ],
         [
             'short' => 'p',

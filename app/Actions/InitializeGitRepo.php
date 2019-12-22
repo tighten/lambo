@@ -19,7 +19,6 @@ class InitializeGitRepo
 
     public function gitCommit()
     {
-        // For when we allow it to be customized...
-        return 'Initial commit.';
+        return app('console')->option('message') ?? 'Initial commit.';
     }
 }
