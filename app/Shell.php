@@ -2,20 +2,28 @@
 
 namespace App;
 
+use Illuminate\Config\Repository;
 use Symfony\Component\Process\Process;
 
 class Shell
 {
+    protected $rootPath;
+    protected $projectPath;
+
+    public function __construct(Repository $config)
+    {
+        $this->rootPath = $config->get('lambo.store.root_path');
+        $this->projectPath = $config->get('lambo.store.project_path');
+    }
+
     public function execInRoot($command)
     {
-        return $this->exec($command);
+        return $this->exec("cd {$this->rootPath} && $command");
     }
 
     public function execInProject($command)
     {
-        $directory = config('lambo.store.project_name');
-
-        return $this->exec("cd {$directory} && $command");
+        return $this->exec("cd {$this->projectPath} && $command");
     }
 
     protected function exec($command)

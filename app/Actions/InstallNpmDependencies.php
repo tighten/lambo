@@ -6,10 +6,17 @@ use App\Shell;
 
 class InstallNpmDependencies
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
         app('console')->info('Installing NPM dependencies.');
 
-        (new Shell)->execInProject("npm install");
+        $this->shell->execInProject("npm install");
     }
 }

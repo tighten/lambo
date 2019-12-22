@@ -6,13 +6,18 @@ use App\Shell;
 
 class InitializeGitRepo
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
-        $shell = new Shell;
-
-        $shell->execInProject('git init');
-        $shell->execInProject('git add .');
-        $shell->execInProject('git commit -m "' . $this->gitCommit() . '"');
+        $this->shell->execInProject('git init');
+        $this->shell->execInProject('git add .');
+        $this->shell->execInProject('git commit -m "' . $this->gitCommit() . '"');
 
         app('console')->info('Git repository initialized.');
     }

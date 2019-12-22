@@ -6,13 +6,20 @@ use App\Shell;
 
 class RunLaravelInstaller
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
         $projectName = config('lambo.store.project_name');
 
         app('console')->info('Creating application using the Laravel installer.');
 
-        (new Shell)->execInRoot("laravel new {$projectName}");
+        $this->shell->execInRoot("laravel new {$projectName}");
 
         // @todo
         // if ($isDev) {

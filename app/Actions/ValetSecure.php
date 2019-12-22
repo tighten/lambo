@@ -6,8 +6,15 @@ use App\Shell;
 
 class ValetSecure
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
-        (new Shell)->execInProject("valet secure");
+        $this->shell->execInProject("valet secure");
     }
 }

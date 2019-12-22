@@ -13,7 +13,9 @@ use App\Actions\OpenInEditor;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
+use App\Actions\VerifyPathAvailable;
 use App\Options;
+use Exception;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
@@ -60,15 +62,23 @@ class NewCommand extends Command
 
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
 
-        app(VerifyDependencies::class)();
-        app(RunLaravelInstaller::class)();
-        app(OpenInEditor::class)();
-        app(CustomizeDotEnv::class)();
-        app(GenerateAppKey::class)();
-        app(InitializeGitRepo::class)();
-        app(InstallNpmDependencies::class)();
-        app(ValetSecure::class)();
-        app(OpenInBrowser::class)();
+        try {
+            // @todo can we get the -vvv level and intentionally add our own layer
+            // of notices when we run each of these depending on the level?
+            app(VerifyPathAvailable::class)();
+            app(VerifyDependencies::class)();
+            app(RunLaravelInstaller::class)();
+            app(OpenInEditor::class)();
+            app(CustomizeDotEnv::class)();
+            app(GenerateAppKey::class)();
+            app(InitializeGitRepo::class)();
+            app(InstallNpmDependencies::class)();
+            app(ValetSecure::class)();
+            app(OpenInBrowser::class)();
+        } catch (Exception $e) {
+            $this->error('FAILURE RUNNING COMMAND:');
+            $this->error($e->getMessage());
+        }
         // @todo cd into it
     }
 
@@ -81,10 +91,10 @@ class NewCommand extends Command
         $tld = $this->getTld();
 
         config()->set('lambo.store', [
-            'install_path' => getcwd(),
             'tld' => $tld,
             'project_name' => $this->argument('projectName'),
-            'project_path' => getcwd() . '/' . $this->argument('projectName'),
+            'root_path' => $this->getBasePath(),
+            'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->argument('projectName') . '.' . $tld,
         ]);
     }
@@ -98,5 +108,14 @@ class NewCommand extends Command
         }
 
         return json_decode(File::get($home . '/.valet/config.json'))->domain;
+    }
+
+    public function getBasePath()
+    {
+        if ($this->option('path')) {
+            return str_replace('~', config('home_dir'), $this->option('path'));
+        }
+
+        return getcwd();
     }
 }

@@ -12,7 +12,7 @@ class DisplayLamboWelcome
  /_____/\__,_/_/ /_/ /_/_.___/\____/";
 
     protected $welcomeText = "
-<info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.";
+<info>Lambo:</info> Super-powered <comment>'laravel new'</comment> for Laravel and Valet.\n";
 
     public function __construct()
     {

@@ -6,8 +6,15 @@ use App\Shell;
 
 class GenerateAppKey
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
-        (new Shell)->execInProject('php artisan key:generate');
+        $this->shell->execInProject('php artisan key:generate');
     }
 }

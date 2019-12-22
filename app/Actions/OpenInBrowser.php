@@ -6,8 +6,15 @@ use App\Shell;
 
 class OpenInBrowser
 {
+    protected $shell;
+
+    public function __construct(Shell $shell)
+    {
+        $this->shell = $shell;
+    }
+
     public function __invoke()
     {
-        (new Shell)->execInProject("valet open");
+        $this->shell->execInProject("valet open");
     }
 }
