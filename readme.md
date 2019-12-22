@@ -32,16 +32,15 @@ Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
 ```bash
 cd ~/Sites
-lambo superApplication
+lambo new superApplication
 ```
-
-This will `laravel new superApplication`, change into that directory, make an initial Git commit, and open your web browser to that app.
 
 ### What exactly does it do?
 
 - `laravel new $PROJECTNAME`
 - `cd $PROJECTNAME`
 - Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
+- Open the project in your editor
 - Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
@@ -62,19 +61,19 @@ There are also a few optional behaviors based on the parameters you pass (or def
 
   ```bash
   # runs "subl ." in the project directory after creating the project
-  lambo superApplication --editor subl
+  lambo new superApplication --editor=subl
   ```
 
 - `-m` or `--message` to set the first commit message.
 
   ```bash
-  lambo superApplication --message "This lambo runs fast!"
+  lambo new superApplication --message="This lambo runs fast!"
   ```
 
 - `-p` or `--path` to specify where to install the application.
 
   ```bash
-  lambo superApplication --path ~/Sites
+  lambo new superApplication --path=~/Sites
   ```
 
 - `-q` or `--quiet` use quiet/silent mode for `git`, `yarn`/`npm` and laravel installer.
@@ -82,74 +81,68 @@ There are also a few optional behaviors based on the parameters you pass (or def
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
 
   ```bash
-  lambo superApplication --dev
+  lambo new superApplication --dev
   ```
 
 - `-a` or `--auth` to use Artisan to scaffold all of the routes and views you need for authentication
 
   ```bash
-  lambo superApplication --auth
+  lambo new superApplication --auth
   ```
 
 - `-n` or `--node` to run `yarn` if installed, otherwise runs `npm install` after creating the project
 
   ```bash
-  lambo superApplication --node
-  ```
-
-- `-b` or `--browser` to define which browser you want to open the project in.
-
-  ```bash
-  lambo superApplication --browser "/Applications/Google Chrome Canary.app"
+  lambo new superApplication --node
   ```
 
 - `-l` or `--link` to create a Valet link to the project directory.
 
   ```bash
-  lambo superApplication --link
+  lambo new superApplication --link
   ```
 
 - `-s` or `--secure` to secure the Valet site using https.
 
   ```bash
-  lambo superApplication --secure
+  lambo new superApplication --secure
   ```
 
 - `--create-db` create a new MySql database which has the same name as your project.
   This requires `mysql` command to be available on your system.
 
   ```bash
-  lambo superApplication --create-db
+  lambo new superApplication --create-db
   ```
 
 - `--dbuser` specify the database username.
 
   ```bash
-  lambo superApplication --dbuser USER
+  lambo new superApplication --dbuser=USER
   ```
 
 - `--dbpassword` specify the database password.
 
   ```bash
-  lambo superApplication --dbpassword SECRET
+  lambo new superApplication --dbpassword=SECRET
   ```
 
 - `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
 
   ```bash
-  lambo superApplication --vue
+  lambo new superApplication --vue
   ```
-  
+
 - `--bootstrap` to set the frontend to Bootstrap
 
   ```bash
-  lambo superApplication --bootstrap
+  lambo new superApplication --bootstrap
   ```
-  
+
 - `--react` to set the frontend to React
 
   ```bash
-  lambo superApplication --react
+  lambo new superApplication --react
   ```
 
 ### Commands
