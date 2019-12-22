@@ -34,6 +34,7 @@ class Shell
 
         $process->setTimeout(null);
 
+        // @todo resolve this
         $process->run(function ($type, $buffer) /*use ($showOutput)*/ {
             echo $buffer;
 

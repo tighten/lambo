@@ -63,20 +63,37 @@ class NewCommand extends Command
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
 
         try {
-            // @todo can we get the -vvv level and intentionally add our own layer
-            // of notices when we run each of these depending on the level?
+            $this->logStep('Verifying Path Availability');
             app(VerifyPathAvailable::class)();
+
+            $this->logStep('Verifying Dependencies');
             app(VerifyDependencies::class)();
+
+            $this->logStep('Running the Laravel Installer');
             app(RunLaravelInstaller::class)();
+
+            $this->logStep('Opening In Editor');
             app(OpenInEditor::class)();
+
+            $this->logStep('Customizing .env and .env.example');
             app(CustomizeDotEnv::class)();
+
+            $this->logStep('Running php artisan key:generate');
             app(GenerateAppKey::class)();
+
+            $this->logStep('Initializing Git Repo');
             app(InitializeGitRepo::class)();
+
+            $this->logStep('Installing NPM dependencies');
             app(InstallNpmDependencies::class)();
+
+            $this->logStep('Running valet secure');
             app(ValetSecure::class)();
+
+            $this->logStep('Opening in Browser');
             app(OpenInBrowser::class)();
         } catch (Exception $e) {
-            $this->error('FAILURE RUNNING COMMAND:');
+            $this->error("\nFAILURE RUNNING COMMAND:");
             $this->error($e->getMessage());
         }
         // @todo cd into it
@@ -117,5 +134,12 @@ class NewCommand extends Command
         }
 
         return getcwd();
+    }
+
+    public function logStep($step)
+    {
+        if ($this->option('verbose')) {
+            $this->comment("$step...\n");
+        }
     }
 }
