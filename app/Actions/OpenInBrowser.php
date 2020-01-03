@@ -16,7 +16,7 @@ class OpenInBrowser
     public function __invoke()
     {
         if ($this->isMac() && $this->browser()) {
-            $this->shell->exec(sprintf(
+            $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
                 config('lambo.store.project_url')
@@ -33,6 +33,6 @@ class OpenInBrowser
 
     public function browser()
     {
-        return config('lambo.store.browser');
+        return app('console')->option('browser');
     }
 }

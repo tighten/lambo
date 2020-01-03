@@ -85,7 +85,7 @@ class NewCommand extends Command
             app(InitializeGitRepo::class)();
 
             $this->logStep('Installing NPM dependencies');
-            app(InstallNpmDependencies::class)();
+            // app(InstallNpmDependencies::class)();
 
             $this->logStep('Running valet secure');
             app(ValetSecure::class)();
@@ -112,7 +112,7 @@ class NewCommand extends Command
             'project_name' => $this->argument('projectName'),
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
-            'project_url' => $this->argument('projectName') . '.' . $tld,
+            'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
         ]);
     }
 
@@ -134,6 +134,12 @@ class NewCommand extends Command
         }
 
         return getcwd();
+    }
+
+    public function getProtocol()
+    {
+        // @todo: If securing, change to https
+        return 'http://';
     }
 
     public function logStep($step)

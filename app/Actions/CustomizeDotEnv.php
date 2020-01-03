@@ -39,7 +39,7 @@ class CustomizeDotEnv
     {
         $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
-            'APP_URL' => 'http://' . config('lambo.store.project_url'),
+            'APP_URL' => config('lambo.store.project_url'),
             'DB_DATABASE' => $this->renameForDatabase(config('lambo.store.project_name')),
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => null,
