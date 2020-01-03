@@ -70,11 +70,11 @@ class Options
             'long' => 'auth',
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
-        // [
-        //     'short' => 'n',
-        //     'long' => 'node',
-        //     'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        // ],
+        [
+            'short' => 'n',
+            'long' => 'node',
+            'cli_description' => "Run <info>'npm install'</info> after creating the project",
+        ],
         [
             'long' => 'vue',
             'cli_description' => "Specify Vue as the frontend",

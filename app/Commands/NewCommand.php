@@ -85,7 +85,7 @@ class NewCommand extends Command
             app(InitializeGitRepo::class)();
 
             $this->logStep('Installing NPM dependencies');
-            // app(InstallNpmDependencies::class)();
+            app(InstallNpmDependencies::class)();
 
             $this->logStep('Running valet secure');
             app(ValetSecure::class)();
