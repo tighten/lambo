@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
@@ -77,6 +78,9 @@ class NewCommand extends Command
 
             $this->logStep('Customizing .env and .env.example');
             app(CustomizeDotEnv::class)();
+
+            $this->logStep('Creating database if selected...');
+            app(CreateDatabase::class)();
 
             $this->logStep('Running php artisan key:generate');
             app(GenerateAppKey::class)();

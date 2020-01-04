@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Facades\App\Utilities;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
@@ -40,7 +41,7 @@ class CustomizeDotEnv
         $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
             'APP_URL' => 'http://' . config('lambo.store.project_url'),
-            'DB_DATABASE' => $this->renameForDatabase(config('lambo.store.project_name')),
+            'DB_DATABASE' => $this->databaseName(),
             'DB_USERNAME' => 'root',
             'DB_PASSWORD' => null,
         ];
@@ -48,8 +49,9 @@ class CustomizeDotEnv
         return Arr::get($replacements, $key, $fallback);
     }
 
-    public function renameForDatabase($name)
+    public function databaseName()
     {
-        return str_replace('-', '_', $name);
+        // @todo allow for flag for custom database name.. TEST IT!
+        return Utilities::prepNameForDatabase(config('lambo.store.project_name'));
     }
 }

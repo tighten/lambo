@@ -17,17 +17,6 @@ class CustomizeDotEnvTest extends TestCase
     }
 
     /** @test */
-    function it_replaces_dashes_with_underscores_in_database_names()
-    {
-        config()->set('lambo.store.project_name', 'with-dashes');
-
-        $customizeDotEnv = new CustomizeDotEnv;
-        $contents = "DB_DATABASE=previous";
-        $contents = $customizeDotEnv->customize($contents);
-        $this->assertEquals("DB_DATABASE=with_dashes", $contents);
-    }
-
-    /** @test */
     function un_targeted_lines_are_unchanged()
     {
         $customizeDotEnv = new CustomizeDotEnv;
@@ -52,5 +41,24 @@ class CustomizeDotEnvTest extends TestCase
         $contents = "A=B\n\nC=D";
         $contents = $customizeDotEnv->customize($contents);
         $this->assertEquals("A=B\n\nC=D", $contents);
+    }
+
+    /** @test */
+    function it_replaces_dashes_with_underscores_in_database_names()
+    {
+        config()->set('lambo.store.project_name', 'with-dashes');
+
+        $customizeDotEnv = new CustomizeDotEnv;
+        $contents = "DB_DATABASE=previous";
+        $contents = $customizeDotEnv->customize($contents);
+        $this->assertEquals("DB_DATABASE=with_dashes", $contents);
+    }
+
+    /** @test */
+    function it_uses_passed_database_name_if_passed()
+    {
+        $this->markTestIncomplete('@todo');
+
+
     }
 }
