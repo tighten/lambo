@@ -15,6 +15,24 @@ class OpenInBrowser
 
     public function __invoke()
     {
-        $this->shell->execInProject("valet open");
+        if ($this->isMac() && $this->browser()) {
+            $this->shell->execInProject(sprintf(
+                'open -a "%s" "%s"',
+                $this->browser(),
+                config('lambo.store.project_url')
+            ));
+        } else {
+            $this->shell->execInProject("valet open");
+        }
+    }
+
+    public function isMac()
+    {
+        return PHP_OS === 'Darwin';
+    }
+
+    public function browser()
+    {
+        return app('console')->option('browser');
     }
 }

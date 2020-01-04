@@ -28,7 +28,7 @@ class Options
             'short' => 'b',
             'long' => 'browser',
             'param_description' => '"browser path"',
-            'cli_description' => "Open the site in the specified browser",
+            'cli_description' => "Open the site in the specified browser (macOS-only)",
         ],
         [
             'long' => 'create-db',
