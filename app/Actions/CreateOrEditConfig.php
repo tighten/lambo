@@ -50,7 +50,6 @@ class CreateOrEditConfig
             ));
             return;
         }
-
         exec("open {$configFilePath}");
     }
 
