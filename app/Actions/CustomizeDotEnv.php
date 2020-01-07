@@ -42,8 +42,8 @@ class CustomizeDotEnv
             'APP_NAME' => config('lambo.store.project_name'),
             'APP_URL' => config('lambo.store.project_url'),
             'DB_DATABASE' => $this->databaseName(),
-            'DB_USERNAME' => 'root',
-            'DB_PASSWORD' => null,
+            'DB_USERNAME' => config('lambo.store.database_username'),
+            'DB_PASSWORD' => config('lambo.store.database_password'),
         ];
 
         return Arr::get($replacements, $key, $fallback);

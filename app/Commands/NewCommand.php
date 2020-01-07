@@ -17,6 +17,7 @@ use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Options;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
@@ -24,6 +25,10 @@ class NewCommand extends Command
 {
     protected $signature;
     protected $description = 'Creates a fresh Laravel application';
+    /**
+     * @var array
+     */
+    private $savedConfig;
 
     public function __construct()
     {
@@ -109,6 +114,11 @@ class NewCommand extends Command
             return $this;
         });
 
+        $configFilePath = sprintf("%s/.lambo/config.json", config('home_dir'));
+        $this->savedConfig = File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
+
+        printf("Saved Config\n%s", print_r($this->savedConfig, true));
+
         $tld = $this->getTld();
 
         config()->set('lambo.store', [
@@ -117,7 +127,11 @@ class NewCommand extends Command
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
+            'database_username' => $this->getDatabaseUsername(),
+            'database_password' => $this->getDatabasePassword(),
         ]);
+
+        printf("lambo.store\n%s", print_r(config()->get('lambo.store'), true));
     }
 
     public function getTld()
@@ -137,6 +151,11 @@ class NewCommand extends Command
             return str_replace('~', config('home_dir'), $this->option('path'));
         }
 
+        if(Arr::has($this->savedConfig, 'path'))
+        {
+            return str_replace('~', config('home_dir'), Arr::get($this->savedConfig, 'path'));
+        }
+
         return getcwd();
     }
 
@@ -144,6 +163,32 @@ class NewCommand extends Command
     {
         // @todo: If securing, change to https
         return 'http://';
+    }
+
+    protected function getDatabaseUsername()
+    {
+        if ($this->option('dbuser')) {
+            return $this->option('dbuser');
+        }
+
+        if (Arr::exists($this->savedConfig, 'db_username')) {
+            return Arr::get($this->savedConfig, 'db_username');
+        }
+
+        return 'root';
+    }
+
+    protected function getDatabasePassword()
+    {
+        if ($this->option('dbpassword')) {
+            return $this->option('dbpassword');
+        }
+
+        if (Arr::exists($this->savedConfig, 'db_password')) {
+            return Arr::get($this->savedConfig, 'db_password');
+        }
+
+        return '';
     }
 
     public function logStep($step)

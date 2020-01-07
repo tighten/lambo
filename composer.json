@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "laravel-zero/framework": "^6.0"
+        "laravel-zero/framework": "^6.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
@@ -45,5 +46,7 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["lambo"]
+    "bin": [
+        "lambo"
+    ]
 }
