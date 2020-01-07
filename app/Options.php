@@ -42,7 +42,7 @@ class Options
         ],
         [
             'long' => 'dbpassword',
-            'param_description' => ' PASSWORD',
+            'param_description' => 'PASSWORD',
             'cli_description' => "Specify the database password",
         ],
         [
@@ -71,7 +71,7 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
-            'short' => 'n',
+            'short' => 'N',
             'long' => 'node',
             'cli_description' => "Run <info>'npm install'</info> after creating the project",
         ],
