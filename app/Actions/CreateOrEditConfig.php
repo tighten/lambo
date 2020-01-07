@@ -9,7 +9,7 @@ class CreateOrEditConfig
     public function __invoke()
     {
         $configPath = config('home_dir') . '/.lambo';
-        $configFilePath = "{$configPath}/config";
+        $configFilePath = "{$configPath}/config.json";
 
         if (File::exists($configFilePath)) {
             app('console')->info("Opening existing config file: {$configFilePath}");
@@ -56,20 +56,22 @@ class CreateOrEditConfig
     private function configFileTemplate(): string
     {
         return <<<'CONTENTS'
-PROJECTPATH="."
-MESSAGE="Initial commit."
-QUIET=false
-DEVELOP=false
-AUTH=false
-NODE=false
-CODEEDITOR=""
-BROWSER=""
-LINK=false
-SECURE=false
-FRONTEND="vue"
-CREATE_DATABASE=false
-DB_USERNAME="root"
-DB_PASSWORD=""
+{
+    "path": ".",
+    "commit_message": "Initial commit.",
+    "quiet": false,
+    "develop": false,
+    "auth": false,
+    "node": false,
+    "codeeditor": "",
+    "browser": "",
+    "link": false,
+    "secure": false,
+    "frontend": "vue",
+    "create_database": false,
+    "db_username": "root",
+    "db_password": ""
+}
 CONTENTS;
     }
 }
