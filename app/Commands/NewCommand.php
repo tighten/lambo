@@ -117,8 +117,6 @@ class NewCommand extends Command
         $configFilePath = sprintf("%s/.lambo/config.json", config('home_dir'));
         $this->savedConfig = File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
 
-        printf("Saved Config\n%s", print_r($this->savedConfig, true));
-
         $tld = $this->getTld();
 
         config()->set('lambo.store', [
@@ -130,8 +128,6 @@ class NewCommand extends Command
             'database_username' => $this->getDatabaseUsername(),
             'database_password' => $this->getDatabasePassword(),
         ]);
-
-        printf("lambo.store\n%s", print_r(config()->get('lambo.store'), true));
     }
 
     public function getTld()
