@@ -12,6 +12,7 @@ use App\Actions\InstallNpmDependencies;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunLaravelInstaller;
+use App\Actions\SetConfig;
 use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
@@ -57,8 +58,11 @@ class NewCommand extends Command
 
     public function handle()
     {
-        $this->setConfig();
+        app()->bind('console', function () {
+            return $this;
+        });
 
+        app(SetConfig::class)();
         app(DisplayLamboWelcome::class)();
 
         if (! $this->argument('projectName')) {
@@ -106,85 +110,6 @@ class NewCommand extends Command
             $this->error($e->getMessage());
         }
         // @todo cd into it
-    }
-
-    public function setConfig()
-    {
-        app()->bind('console', function () {
-            return $this;
-        });
-
-        $configFilePath = sprintf("%s/.lambo/config.json", config('home_dir'));
-        $this->savedConfig = File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
-
-        $tld = $this->getTld();
-
-        config()->set('lambo.store', [
-            'tld' => $tld,
-            'project_name' => $this->argument('projectName'),
-            'root_path' => $this->getBasePath(),
-            'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
-            'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
-            'database_username' => $this->getDatabaseUsername(),
-            'database_password' => $this->getDatabasePassword(),
-        ]);
-    }
-
-    public function getTld()
-    {
-        $home = config('home_dir');
-
-        if (File::exists($home . '/.config/valet/config.json')) {
-            return json_decode(File::get($home . '/.config/valet/config.json'))->tld;
-        }
-
-        return json_decode(File::get($home . '/.valet/config.json'))->domain;
-    }
-
-    public function getBasePath()
-    {
-        if ($this->option('path')) {
-            return str_replace('~', config('home_dir'), $this->option('path'));
-        }
-
-        if(Arr::has($this->savedConfig, 'path'))
-        {
-            return str_replace('~', config('home_dir'), Arr::get($this->savedConfig, 'path'));
-        }
-
-        return getcwd();
-    }
-
-    public function getProtocol()
-    {
-        // @todo: If securing, change to https
-        return 'http://';
-    }
-
-    protected function getDatabaseUsername()
-    {
-        if ($this->option('dbuser')) {
-            return $this->option('dbuser');
-        }
-
-        if (Arr::exists($this->savedConfig, 'db_username')) {
-            return Arr::get($this->savedConfig, 'db_username');
-        }
-
-        return 'root';
-    }
-
-    protected function getDatabasePassword()
-    {
-        if ($this->option('dbpassword')) {
-            return $this->option('dbpassword');
-        }
-
-        if (Arr::exists($this->savedConfig, 'db_password')) {
-            return Arr::get($this->savedConfig, 'db_password');
-        }
-
-        return '';
     }
 
     public function logStep($step)
