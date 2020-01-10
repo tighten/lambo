@@ -103,6 +103,7 @@ class NewCommand extends Command
             $this->error("\nFAILURE RUNNING COMMAND:");
             $this->error($e->getMessage());
         }
+
         // @todo cd into it
     }
 
