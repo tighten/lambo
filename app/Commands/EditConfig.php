@@ -16,6 +16,7 @@ class EditConfig extends Command
         app()->bind('console', function () {
             return $this;
         });
+
         app(CreateOrEditConfig::class)();
     }
 }

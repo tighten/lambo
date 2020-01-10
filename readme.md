@@ -90,7 +90,7 @@ There are also a few optional behaviors based on the parameters you pass (or def
   lambo new superApplication --auth
   ```
 
-- `-n` or `--node` to run `yarn` if installed, otherwise runs `npm install` after creating the project
+- `--node` to run `yarn` if installed, otherwise runs `npm install` after creating the project
 
   ```bash
   lambo new superApplication --node
@@ -146,12 +146,6 @@ There are also a few optional behaviors based on the parameters you pass (or def
   ```
 
 ### Commands
-
-- `make-config` creates a config file so you don't have to pass the parameters every time you use Lambo
-
-  ```bash
-  lambo make-config
-  ```
 
 - `edit-config` edits your config file
 

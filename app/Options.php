@@ -71,7 +71,7 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
-            'short' => 'N',
+            // 'short' => 'n',
             'long' => 'node',
             'cli_description' => "Run <info>'npm install'</info> after creating the project",
         ],

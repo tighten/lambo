@@ -18,18 +18,12 @@ use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Options;
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\File;
 use LaravelZero\Framework\Commands\Command;
 
 class NewCommand extends Command
 {
     protected $signature;
     protected $description = 'Creates a fresh Laravel application';
-    /**
-     * @var array
-     */
-    private $savedConfig;
 
     public function __construct()
     {
@@ -115,7 +109,7 @@ class NewCommand extends Command
     public function logStep($step)
     {
         if ($this->option('verbose')) {
-            $this->comment("$step...\n");
+            $this->comment("{$step}...\n");
         }
     }
 }
