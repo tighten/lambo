@@ -11,6 +11,7 @@ use App\Actions\InitializeGitRepo;
 use App\Actions\InstallNpmDependencies;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
+use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\SetConfig;
 use App\Actions\ValetSecure;
@@ -93,6 +94,13 @@ class NewCommand extends Command
 
             $this->logStep('Installing NPM dependencies');
             app(InstallNpmDependencies::class)();
+
+            $this->logStep('Running after script');
+            app(RunAfterScript::class)();
+
+            // @todo
+            // $this->logStep('Running valet link');
+            // app(ValetLink::class)();
 
             $this->logStep('Running valet secure');
             app(ValetSecure::class)();

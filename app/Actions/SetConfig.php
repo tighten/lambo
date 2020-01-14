@@ -2,18 +2,21 @@
 
 namespace App\Actions;
 
-use Facades\App\Paths;
+use Facades\App\LamboConfig;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class SetConfig
 {
-    protected $existingConfig;
+    protected $savedConfig;
+
+    public function __construct()
+    {
+        $this->savedConfig = $this->loadSavedConfig();
+    }
 
     public function __invoke()
     {
-        $this->existingConfig = $this->existingConfig();
-
         $tld = $this->getTld();
 
         config()->set('lambo.store', [
@@ -27,11 +30,9 @@ class SetConfig
         ]);
     }
 
-    public function existingConfig()
+    public function loadSavedConfig()
     {
-        $configFilePath = Paths::configFile();
-
-        return File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
+        return LamboConfig::fileExists('config.json') ? json_decode(LamboConfig::getFilePath("config.json"), true) : [];
     }
 
     public function getTld()
@@ -55,8 +56,8 @@ class SetConfig
             return $this->option($optionCommandLineName);
         }
 
-        if (Arr::has($this->existingConfig, $optionConfigFileName)) {
-            return Arr::get($this->existingConfig, $optionConfigFileName);
+        if (Arr::has($this->savedConfig, $optionConfigFileName)) {
+            return Arr::get($this->savedConfig, $optionConfigFileName);
         }
     }
 

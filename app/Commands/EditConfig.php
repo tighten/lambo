@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Actions\CreateOrEditConfig;
+use App\Actions\EditConfig as EditConfigAction;
 use LaravelZero\Framework\Commands\Command;
 
 class EditConfig extends Command
@@ -17,6 +17,6 @@ class EditConfig extends Command
             return $this;
         });
 
-        app(CreateOrEditConfig::class)();
+        app(EditConfigAction::class)();
     }
 }

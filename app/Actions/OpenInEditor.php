@@ -20,8 +20,6 @@ class OpenInEditor
         if ($this->editor()) {
             $this->shell->execInProject($this->editor() . " .");
         }
-
-        // @todo: should we default to $EDITOR (environment var)
     }
 
     public function editor()
