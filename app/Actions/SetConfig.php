@@ -32,7 +32,9 @@ class SetConfig
 
     public function loadSavedConfig()
     {
-        return LamboConfig::fileExists('config.json') ? json_decode(LamboConfig::getFilePath("config.json"), true) : [];
+        $configFilePath = LamboConfig::getFilePath("config.json");
+
+        return File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
     }
 
     public function getTld()

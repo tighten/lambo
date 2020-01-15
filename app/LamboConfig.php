@@ -39,7 +39,7 @@ class LamboConfig
         }
     }
 
-    private function getFilePath(string $fileName)
+    public function getFilePath(string $fileName)
     {
         return  $this->configDir() . "/" . $fileName;
     }
