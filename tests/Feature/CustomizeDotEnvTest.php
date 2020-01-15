@@ -3,10 +3,33 @@
 namespace Tests\Feature;
 
 use App\Actions\CustomizeDotEnv;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class CustomizeDotEnvTest extends TestCase
 {
+    /** @test */
+    public function it_saves_the_customized_dot_env_files()
+    {
+        config(['lambo.store.project_name' => 'my-project']);
+        config(['lambo.store.project_url' => 'http://my-project.example.com']);
+        config(['lambo.store.database_username' => 'username']);
+        config(['lambo.store.database_password' => 'password']);
+        config(['lambo.store.project_path' => '/some/project/path']);
+
+        File::shouldReceive('get')
+            ->once()->with('/some/project/path/.env.example')
+            ->andReturn($this->getTestDotEnvFile());
+
+        File::shouldReceive('put')
+            ->with('/some/project/path/.env.example', $this->getCustomizedDotEnvFile());
+
+        File::shouldReceive('put')
+            ->with('/some/project/path/.env', $this->getCustomizedDotEnvFile());
+
+        $customizeDotEnv = (new CustomizeDotEnv)();
+    }
+
     /** @test */
     function it_replaces_static_strings()
     {
@@ -64,5 +87,27 @@ class CustomizeDotEnvTest extends TestCase
         $this->markTestIncomplete('@todo');
 
 
+    }
+
+    private function getTestDotEnvFile()
+    {  return <<<'TEST_FILE'
+APP_NAME=Laravel
+APP_URL=http://my-project.example.com
+
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+TEST_FILE;
+    }
+
+    private function getCustomizedDotEnvFile()
+    {  return <<<'TEST_FILE'
+APP_NAME=my-project
+APP_URL=http://my-project.example.com
+
+DB_DATABASE=my_project
+DB_USERNAME=username
+DB_PASSWORD=password
+TEST_FILE;
     }
 }
