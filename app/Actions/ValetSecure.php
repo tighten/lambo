@@ -15,6 +15,8 @@ class ValetSecure
 
     public function __invoke()
     {
-        $this->shell->execInProject("valet secure");
+        if (config('lambo.store.valet_secure')) {
+            $this->shell->execInProject("valet secure");
+        }
     }
 }

@@ -28,6 +28,7 @@ class SetConfig
             'database_username' => $this->getOptionValue('dbuser', 'db_username') ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', 'db_password') ?? '',
             'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
+            'valet_secure' => $this->getBooleanOptionValue('secure') ?? false,
         ]);
     }
 
@@ -64,6 +65,11 @@ class SetConfig
         }
     }
 
+    private function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
+    {
+        return $this->getOptionValue($optionCommandLineName, $optionConfigFileName) === true;
+    }
+
     public function getBasePath()
     {
         if ($value = $this->getOptionValue('path')) {
@@ -75,8 +81,7 @@ class SetConfig
 
     public function getProtocol()
     {
-        // @todo: If securing, change to https
-        return 'http://';
+        return $this->getBooleanOptionValue('secure') ? 'https://' : 'http://';
     }
 
     public function argument($key)
