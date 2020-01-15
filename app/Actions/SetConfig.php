@@ -27,6 +27,7 @@ class SetConfig
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
             'database_username' => $this->getOptionValue('dbuser', 'db_username') ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', 'db_password') ?? '',
+            'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
         ]);
     }
 

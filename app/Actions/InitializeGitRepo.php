@@ -17,13 +17,8 @@ class InitializeGitRepo
     {
         $this->shell->execInProject('git init');
         $this->shell->execInProject('git add .');
-        $this->shell->execInProject('git commit -m "' . $this->gitCommit() . '"');
+        $this->shell->execInProject('git commit -m "' . config('lambo.store.commit_message') . '"');
 
         app('console')->info('Git repository initialized.');
-    }
-
-    public function gitCommit()
-    {
-        return app('console')->option('message') ?? 'Initial commit.';
     }
 }
