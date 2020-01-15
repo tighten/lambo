@@ -27,7 +27,7 @@ class CustomizeDotEnvTest extends TestCase
         File::shouldReceive('put')
             ->with('/some/project/path/.env', $this->getCustomizedDotEnvFile());
 
-        $customizeDotEnv = (new CustomizeDotEnv)();
+        (new CustomizeDotEnv)();
     }
 
     /** @test */
