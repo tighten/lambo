@@ -29,6 +29,7 @@ class SetConfig
             'database_password' => $this->getOptionValue('dbpassword', 'db_password') ?? '',
             'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
             'valet_secure' => $this->getBooleanOptionValue('secure') ?? false,
+            'quiet' => $this->getBooleanOptionValue('quiet') ?? false,
         ]);
     }
 
