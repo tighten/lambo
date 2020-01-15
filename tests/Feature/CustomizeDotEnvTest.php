@@ -10,6 +10,8 @@ class CustomizeDotEnvTest extends TestCase
     /** @test */
     function it_replaces_static_strings()
     {
+        config()->set('lambo.store.database_username', 'root');
+
         $customizeDotEnv = new CustomizeDotEnv;
         $contents = "DB_USERNAME=previous";
         $contents = $customizeDotEnv->customize($contents);
@@ -19,6 +21,8 @@ class CustomizeDotEnvTest extends TestCase
     /** @test */
     function un_targeted_lines_are_unchanged()
     {
+        config()->set('lambo.store.database_username', 'root');
+
         $customizeDotEnv = new CustomizeDotEnv;
         $contents = "DB_USERNAME=previous\nDONT_TOUCH_ME=cant_touch_me";
         $contents = $customizeDotEnv->customize($contents);
