@@ -28,6 +28,7 @@ class SetConfig
             'database_username' => $this->getOptionValue('dbuser', 'db_username') ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', 'db_password') ?? '',
             'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
+            'valet_link' => $this->getBooleanOptionValue('link'),
             'valet_secure' => $this->getBooleanOptionValue('secure'),
             'quiet' => $this->getBooleanOptionValue('quiet'),
             'editor' => $this->getOptionValue('editor', 'codeeditor'),
