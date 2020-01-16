@@ -33,6 +33,6 @@ class OpenInBrowser
 
     public function browser()
     {
-        return app('console')->option('browser');
+        return config('lambo.store.browser');
     }
 }

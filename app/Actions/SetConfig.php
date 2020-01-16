@@ -35,6 +35,7 @@ class SetConfig
             'node' => $this->getBooleanOptionValue('node'),
             'dev' => $this->getBooleanOptionValue('dev', 'develop'),
             'auth' => $this->getBooleanOptionValue('auth'),
+            'browser' => $this->getOptionValue('browser'),
         ]);
     }
 
