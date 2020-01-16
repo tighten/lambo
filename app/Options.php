@@ -61,6 +61,11 @@ class Options
             'cli_description' => "Use quiet mode to hide most messages",
         ],
         [
+            'short' => 't',
+            'long' => 'silent',
+            'cli_description' => "hide all output <info>Use with caution. This will hide everything!</info>",
+        ],
+        [
             'short' => 'd',
             'long' => 'dev',
             'cli_description' => "Install Laravel using the develop branch",

@@ -31,6 +31,7 @@ class SetConfig
             'valet_link' => $this->getBooleanOptionValue('link'),
             'valet_secure' => $this->getBooleanOptionValue('secure'),
             'quiet' => $this->getBooleanOptionValue('quiet'),
+            'silent' => $this->getBooleanOptionValue('silent'),
             'editor' => $this->getOptionValue('editor', 'codeeditor'),
             'node' => $this->getBooleanOptionValue('node'),
             'dev' => $this->getBooleanOptionValue('dev', 'develop'),

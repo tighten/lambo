@@ -9,21 +9,23 @@ class Shell
 {
     protected $rootPath;
     protected $projectPath;
+    private $hideStdOut;
 
     public function __construct(Repository $config)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
+        $this->hideStdOut = $config->get('lambo.store.silent') ? ' >/dev/null' : '';
     }
 
     public function execInRoot($command)
     {
-        return $this->exec("cd {$this->rootPath} && $command");
+        return $this->exec("cd {$this->rootPath} && $command{$this->hideStdOut}");
     }
 
     public function execInProject($command)
     {
-        return $this->exec("cd {$this->projectPath} && $command");
+        return $this->exec("cd {$this->projectPath} && $command{$this->hideStdOut}");
     }
 
     protected function exec($command)
