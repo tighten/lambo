@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Shell;
+use Facades\App\Environment;
 
 class OpenInBrowser
 {
@@ -15,7 +16,7 @@ class OpenInBrowser
 
     public function __invoke()
     {
-        if ($this->isMac() && $this->browser()) {
+        if (Environment::isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
@@ -24,11 +25,6 @@ class OpenInBrowser
         } else {
             $this->shell->execInProject("valet open");
         }
-    }
-
-    public function isMac()
-    {
-        return PHP_OS === 'Darwin';
     }
 
     public function browser()
