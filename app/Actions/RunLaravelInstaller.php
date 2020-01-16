@@ -19,7 +19,7 @@ class RunLaravelInstaller
 
         app('console')->info('Creating application using the Laravel installer.');
 
-        $this->shell->execInRoot("laravel new {$projectName} {$this->extraArgs()}");
+        $this->shell->execInRoot("laravel new {$projectName} {$this->extraOptions()}");
 
         // @todo
         // if ($isDev) {
@@ -31,9 +31,8 @@ class RunLaravelInstaller
         // }
     }
 
-    public function extraArgs()
+    public function extraOptions()
     {
-        $arguments = config('lambo.store.quiet') ? '--quiet' : '';
-        return $arguments;
+        return config('lambo.store.quiet') ? '--quiet' : '';
     }
 }

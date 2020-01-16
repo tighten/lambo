@@ -30,7 +30,8 @@ class SetConfig
             'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
             'valet_secure' => $this->getBooleanOptionValue('secure'),
             'quiet' => $this->getBooleanOptionValue('quiet'),
-            'editor' => $this->getOptionValue('editor', 'codeeditor')
+            'editor' => $this->getOptionValue('editor', 'codeeditor'),
+            'node' => $this->getBooleanOptionValue('node'),
         ]);
     }
 

@@ -15,8 +15,14 @@ class InstallNpmDependencies
 
     public function __invoke()
     {
-        app('console')->info('Installing NPM dependencies.');
+        if (config('lambo.store.node')) {
+            app('console')->info('Installing NPM dependencies.');
+            $this->shell->execInProject("npm install {$this->extraOptions()}");
+        }
+    }
 
-        $this->shell->execInProject("npm install");
+    public function extraOptions()
+    {
+        return config('lambo.store.quiet') ? '--quiet' : '';
     }
 }
