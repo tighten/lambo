@@ -33,6 +33,7 @@ class SetConfig
             'quiet' => $this->getBooleanOptionValue('quiet'),
             'editor' => $this->getOptionValue('editor', 'codeeditor'),
             'node' => $this->getBooleanOptionValue('node'),
+            'dev' => $this->getBooleanOptionValue('dev', 'develop'),
         ]);
     }
 

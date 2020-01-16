@@ -15,24 +15,18 @@ class RunLaravelInstaller
 
     public function __invoke()
     {
-        $projectName = config('lambo.store.project_name');
+        $command = "laravel new " . config('lambo.store.project_name') . $this->extraOptions();
+        $branch = config('lambo.store.dev') ? 'develop' : 'release';
 
-        app('console')->info('Creating application using the Laravel installer.');
-
-        $this->shell->execInRoot("laravel new {$projectName} {$this->extraOptions()}");
-
-        // @todo
-        // if ($isDev) {
-        //     $this->console->info('Creating application from dev branch.');
-        //     $this->shell->inDirectory($directory, "laravel new {$projectName} --dev");
-        // } else {
-            // $this->console->info('Creating application from release branch.');
-            // $this->shell->inDirectory($directory, "laravel new {$projectName}");
-        // }
+        app('console')->info("Creating application from the {$branch} branch.");
+        $this->shell->execInRoot($command);
     }
 
     public function extraOptions()
     {
-        return config('lambo.store.quiet') ? '--quiet' : '';
+        return sprintf('%s%s',
+            config('lambo.store.dev') ? ' --dev' : '',
+            config('lambo.store.quiet') ? ' --quiet' : ''
+        );
     }
 }
