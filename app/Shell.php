@@ -9,13 +9,13 @@ class Shell
 {
     protected $rootPath;
     protected $projectPath;
-    private $hideStdOut;
+    protected $hideStdOut;
 
     public function __construct(Repository $config)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
-        $this->hideStdOut = $config->get('lambo.store.silent') ? ' >/dev/null' : '';
+        $this->hideStdOut = $config->get('lambo.store.quiet-shell') ? ' >/dev/null' : '';
     }
 
     public function execInRoot($command)

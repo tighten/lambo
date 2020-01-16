@@ -62,8 +62,8 @@ class Options
         ],
         [
             'short' => 't',
-            'long' => 'silent',
-            'cli_description' => "hide all output <info>Use with caution. This will hide everything!</info>",
+            'long' => 'quiet-shell',
+            'cli_description' => "hide output from shell based commands (git, npm and valet etc.) Use in conjuction with -q, --quiet to silence everything",
         ],
         [
             'short' => 'd',

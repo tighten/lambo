@@ -27,7 +27,7 @@ class RunLaravelInstaller
         return sprintf('%s%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
             config('lambo.store.auth') ? ' --auth' : '',
-            config('lambo.store.quiet') ? ' --quiet' : ''
+            config('lambo.store.quiet-shell') ? ' --quiet' : ''
         );
     }
 }

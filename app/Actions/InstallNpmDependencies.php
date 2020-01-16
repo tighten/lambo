@@ -23,6 +23,6 @@ class InstallNpmDependencies
 
     public function extraOptions()
     {
-        return config('lambo.store.quiet') ? '--quiet' : '';
+        return config('lambo.store.quiet-shell') ? '--quiet' : '';
     }
 }
