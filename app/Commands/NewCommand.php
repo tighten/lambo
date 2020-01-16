@@ -14,6 +14,7 @@ use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\SetConfig;
+use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
@@ -98,9 +99,8 @@ class NewCommand extends Command
             $this->logStep('Running after script');
             app(RunAfterScript::class)();
 
-            // @todo
-            // $this->logStep('Running valet link');
-            // app(ValetLink::class)();
+            $this->logStep('Running valet link');
+            app(ValetLink::class)();
 
             $this->logStep('Running valet secure');
             app(ValetSecure::class)();

@@ -15,17 +15,18 @@ class RunLaravelInstaller
 
     public function __invoke()
     {
-        $command = "laravel new " . config('lambo.store.project_name') . $this->extraOptions();
+        $command = 'laravel new ' . config('lambo.store.project_name') . $this->extraOptions();
         $branch = config('lambo.store.dev') ? 'develop' : 'release';
 
-        app('console')->info("Creating application from the {$branch} branch.");
+        app('console')->info("Creating your new application from the {$branch} branch.");
         $this->shell->execInRoot($command);
     }
 
     public function extraOptions()
     {
-        return sprintf('%s%s',
+        return sprintf('%s%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
+            config('lambo.store.auth') ? ' --auth' : '',
             config('lambo.store.quiet') ? ' --quiet' : ''
         );
     }

@@ -34,6 +34,7 @@ class SetConfig
             'editor' => $this->getOptionValue('editor', 'codeeditor'),
             'node' => $this->getBooleanOptionValue('node'),
             'dev' => $this->getBooleanOptionValue('dev', 'develop'),
+            'auth' => $this->getBooleanOptionValue('auth'),
         ]);
     }
 
