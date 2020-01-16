@@ -12,16 +12,6 @@ class LamboConfig
         return config('home_dir') . '/.lambo';
     }
 
-    public function configFile()
-    {
-        return $this->configDir() . '/config.json';
-    }
-
-    public function fileExists($fileName)
-    {
-        return File::exists($this->configDir() . '/' . $fileName);
-    }
-
     public function createOrEditFile(string $fileName, string $fileTemplate)
     {
         $this->ensureFileExists($fileName, $fileTemplate);
@@ -33,15 +23,10 @@ class LamboConfig
     {
         $this->ensureConfigDirExists();
 
-        if (!$this->fileExists($fileName)) {
+        if (! $this->fileExists($fileName)) {
             app('console')->info("File: {$this->getFilePath($fileName)} does not exist, creating it now.");
             File::put($this->getFilePath($fileName), $fileTemplate);
         }
-    }
-
-    public function getFilePath(string $fileName)
-    {
-        return  $this->configDir() . "/" . $fileName;
     }
 
     public function ensureConfigDirExists()
@@ -52,9 +37,19 @@ class LamboConfig
         }
     }
 
+    public function fileExists($fileName)
+    {
+        return File::exists($this->configDir() . '/' . $fileName);
+    }
+
+    public function getFilePath(string $fileName)
+    {
+        return  $this->configDir() . "/" . $fileName;
+    }
+
     protected function editFile(string $filePath)
     {
-        if (!Environment::isMac()) {
+        if (! Environment::isMac()) {
             exec("xdg-open {$filePath}");
             return;
         }
