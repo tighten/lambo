@@ -15,15 +15,14 @@ class OpenInEditor
 
     public function __invoke()
     {
-        app('console')->info('Opening your editor.');
-
         if ($this->editor()) {
+            app('console')->info('Opening your editor.');
             $this->shell->execInProject($this->editor() . " .");
         }
     }
 
     public function editor()
     {
-        return app('console')->option('editor');
+        return config('lambo.store.editor');
     }
 }
