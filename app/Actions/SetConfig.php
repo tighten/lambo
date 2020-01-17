@@ -2,12 +2,44 @@
 
 namespace App\Actions;
 
+use Dotenv\Dotenv;
 use Facades\App\LamboConfig;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class SetConfig
 {
+    const PROJECTPATH = 'PROJECTPATH';
+    const MESSAGE = 'MESSAGE';
+    const QUIET = 'QUIET';
+    const QUIET_SHELL = 'QUIET_SHELL';
+    const DEVELOP = 'DEVELOP';
+    const AUTH = 'AUTH';
+    const NODE = 'NODE';
+    const CODEEDITOR = 'CODEEDITOR';
+    const BROWSER = 'BROWSER';
+    const LINK = 'LINK';
+    const SECURE = 'SECURE';
+    const DB_USERNAME = 'DB_USERNAME';
+    const DB_PASSWORD = 'DB_PASSWORD';
+
+    public $keys = [
+        'PROJECTPATH',
+        'MESSAGE',
+        'QUIET',
+        'DEVELOP',
+        'AUTH',
+        'NODE',
+        'CODEEDITOR',
+        'BROWSER',
+        'LINK',
+        'SECURE',
+        'FRONTEND',
+        'CREATE_DATABASE',
+        'DB_USERNAME',
+        'DB_PASSWORD',
+    ];
+
     protected $savedConfig;
 
     public function __construct()
@@ -25,26 +57,32 @@ class SetConfig
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
-            'database_username' => $this->getOptionValue('dbuser', 'db_username') ?? 'root',
-            'database_password' => $this->getOptionValue('dbpassword', 'db_password') ?? '',
-            'commit_message' => $this->getOptionValue('message', 'commit_message') ?? 'Initial commit.',
-            'valet_link' => $this->getBooleanOptionValue('link'),
-            'valet_secure' => $this->getBooleanOptionValue('secure'),
-            'quiet' => $this->getBooleanOptionValue('quiet'),
-            'quiet-shell' => $this->getBooleanOptionValue('quiet-shell'),
-            'editor' => $this->getOptionValue('editor', 'codeeditor'),
-            'node' => $this->getBooleanOptionValue('node'),
-            'dev' => $this->getBooleanOptionValue('dev', 'develop'),
-            'auth' => $this->getBooleanOptionValue('auth'),
-            'browser' => $this->getOptionValue('browser'),
+            'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
+            'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',
+            'commit_message' => $this->getOptionValue('message', self::MESSAGE) ?? 'Initial commit.',
+            'valet_link' => $this->getBooleanOptionValue('link', self::LINK),
+            'valet_secure' => $this->getBooleanOptionValue('secure', self::SECURE),
+            'quiet' => $this->getBooleanOptionValue('quiet', self::QUIET),
+            'quiet-shell' => $this->getBooleanOptionValue('quiet-shell', self::QUIET_SHELL),
+            'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
+            'node' => $this->getBooleanOptionValue('node', self::NODE),
+            'dev' => $this->getBooleanOptionValue('dev', self::DEVELOP),
+            'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
+            'browser' => $this->getOptionValue('browser', self::BROWSER),
         ]);
     }
 
     public function loadSavedConfig()
     {
-        $configFilePath = LamboConfig::getFilePath("config.json");
+        (Dotenv::create(LamboConfig::configDir(), 'config'))->safeLoad();
 
-        return File::exists($configFilePath) ? json_decode(File::get($configFilePath), true) : [];
+        $loaded = collect($this->keys)->reject(function ($key) {
+            return ! Arr::has($_ENV, $key);
+        })->mapWithKeys(function($value){
+            return [$value => $_ENV[$value]];
+        })->toArray();
+
+        return $loaded;
     }
 
     public function getTld()
@@ -73,9 +111,12 @@ class SetConfig
         }
     }
 
+    /**
+     * Cast "1", "true", "on" and "yes" to boolean true. Everything else to boolean false.
+     */
     private function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
     {
-        return $this->getOptionValue($optionCommandLineName, $optionConfigFileName) === true;
+        return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getBasePath()
@@ -89,7 +130,7 @@ class SetConfig
 
     public function getProtocol()
     {
-        return $this->getBooleanOptionValue('secure') ? 'https://' : 'http://';
+        return $this->getBooleanOptionValue('secure', self::SECURE) ? 'https://' : 'http://';
     }
 
     public function argument($key)
