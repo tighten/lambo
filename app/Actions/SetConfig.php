@@ -22,6 +22,7 @@ class SetConfig
     const SECURE = 'SECURE';
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
+    const FRONTEND = 'FRONTEND';
 
     public $keys = [
         'PROJECTPATH',
@@ -69,6 +70,7 @@ class SetConfig
             'dev' => $this->getBooleanOptionValue('dev', self::DEVELOP),
             'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
             'browser' => $this->getOptionValue('browser', self::BROWSER),
+            'frontend' => $this->getFrontendType(),
         ]);
 
         dump(config('lambo.store'));
@@ -111,6 +113,21 @@ class SetConfig
         if (Arr::has($this->savedConfig, $optionConfigFileName)) {
             return Arr::get($this->savedConfig, $optionConfigFileName);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getFrontendType()
+    {
+        $frontEndType = $this->getOptionValue('frontend', self::FRONTEND);
+
+        if (in_array($frontEndType, ConfigureFrontendFramework::FRAMEWORKS)) {
+            return $frontEndType;
+        }
+        app('console')->error("Oops. '{$frontEndType}' is not a valid option for -f, --frontend.\nValid options are: bootstrap, react or vue.");
+        app(DisplayHelpScreen::class)();
+        exit();
     }
 
     /**

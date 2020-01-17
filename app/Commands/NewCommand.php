@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\ConfigureFrontendFramework;
 use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
@@ -84,11 +85,14 @@ class NewCommand extends Command
             $this->logStep('Customizing .env and .env.example');
             app(CustomizeDotEnv::class)();
 
-            $this->logStep('Creating database if selected...');
+            $this->logStep('Creating database if selected');
             app(CreateDatabase::class)();
 
             $this->logStep('Running php artisan key:generate');
             app(GenerateAppKey::class)();
+
+            $this->logStep('Configuring frontend preset');
+            app(ConfigureFrontendFramework::class)();
 
             $this->logStep('Initializing Git Repo');
             app(InitializeGitRepo::class)();

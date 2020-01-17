@@ -31,6 +31,12 @@ class Options
             'cli_description' => "Open the site in the specified browser (macOS-only)",
         ],
         [
+            'short' => 'f',
+            'long' => 'frontend',
+            'param_description' => '"FRONTEND"',
+            'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
+        ],
+        [
             'long' => 'create-db',
             'param_description' => 'DBNAME', // Maybe?? @todo
             'cli_description' => "Create a new MySQL database",
@@ -79,18 +85,6 @@ class Options
             // 'short' => 'n',
             'long' => 'node',
             'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        ],
-        [
-            'long' => 'vue',
-            'cli_description' => "Specify Vue as the frontend",
-        ],
-        [
-            'long' => 'react',
-            'cli_description' => "Specify React as the frontend",
-        ],
-        [
-            'long' => 'bootstrap',
-            'cli_description' => "Specify Bootstrap as the frontend",
         ],
     ];
 
