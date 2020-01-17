@@ -70,6 +70,8 @@ class SetConfig
             'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
             'browser' => $this->getOptionValue('browser', self::BROWSER),
         ]);
+
+        dump(config('lambo.store'));
     }
 
     public function loadSavedConfig()
@@ -121,7 +123,7 @@ class SetConfig
 
     public function getBasePath()
     {
-        if ($value = $this->getOptionValue('path')) {
+        if ($value = $this->getOptionValue('path', self::PROJECTPATH)) {
             return str_replace('~', config('home_dir'), $value);
         }
 
