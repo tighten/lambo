@@ -25,20 +25,20 @@ class SetConfig
     const FRONTEND = 'FRONTEND';
 
     public $keys = [
-        'PROJECTPATH',
-        'MESSAGE',
-        'QUIET',
-        'DEVELOP',
-        'AUTH',
-        'NODE',
-        'CODEEDITOR',
-        'BROWSER',
-        'LINK',
-        'SECURE',
-        'FRONTEND',
-        'CREATE_DATABASE',
-        'DB_USERNAME',
-        'DB_PASSWORD',
+        self::PROJECTPATH,
+        self::MESSAGE,
+        self::QUIET,
+        self::QUIET_SHELL,
+        self::DEVELOP,
+        self::AUTH,
+        self::NODE,
+        self::CODEEDITOR,
+        self::BROWSER,
+        self::LINK,
+        self::SECURE,
+        self::DB_USERNAME,
+        self::DB_PASSWORD,
+        self::FRONTEND,
     ];
 
     protected $savedConfig;
@@ -121,6 +121,10 @@ class SetConfig
     protected function getFrontendType()
     {
         $frontEndType = $this->getOptionValue('frontend', self::FRONTEND);
+
+        if (empty($frontEndType) || is_null($frontEndType)) {
+            return false;
+        }
 
         if (in_array($frontEndType, ConfigureFrontendFramework::FRAMEWORKS)) {
             return $frontEndType;

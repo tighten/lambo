@@ -25,6 +25,10 @@ class ConfigureFrontendFramework
 
     public function __invoke()
     {
+        if (! config('lambo.store.frontend')) {
+            return;
+        }
+
         $this->ensureLaravelUiInstalled();
 
         $this->shell->execInProject('php artisan ui ' . config('lambo.store.frontend'));
@@ -32,7 +36,7 @@ class ConfigureFrontendFramework
 
     public function ensureLaravelUiInstalled()
     {
-        $composeConfig = json_decode(File::get(config('lambo.store.project_path') . "/composer.json"), true);
+        $composeConfig = json_decode(File::get(config('lambo.store.project_path') . '/composer.json'), true);
 
         if (! Arr::has($composeConfig, 'require.laravel/ui')) {
             $this->shell->execInProject('composer require laravel/ui');
