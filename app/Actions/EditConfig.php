@@ -13,7 +13,6 @@ class EditConfig
 
     private function configFileTemplate()
     {
-        // $this->upgradeIniConfigFile(); @todo use values in existing ini file if one exists.
         return <<<'TEMPLATE'
 #!/usr/bin/env bash
 
@@ -22,7 +21,9 @@ MESSAGE="Initial commit."
 QUIET=false
 DEVELOP=false
 AUTH=false
+FRONTEND=vue
 NODE=false
+MIX=false
 CODEEDITOR=""
 BROWSER=""
 LINK=false

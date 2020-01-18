@@ -86,6 +86,11 @@ class Options
             'long' => 'node',
             'cli_description' => "Run <info>'npm install'</info> after creating the project",
         ],
+        [
+            'short' => 'x',
+            'long' => 'mix',
+            'cli_description' => "Run <info>'npm run dev'</info> after creating the project to compile assets",
+        ],
     ];
 
     public function all()

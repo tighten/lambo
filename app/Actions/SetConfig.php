@@ -15,14 +15,15 @@ class SetConfig
     const QUIET_SHELL = 'QUIET_SHELL';
     const DEVELOP = 'DEVELOP';
     const AUTH = 'AUTH';
+    const FRONTEND = 'FRONTEND';
     const NODE = 'NODE';
+    const MIX = 'MIX';
     const CODEEDITOR = 'CODEEDITOR';
     const BROWSER = 'BROWSER';
     const LINK = 'LINK';
     const SECURE = 'SECURE';
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
-    const FRONTEND = 'FRONTEND';
 
     public $keys = [
         self::PROJECTPATH,
@@ -31,14 +32,15 @@ class SetConfig
         self::QUIET_SHELL,
         self::DEVELOP,
         self::AUTH,
+        self::FRONTEND,
         self::NODE,
+        self::MIX,
         self::CODEEDITOR,
         self::BROWSER,
         self::LINK,
         self::SECURE,
         self::DB_USERNAME,
         self::DB_PASSWORD,
-        self::FRONTEND,
     ];
 
     protected $savedConfig;
@@ -67,6 +69,7 @@ class SetConfig
             'quiet-shell' => $this->getBooleanOptionValue('quiet-shell', self::QUIET_SHELL),
             'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
             'node' => $this->getBooleanOptionValue('node', self::NODE),
+            'mix' => $this->getBooleanOptionValue('mix', self::MIX),
             'dev' => $this->getBooleanOptionValue('dev', self::DEVELOP),
             'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
             'browser' => $this->getOptionValue('browser', self::BROWSER),

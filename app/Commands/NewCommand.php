@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Actions\CompileAssets;
 use App\Actions\ConfigureFrontendFramework;
 use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
@@ -99,6 +100,9 @@ class NewCommand extends Command
 
             $this->logStep('Installing NPM dependencies');
             app(InstallNpmDependencies::class)();
+
+            $this->logStep('Compiling project assets');
+            app(CompileAssets::class)();
 
             $this->logStep('Running after script');
             app(RunAfterScript::class)();
