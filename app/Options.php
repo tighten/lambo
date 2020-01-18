@@ -64,12 +64,12 @@ class Options
         [
             'short' => 'q',
             'long' => 'quiet',
-            'cli_description' => "Use quiet mode to hide most messages",
+            'cli_description' => "Use quiet mode to hide most messages from lambo",
         ],
         [
             'short' => 't',
             'long' => 'quiet-shell',
-            'cli_description' => "hide output from shell based commands (git, npm and valet etc.) Use in conjuction with -q, --quiet to silence everything",
+            'cli_description' => "Use quiet-shell mode to hide output from shell based commands (git and npm etc.) Use with -q, --quiet to silence everything",
         ],
         [
             'short' => 'd',

@@ -12,7 +12,6 @@ class DisplayHelpScreen
     protected $commands = [
         'help-screen' => 'Display this screen',
         'edit-config' => 'Edit config file',
-        'make-after' => 'Generate "after" file',
         'edit-after' => 'Edit "after" file',
     ];
 
