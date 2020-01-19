@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use Dotenv\Dotenv;
 use Facades\App\LamboConfig;
+use Facades\App\Utilities;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
@@ -24,6 +25,7 @@ class SetConfig
     const SECURE = 'SECURE';
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
+    const CREATE_DATABASE = 'CREATE_DATABASE';
 
     public $keys = [
         self::PROJECTPATH,
@@ -60,6 +62,7 @@ class SetConfig
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
+            'create_database' => $this->getDatabaseOption(),
             'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',
             'commit_message' => $this->getOptionValue('message', self::MESSAGE) ?? 'Initial commit.',
@@ -119,6 +122,29 @@ class SetConfig
     }
 
     /**
+     * Cast "1", "true", "on" and "yes" to boolean true. Everything else to boolean false.
+     */
+    private function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
+    {
+        return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
+    }
+
+    protected function getDatabaseOption() {
+
+        $databaseOption = $this->getOptionValue('create-db', self::CREATE_DATABASE);
+
+        if (in_array($databaseOption, ['off', 'no', 'false', '0'])) {
+            return false;
+        }
+
+        if (in_array($databaseOption, ['on', 'yes', 'true', '1'])) {
+            return Utilities::prepNameForDatabase($this->argument('projectName'));
+        }
+
+        return is_null($databaseOption) ? false : Utilities::prepNameForDatabase($databaseOption);
+    }
+
+    /**
      * @return mixed
      */
     protected function getFrontendType()
@@ -135,14 +161,6 @@ class SetConfig
         app('console')->error("Oops. '{$frontEndType}' is not a valid option for -f, --frontend.\nValid options are: bootstrap, react or vue.");
         app(DisplayHelpScreen::class)();
         exit();
-    }
-
-    /**
-     * Cast "1", "true", "on" and "yes" to boolean true. Everything else to boolean false.
-     */
-    private function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
-    {
-        return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getBasePath()
