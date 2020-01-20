@@ -18,6 +18,7 @@ class RunAfterScript
     {
         if (LamboConfig::fileExists('after')) {
             $this->shell->execInProject("sh " . LamboConfig::getFilePath("after"));
+            app('console')->info('[ lambo ] After script has completed.');
         }
     }
 }

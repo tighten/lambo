@@ -16,8 +16,8 @@ class OpenInEditor
     public function __invoke()
     {
         if ($this->editor()) {
-            app('console')->info('Opening your editor.');
             $this->shell->execInProject($this->editor() . " .");
+            app('console')->info('[ lambo ] Opening your project in ' . $this->editor());
         }
     }
 

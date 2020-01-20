@@ -32,6 +32,7 @@ class ConfigureFrontendFramework
         $this->ensureLaravelUiInstalled();
 
         $this->shell->execInProject('php artisan ui ' . config('lambo.store.frontend'));
+        app('console')->info('[ artisan ] ui scaffold set to ' . config('lambo.store.frontend'));
     }
 
     public function ensureLaravelUiInstalled()

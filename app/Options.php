@@ -95,6 +95,10 @@ class Options
             'long' => 'mix',
             'cli_description' => "Run <info>'npm run dev'</info> after creating the project to compile assets",
         ],
+        [
+            'long' => 'full',
+            'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
+        ],
     ];
 
     public function all()

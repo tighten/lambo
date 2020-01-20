@@ -15,9 +15,9 @@ class CompileAssets
 
     public function __invoke()
     {
-        if (config('lambo.store.mix')) {
-            app('console')->info('Compiling project assets.');
+        if (config('lambo.store.mix') || config('lambo.store.full')) {
             $this->shell->execInProject("npm run dev {$this->extraOptions()}");
+            app('console')->info('[ npm ] Project assets compiled successfully.');
         }
     }
 

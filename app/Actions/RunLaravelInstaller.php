@@ -18,7 +18,7 @@ class RunLaravelInstaller
         $command = 'laravel new ' . config('lambo.store.project_name') . $this->extraOptions();
         $branch = config('lambo.store.dev') ? 'develop' : 'release';
 
-        app('console')->info("Creating your new application from the {$branch} branch.");
+        app('console')->info("[ laravel installer ] Creating your new application from the {$branch} branch.");
         $this->shell->execInRoot($command);
     }
 
@@ -26,7 +26,7 @@ class RunLaravelInstaller
     {
         return sprintf('%s%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
-            config('lambo.store.auth') ? ' --auth' : '',
+            config('lambo.store.auth') || config('lambo.store.full') ? ' --auth' : '',
             config('lambo.store.quiet-shell') ? ' --quiet' : ''
         );
     }

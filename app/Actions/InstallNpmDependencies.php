@@ -15,18 +15,33 @@ class InstallNpmDependencies
 
     public function __invoke()
     {
-        if (config('lambo.store.node') || config('lambo.store.mix')) {
-            if(! config('lambo.store.node')){
-                app('console')->warn('Installation of NPM dependencies was not specified but is required for asset compilation.');
-            }
-
-            app('console')->info('Installing NPM dependencies.');
-            $this->shell->execInProject("npm install {$this->extraOptions()}");
+        if ($this->shouldNotRun()) {
+            return;
         }
+
+        if ($this->onlyMixSpecified()) {
+            app('console')->warn('[ lambo ] Installation of NPM dependencies was not specified but is required for asset compilation.');
+        }
+
+        $this->shell->execInProject("npm install {$this->extraOptions()}");
+        app('console')->info('[ npm ] dependencies installed');
     }
 
     public function extraOptions()
     {
         return config('lambo.store.quiet') ? '--silent' : '';
+    }
+
+    protected function shouldNotRun()
+    {
+        return ! (config('lambo.store.node') || config('lambo.store.mix') || config('lambo.store.full'));
+    }
+
+    /**
+     * @return bool
+     */
+    protected function onlyMixSpecified(): bool
+    {
+        return ! (config('lambo.store.node') || config('lambo.store.full'));
     }
 }

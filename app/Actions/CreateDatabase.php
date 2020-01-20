@@ -18,7 +18,7 @@ class CreateDatabase
 
     public function __invoke()
     {
-        if (! config('lambo.store.create_database')) {
+        if (! (config('lambo.store.create_database') || config('lambo.store.full'))) {
             return;
         }
 
@@ -29,11 +29,11 @@ class CreateDatabase
                 config('lambo.store.database_password'),
                 config('lambo.store.database_name')
             );
-            app('console')->info(sprintf(
-                'Creating new database "%s"',
-                config('lambo.store.database_name'))
-            );
             $this->shell->execInProject($createDatabaseCommand);
+            app('console')->info(sprintf(
+                    '[ mysql ] created new database "%s"',
+                    config('lambo.store.database_name'))
+            );
             return;
         }
 

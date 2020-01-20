@@ -27,6 +27,7 @@ class SetConfig
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
     const CREATE_DATABASE = 'CREATE_DATABASE';
+    const FULL = 'FULL';
 
     public $keys = [
         self::PROJECTPATH,
@@ -46,6 +47,7 @@ class SetConfig
         self::DB_NAME,
         self::DB_USERNAME,
         self::DB_PASSWORD,
+        self::FULL,
     ];
 
     protected $savedConfig;
@@ -81,6 +83,7 @@ class SetConfig
             'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
             'browser' => $this->getOptionValue('browser', self::BROWSER),
             'frontend' => $this->getFrontendType(),
+            'full' => $this->getBooleanOptionValue('full'),
         ]);
 
         dump(config('lambo.store'));

@@ -22,9 +22,11 @@ class OpenInBrowser
                 $this->browser(),
                 config('lambo.store.project_url')
             ));
+            app('console')->info('[ lambo ] Opened your new site. in ' . $this->browser() . ' Happy coding!');
         } else {
             $this->shell->execInProject("valet open");
         }
+        app('console')->info('[ lambo ] Opened your new site. Happy coding!');
     }
 
     public function browser()

@@ -16,5 +16,6 @@ class GenerateAppKey
     public function __invoke()
     {
         $this->shell->execInProject('php artisan key:generate');
+        app('console')->info('[ artisan ] application key has been set.');
     }
 }
