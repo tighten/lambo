@@ -9,7 +9,7 @@ use Tests\TestCase;
 class CustomizeDotEnvTest extends TestCase
 {
     /** @test */
-    public function it_saves_the_customized_dot_env_files()
+    function it_saves_the_customized_dot_env_files()
     {
         config(['lambo.store.project_name' => 'my-project']);
         config(['lambo.store.project_url' => 'http://my-project.example.com']);
