@@ -14,14 +14,12 @@ class EditConfig
     private function configFileTemplate()
     {
         return <<<'TEMPLATE'
-#!/usr/bin/env bash
-
 PROJECTPATH="."
 MESSAGE="Initial commit."
 QUIET=false
 DEVELOP=false
 AUTH=false
-FRONTEND=vue
+FRONTEND=
 NODE=false
 MIX=false
 CODEEDITOR=""
@@ -29,8 +27,9 @@ BROWSER=""
 LINK=false
 SECURE=false
 CREATE_DATABASE=false
-DB_USERNAME="root"
-DB_PASSWORD=""
+DB_NAME=
+DB_USERNAME=root
+DB_PASSWORD=
 TEMPLATE;
     }
 }
