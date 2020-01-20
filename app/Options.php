@@ -37,9 +37,9 @@ class Options
             'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
         ],
         [
-            'long' => 'create-db',
-            'param_description' => 'DBNAME', // Maybe?? @todo
-            'cli_description' => "Create a new MySQL database",
+            'long' => 'dbname',
+            'param_description' => 'DBNAME',
+            'cli_description' => "Specify the database name",
         ],
         [
             'long' => 'dbuser',
@@ -50,6 +50,10 @@ class Options
             'long' => 'dbpassword',
             'param_description' => 'PASSWORD',
             'cli_description' => "Specify the database password",
+        ],
+        [
+            'long' => 'create-db',
+            'cli_description' => "Create a new MySQL database",
         ],
         [
             'short' => 'l',

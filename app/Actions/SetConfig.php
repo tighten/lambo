@@ -23,6 +23,7 @@ class SetConfig
     const BROWSER = 'BROWSER';
     const LINK = 'LINK';
     const SECURE = 'SECURE';
+    const DB_NAME = 'DB_NAME';
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
     const CREATE_DATABASE = 'CREATE_DATABASE';
@@ -41,6 +42,8 @@ class SetConfig
         self::BROWSER,
         self::LINK,
         self::SECURE,
+        self::CREATE_DATABASE,
+        self::DB_NAME,
         self::DB_USERNAME,
         self::DB_PASSWORD,
     ];
@@ -62,9 +65,10 @@ class SetConfig
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
-            'create_database' => $this->getDatabaseOption(),
+            'database_name' => $this->getDatabaseName(),
             'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',
+            'create_database' => $this->getBooleanOptionValue('create-db', self::CREATE_DATABASE),
             'commit_message' => $this->getOptionValue('message', self::MESSAGE) ?? 'Initial commit.',
             'valet_link' => $this->getBooleanOptionValue('link', self::LINK),
             'valet_secure' => $this->getBooleanOptionValue('secure', self::SECURE),
@@ -129,24 +133,6 @@ class SetConfig
         return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
     }
 
-    protected function getDatabaseOption() {
-
-        $databaseOption = $this->getOptionValue('create-db', self::CREATE_DATABASE);
-
-        if (in_array($databaseOption, ['off', 'no', 'false', '0'])) {
-            return false;
-        }
-
-        if (in_array($databaseOption, ['on', 'yes', 'true', '1'])) {
-            return Utilities::prepNameForDatabase($this->argument('projectName'));
-        }
-
-        return is_null($databaseOption) ? false : Utilities::prepNameForDatabase($databaseOption);
-    }
-
-    /**
-     * @return mixed
-     */
     protected function getFrontendType()
     {
         $frontEndType = $this->getOptionValue('frontend', self::FRONTEND);
@@ -175,6 +161,13 @@ class SetConfig
     public function getProtocol()
     {
         return $this->getBooleanOptionValue('secure', self::SECURE) ? 'https://' : 'http://';
+    }
+
+    protected function getDatabaseName()
+    {
+        return $this->getOptionValue('dbname', self::DB_NAME)
+            ? Utilities::prepNameForDatabase($this->getOptionValue('dbname', self::DB_NAME))
+            : Utilities::prepNameForDatabase($this->argument('projectName'));
     }
 
     public function argument($key)

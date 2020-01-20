@@ -52,6 +52,6 @@ class CustomizeDotEnv
     public function databaseName()
     {
         // @todo allow for flag for custom database name.. TEST IT!
-        return Utilities::prepNameForDatabase(config('lambo.store.project_name'));
+        return Utilities::prepNameForDatabase(config('lambo.store.database_name'));
     }
 }

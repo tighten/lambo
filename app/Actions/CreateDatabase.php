@@ -27,17 +27,17 @@ class CreateDatabase
                 'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',
                 config('lambo.store.database_username'),
                 config('lambo.store.database_password'),
-                config('lambo.store.create_database')
+                config('lambo.store.database_name')
             );
             app('console')->info(sprintf(
                 'Creating new database "%s"',
-                config('lambo.store.create_database'))
+                config('lambo.store.database_name'))
             );
             $this->shell->execInProject($createDatabaseCommand);
             return;
         }
 
-        app('console')->warn("MySql doesn't seem to be installed. Skipping new database creation.");
+        app('console')->warn("MySql does not seem to be installed. Skipping new database creation.");
     }
 
     protected function mysqlExists()
