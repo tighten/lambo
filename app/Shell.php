@@ -36,7 +36,6 @@ class Shell
 
         $process->setTimeout(null);
         $process->disableOutput();
-        $process->run();
 
         $hideOutput = $this->hideOutput;
         // @todo resolve this
