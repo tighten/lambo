@@ -13,8 +13,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (function_exists('posix_getuid')) {
+            // Mac or Linux
+            $path = posix_getpwuid(posix_getuid())['dir'];
+        } else {
+            // Windows
+            $path = exec('echo %USERPROFILE%');
+        }
+
         config()->set([
-            'home_dir' => posix_getpwuid(posix_getuid())['dir'],
+            'home_dir' => $path,
         ]);
     }
 
@@ -25,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        //
     }
 }
