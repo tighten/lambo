@@ -71,7 +71,6 @@ class NewCommand extends Command
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
 
         try {
-
             app(VerifyPathAvailable::class)();
 
             app(VerifyDependencies::class)();

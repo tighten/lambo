@@ -37,16 +37,6 @@ class Options
             'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
         ],
         [
-            // 'short' => 'n',
-            'long' => 'node',
-            'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        ],
-        [
-            'short' => 'x',
-            'long' => 'mix',
-            'cli_description' => "Run <info>'npm run dev'</info> after creating the project to compile assets",
-        ],
-        [
             'long' => 'dbname',
             'param_description' => 'DBNAME',
             'cli_description' => "Specify the database name",
@@ -66,26 +56,6 @@ class Options
             'cli_description' => "Create a new MySQL database",
         ],
         [
-            'short' => 'l',
-            'long' => 'link',
-            'cli_description' => "Create a Valet link to the project directory",
-        ],
-        [
-            'short' => 's',
-            'long' => 'secure',
-            'cli_description' => "Generate and use an HTTPS cert with Valet",
-        ],
-        [
-            'short' => 'q',
-            'long' => 'quiet',
-            'cli_description' => "Use quiet mode to hide most messages from lambo",
-        ],
-        [
-            'short' => 't',
-            'long' => 'quiet-shell',
-            'cli_description' => "Use quiet-shell mode to hide output from shell based commands (git and npm etc.) Use with -q, --quiet to silence everything",
-        ],
-        [
             'short' => 'd',
             'long' => 'dev',
             'cli_description' => "Install Laravel using the develop branch",
@@ -96,12 +66,37 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
+            // 'short' => 'n',
+            'long' => 'node',
+            'cli_description' => "Run <info>'npm install'</info> after creating the project",
+        ],
+        [
+            'short' => 'x',
+            'long' => 'mix',
+            'cli_description' => "Run <info>'npm run dev'</info> after creating the project",
+        ],
+        [
+            'short' => 'l',
+            'long' => 'link',
+            'cli_description' => "Create a Valet link to the project directory",
+        ],
+        [
+            'short' => 's',
+            'long' => 'secure',
+            'cli_description' => "Generate and use an HTTPS cert with Valet",
+        ],
+        [
             'long' => 'full',
             'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
         ],
         [
             'long' => 'with-output',
-            'cli_description' => "Show command line output from shell commands.",
+            'cli_description' => "Show command line output from shell commands",
+        ],
+        [
+            'short' => 'q',
+            'long' => 'quiet',
+            'cli_description' => "Use quiet mode to hide most messages from lambo",
         ],
     ];
 

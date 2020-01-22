@@ -13,7 +13,6 @@ class SetConfig
     const PROJECTPATH = 'PROJECTPATH';
     const MESSAGE = 'MESSAGE';
     const QUIET = 'QUIET';
-    const QUIET_SHELL = 'QUIET_SHELL';
     const DEVELOP = 'DEVELOP';
     const AUTH = 'AUTH';
     const FRONTEND = 'FRONTEND';
@@ -34,7 +33,6 @@ class SetConfig
         self::PROJECTPATH,
         self::MESSAGE,
         self::QUIET,
-        self::QUIET_SHELL,
         self::DEVELOP,
         self::AUTH,
         self::FRONTEND,
@@ -77,7 +75,6 @@ class SetConfig
             'valet_link' => $this->getBooleanOptionValue('link', self::LINK),
             'valet_secure' => $this->getBooleanOptionValue('secure', self::SECURE),
             'quiet' => $this->getBooleanOptionValue('quiet', self::QUIET),
-            'quiet-shell' => $this->getBooleanOptionValue('quiet-shell', self::QUIET_SHELL),
             'with_output' => $this->getBooleanOptionValue('with-output', self::WITH_OUTPUT),
             'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
             'node' => $this->getBooleanOptionValue('node', self::NODE),
