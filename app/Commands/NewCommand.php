@@ -8,6 +8,7 @@ use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
+use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
 use App\Actions\InstallNpmDependencies;
 use App\Actions\OpenInBrowser;
@@ -83,9 +84,7 @@ class NewCommand extends Command
 
             app(CreateDatabase::class)();
 
-            // @todo remove this. It is done by the Laravel installer!
-//          $this->logStep('Running php artisan key:generate');
-//          app(GenerateAppKey::class)();
+            app(GenerateAppKey::class)();
 
             app(ConfigureFrontendFramework::class)();
 
@@ -102,6 +101,8 @@ class NewCommand extends Command
             app(ValetSecure::class)();
 
             app(OpenInBrowser::class)();
+
+            $this->info("\nDone. Happy coding!");
         } catch (Exception $e) {
             $this->error("\nFAILURE RUNNING COMMAND:");
             $this->error($e->getMessage());

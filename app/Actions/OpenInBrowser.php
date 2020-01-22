@@ -30,7 +30,6 @@ class OpenInBrowser
         } else {
             $this->shell->execInProject("valet open");
         }
-        $this->info('[ lambo ] Opened your new site. Happy coding!');
     }
 
     public function browser()
