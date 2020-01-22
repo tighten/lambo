@@ -2,10 +2,12 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Shell\Shell;
 
 class InitializeGitRepo
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -15,13 +17,12 @@ class InitializeGitRepo
 
     public function __invoke()
     {
+        $this->logStep('Initializing git repository');
+
         $this->shell->execInProject('git init');
-        app('console')->info('[ git ] initialized new repository.');
-
         $this->shell->execInProject('git add .');
-        app('console')->info('[ git ] staged files for commit.');
-
         $this->shell->execInProject('git commit -m "' . config('lambo.store.commit_message') . '"');
-        app('console')->info('[ git ] committed new project.');
+        $this->info('New git repository initialized.');
     }
+
 }

@@ -28,6 +28,7 @@ class SetConfig
     const DB_PASSWORD = 'DB_PASSWORD';
     const CREATE_DATABASE = 'CREATE_DATABASE';
     const FULL = 'FULL';
+    const WITH_OUTPUT = 'WITH_OUTPUT';
 
     public $keys = [
         self::PROJECTPATH,
@@ -48,6 +49,7 @@ class SetConfig
         self::DB_USERNAME,
         self::DB_PASSWORD,
         self::FULL,
+        self::WITH_OUTPUT,
     ];
 
     protected $savedConfig;
@@ -76,6 +78,7 @@ class SetConfig
             'valet_secure' => $this->getBooleanOptionValue('secure', self::SECURE),
             'quiet' => $this->getBooleanOptionValue('quiet', self::QUIET),
             'quiet-shell' => $this->getBooleanOptionValue('quiet-shell', self::QUIET_SHELL),
+            'with_output' => $this->getBooleanOptionValue('with-output', self::WITH_OUTPUT),
             'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
             'node' => $this->getBooleanOptionValue('node', self::NODE),
             'mix' => $this->getBooleanOptionValue('mix', self::MIX),
@@ -86,7 +89,7 @@ class SetConfig
             'full' => $this->getBooleanOptionValue('full'),
         ]);
 
-        dump(config('lambo.store'));
+//        dump(config('lambo.store'));
     }
 
     public function loadSavedConfig()

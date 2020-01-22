@@ -1,15 +1,15 @@
 <?php
 
-
 namespace App\Actions;
 
-
-use App\Shell;
+use App\Shell\Shell;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class ConfigureFrontendFramework
 {
+    use LamboAction;
+
     const FRAMEWORKS = [
         'vue',
         'react',
@@ -31,8 +31,13 @@ class ConfigureFrontendFramework
 
         $this->ensureLaravelUiInstalled();
 
-        $this->shell->execInProject('php artisan ui ' . config('lambo.store.frontend'));
-        app('console')->info('[ artisan ] ui scaffold set to ' . config('lambo.store.frontend'));
+        $this->logStep('Configuring frontend scaffolding');
+
+        $process = $this->shell->execInProject('php artisan ui ' . config('lambo.store.frontend'));
+
+        $this->abortIf(! $process->isSuccessful(), "Installation of UI scaffolding did not complete successfully.", $process);
+
+        $this->info('UI scaffolding has been set to ' . config('lambo.store.frontend'));
     }
 
     public function ensureLaravelUiInstalled()
@@ -40,7 +45,14 @@ class ConfigureFrontendFramework
         $composeConfig = json_decode(File::get(config('lambo.store.project_path') . '/composer.json'), true);
 
         if (! Arr::has($composeConfig, 'require.laravel/ui')) {
-            $this->shell->execInProject('composer require laravel/ui');
+            $this->logStep('To use Laravel frontend scaffolding composer package laravel/ui is required. Installing now.');
+
+            $process = $this->shell->execInProject('composer require laravel/ui --quiet');
+
+            $this->abortIf(! $process->isSuccessful(), "Installation of laravel/ui did not complete successfully.", $process);
+
+            $this->info('laravel/ui installation installed.');
         }
     }
+
 }

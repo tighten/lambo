@@ -2,10 +2,12 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Shell\Shell;
 
 class InstallNpmDependencies
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -20,16 +22,19 @@ class InstallNpmDependencies
         }
 
         if ($this->onlyMixSpecified()) {
-            app('console')->warn('[ lambo ] Installation of NPM dependencies was not specified but is required for asset compilation.');
+            $this->warn('Installation of NPM dependencies was not specified but is required for asset compilation.');
         }
 
-        $this->shell->execInProject("npm install {$this->extraOptions()}");
-        app('console')->info('[ npm ] dependencies installed');
+        $process = $this->shell->execInProject("npm install {$this->extraOptions()}");
+
+        $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
+
+        $this->info('Npm dependencies installed.');
     }
 
     public function extraOptions()
     {
-        return config('lambo.store.quiet') ? '--silent' : '';
+        return config('lambo.store.with-output') ? '' : '--silent';
     }
 
     protected function shouldNotRun()

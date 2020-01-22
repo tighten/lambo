@@ -27,7 +27,7 @@ class Options
         [
             'short' => 'b',
             'long' => 'browser',
-            'param_description' => '"browser path"',
+            'param_description' => '"path"',
             'cli_description' => "Open the site in the specified browser (macOS-only)",
         ],
         [
@@ -35,6 +35,16 @@ class Options
             'long' => 'frontend',
             'param_description' => '"FRONTEND"',
             'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
+        ],
+        [
+            // 'short' => 'n',
+            'long' => 'node',
+            'cli_description' => "Run <info>'npm install'</info> after creating the project",
+        ],
+        [
+            'short' => 'x',
+            'long' => 'mix',
+            'cli_description' => "Run <info>'npm run dev'</info> after creating the project to compile assets",
         ],
         [
             'long' => 'dbname',
@@ -86,18 +96,12 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
-            // 'short' => 'n',
-            'long' => 'node',
-            'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        ],
-        [
-            'short' => 'x',
-            'long' => 'mix',
-            'cli_description' => "Run <info>'npm run dev'</info> after creating the project to compile assets",
-        ],
-        [
             'long' => 'full',
             'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
+        ],
+        [
+            'long' => 'with-output',
+            'cli_description' => "Show command line output from shell commands.",
         ],
     ];
 

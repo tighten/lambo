@@ -8,7 +8,6 @@ use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
-use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
 use App\Actions\InstallNpmDependencies;
 use App\Actions\OpenInBrowser;
@@ -71,55 +70,42 @@ class NewCommand extends Command
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
 
         try {
-            $this->logStep('Verifying Path Availability');
+
             app(VerifyPathAvailable::class)();
 
-            $this->logStep('Verifying Dependencies');
             app(VerifyDependencies::class)();
 
-            $this->logStep('Running the Laravel Installer');
             app(RunLaravelInstaller::class)();
 
-            $this->logStep('Opening In Editor');
             app(OpenInEditor::class)();
 
-            $this->logStep('Customizing .env and .env.example');
             app(CustomizeDotEnv::class)();
 
-            $this->logStep('Creating database if selected');
             app(CreateDatabase::class)();
 
-            $this->logStep('Running php artisan key:generate');
-            app(GenerateAppKey::class)();
+            // @todo remove this. It is done by the Laravel installer!
+//          $this->logStep('Running php artisan key:generate');
+//          app(GenerateAppKey::class)();
 
-            $this->logStep('Configuring frontend preset');
             app(ConfigureFrontendFramework::class)();
 
-            $this->logStep('Initializing Git Repo');
             app(InitializeGitRepo::class)();
 
-            $this->logStep('Installing NPM dependencies');
             app(InstallNpmDependencies::class)();
 
-            $this->logStep('Compiling project assets');
             app(CompileAssets::class)();
 
-            $this->logStep('Running after script');
             app(RunAfterScript::class)();
 
-            $this->logStep('Running valet link');
             app(ValetLink::class)();
 
-            $this->logStep('Running valet secure');
             app(ValetSecure::class)();
 
-            $this->logStep('Opening in Browser');
             app(OpenInBrowser::class)();
         } catch (Exception $e) {
             $this->error("\nFAILURE RUNNING COMMAND:");
             $this->error($e->getMessage());
         }
-
         // @todo cd into it
     }
 
