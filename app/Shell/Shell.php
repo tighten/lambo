@@ -42,7 +42,6 @@ class Shell
             $description
         ));
 
-
         $withOutput = config('lambo.store.with_output');
         $process->run(function ($type, $buffer) use ($out, $debugFormatter, $process, $withOutput) {
 
