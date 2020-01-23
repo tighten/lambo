@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use Exception;
-use Symfony\Component\Process\Process;
 
 trait LamboAction
 {
@@ -20,11 +19,6 @@ trait LamboAction
     public function error(string $message)
     {
         app('console')->error($message);
-    }
-
-    public function reportError(Process $process)
-    {
-        $this->error("Failed to run '{$process->getCommandLine()}'");
     }
 
     public function warn(string $message)
