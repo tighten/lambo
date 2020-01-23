@@ -28,7 +28,7 @@ class DisplayLamboWelcome
             $this->info($line . " ");
         }
 
-        foreach (explode("\n", $$this->welcomeText) as $line) {
+        foreach (explode("\n", $this->welcomeText) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
             $this->line($line . " ");
         }
