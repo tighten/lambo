@@ -21,6 +21,7 @@ use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Options;
+use App\Shell\Shell;
 use Exception;
 use LaravelZero\Framework\Commands\Command;
 
@@ -29,11 +30,14 @@ class NewCommand extends Command
     protected $signature;
     protected $description = 'Creates a fresh Laravel application';
 
-    public function __construct()
+    private $shell;
+
+    public function __construct(Shell $shell)
     {
         $this->signature = $this->buildSignature();
 
         parent::__construct();
+        $this->shell = $shell;
     }
 
     public function buildSignature()
@@ -106,12 +110,5 @@ class NewCommand extends Command
             $this->error("\nFAILURE: " . $e->getMessage());
         }
         // @todo cd into it
-    }
-
-    public function logStep($step)
-    {
-        if ($this->option('verbose')) {
-            $this->comment("{$step}...\n");
-        }
     }
 }
