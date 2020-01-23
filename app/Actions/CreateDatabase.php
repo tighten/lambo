@@ -27,15 +27,9 @@ class CreateDatabase
         $this->logStep('Creating database');
 
         if ($this->mysqlExists()) {
-            $process = $this->shell->execInProject($this->getCommand());
-
-            if ($process->isSuccessful()) {
-                $this->info($this->getFeedback());
-                return;
-            }
-
-            $this->abort("The new database was not created.", $process);
-
+            $process = $this->shell->execInProject($this->command());
+            $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
+            $this->info('Created a new database ' . config('lambo.store.database_name'));
         }
 
         $this->warn("MySql does not seem to be installed. Skipping new database creation.");
@@ -46,7 +40,7 @@ class CreateDatabase
         return $this->finder->find('mysql') !== null;
     }
 
-    protected function getCommand()
+    protected function command()
     {
         return sprintf(
             'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',
@@ -55,12 +49,4 @@ class CreateDatabase
             config('lambo.store.database_name')
         );
     }
-
-    protected function getFeedback()
-    {
-        return sprintf(
-            "Created a new database '%s'",
-            config('lambo.store.database_name'));
-    }
-
 }
