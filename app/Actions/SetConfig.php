@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\File;
 
 class SetConfig
 {
+    use LamboAction;
+
     const PROJECTPATH = 'PROJECTPATH';
     const MESSAGE = 'MESSAGE';
     const QUIET = 'QUIET';
@@ -136,7 +138,7 @@ class SetConfig
         return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
     }
 
-    protected function getFrontendType()
+    public function getFrontendType()
     {
         $frontEndType = $this->getOptionValue('frontend', self::FRONTEND);
 
@@ -147,7 +149,7 @@ class SetConfig
         if (in_array($frontEndType, ConfigureFrontendFramework::FRAMEWORKS)) {
             return $frontEndType;
         }
-        app('console')->error("Oops. '{$frontEndType}' is not a valid option for -f, --frontend.\nValid options are: bootstrap, react or vue.");
+        $this->error("Oops. '{$frontEndType}' is not a valid option for -f, --frontend.\nValid options are: bootstrap, react or vue.");
         app(DisplayHelpScreen::class)();
         exit();
     }
@@ -166,7 +168,7 @@ class SetConfig
         return $this->getBooleanOptionValue('secure', self::SECURE) ? 'https://' : 'http://';
     }
 
-    protected function getDatabaseName()
+    public function getDatabaseName()
     {
         return $this->getOptionValue('dbname', self::DB_NAME)
             ? Utilities::prepNameForDatabase($this->getOptionValue('dbname', self::DB_NAME))

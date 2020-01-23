@@ -4,6 +4,8 @@ namespace App\Actions;
 
 class DisplayLamboWelcome
 {
+    use LamboAction;
+
     protected $lamboLogo = "
      __                    __               :version:
     / /   ____ _____ ___  / /_  ____
@@ -23,12 +25,12 @@ class DisplayLamboWelcome
     {
         foreach (explode("\n", $this->lamboLogo) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console')->info($line . " ");
+            $this->info($line . " ");
         }
 
-        foreach (explode("\n", $this->welcomeText) as $line) {
+        foreach (explode("\n", $$this->welcomeText) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console')->line($line . " ");
+            $this->line($line . " ");
         }
     }
 }

@@ -6,9 +6,9 @@ use Exception;
 
 trait LamboAction
 {
-    public function logStep($step)
+    protected function line(string $message)
     {
-        app('console')->comment("\n{$step}...");
+        app('console')->line($message);
     }
 
     protected function info(string $message)
@@ -24,6 +24,11 @@ trait LamboAction
     public function warn(string $message)
     {
         app('console')->warn($message);
+    }
+
+    public function logStep($step)
+    {
+        app('console')->comment("\n{$step}...");
     }
 
     public function abortIf(bool $abort, string $message, $process)
