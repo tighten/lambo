@@ -16,11 +16,6 @@ trait LamboAction
         app('console')->info($message);
     }
 
-    public function withCommandOutput(): bool
-    {
-        return config('lambo.store.with_output');
-    }
-
     public function error(string $message)
     {
         app('console')->error($message);

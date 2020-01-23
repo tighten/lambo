@@ -38,18 +38,23 @@ class RunLaravelInstaller
         );
     }
 
-    protected function withAuth(): bool
+    public function withAuth(): bool
     {
         return config('lambo.store.auth') || config('lambo.store.full');
     }
 
-    protected function getFeedback(): string
+    public function getFeedback(): string
     {
         return sprintf("A new application '%s'%s has been created from the %s branch.",
             config('lambo.store.project_name'),
             $this->withAuth() ? ' with auth scaffolding' : '',
             config('lambo.store.dev') ? 'develop' : 'release'
         );
+    }
+
+    public function withCommandOutput(): bool
+    {
+        return config('lambo.store.with_output');
     }
 
 }
