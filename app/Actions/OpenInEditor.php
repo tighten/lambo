@@ -21,7 +21,7 @@ class OpenInEditor
             $this->logStep('Opening In Editor');
 
             $this->shell->execInProject($this->editor() . " .");
-            $this->info('[ lambo ] Opening your project in ' . $this->editor());
+            $this->info('Opening your project in ' . $this->editor());
         }
     }
 
