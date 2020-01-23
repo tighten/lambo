@@ -103,8 +103,7 @@ class NewCommand extends Command
 
             $this->info("\nDone. Happy coding!");
         } catch (Exception $e) {
-            $this->error("\nFAILURE RUNNING COMMAND:");
-            $this->error($e->getMessage());
+            $this->error("\nFAILURE: " . $e->getMessage());
         }
         // @todo cd into it
     }

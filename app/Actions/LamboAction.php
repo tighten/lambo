@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Exception;
 use Symfony\Component\Process\Process;
 
 trait LamboAction
@@ -31,16 +32,10 @@ trait LamboAction
         app('console')->warn($message);
     }
 
-    public function abort(string $message, Process $process)
-    {
-        app('console')->error("\n[ lambo ] {$message}\nFailed to run: '{$process->getCommandLine()}'");
-        exit(1);
-    }
-
     public function abortIf(bool $abort, string $message, $process)
     {
         if ($abort) {
-            $this->abort($message, $process);
+            throw new Exception("{$message}\n  Failed to run: '{$process->getCommandLine()}'");
         }
     }
 }
