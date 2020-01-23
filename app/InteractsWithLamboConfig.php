@@ -5,7 +5,7 @@ namespace App;
 use Facades\App\Environment;
 use Illuminate\Support\Facades\File;
 
-class LamboConfig
+trait InteractsWithLamboConfig
 {
     public function configDir()
     {

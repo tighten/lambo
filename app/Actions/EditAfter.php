@@ -2,13 +2,15 @@
 
 namespace App\Actions;
 
-use Facades\App\LamboConfig;
+use App\InteractsWithLamboConfig;
 
 class EditAfter
 {
+    use InteractsWithLamboConfig;
+
     public function __invoke()
     {
-        LamboConfig::createOrEditFile("after", $this->afterFileTemplate());
+        $this->createOrEditFile("after", $this->afterFileTemplate());
     }
 
     private function afterFileTemplate()

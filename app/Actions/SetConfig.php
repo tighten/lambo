@@ -2,15 +2,15 @@
 
 namespace App\Actions;
 
+use App\InteractsWithLamboConfig;
 use Dotenv\Dotenv;
-use Facades\App\LamboConfig;
 use Facades\App\Utilities;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class SetConfig
 {
-    use LamboAction;
+    use LamboAction, InteractsWithLamboConfig;
 
     const PROJECTPATH = 'PROJECTPATH';
     const MESSAGE = 'MESSAGE';
@@ -93,7 +93,7 @@ class SetConfig
 
     public function loadSavedConfig()
     {
-        (Dotenv::create(LamboConfig::configDir(), 'config'))->safeLoad();
+        (Dotenv::create($this->configDir(), 'config'))->safeLoad();
 
         $loaded = collect($this->keys)->reject(function ($key) {
             return ! Arr::has($_ENV, $key);

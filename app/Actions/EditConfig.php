@@ -2,13 +2,15 @@
 
 namespace App\Actions;
 
-use Facades\App\LamboConfig;
+use App\InteractsWithLamboConfig;
 
 class EditConfig
 {
+    use InteractsWithLamboConfig;
+
     public function __invoke()
     {
-        LamboConfig::createOrEditFile("config", $this->configFileTemplate());
+        $this->createOrEditFile("config", $this->configFileTemplate());
     }
 
     private function configFileTemplate()
