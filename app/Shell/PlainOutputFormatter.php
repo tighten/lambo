@@ -2,24 +2,20 @@
 
 namespace App\Shell;
 
-
-class PlainOutputFormatter
+class PlainOutputFormatter extends ConsoleOutputFormatter
 {
-    public function start(string $message, string $prefix = 'RUN')
+    public function getStartMessageFormat(): string
     {
-        return sprintf("[ %s ] %s", $prefix, $message);
+        return "[ RUN ] %s";
     }
 
-    public function progress(
-        string $buffer,
-        bool $error = false,
-        string $prefix = 'OUT',
-        string $errorPrefix = 'ERR'
-    ) {
-        if ($error) {
-            return rtrim(sprintf("[ %s ] %s", $errorPrefix, $buffer));
-        } else {
-            return rtrim(sprintf("[ %s ] %s", $prefix, $buffer));
-        }
+    public function getErrorMessageFormat(): string
+    {
+        return "[ ERR ] %s";
+    }
+
+    public function getMessageFormat(): string
+    {
+        return "[ OUT ] %s";
     }
 }
