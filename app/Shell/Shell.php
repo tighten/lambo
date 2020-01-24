@@ -21,37 +21,44 @@ class Shell
         return $this->exec("cd {$this->rootPath} && $command", $command);
     }
 
-    public function execInProject($command, $description = '')
+    public function execInProject($command)
     {
         return $this->exec("cd {$this->projectPath} && $command", $command);
     }
 
-    protected function exec($command, $description)
+    public function getOutputFormatter()
     {
-        $out = app('Symfony\Component\Console\Output\ConsoleOutput');
-        $debugFormatter = app('console')->option('no-ansi')
+        return app('console')->option('no-ansi')
             ? new PlainOutputFormatter
             : new ColorOutputFormatter;
+    }
 
+    public function buildProcess($command): Process
+    {
         $process = app()->make(Process::class, [
             'command' => $command,
         ]);
         $process->setTimeout(null);
+        return $process;
+    }
 
-        $out->writeln($debugFormatter->start(
-            $description
-        ));
+    protected function exec($command, $description)
+    {
+        $showConsoleOutput = config('lambo.store.with_output');
+        $out = app('Symfony\Component\Console\Output\ConsoleOutput');
 
-        $withOutput = config('lambo.store.with_output');
-        $process->run(function ($type, $buffer) use ($out, $debugFormatter, $process, $withOutput) {
+        $outputFormatter = $this->getOutputFormatter();
+        $out->writeln($outputFormatter->start($description));
 
+        $process = $this->buildProcess($command);
+        $process->run(function ($type, $buffer) use ($out, $outputFormatter, $showConsoleOutput) {
             if (empty($buffer) || $buffer === PHP_EOL) {
                 return;
             }
 
-            if (Process::ERR === $type || $withOutput) {
+            if (Process::ERR === $type || $showConsoleOutput) {
                 $out->writeln(
-                    $debugFormatter->progress(
+                    $outputFormatter->progress(
                         $buffer,
                         Process::ERR === $type
                     )
