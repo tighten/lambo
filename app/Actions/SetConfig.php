@@ -133,7 +133,7 @@ class SetConfig
     /**
      * Cast "1", "true", "on" and "yes" to boolean true. Everything else to boolean false.
      */
-    private function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
+    public function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
     {
         return filter_var($this->getOptionValue($optionCommandLineName, $optionConfigFileName), FILTER_VALIDATE_BOOLEAN);
     }
