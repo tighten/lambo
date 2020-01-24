@@ -2,12 +2,12 @@
 
 namespace App\Actions;
 
+use App\Environment;
 use App\Shell\Shell;
-use Facades\App\Environment;
 
 class OpenInBrowser
 {
-    use LamboAction;
+    use LamboAction, Environment;
 
     protected $shell;
 
@@ -20,7 +20,7 @@ class OpenInBrowser
     {
         $this->logStep('Opening in Browser');
 
-        if (Environment::isMac() && $this->browser()) {
+        if ($this->isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),

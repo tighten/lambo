@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Environment
+trait Environment
 {
     public function isMac()
     {

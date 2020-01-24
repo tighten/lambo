@@ -7,6 +7,7 @@ use Dotenv\Dotenv;
 use Facades\App\Utilities;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class SetConfig
 {
@@ -170,9 +171,19 @@ class SetConfig
 
     public function getDatabaseName()
     {
-        return $this->getOptionValue('dbname', self::DB_NAME)
-            ? Utilities::prepNameForDatabase($this->getOptionValue('dbname', self::DB_NAME))
-            : Utilities::prepNameForDatabase($this->argument('projectName'));
+        $configuredDatabaseName = $this->getOptionValue('dbname', self::DB_NAME)
+            ? $this->getOptionValue('dbname', self::DB_NAME)
+            : $this->argument('projectName');
+
+        if (! Str::contains($configuredDatabaseName, '-')) {
+            return $configuredDatabaseName;
+        }
+
+        $newDatabaseName = str_replace('-', '_', $configuredDatabaseName);
+        $this->warn("Your configured database name <error> {$configuredDatabaseName} </error> contains hyphens which can cause problems in some instances.");
+        $this->warn('The hyphens have been replaced with underscores to prevent problems.');
+        $this->warn("New database name: <info>{$newDatabaseName}</info>.");
+        return $newDatabaseName;
     }
 
     public function argument($key)

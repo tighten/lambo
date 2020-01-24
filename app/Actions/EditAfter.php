@@ -10,7 +10,7 @@ class EditAfter
 
     public function __invoke()
     {
-        $this->createOrEditFile("after", $this->afterFileTemplate());
+        $this->createOrEditConfigFile("after", $this->afterFileTemplate());
     }
 
     private function afterFileTemplate()

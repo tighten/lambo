@@ -10,7 +10,7 @@ class EditConfig
 
     public function __invoke()
     {
-        $this->createOrEditFile("config", $this->configFileTemplate());
+        $this->createOrEditConfigFile("config", $this->configFileTemplate());
     }
 
     private function configFileTemplate()

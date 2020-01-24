@@ -2,30 +2,31 @@
 
 namespace App;
 
-use Facades\App\Environment;
 use Illuminate\Support\Facades\File;
 
 trait InteractsWithLamboConfig
 {
+    use Environment;
+
     public function configDir()
     {
         return config('home_dir') . '/.lambo';
     }
 
-    public function createOrEditFile(string $fileName, string $fileTemplate)
+    public function createOrEditConfigFile(string $fileName, string $fileTemplate)
     {
-        $this->ensureFileExists($fileName, $fileTemplate);
+        $this->ensureConfigFileExists($fileName, $fileTemplate);
 
-        $this->editFile($this->getFilePath($fileName));
+        $this->editConfigFile($this->getConfigFilePath($fileName));
     }
 
-    protected function ensureFileExists(string $fileName, string $fileTemplate)
+    protected function ensureConfigFileExists(string $fileName, string $fileTemplate)
     {
         $this->ensureConfigDirExists();
 
-        if (! $this->fileExists($fileName)) {
-            app('console')->info("File: {$this->getFilePath($fileName)} does not exist, creating it now.");
-            File::put($this->getFilePath($fileName), $fileTemplate);
+        if (! $this->configFileExists($fileName)) {
+            app('console')->info("File: {$this->getConfigFilePath($fileName)} does not exist, creating it now.");
+            File::put($this->getConfigFilePath($fileName), $fileTemplate);
         }
     }
 
@@ -37,19 +38,19 @@ trait InteractsWithLamboConfig
         }
     }
 
-    public function fileExists($fileName)
+    public function configFileExists($fileName)
     {
         return File::exists($this->configDir() . '/' . $fileName);
     }
 
-    public function getFilePath(string $fileName)
+    public function getConfigFilePath(string $fileName)
     {
         return  $this->configDir() . "/" . $fileName;
     }
 
-    protected function editFile(string $filePath)
+    protected function editConfigFile(string $filePath)
     {
-        if (! Environment::isMac()) {
+        if (! $this->isMac()) {
             exec("xdg-open {$filePath}");
             return;
         }

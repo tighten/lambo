@@ -2,29 +2,12 @@
 
 namespace App\Actions;
 
+use App\LogsToConsole;
 use Exception;
 
 trait LamboAction
 {
-    protected function line(string $message)
-    {
-        app('console')->line($message);
-    }
-
-    protected function info(string $message)
-    {
-        app('console')->info($message);
-    }
-
-    public function error(string $message)
-    {
-        app('console')->error($message);
-    }
-
-    public function warn(string $message)
-    {
-        app('console')->warn($message);
-    }
+    use LogsToConsole;
 
     public function logStep($step)
     {
