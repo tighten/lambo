@@ -42,17 +42,22 @@ class ConfigureFrontendFramework
 
     public function ensureLaravelUiInstalled()
     {
-        $composeConfig = json_decode(File::get(config('lambo.store.project_path') . '/composer.json'), true);
-
-        if (! Arr::has($composeConfig, 'require.laravel/ui')) {
-            $this->logStep('To use Laravel frontend scaffolding composer package laravel/ui is required. Installing now.');
-
-            $process = $this->shell->execInProject('composer require laravel/ui --quiet');
-
-            $this->abortIf(! $process->isSuccessful(), "Installation of laravel/ui did not complete successfully.", $process);
-
-            $this->info('laravel/ui installation installed.');
+        if ($this->laravelUiInstalled()) {
+            return;
         }
+
+        $this->logStep('To use Laravel frontend scaffolding composer package laravel/ui is required. Installing now.');
+
+        $process = $this->shell->execInProject('composer require laravel/ui --quiet');
+
+        $this->abortIf(! $process->isSuccessful(), "Installation of laravel/ui did not complete successfully.", $process);
+
+        $this->info('laravel/ui installation installed.');
     }
 
+    private function laravelUiInstalled(): bool
+    {
+        $composeConfig = json_decode(File::get(config('lambo.store.project_path') . '/composer.json'), true);
+        return Arr::has($composeConfig, 'require.laravel/ui');
+    }
 }
