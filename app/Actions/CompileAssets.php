@@ -19,18 +19,19 @@ class CompileAssets
 
     public function __invoke()
     {
-        if (config('lambo.store.mix') || config('lambo.store.full')) {
-
-            $this->squashProgress();
-
-            $this->logStep('Compiling project assets');
-
-            $process = $this->shell->execInProject("npm run dev-no-progress {$this->extraOptions()}");
-
-            $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
-
-            $this->info('Project assets compiled successfully.');
+        if (! config('lambo.store.mix')) {
+            return;
         }
+
+        $this->squashProgress();
+
+        $this->logStep('Compiling project assets');
+
+        $process = $this->shell->execInProject("npm run dev-no-progress {$this->extraOptions()}");
+
+        $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
+
+        $this->info('Project assets compiled successfully.');
     }
 
     public function extraOptions()

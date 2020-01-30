@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\InteractsWithLamboConfig;
 use Dotenv\Dotenv;
-use Facades\App\Utilities;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -80,8 +79,8 @@ class SetConfig
             'quiet' => $this->getBooleanOptionValue('quiet', self::QUIET),
             'with_output' => $this->getBooleanOptionValue('with-output', self::WITH_OUTPUT),
             'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
-            'node' => $this->getBooleanOptionValue('node', self::NODE),
-            'mix' => $this->getBooleanOptionValue('mix', self::MIX),
+            'node' => $this->shouldInstallNpmDependencies(),
+            'mix' => $this->shouldRunMix(),
             'dev' => $this->getBooleanOptionValue('dev', self::DEVELOP),
             'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
             'browser' => $this->getOptionValue('browser', self::BROWSER),
@@ -96,13 +95,11 @@ class SetConfig
     {
         (Dotenv::create($this->configDir(), 'config'))->safeLoad();
 
-        $loaded = collect($this->keys)->reject(function ($key) {
+        return collect($this->keys)->reject(function ($key) {
             return ! Arr::has($_ENV, $key);
         })->mapWithKeys(function($value){
             return [$value => $_ENV[$value]];
         })->toArray();
-
-        return $loaded;
     }
 
     public function getTld()
@@ -131,8 +128,8 @@ class SetConfig
         }
     }
 
-    /**
-     * Cast "1", "true", "on" and "yes" to boolean true. Everything else to boolean false.
+    /*
+     * Cast "1", "true", "on" and "yes" to bool true. Everything else to bool false.
      */
     public function getBooleanOptionValue($optionCommandLineName, $optionConfigFileName = null)
     {
@@ -194,5 +191,17 @@ class SetConfig
     public function option($key)
     {
         return app('console')->option($key);
+    }
+
+    public function shouldRunMix(): bool
+    {
+        return $this->getBooleanOptionValue('full')
+            || $this->getBooleanOptionValue('mix', self::MIX);
+    }
+
+    public function shouldInstallNpmDependencies(): bool
+    {
+        return $this->shouldRunMix()
+            || $this->getBooleanOptionValue('node', self::NODE);
     }
 }
