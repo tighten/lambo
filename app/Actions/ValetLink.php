@@ -17,14 +17,16 @@ class ValetLink
 
     public function __invoke()
     {
-        if (config('lambo.store.valet_link') || config('lambo.store.full')) {
-            $this->logStep('Running valet link');
-
-            $process = $this->shell->execInProject("valet link");
-
-            $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
-
-            $this->info('valet link successful');
+        if (! config('lambo.store.valet_link')) {
+            return;
         }
+
+        $this->logStep('Running valet link');
+
+        $process = $this->shell->execInProject("valet link");
+
+        $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
+
+        $this->info('valet link successful');
     }
 }

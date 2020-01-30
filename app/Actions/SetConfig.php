@@ -72,17 +72,17 @@ class SetConfig
             'database_name' => $this->getDatabaseName(),
             'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',
-            'create_database' => $this->getBooleanOptionValue('create-db', self::CREATE_DATABASE),
+            'create_database' => $this->shouldCreateDatabase(),
             'commit_message' => $this->getOptionValue('message', self::MESSAGE) ?? 'Initial commit.',
-            'valet_link' => $this->getBooleanOptionValue('link', self::LINK),
-            'valet_secure' => $this->getBooleanOptionValue('secure', self::SECURE),
+            'valet_link' => $this->shouldLink(),
+            'valet_secure' => $this->shouldSecure(),
             'quiet' => $this->getBooleanOptionValue('quiet', self::QUIET),
             'with_output' => $this->getBooleanOptionValue('with-output', self::WITH_OUTPUT),
             'editor' => $this->getOptionValue('editor', self::CODEEDITOR),
             'node' => $this->shouldInstallNpmDependencies(),
             'mix' => $this->shouldRunMix(),
             'dev' => $this->getBooleanOptionValue('dev', self::DEVELOP),
-            'auth' => $this->getBooleanOptionValue('auth', self::AUTH),
+            'auth' => $this->shouldInstallAuthentication(),
             'browser' => $this->getOptionValue('browser', self::BROWSER),
             'frontend' => $this->getFrontendType(),
             'full' => $this->getBooleanOptionValue('full'),
@@ -163,7 +163,7 @@ class SetConfig
 
     public function getProtocol()
     {
-        return $this->getBooleanOptionValue('secure', self::SECURE) ? 'https://' : 'http://';
+        return $this->shouldSecure() ? 'https://' : 'http://';
     }
 
     public function getDatabaseName()
@@ -203,5 +203,29 @@ class SetConfig
     {
         return $this->shouldRunMix()
             || $this->getBooleanOptionValue('node', self::NODE);
+    }
+
+    public function shouldCreateDatabase(): bool
+    {
+        return $this->getBooleanOptionValue('full')
+            || $this->getBooleanOptionValue('create-db', self::CREATE_DATABASE);
+    }
+
+    public function shouldLink(): bool
+    {
+        return $this->getBooleanOptionValue('full')
+            || $this->getBooleanOptionValue('link', self::LINK);
+    }
+
+    public function shouldSecure(): bool
+    {
+        return $this->getBooleanOptionValue('full')
+            || $this->getBooleanOptionValue('secure', self::SECURE);
+    }
+
+    public function shouldInstallAuthentication(): bool
+    {
+        return $this->getBooleanOptionValue('full')
+            || $this->getBooleanOptionValue('auth', self::AUTH);
     }
 }

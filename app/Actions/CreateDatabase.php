@@ -20,7 +20,7 @@ class CreateDatabase
 
     public function __invoke()
     {
-        if (! (config('lambo.store.create_database') || config('lambo.store.full'))) {
+        if (! config('lambo.store.create_database')) {
             return;
         }
 

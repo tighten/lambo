@@ -17,14 +17,16 @@ class ValetSecure
 
     public function __invoke()
     {
-        if (config('lambo.store.valet_secure') || config('lambo.store.full')) {
-            $this->logStep('Running valet secure');
-
-            $process = $this->shell->execInProject("valet secure");
-
-            $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
-
-            $this->info('valet secure successful');
+        if (! config('lambo.store.valet_secure')) {
+            return;
         }
+
+        $this->logStep('Running valet secure');
+
+        $process = $this->shell->execInProject("valet secure");
+
+        $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
+
+        $this->info('valet secure successful');
     }
 }
