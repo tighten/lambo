@@ -17,12 +17,14 @@ class OpenInEditor
 
     public function __invoke()
     {
-        if ($this->editor()) {
-            $this->logStep('Opening In Editor');
-
-            $this->shell->execInProject($this->editor() . " .");
-            $this->info('Opening your project in ' . $this->editor());
+        if (! $this->editor()) {
+            return;
         }
+
+        $this->logStep('Opening In Editor');
+
+        $this->shell->execInProject($this->editor() . " .");
+        $this->info('Opening your project in ' . $this->editor());
     }
 
     public function editor()

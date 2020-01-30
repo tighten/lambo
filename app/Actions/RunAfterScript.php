@@ -18,14 +18,16 @@ class RunAfterScript
 
     public function __invoke()
     {
-        if ($this->configFileExists('after')) {
-            $this->logStep('Running after script');
-
-            $process = $this->shell->execInProject("sh " . $this->getConfigFilePath("after"));
-
-            $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
-
-            $this->info('After script has completed.');
+        if (! $this->configFileExists('after')) {
+            return;
         }
+
+        $this->logStep('Running after script');
+
+        $process = $this->shell->execInProject("sh " . $this->getConfigFilePath("after"));
+
+        $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
+
+        $this->info('After script has completed.');
     }
 }
