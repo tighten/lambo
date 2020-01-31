@@ -6,6 +6,10 @@ namespace App;
 
 trait LogsToConsole
 {
+    public function alert(string $message)
+    {
+        app('console')->alert($message);
+    }
 
     public function warn(string $message)
     {
