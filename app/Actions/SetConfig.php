@@ -87,8 +87,6 @@ class SetConfig
             'frontend' => $this->getFrontendType(),
             'full' => $this->getBooleanOptionValue('full'),
         ]);
-
-//        dump(config('lambo.store'));
     }
 
     public function loadSavedConfig()
