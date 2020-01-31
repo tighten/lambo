@@ -23,13 +23,15 @@ class CompileAssets
             return;
         }
 
-        $this->squashProgress();
+        $this->addSilentDevScript();
 
         $this->logStep('Compiling project assets');
 
-        $process = $this->shell->execInProject("npm run dev-no-progress {$this->extraOptions()}");
+        $process = $this->shell->execInProject("npm run dev {$this->extraOptions()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
+
+        $this->removeSilentDevScript();
 
         $this->info('Project assets compiled successfully.');
     }
@@ -39,12 +41,28 @@ class CompileAssets
         return config('lambo.store.show-output') ? '' : '--silent';
     }
 
-    private function squashProgress()
+    public function addSilentDevScript()
     {
-        $path = config('lambo.store.project_path') . '/package.json';
-        $packageJson = json_decode(File::get($path), true);
-        $compileCommand = str_replace('--progress', '--no-progress', Arr::get($packageJson, 'scripts.development'));
-        $newPackageJson = Arr::add($packageJson, 'scripts.dev-no-progress', $compileCommand);
-        File::replace($path, json_encode($newPackageJson, JSON_PRETTY_PRINT));
+        $originalPackageJson = config('lambo.store.project_path') . '/package.json';
+        File::copy($originalPackageJson, config('lambo.store.project_path') . '/package-original.json');
+        File::replace($originalPackageJson, $this->silentPackageJson($originalPackageJson));
+    }
+
+    public function silentPackageJson($originalPackageJsonPath)
+    {
+        $packageJson = json_decode(File::get($originalPackageJsonPath), true);
+        $silentDevelopmentCommand = str_replace('--progress', '--no-progress', Arr::get($packageJson, 'scripts.development'));
+        Arr::set($packageJson, 'scripts.development', $silentDevelopmentCommand);
+        return json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    public function removeSilentDevScript()
+    {
+        $packageJson = config('lambo.store.project_path') . '/package.json';
+        File::delete($packageJson);
+
+        $originalPackageJson = config('lambo.store.project_path') . '/package-original.json';
+        File::copy($originalPackageJson, $packageJson);
+        File::delete($originalPackageJson);
     }
 }
