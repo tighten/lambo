@@ -16,13 +16,15 @@ class VerifyPathAvailableTest extends TestCase
         config(['lambo.store.root_path' => '/some/filesystem/path']);
 
         File::shouldReceive('isDirectory')
-            ->once()->with('/some/filesystem/path')
+            ->with('/some/filesystem/path')
+            ->once()
             ->andReturn(true);
 
         config(['lambo.store.project_path' => '/some/filesystem/path/my-project']);
 
         File::shouldReceive('isDirectory')
-            ->once()->with('/some/filesystem/path/my-project')
+            ->with('/some/filesystem/path/my-project')
+            ->once()
             ->andReturn(false);
 
         (new VerifyPathAvailable)();
@@ -36,7 +38,8 @@ class VerifyPathAvailableTest extends TestCase
         config(['lambo.store.root_path' => '/non/existent/filesystem/path']);
 
         File::shouldReceive('isDirectory')
-            ->once()->with('/non/existent/filesystem/path')
+            ->with('/non/existent/filesystem/path')
+            ->once()
             ->andReturn(false);
 
         $this->expectException(\Exception::class);
@@ -53,13 +56,15 @@ class VerifyPathAvailableTest extends TestCase
         config(['lambo.store.root_path' => '/some/filesystem/path']);
 
         File::shouldReceive('isDirectory')
-            ->once()->with('/some/filesystem/path')
+            ->with('/some/filesystem/path')
+            ->once()
             ->andReturn(true);
 
         config(['lambo.store.project_path' => '/some/filesystem/path/existing-directory']);
 
         File::shouldReceive('isDirectory')
-            ->once()->with('/some/filesystem/path/existing-directory')
+            ->with('/some/filesystem/path/existing-directory')
+            ->once()
             ->andReturn(true);
 
         $this->expectException(\Exception::class);
