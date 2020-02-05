@@ -29,8 +29,6 @@ class NewCommand extends Command
     protected $signature;
     protected $description = 'Creates a fresh Laravel application';
 
-    private $shell;
-
     public function __construct()
     {
         $this->signature = $this->buildSignature();
