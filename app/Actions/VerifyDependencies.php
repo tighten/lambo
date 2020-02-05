@@ -11,25 +11,19 @@ class VerifyDependencies
 
     protected $finder;
 
-    protected $dependencies = [
-        'laravel',
-        'git',
-        'valet',
-    ];
-
     public function __construct(ExecutableFinder $finder)
     {
         $this->finder = $finder;
     }
 
-    public function __invoke()
+    public function __invoke(array $dependencies)
     {
         $this->logStep('Verifying dependencies');
-        foreach ($this->dependencies as $dependency) {
+        foreach ($dependencies as $dependency) {
             if ($this->finder->find($dependency) === null) {
                 throw new Exception($dependency . ' not installed');
             }
         }
-        $this->info('Dependencies: laravel (installer), git and valet are available.');
+        $this->info('Dependencies: '. implode(', ', $dependencies) .' are available.');
     }
 }

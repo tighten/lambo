@@ -73,7 +73,7 @@ class NewCommand extends Command
         try {
             app(VerifyPathAvailable::class)();
 
-            app(VerifyDependencies::class)();
+            app(VerifyDependencies::class)(['laravel', 'git', 'valet']);
 
             app(RunLaravelInstaller::class)();
 
