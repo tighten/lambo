@@ -32,8 +32,8 @@ class RunLaravelInstaller
     public function extraOptions()
     {
         return sprintf('%s%s%s',
-            config('lambo.store.dev') ? ' --dev' : '',
             config('lambo.store.auth') ? ' --auth' : '',
+            config('lambo.store.dev') ? ' --dev' : '',
             config('lambo.store.with_output') ? '' : ' --quiet'
         );
     }
