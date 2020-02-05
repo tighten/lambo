@@ -21,7 +21,6 @@ use App\Actions\ValetSecure;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Options;
-use App\Shell\Shell;
 use Exception;
 use LaravelZero\Framework\Commands\Command;
 
@@ -32,12 +31,11 @@ class NewCommand extends Command
 
     private $shell;
 
-    public function __construct(Shell $shell)
+    public function __construct()
     {
         $this->signature = $this->buildSignature();
 
         parent::__construct();
-        $this->shell = $shell;
     }
 
     public function buildSignature()
