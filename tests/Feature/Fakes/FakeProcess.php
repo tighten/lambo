@@ -13,12 +13,12 @@ class FakeProcess
         $this->failedCommand = $failedCommand;
     }
 
-    public static function successful()
+    public static function success()
     {
         return new self(true);
     }
 
-    public static function failed(string $failedCommand)
+    public static function fail(string $failedCommand)
     {
         return new self(false, $failedCommand);
     }

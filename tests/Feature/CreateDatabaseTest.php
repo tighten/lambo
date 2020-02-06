@@ -26,7 +26,7 @@ class CreateDatabaseTest extends TestCase
             $shell->shouldReceive('execInProject')
                 ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
                 ->once()
-                ->andReturn(FakeProcess::successful());
+                ->andReturn(FakeProcess::success());
         });
         $this->assertEquals('Created a new database ' . Config::get('lambo.store.database_name'), app(CreateDatabase::class)());
     }
@@ -65,7 +65,7 @@ class CreateDatabaseTest extends TestCase
             $shell->shouldReceive('execInProject')
                 ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS name_to_change";')
                 ->once()
-                ->andReturn(FakeProcess::successful());
+                ->andReturn(FakeProcess::success());
         });
         $this->assertEquals('Created a new database name_to_change', app(CreateDatabase::class)());
     }
@@ -85,7 +85,7 @@ class CreateDatabaseTest extends TestCase
             $shell->shouldReceive('execInProject')
                 ->with($command)
                 ->once()
-                ->andReturn(FakeProcess::failed($command));
+                ->andReturn(FakeProcess::fail($command));
         });
 
         $this->expectExceptionMessage('The new database was not created.' . PHP_EOL . "  Failed to run: '{$command}'");

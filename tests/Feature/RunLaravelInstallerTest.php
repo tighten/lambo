@@ -85,7 +85,7 @@ class RunLaravelInstallerTest extends TestCase
 
         $this->mock(Shell::class, function ($shell) {
             $shell->shouldReceive('execInRoot')
-                ->andReturn(FakeProcess::failed('failed command'));
+                ->andReturn(FakeProcess::fail('failed command'));
         });
 
         Config::set('lambo.store.project_name', 'my-project');
@@ -105,7 +105,7 @@ class RunLaravelInstallerTest extends TestCase
             $shell->shouldReceive('execInRoot')
                 ->with($expectedCommand)
                 ->once()
-                ->andReturn(FakeProcess::successful());
+                ->andReturn(FakeProcess::success());
         }));
 
         app(RunLaravelInstaller::class)();
