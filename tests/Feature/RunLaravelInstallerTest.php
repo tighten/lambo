@@ -79,7 +79,7 @@ class RunLaravelInstallerTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_the_laravel_installer_fails_to_run_successfully()
+    public function it_throws_an_exception_if_the_laravel_installer_fails()
     {
         $this->fakeLamboConsole();
 
