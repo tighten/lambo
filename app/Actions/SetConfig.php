@@ -69,7 +69,7 @@ class SetConfig
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
-            'database_name' => $this->getDatabaseName(),
+            'database_name' => $this->getOptionValue('dbname', self::DB_NAME) ?? $this->argument('projectName'),
             'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',
             'create_database' => $this->shouldCreateDatabase(),
@@ -162,23 +162,6 @@ class SetConfig
     public function getProtocol()
     {
         return $this->shouldSecure() ? 'https://' : 'http://';
-    }
-
-    public function getDatabaseName()
-    {
-        $configuredDatabaseName = $this->getOptionValue('dbname', self::DB_NAME)
-            ? $this->getOptionValue('dbname', self::DB_NAME)
-            : $this->argument('projectName');
-
-        if (! Str::contains($configuredDatabaseName, '-')) {
-            return $configuredDatabaseName;
-        }
-
-        $newDatabaseName = str_replace('-', '_', $configuredDatabaseName);
-        $this->warn("Your configured database name <error> {$configuredDatabaseName} </error> contains hyphens which can cause problems in some instances.");
-        $this->warn('The hyphens have been replaced with underscores to prevent problems.');
-        $this->warn("New database name: <info>{$newDatabaseName}</info>.");
-        return $newDatabaseName;
     }
 
     public function argument($key)

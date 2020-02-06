@@ -52,6 +52,25 @@ class CreateDatabaseTest extends TestCase
     }
 
     /** @test */
+    public function it_replaces_hyphens_with_underscores_in_database_names()
+    {
+        $this->fakeLamboConsole();
+
+        Config::set('lambo.store.create_database', true);
+        Config::set('lambo.store.database_username', 'user');
+        Config::set('lambo.store.database_password', 'password');
+        Config::set('lambo.store.database_name', 'name-to-change');
+
+        $this->mock(Shell::class, function ($shell) {
+            $shell->shouldReceive('execInProject')
+                ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS name_to_change";')
+                ->once()
+                ->andReturn(FakeProcess::successful());
+        });
+        $this->assertEquals('Created a new database name_to_change', app(CreateDatabase::class)());
+    }
+
+    /** @test */
     public function it_throws_an_exception_if_database_creation_fails()
     {
         $this->fakeLamboConsole();
