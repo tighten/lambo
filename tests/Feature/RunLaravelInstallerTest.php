@@ -102,11 +102,7 @@ class RunLaravelInstallerTest extends TestCase
         config(['lambo.store.with_output' => false]);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(<<<'TAG'
-The laravel installer did not complete successfully.
-  Failed to run: 'failed command'
-TAG
-);
+        $this->expectExceptionMessage('The laravel installer did not complete successfully.' . PHP_EOL . "  Failed to run: 'failed command'");
 
         app(RunLaravelInstaller::class)();
     }
