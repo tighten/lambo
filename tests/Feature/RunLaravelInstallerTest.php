@@ -7,6 +7,7 @@ use App\Shell\Shell;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Mockery;
+use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class RunLaravelInstallerTest extends TestCase
@@ -82,19 +83,10 @@ class RunLaravelInstallerTest extends TestCase
     {
         $this->fakeLamboConsole();
 
-        $this->instance(Shell::class, Mockery::mock(Shell::class, function ($shell) {
+        $this->mock(Shell::class, function ($shell) {
             $shell->shouldReceive('execInRoot')
-                ->andReturn(new class {
-                    public function isSuccessful()
-                    {
-                        return false;
-                    }
-                    public function getCommandLine()
-                    {
-                        return 'failed command';
-                    }
-                });
-        }));
+                ->andReturn(FakeProcess::failed('failed command'));
+        });
 
         Config::set('lambo.store.project_name', 'my-project');
         Config::set('lambo.store.auth', false);
@@ -113,12 +105,7 @@ class RunLaravelInstallerTest extends TestCase
             $shell->shouldReceive('execInRoot')
                 ->with($expectedCommand)
                 ->once()
-                ->andReturn(new class {
-                    public function isSuccessful()
-                    {
-                        return true;
-                    }
-                });
+                ->andReturn(FakeProcess::successful());
         }));
 
         app(RunLaravelInstaller::class)();
