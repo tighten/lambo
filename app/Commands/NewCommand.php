@@ -81,7 +81,7 @@ class NewCommand extends Command
 
             app(CustomizeDotEnv::class)();
 
-            app(CreateDatabase::class)();
+            $this->info(app(CreateDatabase::class)());
 
             app(GenerateAppKey::class)();
 

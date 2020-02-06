@@ -12,8 +12,9 @@ abstract class TestCase extends BaseTestCase
     {
         app()->bind('console', function () {
             return new class {
-                public function comment(){}
+                public function comment($message = '') {}
                 public function info(){}
+                public function warn($message = '') {}
             };
         });
     }
