@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Actions\RunLaravelInstaller;
 use App\Shell\Shell;
 use Exception;
+use Illuminate\Support\Facades\Config;
 use Mockery;
 use Tests\TestCase;
 
@@ -15,7 +16,6 @@ class RunLaravelInstallerTest extends TestCase
     public function it_runs_the_laravel_installer()
     {
         $this->fakeLamboConsole();
-
 
         collect([
             [
@@ -68,10 +68,10 @@ class RunLaravelInstallerTest extends TestCase
                 'lambo.store.with_output' => true,
             ],
         ])->each(function($options){
-            config(['lambo.store.project_name' => 'my-project']);
-            config(['lambo.store.auth' => $options['lambo.store.auth']]);
-            config(['lambo.store.dev' => $options['lambo.store.dev']]);
-            config(['lambo.store.with_output' => $options['lambo.store.with_output']]);
+            Config::set('lambo.store.project_name', 'my-project');
+            Config::set('lambo.store.auth', $options['lambo.store.auth']);
+            Config::set('lambo.store.dev', $options['lambo.store.dev']);
+            Config::set('lambo.store.with_output', $options['lambo.store.with_output']);
             $this->runLaravelInstaller($options['command']);
         });
 
@@ -96,10 +96,10 @@ class RunLaravelInstallerTest extends TestCase
                 });
         }));
 
-        config(['lambo.store.project_name' => 'my-project']);
-        config(['lambo.store.auth' => false]);
-        config(['lambo.store.dev' => false]);
-        config(['lambo.store.with_output' => false]);
+        Config::set('lambo.store.project_name', 'my-project');
+        Config::set('lambo.store.auth', false);
+        Config::set('lambo.store.dev', false);
+        Config::set('lambo.store.with_output', false);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The laravel installer did not complete successfully.' . PHP_EOL . "  Failed to run: 'failed command'");
