@@ -46,7 +46,7 @@ class CustomizeDotEnv
         $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
             'APP_URL' => config('lambo.store.project_url'),
-            'DB_DATABASE' => config('lambo.store.database_name'),
+            'DB_DATABASE' => str_replace('-', '_', config('lambo.store.database_name')),
             'DB_USERNAME' => config('lambo.store.database_username'),
             'DB_PASSWORD' => config('lambo.store.database_password'),
         ];

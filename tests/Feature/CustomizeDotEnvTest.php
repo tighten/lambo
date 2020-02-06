@@ -79,32 +79,15 @@ class CustomizeDotEnvTest extends TestCase
         $this->assertEquals("A=B\n\nC=D", $contents);
     }
 
-    /**
-     * @todo I think this can be deleted since the database name is configured in \App\Actions\SetConfig
-     *
-     * test
-     */
+    /** @test */
     function it_replaces_dashes_with_underscores_in_database_names()
     {
-        $this->markTestSkipped('This is not needed since the database name is configured in \App\Actions\SetConfig');
-        config()->set('lambo.store.project_name', 'with-dashes');
+        config()->set('lambo.store.database_name', 'with-dashes');
 
         $customizeDotEnv = new CustomizeDotEnv;
         $contents = "DB_DATABASE=previous";
         $contents = $customizeDotEnv->customize($contents);
         $this->assertEquals("DB_DATABASE=with_dashes", $contents);
-    }
-
-    /**
-     * @todo I think this can be deleted since the database name is configured in \App\Actions\SetConfig
-     *
-     * test
-     */
-    function it_uses_passed_database_name_if_passed()
-    {
-        $this->markTestIncomplete('@todo');
-
-
     }
 
     private function getTestDotEnvFile()
