@@ -60,7 +60,6 @@ class NewCommand extends Command
             return $this;
         });
 
-        app(SetConfig::class)();
         app(DisplayLamboWelcome::class)();
 
         if (! $this->argument('projectName')) {
@@ -69,6 +68,8 @@ class NewCommand extends Command
         }
 
         $this->alert('Creating a Laravel app ' . $this->argument('projectName'));
+
+        app(SetConfig::class)();
 
         try {
             app(VerifyPathAvailable::class)();
