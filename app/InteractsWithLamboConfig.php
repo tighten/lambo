@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\File;
 
 trait InteractsWithLamboConfig
 {
-    use Environment;
+    use DetectsEnvironment;
 
     public function configDir()
     {

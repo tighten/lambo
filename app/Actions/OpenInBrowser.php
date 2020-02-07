@@ -2,12 +2,12 @@
 
 namespace App\Actions;
 
-use App\Environment;
+use App\DetectsEnvironment;
 use App\Shell\Shell;
 
 class OpenInBrowser
 {
-    use LamboAction, Environment;
+    use LamboAction, DetectsEnvironment;
 
     protected $shell;
 
