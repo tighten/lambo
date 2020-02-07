@@ -12,7 +12,7 @@ use Tests\TestCase;
 class CreateDatabaseTest extends TestCase
 {
     /** @test */
-    public function it_creates_a_mysql_database()
+    function it_creates_a_mysql_database()
     {
         $this->fakeLamboConsole();
 
