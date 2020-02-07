@@ -9,8 +9,8 @@ abstract class ConsoleOutputFormatter
         return sprintf($this->getStartMessageFormat(), $message);
     }
 
-    public function progress(string $buffer, bool $error) {
-
+    public function progress(string $buffer, bool $error)
+    {
         if ($error) {
             return rtrim(sprintf($this->getErrorMessageFormat(), $buffer));
         }

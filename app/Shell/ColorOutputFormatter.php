@@ -2,7 +2,6 @@
 
 namespace App\Shell;
 
-
 class ColorOutputFormatter extends ConsoleOutputFormatter
 {
     public function getStartMessageFormat(): string
