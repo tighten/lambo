@@ -59,10 +59,7 @@ class CompileAssets
     public function removeSilentDevScript()
     {
         $packageJson = config('lambo.store.project_path') . '/package.json';
-        File::delete($packageJson);
-
         $originalPackageJson = config('lambo.store.project_path') . '/package-original.json';
-        File::copy($originalPackageJson, $packageJson);
-        File::delete($originalPackageJson);
+        File::move($originalPackageJson, $packageJson);
     }
 }
