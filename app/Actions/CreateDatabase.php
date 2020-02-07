@@ -26,7 +26,7 @@ class CreateDatabase
         }
 
         if (! $this->mysqlExists()) {
-            return "MySql does not seem to be installed. Skipping new database creation.";
+            return "MySQL does not seem to be installed. Skipping new database creation.";
         }
 
         $this->logStep('Creating database');
