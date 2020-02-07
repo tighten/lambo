@@ -70,7 +70,7 @@ class CreateDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_database_creation_fails()
+    function it_throws_an_exception_if_database_creation_fails()
     {
         $this->fakeLamboConsole();
 
