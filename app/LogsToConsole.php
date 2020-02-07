@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App;
-
 
 trait LogsToConsole
 {
@@ -21,12 +19,12 @@ trait LogsToConsole
         app('console')->error($message);
     }
 
-    protected function line(string $message)
+    public function line(string $message)
     {
         app('console')->line($message);
     }
 
-    protected function info(string $message)
+    public function info(string $message)
     {
         app('console')->info($message);
     }
