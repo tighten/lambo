@@ -31,7 +31,7 @@ class CreateDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function it_checks_if_mysql_is_installed()
+    function it_checks_if_mysql_is_installed()
     {
         $this->fakeLamboConsole();
 
