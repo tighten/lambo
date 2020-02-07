@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\VerifyPathAvailable;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ use Tests\TestCase;
 class VerifyPathAvailableTest extends TestCase
 {
     /** @test */
-    public function it_checks_if_the_required_directories_are_available()
+    function it_checks_if_the_required_directories_are_available()
     {
         $this->fakeLamboConsole();
 
@@ -30,7 +31,7 @@ class VerifyPathAvailableTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_the_root_path_is_not_available()
+    function it_throws_an_exception_if_the_root_path_is_not_available()
     {
         $this->fakeLamboConsole();
 
@@ -40,14 +41,13 @@ class VerifyPathAvailableTest extends TestCase
             ->once()
             ->andReturn(false);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('/non/existent/filesystem/path is not a directory');
+        $this->expectException(Exception::class);
 
         (new VerifyPathAvailable)();
     }
 
     /** @test */
-    public function it_throws_an_exception_if_the_project_path_already_exists()
+    function it_throws_an_exception_if_the_project_path_already_exists()
     {
         $this->fakeLamboConsole();
 
@@ -63,8 +63,7 @@ class VerifyPathAvailableTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('/some/filesystem/path/existing-directory is already a directory.');
+        $this->expectException(Exception::class);
 
         (new VerifyPathAvailable)();
     }

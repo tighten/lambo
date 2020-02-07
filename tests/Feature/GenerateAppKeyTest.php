@@ -4,13 +4,14 @@ namespace Tests\Feature;
 
 use App\Actions\GenerateAppKey;
 use App\Shell\Shell;
+use Exception;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class GenerateAppKeyTest extends TestCase
 {
     /** @test */
-    public function it_generates_a_new_app_key()
+    function it_generates_a_new_app_key()
     {
         $this->fakeLamboConsole();
 
@@ -25,7 +26,7 @@ class GenerateAppKeyTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_new_app_key_generation_fails()
+    function it_throws_an_exception_if_new_app_key_generation_fails()
     {
         $this->fakeLamboConsole();
 
@@ -37,7 +38,7 @@ class GenerateAppKeyTest extends TestCase
                 ->andReturn(FakeProcess::fail($command));
         });
 
-        $this->expectExceptionMessage("Failed to generate application key successfully\n  Failed to run: '{$command}'");
+        $this->expectException(Exception::class);
 
         app(GenerateAppKey::class)();
     }

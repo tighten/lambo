@@ -12,9 +12,8 @@ use Tests\TestCase;
 
 class RunLaravelInstallerTest extends TestCase
 {
-
     /** @test */
-    public function it_runs_the_laravel_installer()
+    function it_runs_the_laravel_installer()
     {
         $this->fakeLamboConsole();
 
@@ -75,11 +74,10 @@ class RunLaravelInstallerTest extends TestCase
             Config::set('lambo.store.with_output', $options['lambo.store.with_output']);
             $this->runLaravelInstaller($options['command']);
         });
-
     }
 
     /** @test */
-    public function it_throws_an_exception_if_the_laravel_installer_fails()
+    function it_throws_an_exception_if_the_laravel_installer_fails()
     {
         $this->fakeLamboConsole();
 
@@ -94,12 +92,11 @@ class RunLaravelInstallerTest extends TestCase
         Config::set('lambo.store.with_output', false);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('The laravel installer did not complete successfully.' . PHP_EOL . "  Failed to run: 'failed command'");
 
         app(RunLaravelInstaller::class)();
     }
 
-    protected function runLaravelInstaller(string $expectedCommand)
+    function runLaravelInstaller(string $expectedCommand)
     {
         $this->instance(Shell::class, Mockery::mock(Shell::class, function ($shell) use ($expectedCommand) {
             $shell->shouldReceive('execInRoot')

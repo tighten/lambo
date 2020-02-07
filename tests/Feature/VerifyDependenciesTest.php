@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\VerifyDependencies;
+use Exception;
 use Mockery;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\TestCase;
@@ -10,7 +11,7 @@ use Tests\TestCase;
 class VerifyDependenciesTest extends TestCase
 {
     /** @test */
-    public function it_checks_that_required_dependencies_are_available()
+    function it_checks_that_required_dependencies_are_available()
     {
         $this->fakeLamboConsole();
 
@@ -30,7 +31,7 @@ class VerifyDependenciesTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_and_exception_if_a_required_dependency_is_missing_missing()
+    function it_throws_and_exception_if_a_required_dependency_is_missing_missing()
     {
         $this->fakeLamboConsole();
 
@@ -46,8 +47,7 @@ class VerifyDependenciesTest extends TestCase
                 ->andReturn(null);
         }));
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('missingDependency not installed');
+        $this->expectException(Exception::class);
 
         app(VerifyDependencies::class)(['dependencyA', 'missingDependency']);
     }
