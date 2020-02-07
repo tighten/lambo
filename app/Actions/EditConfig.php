@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\InteractsWithLamboConfig;
+use Illuminate\Support\Facades\File;
 
 class EditConfig
 {
@@ -10,28 +11,6 @@ class EditConfig
 
     public function __invoke()
     {
-        $this->createOrEditConfigFile("config", $this->configFileTemplate());
-    }
-
-    private function configFileTemplate()
-    {
-        return <<<'TEMPLATE'
-PROJECTPATH="."
-MESSAGE="Initial commit."
-QUIET=false
-DEVELOP=false
-AUTH=false
-FRONTEND=
-NODE=false
-MIX=false
-CODEEDITOR=""
-BROWSER=""
-LINK=false
-SECURE=false
-CREATE_DATABASE=false
-DB_NAME=
-DB_USERNAME=root
-DB_PASSWORD=
-TEMPLATE;
+        $this->createOrEditConfigFile("config", File::get(base_path('stubs/config.stub')));
     }
 }
