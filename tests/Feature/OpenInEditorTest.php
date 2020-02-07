@@ -11,7 +11,7 @@ use Tests\TestCase;
 class OpenInEditorTest extends TestCase
 {
     /** @test */
-    public function it_opens_the_project_folder_in_the_specified_editor()
+    function it_opens_the_project_folder_in_the_specified_editor()
     {
         $this->fakeLamboConsole();
 
@@ -27,7 +27,7 @@ class OpenInEditorTest extends TestCase
     }
 
     /** @test */
-    public function it_does_not_open_the_project_folder_if_an_editor_is_not_specified()
+    function it_does_not_open_the_project_folder_if_an_editor_is_not_specified()
     {
         $this->fakeLamboConsole();
 
