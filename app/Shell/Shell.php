@@ -45,7 +45,7 @@ class Shell
     protected function exec($command, $description)
     {
         $showConsoleOutput = config('lambo.store.with_output');
-        $out = app('Symfony\Component\Console\Output\ConsoleOutput');
+        $out = app(\Symfony\Component\Console\Output\ConsoleOutput::class);
 
         $outputFormatter = $this->getOutputFormatter();
         $out->writeln($outputFormatter->start($description));
