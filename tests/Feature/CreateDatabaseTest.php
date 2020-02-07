@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Actions\CreateDatabase;
 use App\Shell\Shell;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
@@ -27,7 +28,7 @@ class CreateDatabaseTest extends TestCase
                 ->once()
                 ->andReturn(FakeProcess::success());
         });
-        $this->assertEquals('Created a new database ' . Config::get('lambo.store.database_name'), app(CreateDatabase::class)());
+        $this->assertStringContainsString(Config::get('lambo.store.database_name'), app(CreateDatabase::class)());
     }
 
     /** @test */
@@ -47,26 +48,7 @@ class CreateDatabaseTest extends TestCase
                 ->andReturn(null);
         });
 
-        $this->assertEquals('MySql does not seem to be installed. Skipping new database creation.', app(CreateDatabase::class)());
-    }
-
-    /** @test */
-    function it_replaces_hyphens_with_underscores_in_database_names()
-    {
-        $this->fakeLamboConsole();
-
-        Config::set('lambo.store.create_database', true);
-        Config::set('lambo.store.database_username', 'user');
-        Config::set('lambo.store.database_password', 'password');
-        Config::set('lambo.store.database_name', 'name-to-change');
-
-        $this->mock(Shell::class, function ($shell) {
-            $shell->shouldReceive('execInProject')
-                ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS name_to_change";')
-                ->once()
-                ->andReturn(FakeProcess::success());
-        });
-        $this->assertEquals('Created a new database name_to_change', app(CreateDatabase::class)());
+        $this->assertEquals('MySQL does not seem to be installed. Skipping new database creation.', app(CreateDatabase::class)());
     }
 
     /** @test */
@@ -87,7 +69,7 @@ class CreateDatabaseTest extends TestCase
                 ->andReturn(FakeProcess::fail($command));
         });
 
-        $this->expectExceptionMessage('The new database was not created.' . PHP_EOL . "  Failed to run: '{$command}'");
+        $this->expectException(Exception::class);
 
         app(CreateDatabase::class)();
     }

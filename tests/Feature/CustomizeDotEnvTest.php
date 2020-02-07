@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\CustomizeDotEnv;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
@@ -18,13 +19,12 @@ class CustomizeDotEnvTest extends TestCase
             };
         });
 
-
-        config(['lambo.store.project_name' => 'my-project']);
-        config(['lambo.store.database_name' => 'my_project']);
-        config(['lambo.store.project_url' => 'http://my-project.example.com']);
-        config(['lambo.store.database_username' => 'username']);
-        config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.project_path' => '/some/project/path']);
+        Config::set('lambo.store.project_name', 'my-project');
+        Config::set('lambo.store.database_name', 'my_project');
+        Config::set('lambo.store.project_url', 'http://my-project.example.com');
+        Config::set('lambo.store.database_username', 'username');
+        Config::set('lambo.store.database_password', 'password');
+        Config::set('lambo.store.project_path', '/some/project/path');
 
         File::shouldReceive('get')
             ->once()->with('/some/project/path/.env.example')
@@ -77,17 +77,6 @@ class CustomizeDotEnvTest extends TestCase
         $contents = "A=B\n\nC=D";
         $contents = $customizeDotEnv->customize($contents);
         $this->assertEquals("A=B\n\nC=D", $contents);
-    }
-
-    /** @test */
-    function it_replaces_dashes_with_underscores_in_database_names()
-    {
-        config()->set('lambo.store.database_name', 'with-dashes');
-
-        $customizeDotEnv = new CustomizeDotEnv;
-        $contents = "DB_DATABASE=previous";
-        $contents = $customizeDotEnv->customize($contents);
-        $this->assertEquals("DB_DATABASE=with_dashes", $contents);
     }
 
     private function getTestDotEnvFile()

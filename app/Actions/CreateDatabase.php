@@ -43,27 +43,11 @@ class CreateDatabase
 
     protected function command()
     {
-        $this->checkDatabaseName();
-
         return sprintf(
             'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',
             config('lambo.store.database_username'),
             config('lambo.store.database_password'),
             config('lambo.store.database_name')
         );
-    }
-
-    protected function checkDatabaseName()
-    {
-        $configuredDatabaseName = config('lambo.store.database_name');
-
-        if (! Str::contains($configuredDatabaseName, '-')) {
-            return $configuredDatabaseName;
-        }
-
-        config()->set(['lambo.store.database_name' => str_replace('-', '_', $configuredDatabaseName)]);
-        $this->warn("Your configured database name <error> {$configuredDatabaseName} </error> contains hyphens which can cause problems in some instances.");
-        $this->warn('The hyphens have been replaced with underscores to prevent problems.');
-        $this->warn("New database name: <info>{$configuredDatabaseName}</info>.");
     }
 }
