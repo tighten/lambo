@@ -6,6 +6,7 @@ use App\Actions\CreateDatabase;
 use App\Shell\Shell;
 use Exception;
 use Illuminate\Support\Facades\Config;
+use Mockery;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
