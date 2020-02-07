@@ -51,7 +51,7 @@ class CreateDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function it_replaces_hyphens_with_underscores_in_database_names()
+    function it_replaces_hyphens_with_underscores_in_database_names()
     {
         $this->fakeLamboConsole();
 
