@@ -23,7 +23,7 @@ class CompileAssets
             return;
         }
 
-        $this->silentDevScript ->add();
+        $this->silentDevScript->add();
 
         $this->logStep('Compiling project assets');
 
