@@ -52,6 +52,12 @@ class SetConfig
         self::WITH_OUTPUT,
     ];
 
+    const FRONTEND_FRAMEWORKS = [
+        'vue',
+        'react',
+        'bootstrap',
+    ];
+
     protected $savedConfig;
 
     public function __construct()
@@ -142,7 +148,7 @@ class SetConfig
             return false;
         }
 
-        if (in_array($frontEndType, ConfigureFrontendFramework::FRAMEWORKS)) {
+        if (in_array($frontEndType, self::FRONTEND_FRAMEWORKS)) {
             return $frontEndType;
         }
         $this->error("Oops. '{$frontEndType}' is not a valid option for -f, --frontend.\nValid options are: bootstrap, react or vue.");
