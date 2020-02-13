@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Actions\VerifyDependencies;
 use Exception;
-use Mockery;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\TestCase;
 
@@ -13,9 +12,7 @@ class VerifyDependenciesTest extends TestCase
     /** @test */
     function it_checks_that_required_dependencies_are_available()
     {
-        $this->fakeLamboConsole();
-
-        $this->instance(ExecutableFinder::class, Mockery::mock(ExecutableFinder::class, function ($mock) {
+        $this->mock(ExecutableFinder::class, function ($mock) {
             $mock->shouldReceive('find')
                 ->with('dependencyA')
                 ->once()
@@ -25,7 +22,7 @@ class VerifyDependenciesTest extends TestCase
                 ->with('dependencyB')
                 ->once()
                 ->andReturn('/path/to/dependencyB');
-        }));
+        });
 
         app(VerifyDependencies::class)(['dependencyA', 'dependencyB']);
     }
@@ -33,9 +30,7 @@ class VerifyDependenciesTest extends TestCase
     /** @test */
     function it_throws_and_exception_if_a_required_dependency_is_missing_missing()
     {
-        $this->fakeLamboConsole();
-
-        $this->instance(ExecutableFinder::class, Mockery::mock(ExecutableFinder::class, function ($mock) {
+        $this->mock(ExecutableFinder::class, function ($mock) {
             $mock->shouldReceive('find')
                 ->with('dependencyA')
                 ->once()
@@ -45,7 +40,7 @@ class VerifyDependenciesTest extends TestCase
                 ->with('missingDependency')
                 ->once()
                 ->andReturn(null);
-        }));
+        });
 
         $this->expectException(Exception::class);
 

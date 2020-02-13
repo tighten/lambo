@@ -14,7 +14,6 @@ class ValetSecureTest extends TestCase
     /** @test */
     function it_runs_valet_link()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
 
         Config::set('lambo.store.valet_secure', true);
@@ -30,7 +29,6 @@ class ValetSecureTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_after_script_fails()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
 
         Config::set('lambo.store.valet_secure', true);

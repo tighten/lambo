@@ -15,7 +15,6 @@ class ConfigureFrontendFrameworkTest extends TestCase
     /** @test */
     function it_installs_the_specified_front_end_framework()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
         $laravelUi = $this->mock(LaravelUi::class);
 
@@ -39,7 +38,6 @@ class ConfigureFrontendFrameworkTest extends TestCase
     /** @test */
     function it_does_not_install_a_frontend_framework_if_one_is_not_specified()
     {
-        $this->fakeLamboConsole();
         $shell = $this->spy(Shell::class);
         $laravelUi = $this->spy(LaravelUi::class);
 
@@ -54,7 +52,6 @@ class ConfigureFrontendFrameworkTest extends TestCase
     /** @test */
     function it_throws_and_exception_if_the_ui_framework_fails_installation()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
         $laravelUi = $this->mock(LaravelUi::class);
 

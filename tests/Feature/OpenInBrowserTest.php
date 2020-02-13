@@ -13,7 +13,6 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_opens_the_project_homepage_using_the_specified_browser_on_mac()
     {
-        $this->fakeLamboConsole();
         $environment = $this->mock(Environment::class);
         $shell = $this->mock(Shell::class);
 
@@ -34,7 +33,6 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_opens_the_project_homepage_using_valet_open_when_no_browser_is_specified_on_mac()
     {
-        $this->fakeLamboConsole();
         $environment = $this->mock(Environment::class);
         $shell = $this->mock(Shell::class);
 
@@ -54,7 +52,6 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_uses_valet_open_when_not_running_on_mac()
     {
-        $this->fakeLamboConsole();
         $environment = $this->mock(Environment::class);
         $shell = $this->mock(Shell::class);
 
@@ -72,7 +69,6 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_ignores_the_specified_browser_when_not_running_on_mac()
     {
-        $this->fakeLamboConsole();
         $environment = $this->mock(Environment::class);
         $shell = $this->mock(Shell::class);
 

@@ -13,8 +13,6 @@ class GenerateAppKeyTest extends TestCase
     /** @test */
     function it_generates_a_new_app_key()
     {
-        $this->fakeLamboConsole();
-
         $this->mock(Shell::class, function ($shell) {
             $shell->shouldReceive('execInProject')
                 ->with('php artisan key:generate')
@@ -28,8 +26,6 @@ class GenerateAppKeyTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_new_app_key_generation_fails()
     {
-        $this->fakeLamboConsole();
-
         $command = 'php artisan key:generate';
         $this->mock(Shell::class, function ($shell) use ($command){
             $shell->shouldReceive('execInProject')

@@ -16,8 +16,6 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()
     {
-        $this->fakeLamboConsole();
-
         $silentDevScript = $this->mock(SilentDevScript::class);
         $shell = $this->mock(Shell::class);
 
@@ -46,7 +44,6 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_compiles_project_assets_and_shows_console_output()
     {
-        $this->fakeLamboConsole();
         $silentDevScript = $this->mock(SilentDevScript::class);
         $shell = $this->mock(Shell::class);
 
@@ -76,7 +73,6 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_asset_compilation_fails()
     {
-        $this->fakeLamboConsole();
         $silentDevScript = $this->mock(SilentDevScript::class);
         $shell = $this->mock(Shell::class);
 

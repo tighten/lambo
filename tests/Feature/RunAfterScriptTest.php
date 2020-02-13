@@ -15,7 +15,6 @@ class RunAfterScriptTest extends TestCase
     /** @test */
     function it_runs_the_after_script_if_one_exists()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
 
         Config::set('home_dir', '/my/home/dir');
@@ -40,7 +39,6 @@ class RunAfterScriptTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_after_script_fails()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
 
         Config::set('home_dir', '/my/home/dir');

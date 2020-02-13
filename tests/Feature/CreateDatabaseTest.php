@@ -16,8 +16,6 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_creates_a_mysql_database()
     {
-        $this->fakeLamboConsole();
-
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
@@ -35,8 +33,6 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_checks_if_mysql_is_installed()
     {
-        $this->fakeLamboConsole();
-
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
@@ -55,8 +51,6 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_database_creation_fails()
     {
-        $this->fakeLamboConsole();
-
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');

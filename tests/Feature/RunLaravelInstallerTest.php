@@ -15,8 +15,6 @@ class RunLaravelInstallerTest extends TestCase
     /** @test */
     function it_runs_the_laravel_installer()
     {
-        $this->fakeLamboConsole();
-
         collect([
             [
                 'command' => 'laravel new my-project --quiet',
@@ -79,8 +77,6 @@ class RunLaravelInstallerTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_laravel_installer_fails()
     {
-        $this->fakeLamboConsole();
-
         $this->mock(Shell::class, function ($shell) {
             $shell->shouldReceive('execInRoot')
                 ->andReturn(FakeProcess::fail('failed command'));
@@ -98,12 +94,12 @@ class RunLaravelInstallerTest extends TestCase
 
     function runLaravelInstaller(string $expectedCommand)
     {
-        $this->instance(Shell::class, Mockery::mock(Shell::class, function ($shell) use ($expectedCommand) {
+        $this->mock(Shell::class,function ($shell) use ($expectedCommand) {
             $shell->shouldReceive('execInRoot')
                 ->with($expectedCommand)
                 ->once()
                 ->andReturn(FakeProcess::success());
-        }));
+        });
 
         app(RunLaravelInstaller::class)();
     }

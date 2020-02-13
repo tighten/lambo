@@ -14,8 +14,6 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_initialises_the_projects_git_repository()
     {
-        $this->fakeLamboConsole();
-
         $commitMessage = 'Initial commit';
         Config::set('lambo.store.commit_message', $commitMessage);
 
@@ -42,8 +40,6 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_init_fails()
     {
-        $this->fakeLamboConsole();
-
         $command = 'git init';
         $this->mock(Shell::class, function($shell) use ($command) {
             $shell->shouldReceive('execInProject')
@@ -60,8 +56,6 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_add_fails()
     {
-        $this->fakeLamboConsole();
-
         $command = 'git add .';
         $this->mock(Shell::class, function($shell) use ($command) {
             $shell->shouldReceive('execInProject')
@@ -83,8 +77,6 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_commit_fails()
     {
-        $this->fakeLamboConsole();
-
         $commitMessage = 'Initial commit';
         Config::set('lambo.store.commit_message', $commitMessage);
 

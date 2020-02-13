@@ -15,7 +15,6 @@ class LaravelUiTest extends TestCase
     /** @test */
     function it_installs_laravel_ui()
     {
-        $this->fakeLamboConsole();
         $shell = $this->mock(Shell::class);
 
         $composerJson = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-ui.json'));
@@ -40,7 +39,6 @@ class LaravelUiTest extends TestCase
     /** @test */
     function it_does_not_install_laravel_ui_if_it_is_already_present()
     {
-        $this->fakeLamboConsole();
         $shell = $this->spy(Shell::class);
 
         $composerJson = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
@@ -62,7 +60,6 @@ class LaravelUiTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_laravel_ui_fails_to_install()
     {
-        $this->fakeLamboConsole();
         File::shouldReceive('get');
         $shell = $this->mock(Shell::class);
 
