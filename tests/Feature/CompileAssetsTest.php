@@ -71,6 +71,21 @@ class CompileAssetsTest extends TestCase
     }
 
     /** @test */
+    function it_skips_asset_compilation_if_it_is_not_requested()
+    {
+        $silentDevScript = $this->spy(SilentDevScript::class);
+        $shell = $this->spy(Shell::class);
+
+        Config::set('lambo.store.mix', false);
+
+        app(CompileAssets::class)();
+
+        $silentDevScript->shouldNotHaveReceived('add');
+        $shell->shouldNotHaveReceived('execInProject');
+        $silentDevScript->shouldNotHaveReceived('remove');
+    }
+
+    /** @test */
     function it_throws_an_exception_if_asset_compilation_fails()
     {
         $silentDevScript = $this->mock(SilentDevScript::class);
