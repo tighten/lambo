@@ -46,16 +46,21 @@ class VerifyPathAvailableTest extends TestCase
     function it_throws_an_exception_if_the_project_path_already_exists()
     {
         Config::set('lambo.store.root_path', '/some/filesystem/path');
+        Config::set('lambo.store.project_path', '/some/filesystem/path/existing-directory');
+
         File::shouldReceive('isDirectory')
             ->with('/some/filesystem/path')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+            ->globally()
+            ->ordered();
 
-        Config::set('lambo.store.project_path', '/some/filesystem/path/existing-directory');
         File::shouldReceive('isDirectory')
             ->with('/some/filesystem/path/existing-directory')
             ->once()
-            ->andReturn(true);
+            ->andReturn(true)
+            ->globally()
+            ->ordered();;
 
         $this->expectException(Exception::class);
 
