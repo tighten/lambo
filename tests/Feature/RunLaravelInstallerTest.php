@@ -6,7 +6,6 @@ use App\Actions\RunLaravelInstaller;
 use App\Shell\Shell;
 use Exception;
 use Illuminate\Support\Facades\Config;
-use Mockery;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -94,12 +93,12 @@ class RunLaravelInstallerTest extends TestCase
 
     function runLaravelInstaller(string $expectedCommand)
     {
-        $this->mock(Shell::class,function ($shell) use ($expectedCommand) {
-            $shell->shouldReceive('execInRoot')
-                ->with($expectedCommand)
-                ->once()
-                ->andReturn(FakeProcess::success());
-        });
+        $shell = $this->mock(Shell::class);
+
+        $shell->shouldReceive('execInRoot')
+            ->with($expectedCommand)
+            ->once()
+            ->andReturn(FakeProcess::success());
 
         app(RunLaravelInstaller::class)();
     }
