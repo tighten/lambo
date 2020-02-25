@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\LaravelUi;
 use App\Shell\Shell;
 
 class ConfigureFrontendFramework
