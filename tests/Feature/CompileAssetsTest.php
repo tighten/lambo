@@ -13,7 +13,6 @@ use Tests\TestCase;
 class CompileAssetsTest extends TestCase
 {
     private $shell;
-
     private $silentDevScript;
 
     public function setUp(): void

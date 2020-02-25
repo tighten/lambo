@@ -12,22 +12,27 @@ use Tests\TestCase;
 
 class RunAfterScriptTest extends TestCase
 {
+    private $shell;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+    }
+
     /** @test */
     function it_runs_the_after_script_if_one_exists()
     {
-        $shell = $this->mock(Shell::class);
-
         Config::set('home_dir', '/my/home/dir');
-        $afterScriptPath = Config::get('home_dir') . '/.lambo/after';
 
         File::shouldReceive('exists')
-            ->with($afterScriptPath)
+            ->with('/my/home/dir/.lambo/after')
             ->andReturn(true)
             ->globally()
             ->ordered();
 
-        $shell->shouldReceive('execInProject')
-            ->with("sh " . $afterScriptPath)
+        $this->shell->shouldReceive('execInProject')
+            ->with('sh /my/home/dir/.lambo/after')
             ->once()
             ->andReturn(FakeProcess::success())
             ->globally()
@@ -39,22 +44,18 @@ class RunAfterScriptTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_after_script_fails()
     {
-        $shell = $this->mock(Shell::class);
-
         Config::set('home_dir', '/my/home/dir');
-        $afterScriptPath = Config::get('home_dir') . '/.lambo/after';
 
         File::shouldReceive('exists')
-            ->with($afterScriptPath)
+            ->with('/my/home/dir/.lambo/after')
             ->andReturn(true)
             ->globally()
             ->ordered();
 
-        $command = "sh " . $afterScriptPath;
-        $shell->shouldReceive('execInProject')
-            ->with($command)
+        $this->shell->shouldReceive('execInProject')
+            ->with('sh /my/home/dir/.lambo/after')
             ->once()
-            ->andReturn(FakeProcess::fail($command))
+            ->andReturn(FakeProcess::fail('sh /my/home/dir/.lambo/after'))
             ->globally()
             ->ordered();
 

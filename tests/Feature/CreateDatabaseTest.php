@@ -12,17 +12,23 @@ use Tests\TestCase;
 
 class CreateDatabaseTest extends TestCase
 {
+    private $shell;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+    }
+
     /** @test */
     function it_creates_a_mysql_database()
     {
-        $shell = $this->mock(Shell::class);
-
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
             ->once()
             ->andReturn(FakeProcess::success());
@@ -65,13 +71,10 @@ class CreateDatabaseTest extends TestCase
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $command = 'mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";';
-        $this->mock(Shell::class, function ($shell) use ($command){
-            $shell->shouldReceive('execInProject')
-                ->with($command)
-                ->once()
-                ->andReturn(FakeProcess::fail($command));
-        });
+        $this->shell->shouldReceive('execInProject')
+            ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
+            ->once()
+            ->andReturn(FakeProcess::fail('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";'));
 
         $this->expectException(Exception::class);
 

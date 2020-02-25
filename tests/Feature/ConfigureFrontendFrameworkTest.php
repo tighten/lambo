@@ -12,20 +12,27 @@ use Tests\TestCase;
 
 class ConfigureFrontendFrameworkTest extends TestCase
 {
+    private $shell;
+    private $laravelUi;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+        $this->laravelUi = $this->mock(LaravelUi::class);
+    }
+
     /** @test */
     function it_installs_the_specified_front_end_framework()
     {
-        $shell = $this->mock(Shell::class);
-        $laravelUi = $this->mock(LaravelUi::class);
-
         Config::set('lambo.store.frontend', 'foo-frontend');
 
-        $laravelUi->shouldReceive('install')
+        $this->laravelUi->shouldReceive('install')
             ->once()
             ->globally()
             ->ordered();
 
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with('php artisan ui foo-frontend')
             ->once()
             ->andReturn(FakeProcess::success())
@@ -52,18 +59,15 @@ class ConfigureFrontendFrameworkTest extends TestCase
     /** @test */
     function it_throws_and_exception_if_the_ui_framework_installation_fails()
     {
-        $shell = $this->mock(Shell::class);
-        $laravelUi = $this->mock(LaravelUi::class);
-
         Config::set('lambo.store.frontend', 'foo-frontend');
 
-        $laravelUi->shouldReceive('install')
+        $this->laravelUi->shouldReceive('install')
             ->once()
             ->globally()
             ->ordered();
 
         $command = 'php artisan ui foo-frontend';
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with($command)
             ->once()
             ->andReturn(FakeProcess::fail($command))

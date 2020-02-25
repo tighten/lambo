@@ -11,6 +11,14 @@ use Tests\TestCase;
 
 class RunLaravelInstallerTest extends TestCase
 {
+    private $shell;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+    }
+
     /** @test */
     function it_runs_the_laravel_installer()
     {
@@ -64,11 +72,12 @@ class RunLaravelInstallerTest extends TestCase
                 'lambo.store.dev' => true,
                 'lambo.store.with_output' => true,
             ],
-        ])->each(function($options){
+        ])->each(function ($options) {
             Config::set('lambo.store.project_name', 'my-project');
             Config::set('lambo.store.auth', $options['lambo.store.auth']);
             Config::set('lambo.store.dev', $options['lambo.store.dev']);
             Config::set('lambo.store.with_output', $options['lambo.store.with_output']);
+
             $this->runLaravelInstaller($options['command']);
         });
     }
@@ -76,15 +85,13 @@ class RunLaravelInstallerTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_laravel_installer_fails()
     {
-        $this->mock(Shell::class, function ($shell) {
-            $shell->shouldReceive('execInRoot')
-                ->andReturn(FakeProcess::fail('failed command'));
-        });
-
         Config::set('lambo.store.project_name', 'my-project');
         Config::set('lambo.store.auth', false);
         Config::set('lambo.store.dev', false);
         Config::set('lambo.store.with_output', false);
+
+        $this->shell->shouldReceive('execInRoot')
+            ->andReturn(FakeProcess::fail('failed command'));
 
         $this->expectException(Exception::class);
 
@@ -93,9 +100,7 @@ class RunLaravelInstallerTest extends TestCase
 
     function runLaravelInstaller(string $expectedCommand)
     {
-        $shell = $this->mock(Shell::class);
-
-        $shell->shouldReceive('execInRoot')
+        $this->shell->shouldReceive('execInRoot')
             ->with($expectedCommand)
             ->once()
             ->andReturn(FakeProcess::success());

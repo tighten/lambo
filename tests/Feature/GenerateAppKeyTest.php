@@ -10,12 +10,18 @@ use Tests\TestCase;
 
 class GenerateAppKeyTest extends TestCase
 {
+    private $shell;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+    }
+
     /** @test */
     function it_generates_a_new_app_key()
     {
-        $shell = $this->mock(Shell::class);
-
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with('php artisan key:generate')
             ->once()
             ->andReturn(FakeProcess::success());
@@ -26,9 +32,7 @@ class GenerateAppKeyTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_new_app_key_generation_fails()
     {
-        $shell = $this->mock(Shell::class);
-
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with('php artisan key:generate')
             ->once()
             ->andReturn(FakeProcess::fail('php artisan key:generate'));

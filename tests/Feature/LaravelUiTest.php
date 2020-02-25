@@ -12,14 +12,20 @@ use Tests\TestCase;
 
 class LaravelUiTest extends TestCase
 {
+    private $shell;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->shell = $this->mock(Shell::class);
+    }
+
     /** @test */
     function it_installs_laravel_ui()
     {
-        $shell = $this->mock(Shell::class);
+        Config::set('lambo.store.project_path', '/some/project/path');
 
         $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-ui.json'));
-
-        Config::set('lambo.store.project_path', '/some/project/path');
 
         File::shouldReceive('get')
             ->with('/some/project/path/composer.json')
@@ -28,7 +34,7 @@ class LaravelUiTest extends TestCase
             ->globally()
             ->ordered();
 
-        $shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('execInProject')
             ->with('composer require laravel/ui --quiet')
             ->once()
             ->andReturn(FakeProcess::success());
@@ -41,9 +47,9 @@ class LaravelUiTest extends TestCase
     {
         $shell = $this->spy(Shell::class);
 
-        $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
-
         Config::set('lambo.store.project_path', '/some/project/path');
+
+        $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
 
         File::shouldReceive('get')
             ->with('/some/project/path/composer.json')
@@ -61,15 +67,13 @@ class LaravelUiTest extends TestCase
     function it_throws_an_exception_if_laravel_ui_fails_to_install()
     {
         File::shouldReceive('get');
-        $shell = $this->mock(Shell::class);
 
         Config::set('lambo.store.project_path', '/some/project/path');
 
-        $command = 'composer require laravel/ui --quiet';
-        $shell->shouldReceive('execInProject')
-            ->with($command)
+        $this->shell->shouldReceive('execInProject')
+            ->with('composer require laravel/ui --quiet')
             ->once()
-            ->andReturn(FakeProcess::fail($command));
+            ->andReturn(FakeProcess::fail('composer require laravel/ui --quiet'));
 
         $this->expectException(Exception::class);
 
