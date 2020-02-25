@@ -13,12 +13,12 @@ class GenerateAppKeyTest extends TestCase
     /** @test */
     function it_generates_a_new_app_key()
     {
-        $this->mock(Shell::class, function ($shell) {
-            $shell->shouldReceive('execInProject')
-                ->with('php artisan key:generate')
-                ->once()
-                ->andReturn(FakeProcess::success());
-        });
+        $shell = $this->mock(Shell::class);
+
+        $shell->shouldReceive('execInProject')
+            ->with('php artisan key:generate')
+            ->once()
+            ->andReturn(FakeProcess::success());
 
         app(GenerateAppKey::class)();
     }
@@ -26,13 +26,12 @@ class GenerateAppKeyTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_new_app_key_generation_fails()
     {
-        $command = 'php artisan key:generate';
-        $this->mock(Shell::class, function ($shell) use ($command){
-            $shell->shouldReceive('execInProject')
-                ->with($command)
-                ->once()
-                ->andReturn(FakeProcess::fail($command));
-        });
+        $shell = $this->mock(Shell::class);
+
+        $shell->shouldReceive('execInProject')
+            ->with('php artisan key:generate')
+            ->once()
+            ->andReturn(FakeProcess::fail('php artisan key:generate'));
 
         $this->expectException(Exception::class);
 
