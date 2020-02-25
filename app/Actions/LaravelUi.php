@@ -29,7 +29,7 @@ class LaravelUi
 
         $this->abortIf(! $process->isSuccessful(), "Installation of laravel/ui did not complete successfully.", $process);
 
-        $this->info('laravel/ui installation installed.');
+        $this->info('laravel/ui installed.');
     }
 
     private function laravelUiInstalled(): bool
