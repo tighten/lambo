@@ -14,24 +14,26 @@ class VerifyPathAvailableTest extends TestCase
     function it_checks_if_the_required_directories_are_available()
     {
         Config::set('lambo.store.root_path', '/some/filesystem/path');
+        Config::set('lambo.store.project_path', '/some/filesystem/path/my-project');
+
         File::shouldReceive('isDirectory')
             ->with('/some/filesystem/path')
             ->once()
             ->andReturn(true);
 
-        Config::set('lambo.store.project_path', '/some/filesystem/path/my-project');
         File::shouldReceive('isDirectory')
             ->with('/some/filesystem/path/my-project')
             ->once()
             ->andReturn(false);
 
-        (new VerifyPathAvailable)();
+        app(VerifyPathAvailable::class)();
     }
 
     /** @test */
     function it_throws_an_exception_if_the_root_path_is_not_available()
     {
         Config::set('lambo.store.root_path', '/non/existent/filesystem/path');
+
         File::shouldReceive('isDirectory')
             ->with('/non/existent/filesystem/path')
             ->once()
@@ -39,7 +41,7 @@ class VerifyPathAvailableTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        (new VerifyPathAvailable)();
+        app(VerifyPathAvailable::class)();
     }
 
     /** @test */
@@ -64,6 +66,6 @@ class VerifyPathAvailableTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        (new VerifyPathAvailable)();
+        app( VerifyPathAvailable::class)();
     }
 }
