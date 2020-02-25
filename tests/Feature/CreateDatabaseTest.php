@@ -6,7 +6,6 @@ use App\Actions\CreateDatabase;
 use App\Shell\Shell;
 use Exception;
 use Illuminate\Support\Facades\Config;
-use Mockery;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -16,36 +15,46 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_creates_a_mysql_database()
     {
+        $shell = $this->mock(Shell::class);
+
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $this->mock(Shell::class, function ($shell) {
-            $shell->shouldReceive('execInProject')
-                ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
-                ->once()
-                ->andReturn(FakeProcess::success());
-        });
+        $shell->shouldReceive('execInProject')
+            ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
+            ->once()
+            ->andReturn(FakeProcess::success());
+
         $this->assertStringContainsString(Config::get('lambo.store.database_name'), app(CreateDatabase::class)());
     }
 
     /** @test */
     function it_checks_if_mysql_is_installed()
     {
+        $executableFinder = $this->mock(ExecutableFinder::class);
+
         Config::set('lambo.store.create_database', true);
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $this->mock(ExecutableFinder::class, function($executableFinder){
-            $executableFinder->shouldReceive('find')
-                ->with('mysql')
-                ->once()
-                ->andReturn(null);
-        });
+        $executableFinder->shouldReceive('find')
+            ->with('mysql')
+            ->once()
+            ->andReturn(null);
 
         $this->assertEquals('MySQL does not seem to be installed. Skipping new database creation.', app(CreateDatabase::class)());
+    }
+
+    /**
+     * @todo do we need to test that database creation only happens when MySQL is the configured database?
+     * @test
+     */
+    function it_only_runs_when_mysql_is_the_configured_database()
+    {
+        $this->markTestSkipped('*** @TODO: Add Test: "it only runs when mysql is the configured database" ***');
     }
 
     /** @test */
