@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\ConfigureFrontendFramework;
-use App\LaravelUi;
+use App\Actions\LaravelUi;
 use App\Shell\Shell;
 use Exception;
 use Illuminate\Support\Facades\Config;
@@ -36,7 +36,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
     }
 
     /** @test */
-    function it_does_not_install_a_frontend_framework_if_one_is_not_specified()
+    function it_does_not_install_a_frontend_framework_when_none_is_specified()
     {
         $shell = $this->spy(Shell::class);
         $laravelUi = $this->spy(LaravelUi::class);
@@ -50,7 +50,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
     }
 
     /** @test */
-    function it_throws_and_exception_if_the_ui_framework_fails_installation()
+    function it_throws_and_exception_if_the_ui_framework_installation_fails()
     {
         $shell = $this->mock(Shell::class);
         $laravelUi = $this->mock(LaravelUi::class);

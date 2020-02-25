@@ -17,14 +17,14 @@ class LaravelUiTest extends TestCase
     {
         $shell = $this->mock(Shell::class);
 
-        $composerJson = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-ui.json'));
+        $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-ui.json'));
 
         Config::set('lambo.store.project_path', '/some/project/path');
 
         File::shouldReceive('get')
             ->with('/some/project/path/composer.json')
             ->once()
-            ->andReturn($composerJson)
+            ->andReturn($composerJsonFixture)
             ->globally()
             ->ordered();
 
@@ -41,14 +41,14 @@ class LaravelUiTest extends TestCase
     {
         $shell = $this->spy(Shell::class);
 
-        $composerJson = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
+        $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
 
         Config::set('lambo.store.project_path', '/some/project/path');
 
         File::shouldReceive('get')
             ->with('/some/project/path/composer.json')
             ->once()
-            ->andReturn($composerJson)
+            ->andReturn($composerJsonFixture)
             ->globally()
             ->ordered();
 
