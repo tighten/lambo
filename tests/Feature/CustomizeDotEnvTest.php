@@ -26,15 +26,18 @@ class CustomizeDotEnvTest extends TestCase
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.project_path', '/some/project/path');
 
+        $originalDotEnv = File::get(base_path('tests/Feature/Fixtures/.env.original'));
+        $customizedDotEnv = File::get(base_path('tests/Feature/Fixtures/.env.customized'));
+
         File::shouldReceive('get')
             ->once()->with('/some/project/path/.env.example')
-            ->andReturn($this->getTestDotEnvFile());
+            ->andReturn($originalDotEnv);
 
         File::shouldReceive('put')
-            ->with('/some/project/path/.env.example', $this->getCustomizedDotEnvFile());
+            ->with('/some/project/path/.env.example', $customizedDotEnv);
 
         File::shouldReceive('put')
-            ->with('/some/project/path/.env', $this->getCustomizedDotEnvFile());
+            ->with('/some/project/path/.env', $customizedDotEnv);
 
         (new CustomizeDotEnv)();
     }
@@ -77,27 +80,5 @@ class CustomizeDotEnvTest extends TestCase
         $contents = "A=B\n\nC=D";
         $contents = $customizeDotEnv->customize($contents);
         $this->assertEquals("A=B\n\nC=D", $contents);
-    }
-
-    private function getTestDotEnvFile()
-    {  return <<<'TEST_FILE'
-APP_NAME=Laravel
-APP_URL=http://my-project.example.com
-
-DB_DATABASE=laravel
-DB_USERNAME=root
-DB_PASSWORD=
-TEST_FILE;
-    }
-
-    private function getCustomizedDotEnvFile()
-    {  return <<<'TEST_FILE'
-APP_NAME=my-project
-APP_URL=http://my-project.example.com
-
-DB_DATABASE=my_project
-DB_USERNAME=username
-DB_PASSWORD=password
-TEST_FILE;
     }
 }

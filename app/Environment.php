@@ -2,9 +2,9 @@
 
 namespace App;
 
-trait DetectsEnvironment
+class Environment
 {
-    public function isMac()
+    public static function isMac()
     {
         return PHP_OS === 'Darwin';
     }

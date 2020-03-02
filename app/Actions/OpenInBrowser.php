@@ -2,33 +2,37 @@
 
 namespace App\Actions;
 
-use App\DetectsEnvironment;
+use App\Environment;
 use App\Shell\Shell;
 
 class OpenInBrowser
 {
-    use LamboAction, DetectsEnvironment;
+    use LamboAction;
 
     protected $shell;
+    protected $environment;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, Environment $environment )
     {
         $this->shell = $shell;
+        $this->environment = $environment;
     }
 
     public function __invoke()
     {
         $this->logStep('Opening in Browser');
 
-        if ($this->isMac() && $this->browser()) {
+        if ($this->environment->isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
                 config('lambo.store.project_url')
             ));
-        } else {
-            $this->shell->execInProject("valet open");
+
+            return;
         }
+
+        $this->shell->execInProject("valet open");
     }
 
     public function browser()

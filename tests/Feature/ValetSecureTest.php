@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Actions\GenerateAppKey;
+use App\Actions\ValetSecure;
 use App\Shell\Shell;
 use Exception;
+use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
-class GenerateAppKeyTest extends TestCase
+class ValetSecureTest extends TestCase
 {
     private $shell;
 
@@ -19,26 +20,30 @@ class GenerateAppKeyTest extends TestCase
     }
 
     /** @test */
-    function it_generates_a_new_app_key()
+    function it_runs_valet_link()
     {
+        Config::set('lambo.store.valet_secure', true);
+
         $this->shell->shouldReceive('execInProject')
-            ->with('php artisan key:generate')
+            ->with('valet secure')
             ->once()
             ->andReturn(FakeProcess::success());
 
-        app(GenerateAppKey::class)();
+        app(ValetSecure::class)();
     }
 
     /** @test */
-    function it_throws_an_exception_if_new_app_key_generation_fails()
+    function it_throws_an_exception_if_the_after_script_fails()
     {
+        Config::set('lambo.store.valet_secure', true);
+
         $this->shell->shouldReceive('execInProject')
-            ->with('php artisan key:generate')
+            ->with('valet secure')
             ->once()
-            ->andReturn(FakeProcess::fail('php artisan key:generate'));
+            ->andReturn(FakeProcess::fail('valet secure'));
 
         $this->expectException(Exception::class);
 
-        app(GenerateAppKey::class)();
+        app(ValetSecure::class)();
     }
 }

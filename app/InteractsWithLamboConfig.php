@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\File;
 
 trait InteractsWithLamboConfig
 {
-    use DetectsEnvironment;
-
     public function configDir()
     {
         return config('home_dir') . '/.lambo';
@@ -50,7 +48,7 @@ trait InteractsWithLamboConfig
 
     protected function editConfigFile(string $filePath)
     {
-        if (! $this->isMac()) {
+        if (! Environment::isMac()) {
             exec("xdg-open {$filePath}");
             return;
         }

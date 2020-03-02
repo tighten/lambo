@@ -24,6 +24,6 @@ class VerifyDependencies
                 throw new Exception($dependency . ' not installed');
             }
         }
-        $this->info('Dependencies: '. implode(', ', $dependencies) .' are available.');
+        $this->info('Dependencies: ' . implode(', ', $dependencies) . ' are available.');
     }
 }

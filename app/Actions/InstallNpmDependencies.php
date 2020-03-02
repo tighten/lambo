@@ -21,7 +21,7 @@ class InstallNpmDependencies
             return;
         }
 
-        $process = $this->shell->execInProject("npm install {$this->extraOptions()}");
+        $process = $this->shell->execInProject("npm install{$this->extraOptions()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
@@ -30,6 +30,6 @@ class InstallNpmDependencies
 
     public function extraOptions()
     {
-        return config('lambo.store.with-output') ? '' : '--silent';
+        return config('lambo.store.with-output') ? '' : ' --silent';
     }
 }

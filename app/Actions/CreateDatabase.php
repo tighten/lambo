@@ -30,7 +30,9 @@ class CreateDatabase
         }
 
         $this->logStep('Creating database');
+
         $process = $this->shell->execInProject($this->command());
+
         $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
 
         return 'Created a new database ' . config('lambo.store.database_name');
