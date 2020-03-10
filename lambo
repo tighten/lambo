@@ -390,11 +390,7 @@ if [[ "$FRONTEND" != "" ]]; then
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
 
-    if [[ "$QUIET" = true ]]; then
-        composer require laravel/ui --quiet
-    else
-        composer require laravel/ui
-    fi
+    composer require laravel/ui $QUIET_FLAG
 
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
