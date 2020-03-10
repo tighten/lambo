@@ -364,7 +364,6 @@ ${green}Running the Laravel installer...${reset}
     "
 
 if [[ "$AUTH" = true ]]; then
-    # @todo figure out why this is necessary--why does "$QUIET_FLAG" throw a fit with laravel new when it's empty?
     if [[ "$DEVELOP" = true ]]; then
         laravel new "$PROJECTNAME" $QUIET_FLAG --dev --auth
     else
@@ -390,7 +389,12 @@ if [[ "$FRONTEND" != "" ]]; then
     echo "
 ${green}Installing ${orange}laravel/ui${green}...${reset}
     "
-    composer require laravel/ui $QUIET_FLAG
+
+    if [[ "$QUIET" = true ]]; then
+        composer require laravel/ui --quiet
+    else
+        composer require laravel/ui
+    fi
 
     if [[ "$FRONTEND" = "bootstrap" ]]; then
         php artisan ui bootstrap
