@@ -10,19 +10,17 @@ class OpenInBrowser
     use LamboAction;
 
     protected $shell;
-    protected $environment;
 
-    public function __construct(Shell $shell, Environment $environment )
+    public function __construct(Shell $shell)
     {
         $this->shell = $shell;
-        $this->environment = $environment;
     }
 
     public function __invoke()
     {
         $this->logStep('Opening in Browser');
 
-        if ($this->environment->isMac() && $this->browser()) {
+        if (Environment::isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
