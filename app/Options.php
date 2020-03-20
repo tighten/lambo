@@ -27,13 +27,19 @@ class Options
         [
             'short' => 'b',
             'long' => 'browser',
-            'param_description' => '"browser path"',
+            'param_description' => '"path"',
             'cli_description' => "Open the site in the specified browser (macOS-only)",
         ],
         [
-            'long' => 'create-db',
-            'param_description' => 'DBNAME', // Maybe?? @todo
-            'cli_description' => "Create a new MySQL database",
+            'short' => 'f',
+            'long' => 'frontend',
+            'param_description' => '"FRONTEND"',
+            'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
+        ],
+        [
+            'long' => 'dbname',
+            'param_description' => 'DBNAME',
+            'cli_description' => "Specify the database name",
         ],
         [
             'long' => 'dbuser',
@@ -46,19 +52,8 @@ class Options
             'cli_description' => "Specify the database password",
         ],
         [
-            'short' => 'l',
-            'long' => 'link',
-            'cli_description' => "Create a Valet link to the project directory",
-        ],
-        [
-            'short' => 's',
-            'long' => 'secure',
-            'cli_description' => "Generate and use an HTTPS cert with Valet",
-        ],
-        [
-            'short' => 'q',
-            'long' => 'quiet',
-            'cli_description' => "Use quiet mode to hide most messages",
+            'long' => 'create-db',
+            'cli_description' => "Create a new MySQL database",
         ],
         [
             'short' => 'd',
@@ -76,16 +71,32 @@ class Options
             'cli_description' => "Run <info>'npm install'</info> after creating the project",
         ],
         [
-            'long' => 'vue',
-            'cli_description' => "Specify Vue as the frontend",
+            'short' => 'x',
+            'long' => 'mix',
+            'cli_description' => "Run <info>'npm run dev'</info> after creating the project",
         ],
         [
-            'long' => 'react',
-            'cli_description' => "Specify React as the frontend",
+            'short' => 'l',
+            'long' => 'link',
+            'cli_description' => "Create a Valet link to the project directory",
         ],
         [
-            'long' => 'bootstrap',
-            'cli_description' => "Specify Bootstrap as the frontend",
+            'short' => 's',
+            'long' => 'secure',
+            'cli_description' => "Generate and use an HTTPS cert with Valet",
+        ],
+        [
+            'long' => 'full',
+            'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
+        ],
+        [
+            'long' => 'with-output',
+            'cli_description' => "Show command line output from shell commands",
+        ],
+        [
+            'short' => 'q',
+            'long' => 'quiet',
+            'cli_description' => "Use quiet mode to hide most messages from lambo",
         ],
     ];
 

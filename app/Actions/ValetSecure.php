@@ -2,10 +2,12 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Shell\Shell;
 
 class ValetSecure
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -15,6 +17,16 @@ class ValetSecure
 
     public function __invoke()
     {
-        $this->shell->execInProject("valet secure");
+        if (! config('lambo.store.valet_secure')) {
+            return;
+        }
+
+        $this->logStep('Running valet secure');
+
+        $process = $this->shell->execInProject("valet secure");
+
+        $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
+
+        $this->info('valet secure successful');
     }
 }

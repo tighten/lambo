@@ -2,10 +2,12 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Shell\Shell;
 
 class OpenInEditor
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -15,17 +17,18 @@ class OpenInEditor
 
     public function __invoke()
     {
-        app('console')->info('Opening your editor.');
-
-        if ($this->editor()) {
-            $this->shell->execInProject($this->editor() . " .");
+        if (! $this->editor()) {
+            return;
         }
 
-        // @todo: should we default to $EDITOR (environment var)
+        $this->logStep('Opening In Editor');
+
+        $this->shell->execInProject($this->editor() . " .");
+        $this->info('Opening your project in ' . $this->editor());
     }
 
     public function editor()
     {
-        return app('console')->option('editor');
+        return config('lambo.store.editor');
     }
 }

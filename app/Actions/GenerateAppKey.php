@@ -2,10 +2,12 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Shell\Shell;
 
 class GenerateAppKey
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -15,6 +17,12 @@ class GenerateAppKey
 
     public function __invoke()
     {
-        $this->shell->execInProject('php artisan key:generate');
+        $this->logStep('Running php artisan key:generate');
+
+        $process = $this->shell->execInProject('php artisan key:generate');
+
+        $this->abortIf(! $process->isSuccessful(), 'Failed to generate application key successfully', $process);
+
+        $this->info('Application key has been set.');
     }
 }

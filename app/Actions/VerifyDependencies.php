@@ -7,25 +7,23 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
 {
-    protected $finder;
+    use LamboAction;
 
-    protected $dependencies = [
-        'laravel',
-        'git',
-        'valet',
-    ];
+    protected $finder;
 
     public function __construct(ExecutableFinder $finder)
     {
         $this->finder = $finder;
     }
 
-    public function __invoke()
+    public function __invoke(array $dependencies)
     {
-        foreach ($this->dependencies as $dependency) {
+        $this->logStep('Verifying dependencies');
+        foreach ($dependencies as $dependency) {
             if ($this->finder->find($dependency) === null) {
                 throw new Exception($dependency . ' not installed');
             }
         }
+        $this->info('Dependencies: ' . implode(', ', $dependencies) . ' are available.');
     }
 }
