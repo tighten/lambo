@@ -17,10 +17,10 @@
     ],
     "require": {
         "php": "^7.2",
-        "laravel-zero/framework": "^6.0",
-        "laravel/installer": ">=3.0.1"
+        "laravel/installer": "^3.0.1"
     },
     "require-dev": {
+        "laravel-zero/framework": "^6.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^8.0"
     },
@@ -46,5 +46,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["lambo"]
+    "bin": ["builds/lambo"]
 }
