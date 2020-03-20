@@ -2,10 +2,13 @@
 
 namespace App\Actions;
 
-use App\Shell;
+use App\Environment;
+use App\Shell\Shell;
 
 class OpenInBrowser
 {
+    use LamboAction;
+
     protected $shell;
 
     public function __construct(Shell $shell)
@@ -15,24 +18,23 @@ class OpenInBrowser
 
     public function __invoke()
     {
-        if ($this->isMac() && $this->browser()) {
+        $this->logStep('Opening in Browser');
+
+        if (Environment::isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
                 config('lambo.store.project_url')
             ));
-        } else {
-            $this->shell->execInProject("valet open");
-        }
-    }
 
-    public function isMac()
-    {
-        return PHP_OS === 'Darwin';
+            return;
+        }
+
+        $this->shell->execInProject("valet open");
     }
 
     public function browser()
     {
-        return app('console')->option('browser');
+        return config('lambo.store.browser');
     }
 }
