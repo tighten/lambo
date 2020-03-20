@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "laravel-zero/framework": "^6.0"
+        "laravel-zero/framework": "^6.0",
+        "laravel/installer": ">=3.0.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
