@@ -3,7 +3,7 @@
 Super-powered `laravel new` for Laravel and Valet.
 
 
-![](https://raw.githubusercontent.com/tightenco/lambo/master/lambo.gif)
+NOTE: If you're working with the alpha, you'll need PHP 7.2, and this readme is currently out of date.
 
 
 ## Installation
