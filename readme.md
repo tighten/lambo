@@ -32,7 +32,7 @@ Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
 ```bash
 cd ~/Sites
-lambo new superApplication
+lambo superApplication
 ```
 
 ### What exactly does it do?
