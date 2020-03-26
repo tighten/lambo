@@ -2,9 +2,7 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
-
-NOTE: If you're working with the alpha, you'll need PHP 7.2, and this readme is currently out of date.
-
+> NOTE: If you're working with the alpha, you'll need PHP 7.2, and this readme is currently out of date.The major change is that you'll want to run `lambo new myApplication` instead of `lambo myApplication`.
 
 ## Installation
 
