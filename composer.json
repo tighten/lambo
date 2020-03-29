@@ -46,5 +46,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["lambo"]
+    "bin": ["builds/lambo"]
 }
