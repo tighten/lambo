@@ -17,7 +17,7 @@ class CreateDatabaseTest extends TestCase
     function setUp(): void
     {
         if (! $this->mysqlExists()) {
-            $this->markTestSkipped('MySQL is a dependency of this test but does not seem to be installed on your system.');
+            $this->markTestSkipped('MySQL is a dependency of this test but cannot be found.');
         }
 
         parent::setUp();
