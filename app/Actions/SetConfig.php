@@ -97,11 +97,15 @@ class SetConfig
 
     public function loadSavedConfig()
     {
-        Dotenv::createMutable($this->configDir(), 'config')->load();
+        if (! File::exists($this->configDir() . '/config')) {
+            return [];
+        }
+
+        Dotenv::createMutable($this->configDir() , '/config')->load();
 
         return collect($this->keys)->reject(function ($key) {
             return ! Arr::has($_ENV, $key);
-        })->mapWithKeys(function($value){
+        })->mapWithKeys(function ($value) {
             return [$value => $_ENV[$value]];
         })->toArray();
     }
@@ -184,6 +188,7 @@ class SetConfig
         $this->warn("Your configured database name <error> {$configuredDatabaseName} </error> contains hyphens which can cause problems in some instances.");
         $this->warn('The hyphens have been replaced with underscores to prevent problems.');
         $this->warn("New database name: <info>{$newDatabaseName}</info>.");
+
         return $newDatabaseName;
     }
 
