@@ -15,6 +15,7 @@ use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
+use App\Actions\RunPresets;
 use App\Actions\SetConfig;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
@@ -72,6 +73,9 @@ class NewCommand extends Command
         app(SetConfig::class)();
 
         try {
+            app(RunPresets::class)();
+            exit('Not creating real apps right now.');
+
             app(VerifyPathAvailable::class)();
 
             app(VerifyDependencies::class)(['laravel', 'git', 'valet']);
@@ -101,6 +105,7 @@ class NewCommand extends Command
             app(ValetSecure::class)();
 
             app(OpenInBrowser::class)();
+
 
             $this->info("\nDone. Happy coding!");
         } catch (Exception $e) {

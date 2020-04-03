@@ -25,6 +25,11 @@ class Options
             'cli_description' => "Customize the path in which the new project will be created",
         ],
         [
+            'long' => 'presets',
+            'param_description' => 'A:1,2|B|C',
+            'cli_description' => "Call preset(s), optionally with parameters",
+        ],
+        [
             'short' => 'b',
             'long' => 'browser',
             'param_description' => '"path"',
