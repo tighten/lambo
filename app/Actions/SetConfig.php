@@ -30,6 +30,7 @@ class SetConfig
     const CREATE_DATABASE = 'CREATE_DATABASE';
     const FULL = 'FULL';
     const WITH_OUTPUT = 'WITH_OUTPUT';
+    const PRESETS = 'PRESETS';
 
     public $keys = [
         self::PROJECTPATH,
@@ -50,6 +51,7 @@ class SetConfig
         self::DB_PASSWORD,
         self::FULL,
         self::WITH_OUTPUT,
+        self::PRESETS,
     ];
 
     const FRONTEND_FRAMEWORKS = [
@@ -92,6 +94,7 @@ class SetConfig
             'browser' => $this->getOptionValue('browser', self::BROWSER),
             'frontend' => $this->getFrontendType(),
             'full' => $this->getBooleanOptionValue('full'),
+            'presets' => $this->getOptionValue('presets'),
         ]);
     }
 
