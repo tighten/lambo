@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": "^7.2.5",
-        "laravel/installer": "^3.0.1"
+        "laravel/installer": "^3.0.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "laravel-zero/framework": "^7.0",
