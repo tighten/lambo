@@ -97,7 +97,7 @@ class SetConfig
 
     public function loadSavedConfig()
     {
-        (Dotenv::create($this->configDir(), 'config'))->safeLoad();
+        Dotenv::createMutable($this->configDir(), 'config')->load();
 
         return collect($this->keys)->reject(function ($key) {
             return ! Arr::has($_ENV, $key);
