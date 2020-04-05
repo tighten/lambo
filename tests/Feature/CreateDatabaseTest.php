@@ -78,6 +78,6 @@ class CreateDatabaseTest extends TestCase
 
     function mysqlExists()
     {
-        return (new ExecutableFinder)->find('foo') !== null;
+        return (new ExecutableFinder)->find('mysql') !== null;
     }
 }
