@@ -105,7 +105,7 @@ class SetConfig
 
         return collect($this->keys)->reject(function ($key) {
             return ! Arr::has($_ENV, $key);
-        })->mapWithKeys(function ($value) {
+        })->mapWithKeys(function($value){
             return [$value => $_ENV[$value]];
         })->toArray();
     }
