@@ -28,7 +28,7 @@ class Options
             'short' => 'b',
             'long' => 'browser',
             'param_description' => '"BROWSER"',
-            'cli_description' => "Open the site in the specified <info>BROWSER</info>. For example, use <info>'Google Chrome'</info> or <info>'Safari'</info> (macOS-only).",
+            'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>'Google Chrome'</info> or <info>'Safari'</info> (macOS)",
         ],
         [
             'short' => 'f',
