@@ -83,4 +83,27 @@ class RunPresetsTest extends TestCase
         $this->assertContains('ghi', $secondPreset->parameters);
         $this->assertContains('jkl', $secondPreset->parameters);
     }
+
+    /** @test */
+    function it_generates_preset_class_names_from_short_strings()
+    {
+        $action = app(RunPresets::class);
+
+        $this->assertEquals('MyFavoriteEver', $action->getPresetClassName('my-favorite-ever'));
+    }
+
+    /** @test */
+    function it_news_premade_presets_from_short_strings()
+    {
+        $action = app(RunPresets::class);
+
+        $this->assertTrue($action->getPresetByShortName('telescope') instanceof \App\Presets\Premade\Telescope);
+    }
+
+    // @todo decide: Are the parameters passed when newing up the preset? assume so?
+    // @todo new tests:
+    // it news local presets
+    // it news composer-required presets
+    // it errors if a preset is requested which doesn't exist
+    // it passes parameters to presets
 }

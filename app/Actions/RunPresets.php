@@ -3,13 +3,14 @@
 namespace App\Actions;
 
 use App\InteractsWithLamboConfig;
+use App\Presets\BasePreset;
 use Illuminate\Support\Str;
 
 class RunPresets
 {
     use LamboAction, InteractsWithLamboConfig;
 
-    public $presets = []; // Array of stdClass objects with "preset" and "parameters"
+    public $presets = []; // Array of stdClass objects, each with "preset" and "parameters" keys
 
     public function __construct()
     {
@@ -34,7 +35,44 @@ class RunPresets
     public function __invoke()
     {
         foreach ($this->presets as $preset) {
-            dd('!@todo!');
+            // construct
+            $preset = $this->getPresetByShortName($preset->preset);
+
+            // run before
+            $preset->before();
+
+            // run run
+            $preset->run();
+
+            // run after
+            $preset->after();
+
+            dd($preset);
         }
+    }
+
+    public function getPresetByShortName(string $shortName): BasePreset
+    {
+        $className = $this->getPresetClassName($shortName);
+
+        // look for the pre-made class
+        $fqcn = "App\\Presets\\Premade\\{$className}";
+
+        if (class_exists($fqcn)) {
+            return app($fqcn);
+        }
+
+        throw new \Exception('Cannot resolve preset: ' . $shortName);
+
+        // look for the hand-made local
+        // @todo something like "custom/telescope"
+
+        // look for the composer-loaded class
+        // @todo something like "nunomaduro/telescope"
+    }
+
+    public function getPresetClassName(string $presetShortName): string
+    {
+        return Str::studly($presetShortName);
     }
 }
