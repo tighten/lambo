@@ -20,7 +20,7 @@ class DisplayHelpScreen
     {
 
         $this->line("\n<comment>Usage:</comment>");
-        $this->line("  lambo new myApplication [arguments]\n");
+        $this->line("  lambo myApplication [arguments]\n");
         $this->line("<comment>Commands (lambo COMMANDNAME):</comment>");
 
         foreach ($this->commands as $command => $description) {
@@ -28,7 +28,7 @@ class DisplayHelpScreen
             $this->line("  <info>{$command}</info>{$spaces}{$description}");
         }
 
-        $this->line("\n<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        $this->line("\n<comment>Options (lambo myApplication OPTIONS):</comment>");
 
         foreach ((new Options)->all() as $option) {
             $this->line($this->createCliStringForOption($option));
