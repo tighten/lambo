@@ -41,7 +41,7 @@ class NewCommand extends Command
     {
         return collect((new Options)->all())->reduce(function ($carry, $option) {
             return $carry . $this->buildSignatureOption($option);
-        }, "new\n{projectName? : Name of the Laravel project}");
+        }, "{projectName? : Name of the Laravel project}");
     }
 
     public function buildSignatureOption($option)
