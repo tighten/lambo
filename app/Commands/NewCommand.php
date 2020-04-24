@@ -73,9 +73,6 @@ class NewCommand extends Command
         app(SetConfig::class)();
 
         try {
-            app(RunPresets::class)();
-            exit('Not creating real apps right now.');
-
             app(VerifyPathAvailable::class)();
 
             app(VerifyDependencies::class)(['laravel', 'git', 'valet']);
@@ -94,6 +91,8 @@ class NewCommand extends Command
 
             app(InitializeGitRepo::class)();
 
+            app(RunPresets::class)();
+
             app(InstallNpmDependencies::class)();
 
             app(CompileAssets::class)();
@@ -105,7 +104,6 @@ class NewCommand extends Command
             app(ValetSecure::class)();
 
             app(OpenInBrowser::class)();
-
 
             $this->info("\nDone. Happy coding!");
         } catch (Exception $e) {

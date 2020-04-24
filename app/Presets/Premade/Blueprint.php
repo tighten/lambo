@@ -15,7 +15,7 @@ class Blueprint extends BasePreset
     public function run()
     {
         $stub = File::copy(
-            base_path('app\Presets\Premade\stubs\blueprint-draft.yaml'),
+            base_path('app/Presets/Premade/stubs/blueprint-draft.yaml'),
             config('lambo.store.project_path') . '/draft.yaml'
         );
     }

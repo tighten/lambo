@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\InteractsWithLamboConfig;
 use App\Presets\BasePreset;
+use App\Shell\Shell;
 use Illuminate\Support\Str;
 
 class RunPresets
@@ -11,10 +12,12 @@ class RunPresets
     use LamboAction, InteractsWithLamboConfig;
 
     public $presets = []; // Array of stdClass objects, each with "preset" and "parameters" keys
+    protected $shell;
 
-    public function __construct()
+    public function __construct(Shell $shell)
     {
         $this->presets = $this->presetsPassed();
+        $this->shell = $shell;
     }
 
     public function presetsPassed()
@@ -47,7 +50,7 @@ class RunPresets
             // run after
             $preset->baseAfter();
 
-            dd($preset);
+            $this->commitToGit($preset->preset);
         }
     }
 
@@ -74,5 +77,11 @@ class RunPresets
     public function getPresetClassName(string $presetShortName): string
     {
         return Str::studly($presetShortName);
+    }
+
+    public function commitToGit(string $presetName)
+    {
+        $this->shell->execInProject('git add .');
+        $this->shell->execInProject("git commit -m \"Run ${presetName} preset.\"");
     }
 }
