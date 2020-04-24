@@ -37,9 +37,9 @@ class RunPresets
 
     public function __invoke()
     {
-        foreach ($this->presets as $preset) {
+        foreach ($this->presets as $passedPreset) {
             // construct
-            $preset = $this->getPresetByShortName($preset->preset);
+            $preset = $this->getPresetByShortName($passedPreset->preset);
 
             // run before
             $preset->baseBefore();
@@ -50,7 +50,7 @@ class RunPresets
             // run after
             $preset->baseAfter();
 
-            $this->commitToGit($preset->preset);
+            $this->commitToGit($passedPreset->preset);
         }
     }
 
