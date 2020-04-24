@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\File;
 
 class Blueprint extends BasePreset
 {
-    public $composerRequires = [
+    public $composerDevRequires = [
         'laravel-shift/blueprint' => '^1.6',
-        'jasonmccreary/laravel-test-assertions' => '^2.0',
+        'jasonmccreary/laravel-test-assertions' => '^1.0',
     ];
 
     public function run()

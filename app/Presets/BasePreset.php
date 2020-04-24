@@ -7,6 +7,7 @@ use App\Shell\Shell;
 abstract class BasePreset
 {
     public $composerRequires = [];
+    public $composerDevRequires = [];
     public $beforeShellCommands = [];
     public $afterShellCommands = [];
     // public $presetDependencies = []; // @todo later
@@ -65,12 +66,28 @@ abstract class BasePreset
 
     public function buildComposerRequireString()
     {
-        $string = 'composer require ';
+        $requires = [];
 
-        foreach ($this->composerRequires as $package => $constraint) {
-            $string .= sprintf('%s:"%s" ', $package, $constraint);
+        if (! empty($this->composerRequires)) {
+            $string = 'composer require ';
+
+            foreach ($this->composerRequires as $package => $constraint) {
+                $string .= sprintf('%s:"%s" ', $package, $constraint);
+            }
+
+            $requires[] = rtrim($string);
         }
 
-        return rtrim($string);
+        if (! empty($this->composerDevRequires)) {
+            $string = 'composer require --dev ';
+
+            foreach ($this->composerDevRequires as $package => $constraint) {
+                $string .= sprintf('%s:"%s" ', $package, $constraint);
+            }
+
+            $requires[] = rtrim($string);
+        }
+
+        return implode(' && ', $requires);
     }
 }
