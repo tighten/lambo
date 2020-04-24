@@ -3,6 +3,7 @@
 namespace App\Shell;
 
 use Illuminate\Config\Repository;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Process\Process;
 
 class Shell
@@ -35,9 +36,7 @@ class Shell
 
     public function buildProcess($command): Process
     {
-        $process = app()->make(Process::class, [
-            'command' => $command,
-        ]);
+        $process = Process::fromShellCommandline($command);
         $process->setTimeout(null);
         return $process;
     }
@@ -45,7 +44,7 @@ class Shell
     protected function exec($command, $description)
     {
         $showConsoleOutput = config('lambo.store.with_output');
-        $out = app(\Symfony\Component\Console\Output\ConsoleOutput::class);
+        $out = app(ConsoleOutput::class);
 
         $outputFormatter = $this->getOutputFormatter();
         $out->writeln($outputFormatter->start($description));

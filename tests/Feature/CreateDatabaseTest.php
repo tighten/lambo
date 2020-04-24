@@ -14,8 +14,12 @@ class CreateDatabaseTest extends TestCase
 {
     private $shell;
 
-    public function setUp(): void
+    function setUp(): void
     {
+        if (! $this->mysqlExists()) {
+            $this->markTestSkipped('MySQL is a dependency of this test but cannot be found.');
+        }
+
         parent::setUp();
         $this->shell = $this->mock(Shell::class);
     }
@@ -56,15 +60,6 @@ class CreateDatabaseTest extends TestCase
         $this->assertEquals('MySQL does not seem to be installed. Skipping new database creation.', app(CreateDatabase::class)());
     }
 
-    /**
-     * @todo do we need to test that database creation only happens when MySQL is the configured database?
-     * @test
-     */
-    function it_only_runs_when_mysql_is_the_configured_database()
-    {
-        $this->markTestSkipped('*** @TODO: Add Test: "it only runs when mysql is the configured database" ***');
-    }
-
     /** @test */
     function it_throws_an_exception_if_database_creation_fails()
     {
@@ -83,5 +78,10 @@ class CreateDatabaseTest extends TestCase
         $this->expectException(Exception::class);
 
         app(CreateDatabase::class)();
+    }
+
+    function mysqlExists()
+    {
+        return (new ExecutableFinder)->find('mysql') !== null;
     }
 }
