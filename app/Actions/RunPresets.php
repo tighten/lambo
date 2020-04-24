@@ -39,13 +39,13 @@ class RunPresets
             $preset = $this->getPresetByShortName($preset->preset);
 
             // run before
-            $preset->before();
+            $preset->baseBefore();
 
             // run run
-            $preset->run();
+            $preset->baseRun();
 
             // run after
-            $preset->after();
+            $preset->baseAfter();
 
             dd($preset);
         }

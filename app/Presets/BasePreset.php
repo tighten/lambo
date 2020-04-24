@@ -18,13 +18,25 @@ abstract class BasePreset
         $this->shell = $shell;
     }
 
-    public function before()
+    public function baseBefore()
     {
         foreach ($this->beforeShellCommands as $shellCommand) {
             $this->executeShellCommand($shellCommand);
         }
 
         $this->shell->ExecInProject($this->buildComposerRequireString());
+
+        $this->before();
+    }
+
+    public function before()
+    {
+        // Do nothing
+    }
+
+    public function baseRun()
+    {
+        $this->run();
     }
 
     public function run()
@@ -32,11 +44,18 @@ abstract class BasePreset
         // Do nothing by default
     }
 
-    public function after()
+    public function baseAfter()
     {
         foreach ($this->afterShellCommands as $shellCommand) {
             $this->executeShellCommand($shellCommand);
         }
+
+        $this->after();
+    }
+
+    public function after()
+    {
+        // Do nothing by default
     }
 
     public function executeShellCommand($shellCommand)
