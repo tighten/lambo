@@ -6,6 +6,7 @@ use App\InteractsWithLamboConfig;
 use App\Presets\BasePreset;
 use App\Shell\Shell;
 use Illuminate\Support\Str;
+use stdClass;
 
 class RunPresets
 {
@@ -39,7 +40,7 @@ class RunPresets
     {
         foreach ($this->presets as $passedPreset) {
             // construct
-            $preset = $this->getPresetByShortName($passedPreset->preset);
+            $preset = $this->getPresetInstance($passedPreset);
 
             // run before
             $preset->baseBefore();
@@ -54,15 +55,15 @@ class RunPresets
         }
     }
 
-    public function getPresetByShortName(string $shortName): BasePreset
+    public function getPresetInstance(stdClass $preset): BasePreset
     {
-        $className = $this->getPresetClassName($shortName);
+        $className = $this->getPresetClassName($preset->preset);
 
         // look for the pre-made class
         $fqcn = "App\\Presets\\Premade\\{$className}";
 
         if (class_exists($fqcn)) {
-            return app($fqcn);
+            return app($fqcn, ['params' => $preset->parameters]);
         }
 
         throw new \Exception('Cannot resolve preset: ' . $shortName);

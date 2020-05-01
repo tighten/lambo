@@ -22,7 +22,7 @@ class DisplaySpecificHelpScreen
         // if preset exists for this target, get it
         $studly = Str::studly($target);
         // If this exists as a preset class, new it up
-        return app(\App\Presets\Premade\Blueprint::class);
+        return app(\App\Presets\Premade\Telescope::class);
     }
 
     public function renderCommandHelp($target)

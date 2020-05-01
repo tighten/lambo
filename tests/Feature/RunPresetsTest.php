@@ -93,11 +93,13 @@ class RunPresetsTest extends TestCase
     }
 
     /** @test */
-    function it_news_premade_presets_from_short_strings()
+    function it_news_premade_presets_from_passed_preset_objects()
     {
         $action = app(RunPresets::class);
 
-        $this->assertTrue($action->getPresetByShortName('telescope') instanceof \App\Presets\Premade\Telescope);
+        $passedPreset = (object) ['preset' => 'telescope', 'parameters' => []];
+
+        $this->assertTrue($action->getPresetInstance($passedPreset) instanceof \App\Presets\Premade\Telescope);
     }
 
     // @todo decide: Are the parameters passed when newing up the preset? assume so?

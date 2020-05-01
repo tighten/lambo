@@ -14,10 +14,12 @@ abstract class BasePreset
     // public $presetDependencies = []; // @todo later
 
     protected $shell;
+    protected $params;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, array $params = [])
     {
         $this->shell = $shell;
+        $this->params = $params;
     }
 
     public function baseBefore()
@@ -26,9 +28,9 @@ abstract class BasePreset
             $this->executeShellCommand($shellCommand);
         }
 
-        $this->shell->ExecInProject($this->buildComposerRequireString());
-
         $this->before();
+
+        $this->shell->ExecInProject($this->buildComposerRequireString());
     }
 
     public function before()
@@ -65,24 +67,34 @@ abstract class BasePreset
         $this->shell->execInProject($shellCommand);
     }
 
+    public function composerRequires()
+    {
+        return $this->composerRequires;
+    }
+
+    public function composerDevRequires()
+    {
+        return $this->composerDevRequires;
+    }
+
     public function buildComposerRequireString()
     {
         $requires = [];
 
-        if (! empty($this->composerRequires)) {
+        if (! empty($this->composerRequires())) {
             $string = 'composer require ';
 
-            foreach ($this->composerRequires as $package => $constraint) {
+            foreach ($this->composerRequires() as $package => $constraint) {
                 $string .= sprintf('%s:"%s" ', $package, $constraint);
             }
 
             $requires[] = rtrim($string);
         }
 
-        if (! empty($this->composerDevRequires)) {
+        if (! empty($this->composerDevRequires())) {
             $string = 'composer require --dev ';
 
-            foreach ($this->composerDevRequires as $package => $constraint) {
+            foreach ($this->composerDevRequires() as $package => $constraint) {
                 $string .= sprintf('%s:"%s" ', $package, $constraint);
             }
 
