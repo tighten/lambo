@@ -6,6 +6,7 @@ use App\Shell\Shell;
 
 abstract class BasePreset
 {
+    public $description = '';
     public $composerRequires = [];
     public $composerDevRequires = [];
     public $beforeShellCommands = [];

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\File;
 
 class Blueprint extends BasePreset
 {
+    public $description = 'It installs Blueprint stuff.';
+
     public $composerDevRequires = [
         'laravel-shift/blueprint' => '^1.6',
         'jasonmccreary/laravel-test-assertions' => '^1.0',

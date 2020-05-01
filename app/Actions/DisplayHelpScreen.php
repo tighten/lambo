@@ -2,23 +2,21 @@
 
 namespace App\Actions;
 
+use App\GeneratesHelpScreens;
 use App\Options;
 
 class DisplayHelpScreen
 {
-    use LamboAction;
-
-    protected $indent = 30;
+    use LamboAction, GeneratesHelpScreens;
 
     protected $commands = [
-        'help-screen' => 'Display this screen',
+        'help-screen' => 'Display this screen', // @todo modify to mention you can ask for help on a specific item
         'edit-config' => 'Edit config file',
         'edit-after' => 'Edit "after" file',
     ];
 
     public function __invoke()
     {
-
         $this->line("\n<comment>Usage:</comment>");
         $this->line("  lambo myApplication [arguments]\n");
         $this->line("<comment>Commands (lambo COMMANDNAME):</comment>");
