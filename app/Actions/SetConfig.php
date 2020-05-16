@@ -24,7 +24,7 @@ class SetConfig
     const BROWSER = 'BROWSER';
     const LINK = 'LINK';
     const SECURE = 'SECURE';
-    const DB_TYPE = 'DB_TYPE';
+    const DB_TYPE = 'DB_CONNECTION';
     const DB_PORT = 'DB_PORT';
     const DB_NAME = 'DB_NAME';
     const DB_USERNAME = 'DB_USERNAME';
@@ -103,15 +103,15 @@ class SetConfig
 
     public function loadSavedConfig()
     {
-        if (! File::exists($this->configDir() . '/config')) {
+        if (!File::exists($this->configDir() . '/config')) {
             return [];
         }
 
-        Dotenv::createMutable($this->configDir() , '/config')->load();
+        Dotenv::createMutable($this->configDir(), '/config')->load();
 
         return collect($this->keys)->reject(function ($key) {
-            return ! Arr::has($_ENV, $key);
-        })->mapWithKeys(function($value){
+            return !Arr::has($_ENV, $key);
+        })->mapWithKeys(function ($value) {
             return [$value => $_ENV[$value]];
         })->toArray();
     }
@@ -186,7 +186,7 @@ class SetConfig
             ? $this->getOptionValue('dbname', self::DB_NAME)
             : $this->argument('projectName');
 
-        if (! Str::contains($configuredDatabaseName, '-')) {
+        if (!Str::contains($configuredDatabaseName, '-')) {
             return $configuredDatabaseName;
         }
 
