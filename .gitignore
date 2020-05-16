@@ -1,3 +1,5 @@
+.idea
+.vscode
 /vendor
 .phpunit.result.cache
 /storage/framework/

@@ -37,9 +37,19 @@ class Options
             'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
         ],
         [
+            'long' => 'dbtype',
+            'param_description' => 'DBTYPE',
+            'cli_description' => "Specify the database type. Must be one of mysql or pgsql",
+        ],
+        [
             'long' => 'dbname',
             'param_description' => 'DBNAME',
             'cli_description' => "Specify the database name",
+        ],
+        [
+            'long' => 'dbport',
+            'param_description' => 'DBPORT',
+            'cli_description' => "Specify the database port",
         ],
         [
             'long' => 'dbuser',
@@ -53,7 +63,7 @@ class Options
         ],
         [
             'long' => 'create-db',
-            'cli_description' => "Create a new MySQL database",
+            'cli_description' => "Create a new database",
         ],
         [
             'short' => 'd',

@@ -24,6 +24,8 @@ class SetConfig
     const BROWSER = 'BROWSER';
     const LINK = 'LINK';
     const SECURE = 'SECURE';
+    const DB_TYPE = 'DB_TYPE';
+    const DB_PORT = 'DB_PORT';
     const DB_NAME = 'DB_NAME';
     const DB_USERNAME = 'DB_USERNAME';
     const DB_PASSWORD = 'DB_PASSWORD';
@@ -45,6 +47,8 @@ class SetConfig
         self::LINK,
         self::SECURE,
         self::CREATE_DATABASE,
+        self::DB_TYPE,
+        self::DB_PORT,
         self::DB_NAME,
         self::DB_USERNAME,
         self::DB_PASSWORD,
@@ -75,6 +79,8 @@ class SetConfig
             'root_path' => $this->getBasePath(),
             'project_path' => $this->getBasePath() . '/' . $this->argument('projectName'),
             'project_url' => $this->getProtocol() . $this->argument('projectName') . '.' . $tld,
+            'database_type' => $this->getOptionValue('dbtype', self::DB_TYPE) ?? 'mysql',
+            'database_port' => $this->getOptionValue('dbport', self::DB_PORT) ?? '3306',
             'database_name' => $this->getDatabaseName(),
             'database_username' => $this->getOptionValue('dbuser', self::DB_USERNAME) ?? 'root',
             'database_password' => $this->getOptionValue('dbpassword', self::DB_PASSWORD) ?? '',

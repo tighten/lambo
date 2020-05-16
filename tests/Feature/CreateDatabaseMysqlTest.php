@@ -10,13 +10,13 @@ use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
-class CreateDatabaseTest extends TestCase
+class CreateDatabaseMysqlTest extends TestCase
 {
     private $shell;
 
     function setUp(): void
     {
-        if (! $this->mysqlExists()) {
+        if (!$this->mysqlExists()) {
             $this->markTestSkipped('MySQL is a dependency of this test but cannot be found.');
         }
 
@@ -28,6 +28,7 @@ class CreateDatabaseTest extends TestCase
     function it_creates_a_mysql_database()
     {
         Config::set('lambo.store.create_database', true);
+        Config::set('lambo.store.database_type', 'mysql');
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
@@ -46,6 +47,7 @@ class CreateDatabaseTest extends TestCase
         $executableFinder = $this->mock(ExecutableFinder::class);
 
         Config::set('lambo.store.create_database', true);
+        Config::set('lambo.store.database_type', 'mysql');
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
@@ -62,6 +64,7 @@ class CreateDatabaseTest extends TestCase
     function it_throws_an_exception_if_database_creation_fails()
     {
         Config::set('lambo.store.create_database', true);
+        Config::set('lambo.store.database_type', 'mysql');
         Config::set('lambo.store.database_username', 'user');
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');

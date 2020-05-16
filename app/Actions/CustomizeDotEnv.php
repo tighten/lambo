@@ -46,6 +46,8 @@ class CustomizeDotEnv
         $replacements = [
             'APP_NAME' => config('lambo.store.project_name'),
             'APP_URL' => config('lambo.store.project_url'),
+            'DB_CONNECTION' => config('lambo.store.database_type'),
+            'DB_PORT' => config('lambo.store.database_port'),
             'DB_DATABASE' => config('lambo.store.database_name'),
             'DB_USERNAME' => config('lambo.store.database_username'),
             'DB_PASSWORD' => config('lambo.store.database_password'),
