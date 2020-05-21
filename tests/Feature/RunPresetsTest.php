@@ -101,11 +101,4 @@ class RunPresetsTest extends TestCase
 
         $this->assertTrue($action->getPresetInstance($passedPreset) instanceof \App\Presets\Premade\Telescope);
     }
-
-    // @todo decide: Are the parameters passed when newing up the preset? assume so?
-    // @todo new tests:
-    // it news local presets
-    // it news composer-required presets
-    // it errors if a preset is requested which doesn't exist
-    // it passes parameters to presets
 }
