@@ -10,12 +10,12 @@ class Telescope extends BasePreset
 
     // @todo: add documentation about its options
 
-    public function run()
+    public function before()
     {
         if (in_array('prod', $this->params)) {
-            $this->composerRequires['laravel/telescope'] = '~1.0';
+            $this->composerRequires['laravel/telescope'] = '~3.0';
         } else {
-            $this->composerDevRequires['laravel/telescope'] = '~1.0';
+            $this->composerDevRequires['laravel/telescope'] = '~3.0';
         }
     }
 

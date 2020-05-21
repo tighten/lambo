@@ -24,6 +24,7 @@ class RunPresets
     public function presetsPassed()
     {
         return collect(explode('|', config('lambo.store.presets')))
+            ->filter()
             ->map(function ($preset) {
                 $parameters = Str::contains($preset, ':')
                     ? explode(',', Str::after($preset, ':'))
