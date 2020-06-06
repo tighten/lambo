@@ -7,20 +7,18 @@ use Illuminate\Support\Facades\File;
 
 class CustomizeDotEnv
 {
-    use LamboAction;
-
     public function __invoke()
     {
-        $this->logStep('Customizing .env and .env.example');
+        app('console-writer')->logStep('Customizing .env and .env.example');
 
         $filePath = config('lambo.store.project_path') . '/.env.example';
 
         $output = $this->customize(File::get($filePath));
 
         File::put($filePath, $output);
-        File::put(str_replace('.env.example', '.env', $filePath), $output);
+        File::put(str_replace(' .env.example', '.env', $filePath), $output);
 
-        $this->info('.env files configured.');
+        app('console-writer')->success('.env files configured.');
     }
 
     public function customize($contents)

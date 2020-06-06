@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\RunAfterScript;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
@@ -25,7 +25,7 @@ class RunAfterScriptTest extends TestCase
     {
         Config::set('home_dir', '/my/home/dir');
 
-        File::shouldReceive('exists')
+        File::shouldReceive('isFile')
             ->with('/my/home/dir/.lambo/after')
             ->andReturn(true)
             ->globally()
@@ -46,7 +46,7 @@ class RunAfterScriptTest extends TestCase
     {
         Config::set('home_dir', '/my/home/dir');
 
-        File::shouldReceive('exists')
+        File::shouldReceive('isFile')
             ->with('/my/home/dir/.lambo/after')
             ->andReturn(true)
             ->globally()
@@ -59,7 +59,7 @@ class RunAfterScriptTest extends TestCase
             ->globally()
             ->ordered();
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(RunAfterScript::class)();
     }

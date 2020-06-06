@@ -2,12 +2,12 @@
 
 namespace App\Actions;
 
-use App\InteractsWithLamboConfig;
-use App\Shell\Shell;
+use App\Shell;
+use Illuminate\Support\Facades\File;
 
 class RunAfterScript
 {
-    use LamboAction, InteractsWithLamboConfig;
+    use LamboAction;
 
     protected $shell;
 
@@ -18,16 +18,16 @@ class RunAfterScript
 
     public function __invoke()
     {
-        if (! $this->configFileExists('after')) {
-            return;
+        $afterScriptPath = config('home_dir') . '/.lambo/after';
+
+        if (File::isFile($afterScriptPath)) {
+            app('console-writer')->logStep('Running after script');
+
+            $process = $this->shell->execInProject("sh " . $afterScriptPath);
+
+            $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
+
+            app('console-writer')->success('After script has completed.');
         }
-
-        $this->logStep('Running after script');
-
-        $process = $this->shell->execInProject("sh " . $this->getConfigFilePath("after"));
-
-        $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
-
-        $this->info('After script has completed.');
     }
 }

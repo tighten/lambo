@@ -2,22 +2,17 @@
 
 namespace App\Actions;
 
-use App\LogsToConsole;
-use Exception;
+use App\LamboException;
 
 trait LamboAction
 {
-    use LogsToConsole;
-
-    public function logStep($step)
-    {
-        app('console')->comment("\n{$step}...");
-    }
-
-    public function abortIf(bool $abort, string $message, $process)
+    public function abortIf(bool $abort, string $message, $process = null)
     {
         if ($abort) {
-            throw new Exception("{$message}\n  Failed to run: '{$process->getCommandLine()}'");
+            if ($process) {
+                throw new LamboException("{$message}\nFailed to run: '{$process->getCommandLine()}'.");
+            }
+            throw new LamboException("{$message}");
         }
     }
 }

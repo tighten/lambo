@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\VerifyDependencies;
-use Exception;
+use App\LamboException;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\TestCase;
 
@@ -21,33 +21,35 @@ class VerifyDependenciesTest extends TestCase
     function it_checks_that_required_dependencies_are_available()
     {
         $this->executableFinder->shouldReceive('find')
-            ->with('dependencyA')
-            ->once()
-            ->andReturn('/path/to/dependencyA');
+            ->with('cmdA')
+            ->andReturn('/path/to/cmdA');
 
         $this->executableFinder->shouldReceive('find')
-            ->with('dependencyB')
-            ->once()
-            ->andReturn('/path/to/dependencyB');
+            ->with('cmdB')
+            ->andReturn('/path/to/cmdB');
 
-        app(VerifyDependencies::class)(['dependencyA', 'dependencyB']);
+        app(VerifyDependencies::class)([
+            'Command A' => 'cmdA|cmda.example.com',
+            'Command B' => 'cmdB|cmdb.example.com',
+        ]);
     }
 
     /** @test */
-    function it_throws_and_exception_if_a_required_dependency_is_missing_missing()
+    function it_throws_a_lambo_exception_if_a_required_dependency_is_missing_missing()
     {
         $this->executableFinder->shouldReceive('find')
-            ->with('dependencyA')
-            ->once()
-            ->andReturn('/path/to/dependencyA');
+            ->with('cmdA')
+            ->andReturn('/path/to/cmdA');
 
         $this->executableFinder->shouldReceive('find')
-            ->with('missingDependency')
-            ->once()
-            ->andReturn(null);
+            ->with('cmdB')
+            ->andReturnNull();
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
-        app(VerifyDependencies::class)(['dependencyA', 'missingDependency']);
+        app(VerifyDependencies::class)([
+            'Command A' => 'cmdA|cmda.example.com',
+            'Command B' => 'cmdB|cmdb.example.com',
+        ]);
     }
 }

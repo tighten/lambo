@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 
 class ValetSecure
 {
@@ -21,12 +21,12 @@ class ValetSecure
             return;
         }
 
-        $this->logStep('Running valet secure');
+        app('console-writer')->logStep('Running valet secure');
 
         $process = $this->shell->execInProject("valet secure");
 
         $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
 
-        $this->info('valet secure successful');
+        app('console-writer')->success('valet secure successful');
     }
 }

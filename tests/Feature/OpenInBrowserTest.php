@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\OpenInBrowser;
-use App\Shell\Shell;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 

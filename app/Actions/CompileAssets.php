@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 
 class CompileAssets
 {
@@ -25,7 +25,7 @@ class CompileAssets
 
         $this->silentDevScript->add();
 
-        $this->logStep('Compiling project assets');
+        app('console-writer')->logStep('Compiling project assets');
 
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
 
@@ -33,7 +33,7 @@ class CompileAssets
 
         $this->silentDevScript->remove();
 
-        $this->info('Project assets compiled successfully.');
+        app('console-writer')->success('Project assets compiled successfully.');
     }
     public function extraOptions()
     {

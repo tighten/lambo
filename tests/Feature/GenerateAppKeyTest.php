@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\GenerateAppKey;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -22,7 +22,7 @@ class GenerateAppKeyTest extends TestCase
     function it_generates_a_new_app_key()
     {
         $this->shell->shouldReceive('execInProject')
-            ->with('php artisan key:generate')
+            ->with('php artisan key:generate --quiet')
             ->once()
             ->andReturn(FakeProcess::success());
 
@@ -33,11 +33,11 @@ class GenerateAppKeyTest extends TestCase
     function it_throws_an_exception_if_new_app_key_generation_fails()
     {
         $this->shell->shouldReceive('execInProject')
-            ->with('php artisan key:generate')
+            ->with('php artisan key:generate --quiet')
             ->once()
             ->andReturn(FakeProcess::fail('php artisan key:generate'));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(GenerateAppKey::class)();
     }

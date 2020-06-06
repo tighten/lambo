@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\ExecutableFinder;
 
@@ -25,17 +25,21 @@ class CreateDatabase
             return;
         }
 
-        if (! $this->mysqlExists()) {
-            return "MySQL does not seem to be installed. Skipping new database creation.";
+        app('console-writer')->logStep('Creating database');
+
+        $this->abortIf(! $this->mysqlExists(), "I can't create a database for your project because MySQL does not seem to be installed.");
+
+        if (! $this->mysqlServerRunning()) {
+            app('console-writer')->ignoreVerbosity()->warn('Skipping database creation');
+            app('console-writer')->ignoreVerbosity()->warn("I can't create a database for your project because your MySQL server does not seem to be running.");
+            return;
         }
 
-        $this->logStep('Creating database');
-
-        $process = $this->shell->execInProject($this->command());
+        $process = $this->shell->exec($this->command());
 
         $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
 
-        return 'Created a new database ' . config('lambo.store.database_name');
+        app('console-writer')->success('Created a new database ' . config('lambo.store.database_name'));
     }
 
     protected function mysqlExists()
@@ -43,7 +47,14 @@ class CreateDatabase
         return $this->finder->find('mysql') !== null;
     }
 
-    protected function command()
+    private function mysqlServerRunning(): bool
+    {
+        app('console-writer')->text('Searching for a running MySQL server');
+        $output = $this->shell->exec('mysql.server status')->getOutput();
+        return Str::of($output)->contains('MySQL running');
+    }
+
+    private function command()
     {
         return sprintf(
             'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',

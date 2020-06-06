@@ -4,18 +4,20 @@ namespace App\Commands;
 
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
-use LaravelZero\Framework\Commands\Command;
 
-class HelpCommand extends Command
+class HelpCommand extends LamboCommand
 {
     protected $signature = 'help-screen';
     protected $description = 'Show help';
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function handle()
     {
-        app()->bind('console', function () {
-            return $this;
-        });
+        parent::handle();
 
         app(DisplayLamboWelcome::class)();
         app(DisplayHelpScreen::class)();

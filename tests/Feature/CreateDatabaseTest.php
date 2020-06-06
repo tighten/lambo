@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\CreateDatabase;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
@@ -32,16 +32,21 @@ class CreateDatabaseTest extends TestCase
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $this->shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('exec')
+            ->with('mysql.server status')
+            ->once()
+            ->andReturn(FakeProcess::success()->withOutput('MySQL running'));
+
+        $this->shell->shouldReceive('exec')
             ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
             ->once()
             ->andReturn(FakeProcess::success());
 
-        $this->assertStringContainsString(Config::get('lambo.store.database_name'), app(CreateDatabase::class)());
+        app(CreateDatabase::class)();
     }
 
     /** @test */
-    function it_checks_if_mysql_is_installed()
+    function it_throws_an_exception_if_mysql_is_not_installed()
     {
         $executableFinder = $this->mock(ExecutableFinder::class);
 
@@ -55,7 +60,9 @@ class CreateDatabaseTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        $this->assertEquals('MySQL does not seem to be installed. Skipping new database creation.', app(CreateDatabase::class)());
+        $this->expectException(LamboException::class);
+
+        app(CreateDatabase::class)();
     }
 
     /** @test */
@@ -66,12 +73,17 @@ class CreateDatabaseTest extends TestCase
         Config::set('lambo.store.database_password', 'password');
         Config::set('lambo.store.database_name', 'database_name');
 
-        $this->shell->shouldReceive('execInProject')
+        $this->shell->shouldReceive('exec')
+            ->with('mysql.server status')
+            ->once()
+            ->andReturn(FakeProcess::success()->withOutput('MySQL running'));
+
+        $this->shell->shouldReceive('exec')
             ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
             ->once()
             ->andReturn(FakeProcess::fail('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";'));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(CreateDatabase::class)();
     }

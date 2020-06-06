@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\LaravelUi;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
@@ -43,7 +43,7 @@ class LaravelUiTest extends TestCase
     }
 
     /** @test */
-    function it_does_not_install_laravel_ui_if_it_is_already_present()
+    function it_skips_laravel_ui_installation_if_it_is_already_present()
     {
         $shell = $this->spy(Shell::class);
 
@@ -75,7 +75,7 @@ class LaravelUiTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::fail('composer require laravel/ui --quiet'));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(LaravelUi::class)->install();
     }

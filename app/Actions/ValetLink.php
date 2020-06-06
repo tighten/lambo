@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 
 class ValetLink
 {
@@ -21,12 +21,12 @@ class ValetLink
             return;
         }
 
-        $this->logStep('Running valet link');
+        app('console-writer')->logStep('Running valet link');
 
         $process = $this->shell->execInProject('valet link');
 
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
-        $this->info('valet link successful');
+        app('console-writer')->success('valet link successful');
     }
 }

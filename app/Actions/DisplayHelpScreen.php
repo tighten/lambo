@@ -6,8 +6,6 @@ use App\Options;
 
 class DisplayHelpScreen
 {
-    use LamboAction;
-
     protected $indent = 30;
 
     protected $commands = [
@@ -18,20 +16,23 @@ class DisplayHelpScreen
 
     public function __invoke()
     {
+        $consoleWriter = app('console-writer');
 
-        $this->line("\n<comment>Usage:</comment>");
-        $this->line("  lambo new myApplication [arguments]\n");
-        $this->line("<comment>Commands (lambo COMMANDNAME):</comment>");
+        $consoleWriter->newLine();
+        $consoleWriter->ignoreVerbosity()->text("<comment>Usage:</comment>");
+        $consoleWriter->ignoreVerbosity()->text("  lambo new myApplication [arguments]\n");
+        $consoleWriter->ignoreVerbosity()->text("<comment>Commands (lambo COMMANDNAME):</comment>");
 
         foreach ($this->commands as $command => $description) {
             $spaces = $this->makeSpaces(strlen($command));
-            $this->line("  <info>{$command}</info>{$spaces}{$description}");
+            $consoleWriter->ignoreVerbosity()->text("  <info>{$command}</info>{$spaces}{$description}");
         }
 
-        $this->line("\n<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        $consoleWriter->ignoreVerbosity()->newLine();
+        $consoleWriter->ignoreVerbosity()->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
 
         foreach ((new Options)->all() as $option) {
-            $this->line($this->createCliStringForOption($option));
+            $consoleWriter->ignoreVerbosity()->text($this->createCliStringForOption($option));
         }
     }
 

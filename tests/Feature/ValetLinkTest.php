@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\ValetLink;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -33,7 +33,7 @@ class ValetLinkTest extends TestCase
     }
 
     /** @test */
-    function it_throws_an_exception_if_the_after_script_fails()
+    function it_throws_an_exception_if_valet_link_fails()
     {
         Config::set('lambo.store.valet_link', true);
 
@@ -43,7 +43,7 @@ class ValetLinkTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::fail($command));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(ValetLink::class)();
     }

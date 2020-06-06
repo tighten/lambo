@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\InstallNpmDependencies;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -23,7 +23,7 @@ class InstallNpmDependenciesTest extends TestCase
     function it_installs_npm_dependencies()
     {
         Config::set('lambo.store.node', true);
-        Config::set('lambo.store.with-output', false);
+        Config::set('lambo.store.with_output', false);
 
         $this->shell->shouldReceive('execInProject')
             ->with("npm install --silent")
@@ -37,7 +37,7 @@ class InstallNpmDependenciesTest extends TestCase
     function it_installs_npm_dependencies_and_shows_console_output()
     {
         Config::set('lambo.store.node', true);
-        Config::set('lambo.store.with-output', true);
+        Config::set('lambo.store.with_output', true);
 
         $this->shell->shouldReceive('execInProject')
             ->with("npm install")
@@ -51,14 +51,14 @@ class InstallNpmDependenciesTest extends TestCase
     function it_throws_an_exception_if_npm_install_fails()
     {
         Config::set('lambo.store.node', true);
-        Config::set('lambo.store.with-output', false);
+        Config::set('lambo.store.with_output', false);
 
         $this->shell->shouldReceive('execInProject')
             ->with('npm install --silent')
             ->once()
             ->andReturn(FakeProcess::fail('npm install --silent'));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(InstallNpmDependencies::class)();
     }

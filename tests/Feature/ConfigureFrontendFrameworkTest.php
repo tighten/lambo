@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Actions\ConfigureFrontendFramework;
 use App\Actions\LaravelUi;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -33,13 +33,13 @@ class ConfigureFrontendFrameworkTest extends TestCase
             ->ordered();
 
         $this->shell->shouldReceive('execInProject')
-            ->with('php artisan ui foo-frontend')
+            ->with('php artisan ui foo-frontend --quiet')
             ->once()
             ->andReturn(FakeProcess::success())
             ->globally()
             ->ordered();
 
-        app(ConfigureFrontendFramework::class)();
+        app(ConfigureFrontendFramework::class)(['foo-frontend', 'bar-frontend']);
     }
 
     /** @test */
@@ -66,6 +66,30 @@ class ConfigureFrontendFrameworkTest extends TestCase
             ->globally()
             ->ordered();
 
+        $command = 'php artisan ui foo-frontend --quiet';
+        $this->shell->shouldReceive('execInProject')
+            ->with($command)
+            ->once()
+            ->andReturn(FakeProcess::fail($command))
+            ->globally()
+            ->ordered();
+
+        $this->expectException(LamboException::class);
+
+        app(ConfigureFrontendFramework::class)(['foo-frontend', 'bar-frontend']);
+    }
+
+    /** @test */
+    function it_removes_the_quiet_flag_when_show_output_is_enabled()
+    {
+        Config::set('lambo.store.frontend', 'foo-frontend');
+        Config::set('lambo.store.with_output', true);
+
+        $this->laravelUi->shouldReceive('install')
+            ->once()
+            ->globally()
+            ->ordered();
+
         $command = 'php artisan ui foo-frontend';
         $this->shell->shouldReceive('execInProject')
             ->with($command)
@@ -74,8 +98,8 @@ class ConfigureFrontendFrameworkTest extends TestCase
             ->globally()
             ->ordered();
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
-        app(ConfigureFrontendFramework::class)();
+        app(ConfigureFrontendFramework::class)(['foo-frontend', 'bar-frontend']);
     }
 }

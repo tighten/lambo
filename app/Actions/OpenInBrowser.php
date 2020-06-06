@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\Environment;
-use App\Shell\Shell;
+use App\Shell;
 
 class OpenInBrowser
 {
@@ -18,7 +18,7 @@ class OpenInBrowser
 
     public function __invoke()
     {
-        $this->logStep('Opening in Browser');
+        app('console-writer')->logStep('Opening in Browser');
 
         if (Environment::isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(

@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use App\Actions\CompileAssets;
 use App\Actions\SilentDevScript;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -48,33 +48,7 @@ class CompileAssetsTest extends TestCase
     }
 
     /** @test */
-    function it_compiles_project_assets_and_shows_console_output()
-    {
-        Config::set('lambo.store.mix', true);
-        Config::set('lambo.store.with_output', true);
-
-        $this->silentDevScript->shouldReceive('add')
-            ->once()
-            ->globally()
-            ->ordered();
-
-        $this->shell->shouldReceive('execInProject')
-            ->with('npm run dev')
-            ->once()
-            ->andReturn(FakeProcess::success())
-            ->globally()
-            ->ordered();
-
-        $this->silentDevScript->shouldReceive('remove')
-            ->once()
-            ->globally()
-            ->ordered();
-
-        app(CompileAssets::class)();
-    }
-
-    /** @test */
-    function it_skips_asset_compilation_if_it_is_not_requested()
+    function it_skips_asset_compilation()
     {
         $this->silentDevScript = $this->spy(SilentDevScript::class);
         $this->shell = $this->spy(Shell::class);
@@ -106,7 +80,7 @@ class CompileAssetsTest extends TestCase
             ->globally()
             ->ordered();
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(CompileAssets::class)();
     }

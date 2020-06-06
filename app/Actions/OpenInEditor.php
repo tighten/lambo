@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 
 class OpenInEditor
 {
@@ -17,18 +17,16 @@ class OpenInEditor
 
     public function __invoke()
     {
-        if (! $this->editor()) {
+        if (config('lambo.store.no_editor')) {
             return;
         }
 
-        $this->logStep('Opening In Editor');
+        app('console-writer')->logStep('Opening In Editor');
 
-        $this->shell->execInProject($this->editor() . " .");
-        $this->info('Opening your project in ' . $this->editor());
-    }
+        $process = $this->shell->execInProject(sprintf("%s .", config('lambo.store.editor')));
 
-    public function editor()
-    {
-        return config('lambo.store.editor');
+        $this->abortIf(! $process->isSuccessful(), sprintf("Failed to open editor %s", config('lambo.store.editor')), $process);
+
+        app('console-writer')->success('Opening your project in ' . config('lambo.store.editor'));
     }
 }

@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Actions\RunLaravelInstaller;
-use App\Shell\Shell;
-use Exception;
+use App\LamboException;
+use App\Shell;
 use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -78,7 +78,12 @@ class RunLaravelInstallerTest extends TestCase
             Config::set('lambo.store.dev', $options['lambo.store.dev']);
             Config::set('lambo.store.with_output', $options['lambo.store.with_output']);
 
-            $this->runLaravelInstaller($options['command']);
+            $this->shell->shouldReceive('execInRoot')
+                ->with($options['command'])
+                ->once()
+                ->andReturn(FakeProcess::success());
+
+            app(RunLaravelInstaller::class)();
         });
     }
 
@@ -93,17 +98,7 @@ class RunLaravelInstallerTest extends TestCase
         $this->shell->shouldReceive('execInRoot')
             ->andReturn(FakeProcess::fail('failed command'));
 
-        $this->expectException(Exception::class);
-
-        app(RunLaravelInstaller::class)();
-    }
-
-    function runLaravelInstaller(string $expectedCommand)
-    {
-        $this->shell->shouldReceive('execInRoot')
-            ->with($expectedCommand)
-            ->once()
-            ->andReturn(FakeProcess::success());
+        $this->expectException(LamboException::class);
 
         app(RunLaravelInstaller::class)();
     }

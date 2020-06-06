@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\Shell;
 
 class GenerateAppKey
 {
@@ -17,12 +17,17 @@ class GenerateAppKey
 
     public function __invoke()
     {
-        $this->logStep('Running php artisan key:generate');
+        app('console-writer')->logStep('Setting APP_KEY in .env');
 
-        $process = $this->shell->execInProject('php artisan key:generate');
+        $process = $this->shell->execInProject(sprintf("php artisan key:generate%s", $this->withQuiet()));
 
         $this->abortIf(! $process->isSuccessful(), 'Failed to generate application key successfully', $process);
 
-        $this->info('Application key has been set.');
+        app('console-writer')->success('APP_KEY has been set.');
+    }
+
+    private function withQuiet()
+    {
+        return config('lambo.store.with_output') ? '' : ' --quiet';
     }
 }
