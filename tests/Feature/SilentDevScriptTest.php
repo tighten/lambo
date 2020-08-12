@@ -14,8 +14,8 @@ class SilentDevScriptTest extends TestCase
     {
         Config::set('lambo.store.project_path', '/some/project/path');
 
-        $packageJson = File::get(base_path('tests/feature/fixtures/package.json'));
-        $silentPackageJson = File::get(base_path('tests/feature/fixtures/package-silent.json'));
+        $packageJson = File::get(base_path('tests/Feature/Fixtures/package.json'));
+        $silentPackageJson = File::get(base_path('tests/Feature/Fixtures/package-silent.json'));
 
         File::shouldReceive('copy')
             ->with('/some/project/path/package.json', '/some/project/path/package-original.json')
