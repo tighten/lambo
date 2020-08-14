@@ -19,7 +19,7 @@ class ConfigureFrontendFramework
         $this->laravelUi = $laravelUi;
     }
 
-    public function __invoke(array $availableFrontends)
+    public function __invoke()
     {
         $this->availableFrontends = $availableFrontends;
 
