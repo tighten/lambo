@@ -11,7 +11,7 @@ class ConfigureFrontendFramework
 
     private $shell;
     private $laravelUi;
-    private $availableFrontends;
+    private $availableFrontends = ['bootstrap', 'react', 'vue'];
 
     public function __construct(Shell $shell, LaravelUi $laravelUi)
     {
