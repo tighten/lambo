@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\CreateDatabase;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -27,10 +26,10 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_creates_a_mysql_database()
     {
-        Config::set('lambo.store.create_database', true);
-        Config::set('lambo.store.database_username', 'user');
-        Config::set('lambo.store.database_password', 'password');
-        Config::set('lambo.store.database_name', 'database_name');
+        config(['lambo.store.create_database' => true]);
+        config(['lambo.store.database_username' => 'user']);
+        config(['lambo.store.database_password' => 'password']);
+        config(['lambo.store.database_name' => 'database_name']);
 
         $this->shell->shouldReceive('exec')
             ->with('mysql.server status')
@@ -50,10 +49,10 @@ class CreateDatabaseTest extends TestCase
     {
         $executableFinder = $this->mock(ExecutableFinder::class);
 
-        Config::set('lambo.store.create_database', true);
-        Config::set('lambo.store.database_username', 'user');
-        Config::set('lambo.store.database_password', 'password');
-        Config::set('lambo.store.database_name', 'database_name');
+        config(['lambo.store.create_database' => true]);
+        config(['lambo.store.database_username' => 'user']);
+        config(['lambo.store.database_password' => 'password']);
+        config(['lambo.store.database_name' => 'database_name']);
 
         $executableFinder->shouldReceive('find')
             ->with('mysql')
@@ -68,10 +67,10 @@ class CreateDatabaseTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_database_creation_fails()
     {
-        Config::set('lambo.store.create_database', true);
-        Config::set('lambo.store.database_username', 'user');
-        Config::set('lambo.store.database_password', 'password');
-        Config::set('lambo.store.database_name', 'database_name');
+        config(['lambo.store.create_database' => true]);
+        config(['lambo.store.database_username' => 'user']);
+        config(['lambo.store.database_password' => 'password']);
+        config(['lambo.store.database_name' => 'database_name']);
 
         $this->shell->shouldReceive('exec')
             ->with('mysql.server status')

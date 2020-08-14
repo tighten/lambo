@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\SavedConfig;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -29,8 +28,8 @@ class SavedConfigTest extends TestCase
         $this->configDirectory = "{$homeDirectory}/.lambo";
         $this->configFilePath = "{$this->configDirectory}/{$this->fileName}";
 
-        Config::set('home_dir', $homeDirectory);
-        Config::set('lambo.store.editor', 'vim');
+        config(['home_dir' => $homeDirectory]);
+        config(['lambo.store.editor' => 'vim']);
 
         $this->fileTemplate = 'my-config-file-template';
     }

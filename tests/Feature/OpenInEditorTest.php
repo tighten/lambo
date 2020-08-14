@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\OpenInEditor;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -16,7 +15,7 @@ class OpenInEditorTest extends TestCase
     {
         $shell = $this->mock(Shell::class);
 
-        Config::set('lambo.store.editor', 'my-editor');
+        config(['lambo.store.editor' => 'my-editor']);
 
         $shell->shouldReceive('execInProject')
             ->with("my-editor .")
@@ -31,7 +30,7 @@ class OpenInEditorTest extends TestCase
     {
         $shell = $this->mock(Shell::class);
 
-        Config::set('lambo.store.editor', 'my-editor');
+        config(['lambo.store.editor' => 'my-editor']);
 
         $editorCommand = "my-editor .";
         $shell->shouldReceive('execInProject')

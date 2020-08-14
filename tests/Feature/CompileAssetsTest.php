@@ -6,7 +6,6 @@ use App\Actions\CompileAssets;
 use App\Actions\SilentDevScript;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -25,7 +24,7 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()
     {
-        Config::set('lambo.store.mix', true);
+        config(['lambo.store.mix' => true]);
 
         $this->silentDevScript->shouldReceive('add')
             ->once()
@@ -53,7 +52,7 @@ class CompileAssetsTest extends TestCase
         $this->silentDevScript = $this->spy(SilentDevScript::class);
         $this->shell = $this->spy(Shell::class);
 
-        Config::set('lambo.store.mix', false);
+        config(['lambo.store.mix' => false]);
 
         app(CompileAssets::class)();
 
@@ -65,7 +64,7 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_asset_compilation_fails()
     {
-        Config::set('lambo.store.mix', true);
+        config(['lambo.store.mix' => true]);
 
         $this->silentDevScript->shouldReceive('add')
             ->once()

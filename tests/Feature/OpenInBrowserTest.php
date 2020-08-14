@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Actions\OpenInBrowser;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class OpenInBrowserTest extends TestCase
@@ -22,8 +21,8 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_opens_the_project_homepage_using_the_specified_browser_on_mac()
     {
-        Config::set('lambo.store.browser', '/Applications/my/browser.app');
-        Config::set('lambo.store.project_url', 'http://my-project.test');
+        config(['lambo.store.browser' => '/Applications/my/browser.app']);
+        config(['lambo.store.project_url' => 'http://my-project.test']);
 
         $this->environment->shouldReceive('isMac')
             ->once()
@@ -39,7 +38,7 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_opens_the_project_homepage_using_valet_open_when_no_browser_is_specified_on_mac()
     {
-        $this->assertEmpty(Config::get('lambo.store.browser'));
+        $this->assertEmpty(config('lambo.store.browser'));
 
         $this->environment->shouldReceive('isMac')
             ->once()
@@ -69,8 +68,8 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_ignores_the_specified_browser_when_not_running_on_mac()
     {
-        Config::set('lambo.store.browser', '/path/to/a/browser');
-        Config::set('lambo.store.project_url', 'http://my-project.test');
+        config(['lambo.store.browser' => '/path/to/a/browser']);
+        config(['lambo.store.project_url' => 'http://my-project.test']);
 
         $this->environment->shouldReceive('isMac')
             ->once()

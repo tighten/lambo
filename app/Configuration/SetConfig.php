@@ -3,7 +3,7 @@
 namespace App\Configuration;
 
 use App\LamboException;
-use Illuminate\Support\Facades\Config;
+
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -25,17 +25,17 @@ class SetConfig
         foreach ($defaultConfiguration as $configurationKey => $default) {
             $methodName = 'get' . Str::of($configurationKey)->studly();
             if (method_exists($this, $methodName)) {
-                Config::set("lambo.store.{$configurationKey}", $this->$methodName($configurationKey, $default));
+                config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
                 continue;
             }
-            Config::set("lambo.store.{$configurationKey}", $this->get($configurationKey, $default));
+            config(["lambo.store.{$configurationKey}" => $this->get($configurationKey, $default)]);
         }
         // These are set here because they require that the, command line
         // arguments/options, saved configuration and shell environment
         // configurations have been merged prior to setting.
         // @todo: vvv should we check that the required config variables are set? vvv
-        Config::set("lambo.store.project_path", Config::get('lambo.store.root_path') . "/" . Config::get('lambo.store.project_name'));
-        Config::set("lambo.store.project_url", $this->getProjectURL());
+        config(["lambo.store.project_path" => config('lambo.store.root_path') . "/" . config('lambo.store.project_name')]);
+        config(["lambo.store.project_url" => $this->getProjectURL()]);
     }
 
     private function get(string $configurationKey, $default)
@@ -57,8 +57,8 @@ class SetConfig
 
     private function getTld(): string
     {
-        $valetConfig = Config::get('home_dir') . '/.config/valet/config.json';
-        $legacyValetConfig = Config::get('home_dir') . '/.valet/config.json';
+        $valetConfig = config('home_dir') . '/.config/valet/config.json';
+        $legacyValetConfig = config('home_dir') . '/.valet/config.json';
 
         if (File::isFile($valetConfig)) {
             return json_decode(File::get($valetConfig))->tld;
@@ -87,8 +87,8 @@ class SetConfig
 
     private function getProjectURL(): string
     {
-        $protocol = Config::get("lambo.store.valet_secure") ? 's' : '';
-        return sprintf("http%s://%s.%s", $protocol, Config::get('lambo.store.project_name'), Config::get('lambo.store.tld'));
+        $protocol = config("lambo.store.valet_secure") ? 's' : '';
+        return sprintf("http%s://%s.%s", $protocol, config('lambo.store.project_name'), config('lambo.store.tld'));
     }
 
     private function getAuth(string $key, $default)

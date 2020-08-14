@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\LaravelUi;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -23,7 +22,7 @@ class LaravelUiTest extends TestCase
     /** @test */
     function it_installs_laravel_ui()
     {
-        Config::set('lambo.store.project_path', '/some/project/path');
+        config(['lambo.store.project_path' => '/some/project/path']);
 
         $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-ui.json'));
 
@@ -47,7 +46,7 @@ class LaravelUiTest extends TestCase
     {
         $shell = $this->spy(Shell::class);
 
-        Config::set('lambo.store.project_path', '/some/project/path');
+        config(['lambo.store.project_path' => '/some/project/path']);
 
         $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-with-laravel-ui.json'));
 
@@ -68,7 +67,7 @@ class LaravelUiTest extends TestCase
     {
         File::shouldReceive('get');
 
-        Config::set('lambo.store.project_path', '/some/project/path');
+        config(['lambo.store.project_path' => '/some/project/path']);
 
         $this->shell->shouldReceive('execInProject')
             ->with('composer require laravel/ui --quiet')

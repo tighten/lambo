@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\InitializeGitRepo;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -22,7 +21,7 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_initialises_the_projects_git_repository()
     {
-        Config::set('lambo.store.commit_message', 'Initial commit');
+        config(['lambo.store.commit_message' => 'Initial commit']);
 
         $this->shell->shouldReceive('execInProject')
             ->with('git init --quiet')
@@ -76,7 +75,7 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_commit_fails()
     {
-        Config::set('lambo.store.commit_message', 'Initial commit');
+        config(['lambo.store.commit_message' => 'Initial commit']);
 
         $command = 'git init --quiet';
         $this->shell->shouldReceive('execInProject')
@@ -102,8 +101,8 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_removes_the_quiet_flag_when_show_output_is_enabled()
     {
-        Config::set('lambo.store.commit_message', 'Initial commit');
-        Config::set('lambo.store.with_output', true);
+        config(['lambo.store.commit_message' => 'Initial commit']);
+        config(['lambo.store.with_output' => true]);
 
         $this->shell->shouldReceive('execInProject')
             ->with('git init')

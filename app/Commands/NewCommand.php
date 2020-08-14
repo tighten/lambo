@@ -26,7 +26,6 @@ use App\Configuration\SetConfig;
 use App\Configuration\ShellConfiguration;
 use App\LamboException;
 use App\Options;
-use Illuminate\Support\Facades\Config;
 
 class NewCommand extends LamboCommand
 {
@@ -117,7 +116,7 @@ class NewCommand extends LamboCommand
 
     private function setConfig(): void
     {
-        Config::set('lambo.store'); // @todo remove if debug code is removed.
+        config(['lambo.store' => []]); // @todo remove if debug code is removed.
 
         $commandLineConfiguration = new CommandLineConfiguration([
             'editor'      => LamboConfiguration::EDITOR,

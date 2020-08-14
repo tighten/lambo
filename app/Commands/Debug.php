@@ -4,7 +4,6 @@ namespace App\Commands;
 
 use Dotenv\Dotenv;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 trait Debug
@@ -13,7 +12,7 @@ trait Debug
     protected function arrayToTable(array $data, array $filter = null, string $keyPrefix = '', array $headers = null): void
     {
         if (count($data) === 0) {
-            app('console-writer')->text(sprintf('No saved configuration found at "%s".', Config::get('home_dir') . '/.lambo/config'));
+            app('console-writer')->text(sprintf('No saved configuration found at "%s".', config('home_dir') . '/.lambo/config'));
             app('console-writer')->newLine();
 
             return;
@@ -58,7 +57,7 @@ trait Debug
             'shell environment variables.',
         ]);
 
-        $config = Arr::prepend(Config::get('lambo.store'), Config::get('home_dir'), 'home_dir');
+        $config = Arr::prepend(config('lambo.store'), config('home_dir'), 'home_dir');
         $this->arrayToTable($config, null, 'lambo.store.', ['Configuration key', 'Value', 'Type']);
 
         app('console-writer')->section('Pre-flight Configuration');
@@ -96,8 +95,8 @@ trait Debug
         app('console-writer')->text('Saved configuration:');
 
         $savedConfig = [];
-        if (File::isFile(Config::get('home_dir') . '/.lambo/config')) {
-            $savedConfig = Dotenv::createMutable(Config::get('home_dir') . '/.lambo', 'config')->load();
+        if (File::isFile(config('home_dir') . '/.lambo/config')) {
+            $savedConfig = Dotenv::createMutable(config('home_dir') . '/.lambo', 'config')->load();
         }
         $this->arrayToTable(
             $savedConfig,

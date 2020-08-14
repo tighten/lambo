@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\CustomizeDotEnv;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
@@ -19,12 +18,12 @@ class CustomizeDotEnvTest extends TestCase
             };
         });
 
-        Config::set('lambo.store.project_name', 'my-project');
-        Config::set('lambo.store.database_name', 'my_project');
-        Config::set('lambo.store.project_url', 'http://my-project.example.com');
-        Config::set('lambo.store.database_username', 'username');
-        Config::set('lambo.store.database_password', 'password');
-        Config::set('lambo.store.project_path', '/some/project/path');
+        config(['lambo.store.project_name' => 'my-project']);
+        config(['lambo.store.database_name' => 'my_project']);
+        config(['lambo.store.project_url' => 'http://my-project.example.com']);
+        config(['lambo.store.database_username' => 'username']);
+        config(['lambo.store.database_password' => 'password']);
+        config(['lambo.store.project_path' => '/some/project/path']);
 
         $originalDotEnv = File::get(base_path('tests/Feature/Fixtures/.env.original'));
         $customizedDotEnv = File::get(base_path('tests/Feature/Fixtures/.env.customized'));

@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Config\Repository;
-use Illuminate\Support\Facades\Config;
+
 use Symfony\Component\Process\Process;
 
 class Shell
@@ -72,7 +72,7 @@ class Shell
 
     private function shouldReportProgress(): bool
     {
-        return app('console-writer')->isVerbose() || Config::get('lambo.store.with_output');
+        return app('console-writer')->isVerbose() || config('lambo.store.with_output');
     }
 
     private function progress(string $line, string $type)

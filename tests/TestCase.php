@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
                 public function comment($message = '') {}
                 public function info() {}
                 public function warn($message = '') {}
-                public function choice(stirng $choice) {}
+                public function choice(string $choice) {}
             };
         });
 

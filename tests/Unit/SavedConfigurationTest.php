@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Configuration\SavedConfiguration;
-use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class SavedConfigurationTest extends TestCase
@@ -12,8 +11,8 @@ class SavedConfigurationTest extends TestCase
     {
         parent::setUp();
 
-        Config::set('home_dir', base_path('tests/Feature/Fixtures'));
-        Config::set('config_dir', '.lambo');
+        config(['home_dir' => base_path('tests/Feature/Fixtures')]);
+        config(['config_dir' => '.lambo']);
     }
 
     /** @test */
@@ -59,7 +58,7 @@ class SavedConfigurationTest extends TestCase
     /** test */
     function it_returns_null_when_the_configuration_file_does_not_exist()
     {
-        Config::set('config_file', 'non-existent-configuration_file');
+        config(['config_file' => 'non-existent-configuration_file']);
 
         $savedConfiguration = new SavedConfiguration([
             'CONFIGURATION_VALUE' => 'genericOption',

@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\RunAfterScript;
 use App\LamboException;
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -23,7 +22,7 @@ class RunAfterScriptTest extends TestCase
     /** @test */
     function it_runs_the_after_script_if_one_exists()
     {
-        Config::set('home_dir', '/my/home/dir');
+        config(['home_dir' => '/my/home/dir']);
 
         File::shouldReceive('isFile')
             ->with('/my/home/dir/.lambo/after')
@@ -44,7 +43,7 @@ class RunAfterScriptTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_the_after_script_fails()
     {
-        Config::set('home_dir', '/my/home/dir');
+        config(['home_dir' => '/my/home/dir']);
 
         File::shouldReceive('isFile')
             ->with('/my/home/dir/.lambo/after')
