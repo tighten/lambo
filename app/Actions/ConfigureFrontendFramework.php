@@ -21,7 +21,6 @@ class ConfigureFrontendFramework
 
     public function __invoke()
     {
-        $this->availableFrontends = $availableFrontends;
 
         if (! Config::get('lambo.store.frontend')) {
             return;
