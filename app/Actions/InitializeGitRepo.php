@@ -19,7 +19,7 @@ class InitializeGitRepo
     {
         app('console-writer')->logStep('Initializing git repository');
 
-        $this->execAndCheck('git init' . $this->withQuiet());
+        $this->execAndCheck("git init{$this->withQuiet()}");
         $this->execAndCheck('git add .');
         $this->execAndCheck(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
 
