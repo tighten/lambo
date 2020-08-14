@@ -19,7 +19,7 @@ class GenerateAppKey
     {
         app('console-writer')->logStep('Setting APP_KEY in .env');
 
-        $process = $this->shell->execInProject(sprintf("php artisan key:generate%s", $this->withQuiet()));
+        $process = $this->shell->execInProject("php artisan key:generate{$this->withQuiet()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Failed to generate application key successfully', $process);
 
