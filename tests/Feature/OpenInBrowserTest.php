@@ -19,7 +19,7 @@ class OpenInBrowserTest extends TestCase
     }
 
     /** @test */
-    function it_opens_the_project_homepage_using_the_specified_browser_on_mac()
+    function it_uses_the_open_command_on_mac_when_a_browser_is_specified()
     {
         config(['lambo.store.browser' => '/Applications/my/browser.app']);
         config(['lambo.store.project_url' => 'http://my-project.test']);
@@ -36,7 +36,7 @@ class OpenInBrowserTest extends TestCase
     }
 
     /** @test */
-    function it_opens_the_project_homepage_using_valet_open_when_no_browser_is_specified_on_mac()
+    function it_uses_valet_open_on_mac_when_no_browser_is_specified()
     {
         $this->assertEmpty(config('lambo.store.browser'));
 
