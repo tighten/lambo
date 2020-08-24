@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Shell;
-use Illuminate\Support\Facades\Config;
 
 class ConfigureFrontendFramework
 {
@@ -21,8 +20,7 @@ class ConfigureFrontendFramework
 
     public function __invoke()
     {
-
-        if (! Config::get('lambo.store.frontend')) {
+        if (! config('lambo.store.frontend')) {
             return;
         }
 
@@ -47,7 +45,7 @@ class ConfigureFrontendFramework
 
         $configuredFrontend = $this->chooseFrontend();
         if ($configuredFrontend !== 'none') {
-            Config::set('lambo.store.frontend', $configuredFrontend);
+            config(['lambo.store.frontend' => $configuredFrontend]);
             app('console-writer')->success("Using {$configuredFrontend} ui scaffolding.", ' OK ');
             return true;
         }
@@ -59,7 +57,7 @@ class ConfigureFrontendFramework
     private function chooseFrontend()
     {
         $this->availableFrontends[] = 'none';
-        $message = sprintf("<fg=yellow>I can't install %s</>. Please choose one of the following options", Config::get('lambo.store.frontend'));
+        $message = sprintf("<fg=yellow>I can't install %s</>. Please choose one of the following options", config('lambo.store.frontend'));
         $preselectedChoice = count($this->availableFrontends) - 1;
 
         return app('console')->choice($message, $this->availableFrontends, $preselectedChoice);
@@ -72,6 +70,6 @@ class ConfigureFrontendFramework
 
     private function validFrontend()
     {
-        return in_array(strtolower(Config::get('lambo.store.frontend')), $this->availableFrontends);
+        return in_array(strtolower(config('lambo.store.frontend')), $this->availableFrontends);
     }
 }

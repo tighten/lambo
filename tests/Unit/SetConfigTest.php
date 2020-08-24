@@ -7,7 +7,6 @@ use App\Configuration\SavedConfiguration;
 use App\Configuration\SetConfig;
 use App\Configuration\ShellConfiguration;
 use App\LamboException;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\LamboTestEnvironment;
 use Tests\TestCase;
@@ -21,14 +20,14 @@ class SetConfigTest extends TestCase
     function it_sets_the_top_level_domain()
     {
         File::shouldReceive('isFile')
-            ->with(Config::get('home_dir') . '/.config/valet/config.json')
+            ->with(config('home_dir') . '/.config/valet/config.json')
             ->once()
             ->andReturnTrue()
             ->globally()
             ->ordered();
 
         File::shouldReceive('get')
-            ->with(Config::get('home_dir') . '/.config/valet/config.json')
+            ->with(config('home_dir') . '/.config/valet/config.json')
             ->once()
             ->andReturn('{"tld": "mytld"}')
             ->globally()
@@ -40,14 +39,14 @@ class SetConfigTest extends TestCase
             $this->mock(ShellConfiguration::class)
         ))(['tld' => null]);
 
-        $this->assertEquals('mytld', Config::get('lambo.store.tld'));
+        $this->assertEquals('mytld', config('lambo.store.tld'));
     }
 
     /** @test */
     function it_sets_the_top_level_domain_using_legacy_valet_config()
     {
         File::shouldReceive('isFile')
-            ->with(Config::get('home_dir') . '/.config/valet/config.json')
+            ->with(config('home_dir') . '/.config/valet/config.json')
             ->once()
             ->andReturnFalse()
             ->globally()
@@ -55,13 +54,13 @@ class SetConfigTest extends TestCase
 
         File::shouldReceive('isFile')
             ->once()
-            ->with(Config::get('home_dir') . '/.valet/config.json')
+            ->with(config('home_dir') . '/.valet/config.json')
             ->andReturnTrue()
             ->globally()
             ->ordered();
 
         File::shouldReceive('get')
-            ->with(Config::get('home_dir') . '/.valet/config.json')
+            ->with(config('home_dir') . '/.valet/config.json')
             ->once()
             ->andReturn('{"domain": "mytld"}')
             ->globally()
@@ -73,14 +72,14 @@ class SetConfigTest extends TestCase
             $this->mock(ShellConfiguration::class)
         ))(['tld' => null]);
 
-        $this->assertEquals('mytld', Config::get('lambo.store.tld'));
+        $this->assertEquals('mytld', config('lambo.store.tld'));
     }
 
     /** @test */
     function it_throws_a_LamboException_if_valet_config_is_missing()
     {
         File::shouldReceive('isFile')
-            ->with(Config::get('home_dir') . '/.config/valet/config.json')
+            ->with(config('home_dir') . '/.config/valet/config.json')
             ->once()
             ->andReturnFalse()
             ->globally()
@@ -88,7 +87,7 @@ class SetConfigTest extends TestCase
 
         File::shouldReceive('isFile')
             ->once()
-            ->with(Config::get('home_dir') . '/.valet/config.json')
+            ->with(config('home_dir') . '/.valet/config.json')
             ->andReturnFalse()
             ->globally()
             ->ordered();
@@ -124,7 +123,7 @@ class SetConfigTest extends TestCase
             'testKey' => 'default',
         ]);
 
-        $this->assertEquals('command-line-parameter', Config::get('lambo.store.testKey'));
+        $this->assertEquals('command-line-parameter', config('lambo.store.testKey'));
     }
 
     /** @test */
@@ -149,7 +148,7 @@ class SetConfigTest extends TestCase
             'testKey' => 'default',
         ]);
 
-        $this->assertEquals('saved-config-parameter', Config::get('lambo.store.testKey'));
+        $this->assertEquals('saved-config-parameter', config('lambo.store.testKey'));
     }
 
     /** @test */
@@ -174,7 +173,7 @@ class SetConfigTest extends TestCase
             'testKey' => 'default',
         ]);
 
-        $this->assertEquals('shell-environment-parameter', Config::get('lambo.store.testKey'));
+        $this->assertEquals('shell-environment-parameter', config('lambo.store.testKey'));
     }
 
     /** @test */
@@ -199,13 +198,13 @@ class SetConfigTest extends TestCase
             'testKey' => 'default',
         ]);
 
-        $this->assertEquals('default', Config::get('lambo.store.testKey'));
+        $this->assertEquals('default', config('lambo.store.testKey'));
     }
 
     /** @test */
     function it_replaces_tilda_in_root_path()
     {
-        Config::set('home_dir', '/home/user');
+        config(['home_dir' => '/home/user']);
 
         $this->withValetTld();
 
@@ -218,7 +217,7 @@ class SetConfigTest extends TestCase
             $this->mock(ShellConfiguration::class)
         ))(['root_path' => getcwd()]);
 
-        $this->assertEquals('/home/user/path/from/command/line', Config::get('lambo.store.root_path'));
+        $this->assertEquals('/home/user/path/from/command/line', config('lambo.store.root_path'));
 
         $savedConfiguration = $this->mock(SavedConfiguration::class);
         $savedConfiguration->root_path = '~/path/from/saved/configuration';
@@ -229,14 +228,14 @@ class SetConfigTest extends TestCase
             $this->mock(ShellConfiguration::class)
         ))(['root_path' => getcwd()]);
 
-        $this->assertEquals('/home/user/path/from/saved/configuration', Config::get('lambo.store.root_path'));
+        $this->assertEquals('/home/user/path/from/saved/configuration', config('lambo.store.root_path'));
     }
 
     /** @test */
     function it_replaces_hyphens_with_underscores_in_database_names()
     {
         $this->withValetTld();
-        Config::set('home_dir', '/home/user');
+        config(['home_dir' => '/home/user']);
 
         $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
         $commandLineConfiguration->project_name = 'foo';
@@ -252,7 +251,7 @@ class SetConfigTest extends TestCase
             'database_name' => null
         ]);
 
-        $this->assertEquals('h_y_p_h_e_n_s', Config::get('lambo.store.database_name'));
+        $this->assertEquals('h_y_p_h_e_n_s', config('lambo.store.database_name'));
     }
 
     /* -------------------------------------------------------------------------------------------------------------- /*
@@ -295,7 +294,7 @@ class SetConfigTest extends TestCase
             'valet_secure' => false,
         ]);
 
-        $this->assertEquals('http://foo.test-domain', Config::get('lambo.store.project_url'));
+        $this->assertEquals('http://foo.test-domain', config('lambo.store.project_url'));
 
         $commandLineConfiguration->valet_secure = true;
 
@@ -309,7 +308,7 @@ class SetConfigTest extends TestCase
             'valet_secure' => false,
         ]);
 
-        $this->assertEquals('https://foo.test-domain', Config::get('lambo.store.project_url'));
+        $this->assertEquals('https://foo.test-domain', config('lambo.store.project_url'));
     }
 
     /** @test */
@@ -326,14 +325,14 @@ class SetConfigTest extends TestCase
             $this->mock(ShellConfiguration::class)
         ))(['project_name' => null]);
 
-        $this->assertEquals('foo', Config::get('lambo.store.project_name'));
+        $this->assertEquals('foo', config('lambo.store.project_name'));
     }
 
     /** @test */
     function it_sets_the_project_path()
     {
         $this->withValetTld();
-        Config::set('home_dir', '/home/user');
+        config(['home_dir' => '/home/user']);
 
         $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
         $commandLineConfiguration->root_path = '/path/from/command/line';
@@ -348,14 +347,14 @@ class SetConfigTest extends TestCase
             'project_name' => null,
         ]);
 
-        $this->assertEquals('/path/from/command/line/my-project', Config::get('lambo.store.project_path'));
+        $this->assertEquals('/path/from/command/line/my-project', config('lambo.store.project_path'));
     }
 
     /** @test */
     function it_sets_the_create_database_configuration()
     {
         $this->withValetTld();
-//        Config::set('home_dir', '/home/user');
+//        config(['home_dir' => '/home/user']);
 
         $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
         $savedConfiguration = $this->mock(SavedConfiguration::class);
@@ -367,7 +366,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.auth'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->auth = true;
@@ -376,7 +375,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.auth'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->auth = false;
@@ -385,7 +384,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.auth'));
+        $this->assertFalse(config('lambo.store.auth'));
 
 
         /*
@@ -397,7 +396,7 @@ class SetConfigTest extends TestCase
          *                   stored in ~/.lambo/config.
          *
          * create_database = the value that should be returned from
-         *                   Config::get('lambo.store.create_database')
+         *                   config('lambo.store.create_database')
          *                   after SetConfig has merged all configurations.
          */
         /*collect([
@@ -464,7 +463,7 @@ class SetConfigTest extends TestCase
                 'create_database' => false,
             ]);
 
-            $this->assertEquals($options['create_database'], Config::get('lambo.store.create_database'));
+            $this->assertEquals($options['create_database'], config('lambo.store.create_database'));
         });*/
     }
 
@@ -484,7 +483,7 @@ class SetConfigTest extends TestCase
             'node' => false,
             'mix' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.node'));
+        $this->assertTrue(config('lambo.store.node'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->mix = true;
@@ -495,7 +494,7 @@ class SetConfigTest extends TestCase
             'node' => false,
             'mix' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.node'));
+        $this->assertTrue(config('lambo.store.node'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->mix = false;
@@ -506,7 +505,7 @@ class SetConfigTest extends TestCase
             'node' => false,
             'mix' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.node'));
+        $this->assertTrue(config('lambo.store.node'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->mix = false;
@@ -517,7 +516,7 @@ class SetConfigTest extends TestCase
             'node' => false,
             'mix' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.node'));
+        $this->assertFalse(config('lambo.store.node'));
     }
 
     /** @test */
@@ -535,7 +534,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'mix' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.mix'));
+        $this->assertTrue(config('lambo.store.mix'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->mix = true;
@@ -544,7 +543,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'mix' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.mix'));
+        $this->assertTrue(config('lambo.store.mix'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->mix = false;
@@ -553,7 +552,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'mix' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.mix'));
+        $this->assertFalse(config('lambo.store.mix'));
 
     }
 
@@ -571,7 +570,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.auth'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->auth = true;
@@ -580,7 +579,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.auth'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->auth = false;
@@ -589,7 +588,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'auth' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.auth'));
+        $this->assertFalse(config('lambo.store.auth'));
     }
 
     /** @test */
@@ -606,7 +605,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'valet_link' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.valet_link'));
+        $this->assertTrue(config('lambo.store.valet_link'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = true;
@@ -615,7 +614,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'valet_link' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.valet_link'));
+        $this->assertTrue(config('lambo.store.valet_link'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = false;
@@ -624,7 +623,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'valet_link' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.valet_link'));
+        $this->assertFalse(config('lambo.store.valet_link'));
     }
 
     /** @test */
@@ -641,7 +640,7 @@ class SetConfigTest extends TestCase
             'full' => true,
             'valet_secure' => false,
         ]);
-        $this->assertTrue(Config::get('lambo.store.valet_secure'));
+        $this->assertTrue(config('lambo.store.valet_secure'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = true;
@@ -650,7 +649,7 @@ class SetConfigTest extends TestCase
             'full' => false,
             'valet_secure' => true,
         ]);
-        $this->assertTrue(Config::get('lambo.store.valet_secure'));
+        $this->assertTrue(config('lambo.store.valet_secure'));
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = false;
@@ -659,6 +658,6 @@ class SetConfigTest extends TestCase
             'full' => false,
             'valet_secure' => false,
         ]);
-        $this->assertFalse(Config::get('lambo.store.valet_secure'));
+        $this->assertFalse(config('lambo.store.valet_secure'));
     }
 }
