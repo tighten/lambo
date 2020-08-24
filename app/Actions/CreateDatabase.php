@@ -27,11 +27,9 @@ class CreateDatabase
 
         app('console-writer')->logStep('Creating database');
 
-        $this->abortIf(! $this->mysqlExists(), "I can't create a database for your project because MySQL does not seem to be installed.");
-
-        if (! $this->mysqlServerRunning()) {
-            app('console-writer')->ignoreVerbosity()->warn('Skipping database creation');
-            app('console-writer')->ignoreVerbosity()->warn("I can't create a database for your project because your MySQL server does not seem to be running.");
+        if (! $this->mysqlExists() || ! $this->mysqlServerRunning()) {
+            app('console-writer')->warn('Skipping database creation');
+            app('console-writer')->warn("Either MySQL is not installed or it's not running.");
             return;
         }
 
@@ -44,7 +42,7 @@ class CreateDatabase
 
     protected function mysqlExists()
     {
-        return $this->finder->find('mysql') !== null;
+        return ! is_null($this->finder->find('mysql'));
     }
 
     private function mysqlServerRunning(): bool
