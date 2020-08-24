@@ -18,6 +18,10 @@ class OpenInBrowser
 
     public function __invoke()
     {
+        if (config('lambo.store.no_browser')) {
+            return;
+        }
+
         app('console-writer')->logStep('Opening in Browser');
 
         if (Environment::isMac() && $this->browser()) {

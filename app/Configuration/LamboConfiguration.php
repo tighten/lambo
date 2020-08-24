@@ -26,6 +26,7 @@ abstract class LamboConfiguration
     const VALET_LINK = 'valet_link';
     const VALET_SECURE = 'valet_secure';
     const BROWSER = 'browser';
+    const NO_BROWSER = 'no_browser';
 
     public $editor;
 

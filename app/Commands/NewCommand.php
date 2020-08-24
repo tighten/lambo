@@ -137,6 +137,7 @@ class NewCommand extends LamboCommand
             'dev'         => LamboConfiguration::USE_DEVELOP_BRANCH,
             'full'        => LamboConfiguration::FULL,
             'no-editor'   => LamboConfiguration::NO_EDITOR,
+            'no-browser'  => LamboConfiguration::NO_BROWSER,
             'projectName' => LamboConfiguration::PROJECT_NAME,
         ]);
 
@@ -158,6 +159,7 @@ class NewCommand extends LamboCommand
             'WITH_OUTPUT'     => LamboConfiguration::WITH_OUTPUT,
             'DEVELOP'         => LamboConfiguration::USE_DEVELOP_BRANCH,
             'NO_EDITOR'       => LamboConfiguration::NO_EDITOR,
+            'NO_BROWSER'      => LamboConfiguration::NO_BROWSER,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
@@ -187,6 +189,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::USE_DEVELOP_BRANCH => false,
             LamboConfiguration::FULL               => false,
             LamboConfiguration::NO_EDITOR          => false,
+            LamboConfiguration::NO_BROWSER         => false,
             LamboConfiguration::PROJECT_NAME       => null,
             LamboConfiguration::TLD                => null,
         ]);

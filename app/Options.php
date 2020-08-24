@@ -102,6 +102,10 @@ class Options
             'long'            => 'no-editor',
             'cli_description' => "Do not open the project in an editor",
         ],
+        [
+            'long'            => 'no-browser',
+            'cli_description' => "Do not open the project in a browser",
+        ],
     ];
 
     public function all()

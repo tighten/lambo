@@ -81,4 +81,16 @@ class OpenInBrowserTest extends TestCase
 
         app(OpenInBrowser::class)();
     }
+
+    /** @test */
+    function it_skips_opening_the_site()
+    {
+        $shell = $this->spy(Shell::class);
+
+        config(['lambo.store.no_browser' => false]);
+
+        app(OpenInBrowser::class);
+
+        $shell->shouldNotHaveReceived('execInProject');
+    }
 }
