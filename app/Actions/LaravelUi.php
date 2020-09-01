@@ -25,7 +25,7 @@ class LaravelUi
 
         app('console-writer')->note('To use Laravel frontend scaffolding the composer package laravel/ui is required. Installing now...');
 
-        $process = $this->shell->execInProject('composer require laravel/ui' . $this->withQuiet());
+        $process = $this->shell->execInProject("composer require laravel/ui{$this->withQuiet()}");
 
         $this->abortIf(! $process->isSuccessful(), "Installation of laravel/ui did not complete successfully.", $process);
 
