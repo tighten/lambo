@@ -21,7 +21,7 @@ class GenerateAppKey
 
         $process = $this->shell->execInProject("php artisan key:generate{$this->withQuiet()}");
 
-        $this->abortIf(! $process->isSuccessful(), 'Failed to generate application key successfully', $process);
+        $this->abortIf(! $process->isSuccessful(), 'Failed to generated APP_KEY successfully', $process);
 
         app('console-writer')->success('APP_KEY has been set.');
     }
