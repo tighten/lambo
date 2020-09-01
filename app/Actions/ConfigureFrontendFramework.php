@@ -21,25 +21,28 @@ class ConfigureFrontendFramework
     public function __invoke()
     {
         if (! config('lambo.store.frontend')) {
-            return;
+            return false;
         }
 
         app('console-writer')->logStep('Configuring frontend scaffolding');
 
-        if ($this->continueInstallation()) {
-            $this->laravelUi->install();
-
-            $process = $this->shell->execInProject(sprintf("php artisan ui %s%s", config('lambo.store.frontend'), $this->extraOptions()));
-
-            $this->abortIf(! $process->isSuccessful(), sprintf("Installation of %s UI scaffolding did not complete successfully.", config('lambo.store.frontend')), $process);
-
-            app('console-writer')->success(config('lambo.store.frontend') . ' ui scaffolding installed.');
+        if (! $this->chooseValidFrontend()) {
+            app('console-writer')->success('No frontend framework will be installed.', ' OK ');
+            return false;
         }
+
+        $this->laravelUi->install();
+
+        $process = $this->shell->execInProject(sprintf("php artisan ui %s%s", config('lambo.store.frontend'), $this->extraOptions()));
+
+        $this->abortIf(! $process->isSuccessful(), sprintf("Installation of %s UI scaffolding did not complete successfully.", config('lambo.store.frontend')), $process);
+
+        app('console-writer')->success(config('lambo.store.frontend') . ' ui scaffolding installed.');
     }
 
-    private function continueInstallation(): bool
+    private function chooseValidFrontend(): bool
     {
-        if ($this->validFrontend()) {
+        if (in_array(strtolower(config('lambo.store.frontend')), $this->availableFrontends)) {
             return true;
         }
 
@@ -49,8 +52,6 @@ class ConfigureFrontendFramework
             app('console-writer')->success("Using {$configuredFrontend} ui scaffolding.", ' OK ');
             return true;
         }
-
-        app('console-writer')->success('No frontend framework will be installed.', ' OK ');
         return false;
     }
 
@@ -66,10 +67,5 @@ class ConfigureFrontendFramework
     private function extraOptions()
     {
         return config('lambo.store.with_output') ? '' : ' --quiet';
-    }
-
-    private function validFrontend()
-    {
-        return in_array(strtolower(config('lambo.store.frontend')), $this->availableFrontends);
     }
 }
