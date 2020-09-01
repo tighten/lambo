@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Config\Repository;
-
 use Symfony\Component\Process\Process;
 
 class Shell
@@ -33,26 +32,23 @@ class Shell
         return $this->exec("cd {$directory} && $command");
     }
 
-    public function exec($command)
+    public function exec(string $command)
     {
         $process = Process::fromShellCommandline($command)
             ->setTty($this->useTTY)
             ->setTimeout(null)
             ->enableOutput();
 
-        app('console-writer')->text($this->start($command));
-        $process->run(function ($type, $buffer) {
-            if ($this->shouldReportProgress()) {
-                if (empty(trim($buffer)) || $buffer === PHP_EOL) {
-                    return;
-                }
+        app('console-writer')->text("{$this->prefix('EXEC', '<bg=blue;fg=black>')} {$command}");
 
-                collect(explode(PHP_EOL, trim($buffer)))
-                    ->each(function ($line) use ($type) {
-                        app('console-writer')->ignoreVerbosity()->text($this->progress($line, $type));
-                    });
-                app('console-writer')->newLine();
+        $process->run(function ($type, $buffer) {
+            if (! $this->reportProgress($buffer)) {
+                return;
             }
+
+            collect(explode(PHP_EOL, trim($buffer)))->each(function ($line) use ($type) {
+                app('console-writer')->ignoreVerbosity()->text($this->formatOutput($type, $line));
+            });
         });
 
         $this->useTTY = false;
@@ -65,22 +61,20 @@ class Shell
         return $this;
     }
 
-    public function start(string $message)
+    private function reportProgress($buffer): bool
     {
-        return sprintf('%s %s', $this->prefix('EXEC', '<bg=blue;fg=black>'), $message);
-    }
+        if (empty(trim($buffer)) || $buffer === PHP_EOL) {
+            return false;
+        }
 
-    private function shouldReportProgress(): bool
-    {
         return app('console-writer')->isVerbose() || config('lambo.store.with_output');
     }
 
-    private function progress(string $line, string $type)
+    private function formatOutput($type, $line): string
     {
-        if ($type === Process::ERR) {
-            return sprintf('   %s <fg=yellow>%s</>', $this->prefix('>', '<bg=blue;fg=black>'), $line);
-        }
-        return sprintf('   %s %s', $this->prefix('>', '<bg=blue;fg=black>'), $line);
+        return ($type === Process::ERR)
+            ? "   {$this->prefix('!', '<bg=yellow;fg=black>')} <fg=yellow>{$line}</>"
+            : "   {$this->prefix('✓', '<bg=blue;fg=black>')} {$line}";
     }
 
     private function prefix(string $prefix, string $format): string
