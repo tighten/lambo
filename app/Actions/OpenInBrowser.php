@@ -7,7 +7,7 @@ use App\Shell;
 
 class OpenInBrowser
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

@@ -6,7 +6,7 @@ use App\Shell;
 
 class RunLaravelInstaller
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 class SavedConfig
 {
-    use LamboAction;
+    use AbortsCommands;
 
     public $shell;
 

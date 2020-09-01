@@ -6,7 +6,7 @@ use App\Shell;
 
 class CompileAssets
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
     protected $silentDevScript;

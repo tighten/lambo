@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 class RunAfterScript
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

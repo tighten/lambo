@@ -6,7 +6,7 @@ use App\Shell;
 
 class ConfigureFrontendFramework
 {
-    use LamboAction;
+    use AbortsCommands;
 
     private $shell;
     private $laravelUi;

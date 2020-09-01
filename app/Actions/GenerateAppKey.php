@@ -6,7 +6,7 @@ use App\Shell;
 
 class GenerateAppKey
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

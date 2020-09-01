@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 
 class LaravelUi
 {
-    use LamboAction;
+    use AbortsCommands;
 
     private $shell;
 

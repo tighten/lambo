@@ -4,7 +4,7 @@ namespace App\Actions;
 
 use App\LamboException;
 
-trait LamboAction
+trait AbortsCommands
 {
     public function abortIf(bool $abort, string $message, $process = null)
     {

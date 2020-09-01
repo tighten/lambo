@@ -6,7 +6,7 @@ use App\Shell;
 
 class ValetSecure
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

@@ -6,7 +6,7 @@ use App\Shell;
 
 class InstallNpmDependencies
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 

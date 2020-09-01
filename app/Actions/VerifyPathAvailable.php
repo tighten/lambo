@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\File;
 
 class VerifyPathAvailable
 {
-    use LamboAction;
+    use AbortsCommands;
 
     public function __invoke()
     {

@@ -8,7 +8,7 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class CreateDatabase
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $finder;
     protected $shell;

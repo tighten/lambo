@@ -6,7 +6,7 @@ use App\Shell;
 
 class OpenInEditor
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
 
