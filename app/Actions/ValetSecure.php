@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 
 class ValetSecure
@@ -9,10 +10,12 @@ class ValetSecure
     use AbortsCommands;
 
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
@@ -21,12 +24,12 @@ class ValetSecure
             return;
         }
 
-        app('console-writer')->logStep('Running valet secure');
+        $this->consoleWriter->logStep('Running valet secure');
 
         $process = $this->shell->execInProject("valet secure");
 
         $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
 
-        app('console-writer')->success('valet secure successful');
+        $this->consoleWriter->success('valet secure successful');
     }
 }

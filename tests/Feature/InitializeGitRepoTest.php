@@ -10,13 +10,10 @@ use Tests\TestCase;
 
 class InitializeGitRepoTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_initialises_the_projects_git_repository()

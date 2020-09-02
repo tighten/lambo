@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\RunLaravelInstaller;
+use App\ConsoleWriter;
 use App\LamboException;
 use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
@@ -10,14 +11,6 @@ use Tests\TestCase;
 
 class RunLaravelInstallerTest extends TestCase
 {
-    private $shell;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
-
     /** @test */
     function it_runs_the_laravel_installer()
     {

@@ -10,13 +10,10 @@ use Tests\TestCase;
 
 class ValetLinkTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_runs_valet_link()

@@ -10,13 +10,10 @@ use Tests\TestCase;
 
 class InstallNpmDependenciesTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_installs_npm_dependencies()

@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\LamboException;
 use Illuminate\Support\Facades\File;
 
@@ -9,9 +10,16 @@ class VerifyPathAvailable
 {
     use AbortsCommands;
 
+    private $consoleWriter;
+
+    public function __construct(ConsoleWriter $consoleWriter)
+    {
+        $this->consoleWriter = $consoleWriter;
+    }
+
     public function __invoke()
     {
-        app('console-writer')->logStep("Verifying path availability");
+        $this->consoleWriter->logStep("Verifying path availability");
 
         $rootPath = config('lambo.store.root_path');
 
@@ -29,6 +37,6 @@ class VerifyPathAvailable
             throw new LamboException($projectPath . ' is already a directory.');
         }
 
-        app('console-writer')->success(sprintf('Directory "%s" is available.', config('lambo.store.project_path')));
+        $this->consoleWriter->success(sprintf('Directory "%s" is available.', config('lambo.store.project_path')));
     }
 }

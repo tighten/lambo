@@ -2,32 +2,43 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\LamboException;
 use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
 {
     protected $finder;
+    private $consoleWriter;
+    private $dependencies = [
+        'The Laravel installer' => 'laravel|https://laravel.com/docs/installation#installing-laravel',
+        'Laravel valet'         => 'valet|https://laravel.com/docs/valet',
+        'Git version control'   => 'git|https://git-scm.com/',
+    ];
 
-    public function __construct(ExecutableFinder $finder)
-    {
+    public function __construct(
+        ConsoleWriter $consoleWriter,
+        ExecutableFinder $finder
+
+    ) {
         $this->finder = $finder;
+        $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke(array $dependencies)
+    public function __invoke()
     {
-        app('console-writer')->logStep("Verifying dependencies");
+        $this->consoleWriter->logStep("Verifying dependencies");
 
         $fail = false;
-        collect($dependencies)->each(function ($dependency, $description) use (&$fail) {
+        collect($this->dependencies)->each(function ($dependency, $description) use (&$fail) {
             list($command, $url) = explode('|', $dependency);
             if (($installedDependency = $this->finder->find($command)) === null) {
                 $fail = true;
-                app('console-writer')->fail("${description} is missing. You can find installation instructions at:");
-                app('console-writer')->text("       <fg=blue;href={$url}>{$url}</>");
+                $this->consoleWriter->fail("${description} is missing. You can find installation instructions at:");
+                $this->consoleWriter->text("       <fg=blue;href={$url}>{$url}</>");
             } else {
-                app('console-writer')->success("${description} found at:");
-                app('console-writer')->text("       <fg=blue>{$installedDependency}</>");
+                $this->consoleWriter->success("${description} found at:");
+                $this->consoleWriter->text("       <fg=blue>{$installedDependency}</>");
             }
         });
 

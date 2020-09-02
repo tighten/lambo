@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\ExecutableFinder;
@@ -12,11 +13,13 @@ class CreateDatabase
 
     protected $finder;
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell, ExecutableFinder $finder)
+    public function __construct(Shell $shell, ExecutableFinder $finder, ConsoleWriter $consoleWriter)
     {
         $this->finder = $finder;
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
@@ -25,11 +28,11 @@ class CreateDatabase
             return;
         }
 
-        app('console-writer')->logStep('Creating database');
+        $this->consoleWriter->logStep('Creating database');
 
         if (! $this->mysqlExists() || ! $this->mysqlServerRunning()) {
-            app('console-writer')->warn('Skipping database creation');
-            app('console-writer')->warn("Either MySQL is not installed or it's not running.");
+            $this->consoleWriter->warn('Skipping database creation');
+            $this->consoleWriter->warn("Either MySQL is not installed or it's not running.");
             return;
         }
 
@@ -37,7 +40,7 @@ class CreateDatabase
 
         $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
 
-        app('console-writer')->success('Created a new database ' . config('lambo.store.database_name'));
+        $this->consoleWriter->success('Created a new database ' . config('lambo.store.database_name'));
     }
 
     protected function mysqlExists()
@@ -47,7 +50,7 @@ class CreateDatabase
 
     private function mysqlServerRunning(): bool
     {
-        app('console-writer')->text('Searching for a running MySQL server');
+        $this->consoleWriter->text('Searching for a running MySQL server');
         $output = $this->shell->exec('mysql.server status')->getOutput();
         return Str::of($output)->contains('MySQL running');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Options;
 
 class DisplayHelpScreen
@@ -14,25 +15,30 @@ class DisplayHelpScreen
         'edit-after' => 'Edit "after" file',
     ];
 
+    private $consoleWriter;
+
+    public function __construct(ConsoleWriter $consoleWriter)
+    {
+        $this->consoleWriter = $consoleWriter;
+    }
+
     public function __invoke()
     {
-        $consoleWriter = app('console-writer');
-
-        $consoleWriter->newLine();
-        $consoleWriter->ignoreVerbosity()->text("<comment>Usage:</comment>");
-        $consoleWriter->ignoreVerbosity()->text("  lambo new myApplication [arguments]\n");
-        $consoleWriter->ignoreVerbosity()->text("<comment>Commands (lambo COMMANDNAME):</comment>");
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->ignoreVerbosity()->text("<comment>Usage:</comment>");
+        $this->consoleWriter->ignoreVerbosity()->text("  lambo new myApplication [arguments]\n");
+        $this->consoleWriter->ignoreVerbosity()->text("<comment>Commands (lambo COMMANDNAME):</comment>");
 
         foreach ($this->commands as $command => $description) {
             $spaces = $this->makeSpaces(strlen($command));
-            $consoleWriter->ignoreVerbosity()->text("  <info>{$command}</info>{$spaces}{$description}");
+            $this->consoleWriter->ignoreVerbosity()->text("  <info>{$command}</info>{$spaces}{$description}");
         }
 
-        $consoleWriter->ignoreVerbosity()->newLine();
-        $consoleWriter->ignoreVerbosity()->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        $this->consoleWriter->ignoreVerbosity()->newLine();
+        $this->consoleWriter->ignoreVerbosity()->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
 
         foreach ((new Options)->all() as $option) {
-            $consoleWriter->ignoreVerbosity()->text($this->createCliStringForOption($option));
+            $this->consoleWriter->ignoreVerbosity()->text($this->createCliStringForOption($option));
         }
     }
 

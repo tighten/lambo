@@ -11,15 +11,13 @@ use Tests\TestCase;
 
 class CompileAssetsTest extends TestCase
 {
-    private $shell;
     private $silentDevScript;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->silentDevScript = $this->mock(SilentDevScript::class);
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()

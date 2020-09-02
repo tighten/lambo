@@ -11,13 +11,10 @@ use Tests\TestCase;
 
 class RunAfterScriptTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_runs_the_after_script_if_one_exists()

@@ -34,7 +34,7 @@ class Options
             'short'             => 'f',
             'long'              => 'frontend',
             'param_description' => '"FRONTEND"',
-            'cli_description'   => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
+            'cli_description'   => "Specify the <info>FRONTEND</info> framework to use. Must be one of <info>inertia</info> or <info>livewire</info>",
         ],
         [
             'long'              => 'dbname',
@@ -54,6 +54,10 @@ class Options
         [
             'long'            => 'create-db',
             'cli_description' => "Create a new MySQL database",
+        ],
+        [
+            'long'            => 'with-teams',
+            'cli_description' => "Scaffold Jetstream UI with team features (must be used with -f, --frontend)",
         ],
         [
             'short'           => 'a',
@@ -97,14 +101,6 @@ class Options
         [
             'long'            => 'full',
             'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
-        ],
-        [
-            'long'            => 'no-editor',
-            'cli_description' => "Do not open the project in an editor",
-        ],
-        [
-            'long'            => 'no-browser',
-            'cli_description' => "Do not open the project in a browser",
         ],
     ];
 

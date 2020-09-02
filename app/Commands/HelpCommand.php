@@ -17,9 +17,7 @@ class HelpCommand extends LamboCommand
 
     public function handle()
     {
-        parent::handle();
-
-        app(DisplayLamboWelcome::class)();
-        app(DisplayHelpScreen::class)();
+        $this->makeAndInvoke(DisplayLamboWelcome::class);
+        $this->makeAndInvoke(DisplayHelpScreen::class);
     }
 }

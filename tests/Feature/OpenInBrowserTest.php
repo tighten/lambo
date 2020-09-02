@@ -8,13 +8,11 @@ use Tests\TestCase;
 
 class OpenInBrowserTest extends TestCase
 {
-    private $shell;
     private $environment;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
         $this->environment = $this->mock('alias:App\Environment');
     }
 

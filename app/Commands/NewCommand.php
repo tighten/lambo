@@ -39,6 +39,10 @@ class NewCommand extends LamboCommand
         $this->signature = $this->buildSignature();
 
         parent::__construct();
+
+        app()->bind('console', function () {
+            return $this;
+        });
     }
 
     public function buildSignature()
@@ -67,51 +71,45 @@ class NewCommand extends LamboCommand
 
     public function handle()
     {
-        parent::handle();
-
-        app(DisplayLamboWelcome::class)();
+        $this->makeAndInvoke(DisplayLamboWelcome::class);
 
         if (! $this->argument('projectName')) {
-            app(DisplayHelpScreen::class)();
+            $this->makeAndInvoke(DisplayHelpScreen::class);
             exit;
         }
 
         $this->setConfig();
 
-        app('console-writer')->ignoreVerbosity()->note(sprintf('Creating a Laravel app "%s"', $this->argument('projectName')));
+        $this->consoleWriter->ignoreVerbosity()->note(sprintf('Creating a Laravel app "%s"', $this->argument('projectName')));
 
         try {
-            app(VerifyPathAvailable::class)();
-            app(VerifyDependencies::class)([
-                'The Laravel installer' => 'laravel|https://laravel.com/docs/installation#installing-laravel',
-                'Laravel valet'         => 'valet|https://laravel.com/docs/valet',
-                'Git version control'   => 'git|https://git-scm.com/',
-            ]);
-            app(RunLaravelInstaller::class)();
-            app(OpenInEditor::class)();
-            app(CustomizeDotEnv::class)();
-            app(CreateDatabase::class)();
-            app(GenerateAppKey::class)();
-            app(ConfigureFrontendFramework::class)(['bootstrap', 'react', 'vue']);
-            app(InitializeGitRepo::class)();
-            app(InstallNpmDependencies::class)();
-            app(CompileAssets::class)();
-            app(RunAfterScript::class)();
-            app(ValetLink::class)();
-            app(ValetSecure::class)();
-            app(OpenInBrowser::class)();
+            $this->makeAndInvoke(VerifyPathAvailable::class);
+            $this->makeAndInvoke(VerifyDependencies::class);
+            $this->makeAndInvoke(RunLaravelInstaller::class);
+            $this->makeAndInvoke(OpenInEditor::class);
+            $this->makeAndInvoke(CustomizeDotEnv::class);
+            $this->makeAndInvoke(CreateDatabase::class);
+            $this->makeAndInvoke(GenerateAppKey::class);
+            $this->makeAndInvoke(ConfigureFrontendFramework::class);
+            $this->makeAndInvoke(InitializeGitRepo::class);
+            $this->makeAndInvoke(InstallNpmDependencies::class);
+            $this->makeAndInvoke(CompileAssets::class);
+            $this->makeAndInvoke(RunAfterScript::class);
+            $this->makeAndInvoke(ValetLink::class);
+            $this->makeAndInvoke(ValetSecure::class);
+            $this->makeAndInvoke(OpenInBrowser::class);
         } catch (LamboException $e) {
-            app('console-writer')->exception($e->getMessage());
+            $this->consoleWriter->exception($e->getMessage());
 
             return;
         }
 
-        app('console-writer')->ignoreVerbosity()->newLine();
-        app('console-writer')->ignoreVerbosity()->text([
+        $this->consoleWriter->ignoreVerbosity()->newLine();
+        $this->consoleWriter->ignoreVerbosity()->text([
             '<fg=green>Done, happy coding!</>',
             'Lambo is bought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
         ]);
-        app('console-writer')->ignoreVerbosity()->newLine();
+        $this->consoleWriter->ignoreVerbosity()->newLine();
     }
 
     private function setConfig(): void
@@ -119,47 +117,45 @@ class NewCommand extends LamboCommand
         config(['lambo.store' => []]); // @todo remove if debug code is removed.
 
         $commandLineConfiguration = new CommandLineConfiguration([
-            'editor'      => LamboConfiguration::EDITOR,
-            'message'     => LamboConfiguration::COMMIT_MESSAGE,
-            'path'        => LamboConfiguration::ROOT_PATH,
-            'browser'     => LamboConfiguration::BROWSER,
-            'frontend'    => LamboConfiguration::FRONTEND_FRAMEWORK,
-            'dbname'      => LamboConfiguration::DATABASE_NAME,
-            'dbuser'      => LamboConfiguration::DATABASE_USERNAME,
-            'dbpassword'  => LamboConfiguration::DATABASE_PASSWORD,
-            'create-db'   => LamboConfiguration::CREATE_DATABASE,
-            'auth'        => LamboConfiguration::AUTH,
-            'node'        => LamboConfiguration::NODE,
-            'mix'         => LamboConfiguration::MIX,
-            'link'        => LamboConfiguration::VALET_LINK,
-            'secure'      => LamboConfiguration::VALET_SECURE,
+            'editor' => LamboConfiguration::EDITOR,
+            'message' => LamboConfiguration::COMMIT_MESSAGE,
+            'path' => LamboConfiguration::ROOT_PATH,
+            'browser' => LamboConfiguration::BROWSER,
+            'frontend' => LamboConfiguration::FRONTEND_FRAMEWORK,
+            'dbname' => LamboConfiguration::DATABASE_NAME,
+            'dbuser' => LamboConfiguration::DATABASE_USERNAME,
+            'dbpassword' => LamboConfiguration::DATABASE_PASSWORD,
+            'create-db' => LamboConfiguration::CREATE_DATABASE,
+            'auth' => LamboConfiguration::AUTH,
+            'node' => LamboConfiguration::NODE,
+            'mix' => LamboConfiguration::MIX,
+            'link' => LamboConfiguration::VALET_LINK,
+            'secure' => LamboConfiguration::VALET_SECURE,
             'with-output' => LamboConfiguration::WITH_OUTPUT,
-            'dev'         => LamboConfiguration::USE_DEVELOP_BRANCH,
-            'full'        => LamboConfiguration::FULL,
-            'no-editor'   => LamboConfiguration::NO_EDITOR,
-            'no-browser'  => LamboConfiguration::NO_BROWSER,
+            'dev' => LamboConfiguration::USE_DEVELOP_BRANCH,
+            'full' => LamboConfiguration::FULL,
+            'with-teams' => LamboConfiguration::WITH_TEAMS,
             'projectName' => LamboConfiguration::PROJECT_NAME,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'CODEEDITOR'      => LamboConfiguration::EDITOR,
-            'MESSAGE'         => LamboConfiguration::COMMIT_MESSAGE,
-            'PROJECTPATH'     => LamboConfiguration::ROOT_PATH,
-            'BROWSER'         => LamboConfiguration::BROWSER,
-            'FRONTEND'        => LamboConfiguration::FRONTEND_FRAMEWORK,
-            'DB_NAME'         => LamboConfiguration::DATABASE_NAME,
-            'DB_USERNAME'     => LamboConfiguration::DATABASE_USERNAME,
-            'DB_PASSWORD'     => LamboConfiguration::DATABASE_PASSWORD,
+            'CODEEDITOR' => LamboConfiguration::EDITOR,
+            'MESSAGE' => LamboConfiguration::COMMIT_MESSAGE,
+            'PROJECTPATH' => LamboConfiguration::ROOT_PATH,
+            'BROWSER' => LamboConfiguration::BROWSER,
+            'FRONTEND' => LamboConfiguration::FRONTEND_FRAMEWORK,
+            'DB_NAME' => LamboConfiguration::DATABASE_NAME,
+            'DB_USERNAME' => LamboConfiguration::DATABASE_USERNAME,
+            'DB_PASSWORD' => LamboConfiguration::DATABASE_PASSWORD,
             'CREATE_DATABASE' => LamboConfiguration::CREATE_DATABASE,
-            'AUTH'            => LamboConfiguration::AUTH,
-            'NODE'            => LamboConfiguration::NODE,
-            'MIX'             => LamboConfiguration::MIX,
-            'LINK'            => LamboConfiguration::VALET_LINK,
-            'SECURE'          => LamboConfiguration::VALET_SECURE,
-            'WITH_OUTPUT'     => LamboConfiguration::WITH_OUTPUT,
-            'DEVELOP'         => LamboConfiguration::USE_DEVELOP_BRANCH,
-            'NO_EDITOR'       => LamboConfiguration::NO_EDITOR,
-            'NO_BROWSER'      => LamboConfiguration::NO_BROWSER,
+            'AUTH' => LamboConfiguration::AUTH,
+            'NODE' => LamboConfiguration::NODE,
+            'MIX' => LamboConfiguration::MIX,
+            'LINK' => LamboConfiguration::VALET_LINK,
+            'SECURE' => LamboConfiguration::VALET_SECURE,
+            'WITH_OUTPUT' => LamboConfiguration::WITH_OUTPUT,
+            'DEVELOP' => LamboConfiguration::USE_DEVELOP_BRANCH,
+            'WITH_TEAMS' => LamboConfiguration::WITH_TEAMS,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
@@ -171,30 +167,29 @@ class NewCommand extends LamboCommand
             $savedConfiguration,
             $shellConfiguration
         ))([
-            LamboConfiguration::EDITOR             => 'nano',
-            LamboConfiguration::COMMIT_MESSAGE     => 'Initial commit',
-            LamboConfiguration::ROOT_PATH          => getcwd(),
-            LamboConfiguration::BROWSER            => null,
+            LamboConfiguration::EDITOR => 'nano',
+            LamboConfiguration::COMMIT_MESSAGE => 'Initial commit',
+            LamboConfiguration::ROOT_PATH => getcwd(),
+            LamboConfiguration::BROWSER => null,
             LamboConfiguration::FRONTEND_FRAMEWORK => null,
-            LamboConfiguration::DATABASE_NAME      => $this->argument('projectName'),
-            LamboConfiguration::DATABASE_USERNAME  => 'root',
-            LamboConfiguration::DATABASE_PASSWORD  => '',
-            LamboConfiguration::CREATE_DATABASE    => false,
-            LamboConfiguration::AUTH               => false,
-            LamboConfiguration::NODE               => false,
-            LamboConfiguration::MIX                => false,
-            LamboConfiguration::VALET_LINK         => false,
-            LamboConfiguration::VALET_SECURE       => false,
-            LamboConfiguration::WITH_OUTPUT        => false,
+            LamboConfiguration::DATABASE_NAME => $this->argument('projectName'),
+            LamboConfiguration::DATABASE_USERNAME => 'root',
+            LamboConfiguration::DATABASE_PASSWORD => '',
+            LamboConfiguration::CREATE_DATABASE => false,
+            LamboConfiguration::AUTH => false,
+            LamboConfiguration::NODE => false,
+            LamboConfiguration::MIX => false,
+            LamboConfiguration::VALET_LINK => false,
+            LamboConfiguration::VALET_SECURE => false,
+            LamboConfiguration::WITH_OUTPUT => false,
             LamboConfiguration::USE_DEVELOP_BRANCH => false,
-            LamboConfiguration::FULL               => false,
-            LamboConfiguration::NO_EDITOR          => false,
-            LamboConfiguration::NO_BROWSER         => false,
-            LamboConfiguration::PROJECT_NAME       => null,
-            LamboConfiguration::TLD                => null,
+            LamboConfiguration::FULL => false,
+            LamboConfiguration::WITH_TEAMS => false,
+            LamboConfiguration::PROJECT_NAME => null,
+            LamboConfiguration::TLD => null,
         ]);
 
-        if (app('console-writer')->isDebug()) {
+        if ($this->consoleWriter->isDebug()) {
             $this->debugReport();
         }
     }

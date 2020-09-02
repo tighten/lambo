@@ -6,7 +6,7 @@ use Dotenv\Dotenv;
 
 use Illuminate\Support\Facades\File;
 
-class   SavedConfiguration extends LamboConfiguration
+class SavedConfiguration extends LamboConfiguration
 {
     protected function getSettings(): array
     {

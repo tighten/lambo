@@ -2,14 +2,22 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 class CustomizeDotEnv
 {
+    protected $consoleWriter;
+
+    public function __construct(ConsoleWriter $consoleWriter)
+    {
+        $this->consoleWriter = $consoleWriter;
+    }
+
     public function __invoke()
     {
-        app('console-writer')->logStep('Customizing .env and .env.example');
+        $this->consoleWriter->logStep('Customizing .env and .env.example');
 
         $filePath = config('lambo.store.project_path') . '/.env.example';
 
@@ -18,7 +26,7 @@ class CustomizeDotEnv
         File::put($filePath, $output);
         File::put(str_replace('.env.example', '.env', $filePath), $output);
 
-        app('console-writer')->success('.env files configured.');
+        $this->consoleWriter->success('.env files configured.');
     }
 
     public function customize($contents)

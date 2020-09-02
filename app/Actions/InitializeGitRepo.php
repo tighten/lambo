@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 
 class InitializeGitRepo
@@ -9,21 +10,23 @@ class InitializeGitRepo
     use AbortsCommands;
 
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        app('console-writer')->logStep('Initializing git repository');
+        $this->consoleWriter->logStep('Initializing git repository');
 
         $this->execAndCheck("git init{$this->withQuiet()}");
         $this->execAndCheck('git add .');
         $this->execAndCheck(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
 
-        app('console-writer')->success('New git repository initialized.');
+        $this->consoleWriter->success('New git repository initialized.');
     }
 
     public function execAndCheck($command)

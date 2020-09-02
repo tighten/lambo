@@ -10,12 +10,9 @@ use Tests\TestCase;
 
 class GenerateAppKeyTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
     }
 
     /** @test */

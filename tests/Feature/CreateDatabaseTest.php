@@ -4,28 +4,21 @@ namespace Tests\Feature;
 
 use App\Actions\CreateDatabase;
 use App\LamboException;
-use App\Shell;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class CreateDatabaseTest extends TestCase
 {
-    private $shell;
-
-    function setUp(): void
-    {
-        if (! $this->mysqlExists()) {
-            $this->markTestSkipped('MySQL is a dependency of this test but cannot be found.');
-        }
-
-        parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
-
     /** @test */
     function it_creates_a_mysql_database()
     {
+        $this->mock(ExecutableFinder::class)
+            ->shouldReceive('find')
+            ->with('mysql')
+            ->once()
+            ->andReturn('/path/to/mysql');
+
         config(['lambo.store.create_database' => true]);
         config(['lambo.store.database_username' => 'user']);
         config(['lambo.store.database_password' => 'password']);
@@ -45,28 +38,14 @@ class CreateDatabaseTest extends TestCase
     }
 
     /** @test */
-    function it_throws_an_exception_if_mysql_is_not_installed()
-    {
-        $executableFinder = $this->mock(ExecutableFinder::class);
-
-        config(['lambo.store.create_database' => true]);
-        config(['lambo.store.database_username' => 'user']);
-        config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'database_name']);
-
-        $executableFinder->shouldReceive('find')
-            ->with('mysql')
-            ->once()
-            ->andReturn(null);
-
-        $this->expectException(LamboException::class);
-
-        app(CreateDatabase::class)();
-    }
-
-    /** @test */
     function it_throws_an_exception_if_database_creation_fails()
     {
+        $this->mock(ExecutableFinder::class)
+            ->shouldReceive('find')
+            ->with('mysql')
+            ->once()
+            ->andReturn('/path/to/mysql');
+
         config(['lambo.store.create_database' => true]);
         config(['lambo.store.database_username' => 'user']);
         config(['lambo.store.database_password' => 'password']);

@@ -2,19 +2,22 @@
 
 namespace App;
 
-use Illuminate\Config\Repository;
+use Illuminate\Contracts\Config\Repository;
 use Symfony\Component\Process\Process;
 
 class Shell
 {
     protected $rootPath;
     protected $projectPath;
-    private $useTTY = false;
 
-    public function __construct(Repository $config)
+    private $useTTY = false;
+    private $consoleWriter;
+
+    public function __construct(ConsoleWriter $consoleWriter, Repository $config)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function execInRoot($command)
@@ -39,16 +42,16 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
 
-        app('console-writer')->text("{$this->prefix('EXEC', '<bg=blue;fg=black>')} {$command}");
+        $this->consoleWriter->labeledLine('EXEC', $command, 'bg=blue;fg=black');
 
         $process->run(function ($type, $buffer) {
-            if (! $this->reportProgress($buffer)) {
+            if (! $this->shouldReportProgress($buffer)) {
                 return;
             }
 
-            collect(explode(PHP_EOL, trim($buffer)))->each(function ($line) use ($type) {
-                app('console-writer')->ignoreVerbosity()->text($this->formatOutput($type, $line));
-            });
+            foreach (explode(PHP_EOL, trim($buffer)) as $line) {
+                $this->consoleWriter->consoleOutput($line, $type);
+            }
         });
 
         $this->useTTY = false;
@@ -61,26 +64,12 @@ class Shell
         return $this;
     }
 
-    private function reportProgress($buffer): bool
+    private function shouldReportProgress($buffer): bool
     {
         if (empty(trim($buffer)) || $buffer === PHP_EOL) {
             return false;
         }
 
-        return app('console-writer')->isVerbose() || config('lambo.store.with_output');
-    }
-
-    private function formatOutput($type, $line): string
-    {
-        return ($type === Process::ERR)
-            ? "   {$this->prefix('!', '<bg=yellow;fg=black>')} <fg=yellow>{$line}</>"
-            : "   {$this->prefix('✓', '<bg=blue;fg=black>')} {$line}";
-    }
-
-    private function prefix(string $prefix, string $format): string
-    {
-        return app('console')->option('no-ansi')
-            ? "[ {$prefix} ]"
-            : "{$format} {$prefix} </>";
+        return $this->consoleWriter->isVerbose() || config('lambo.store.with_output');
     }
 }

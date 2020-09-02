@@ -15,13 +15,9 @@ class SavedConfigTest extends TestCase
     private $configDirectory;
     private $configFilePath;
     private $fileTemplate;
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->shell = $this->mock(Shell::class);
 
         $this->fileName = 'my-config-file-name';
         $homeDirectory = '/my/home/directory';

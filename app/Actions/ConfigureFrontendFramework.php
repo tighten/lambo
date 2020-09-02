@@ -2,54 +2,61 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 
 class ConfigureFrontendFramework
 {
     use AbortsCommands;
 
-    private $shell;
-    private $laravelUi;
-    private $availableFrontends = ['bootstrap', 'react', 'vue'];
+    protected $shell;
+    protected $availableFrontends = ['inertia', 'livewire'];
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell, LaravelUi $laravelUi)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
-        $this->laravelUi = $laravelUi;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        if (! config('lambo.store.frontend')) {
+        if (! $this->getFrontend()) {
             return false;
         }
 
-        app('console-writer')->logStep('Configuring frontend scaffolding');
+        $this->consoleWriter->logStep('Configuring frontend scaffolding');
 
         if (! $this->chooseValidFrontend()) {
-            app('console-writer')->success('No frontend framework will be installed.', ' OK ');
+            $this->consoleWriter->success('No frontend framework will be installed.', ' OK ');
             return false;
         }
 
-        $this->laravelUi->install();
+        $this->ensureJetstreamInstalled();
 
-        $process = $this->shell->execInProject(sprintf("php artisan ui %s%s", config('lambo.store.frontend'), $this->extraOptions()));
+        $process = $this->shell->execInProject(sprintf("php artisan jetstream:install %s%s%s",
+                $this->getFrontend(),
+                $this->withTeams(),
+                $this->withQuiet())
+        );
 
-        $this->abortIf(! $process->isSuccessful(), sprintf("Installation of %s UI scaffolding did not complete successfully.", config('lambo.store.frontend')), $process);
+        $this->abortIf(! $process->isSuccessful(), "Installation of {$this->getFrontend()} UI scaffolding did not complete successfully.", $process);
 
-        app('console-writer')->success(config('lambo.store.frontend') . ' ui scaffolding installed.');
+        $this->consoleWriter->success($this->getFrontend() . ' ui scaffolding installed.');
     }
 
     private function chooseValidFrontend(): bool
     {
-        if (in_array(strtolower(config('lambo.store.frontend')), $this->availableFrontends)) {
+        if (in_array(strtolower($this->getFrontend()), $this->availableFrontends)) {
             return true;
         }
 
         $configuredFrontend = $this->chooseFrontend();
         if ($configuredFrontend !== 'none') {
             config(['lambo.store.frontend' => $configuredFrontend]);
-            app('console-writer')->success("Using {$configuredFrontend} ui scaffolding.", ' OK ');
+            $this->consoleWriter->success("Using {$configuredFrontend} ui scaffolding.", ' OK ');
             return true;
         }
         return false;
@@ -58,14 +65,39 @@ class ConfigureFrontendFramework
     private function chooseFrontend()
     {
         $this->availableFrontends[] = 'none';
-        $message = sprintf("<fg=yellow>I can't install %s</>. Please choose one of the following options", config('lambo.store.frontend'));
         $preselectedChoice = count($this->availableFrontends) - 1;
-
-        return app('console')->choice($message, $this->availableFrontends, $preselectedChoice);
+        return app('console')->choice("<fg=yellow>I can't install {$this->getFrontend()}</>. Please choose one of the following options", $this->availableFrontends, $preselectedChoice);
     }
 
-    private function extraOptions()
+    public function ensureJetstreamInstalled()
+    {
+        $composeConfig = json_decode(File::get(config('lambo.store.project_path') . '/composer.json'), true);
+        if(Arr::has($composeConfig, 'require.laravel/jetstream')) {
+            return;
+        }
+
+        $this->consoleWriter->note('To use Laravel frontend scaffolding the composer package laravel/jetstream is required. Installing now...');
+
+        $process = $this->shell->execInProject("composer require laravel/jetstream{$this->withQuiet()}");
+
+        $this->abortIf(! $process->isSuccessful(), "Installation of laravel/jetstream did not complete successfully.", $process);
+
+        $this->consoleWriter->success('laravel/jetstream installed.');
+    }
+
+
+    private function withQuiet()
     {
         return config('lambo.store.with_output') ? '' : ' --quiet';
+    }
+
+    private function withTeams(): string
+    {
+        return config('lambo.store.with_teams') ? ' --teams' : '';
+    }
+
+    private function getFrontend()
+    {
+        return config('lambo.store.frontend');
     }
 }

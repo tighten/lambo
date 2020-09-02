@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 
 class RunLaravelInstaller
@@ -9,21 +10,23 @@ class RunLaravelInstaller
     use AbortsCommands;
 
     protected $shell;
+    private $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        app('console-writer')->logStep("Running the Laravel installer");
+        $this->consoleWriter->logStep("Running the Laravel installer");
 
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
 
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
-        app('console-writer')->success($this->getFeedback());
+        $this->consoleWriter->success($this->getFeedback());
     }
 
     public function extraOptions()

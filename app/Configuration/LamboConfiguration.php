@@ -18,7 +18,6 @@ abstract class LamboConfiguration
     const DATABASE_PASSWORD = 'database_password';
     const FRONTEND_FRAMEWORK = 'frontend';
     const FULL = 'full';
-    const NO_EDITOR = 'no_editor';
     const TLD = 'tld';
     const COMMIT_MESSAGE = 'commit_message';
     const NODE = 'node';
@@ -26,18 +25,13 @@ abstract class LamboConfiguration
     const VALET_LINK = 'valet_link';
     const VALET_SECURE = 'valet_secure';
     const BROWSER = 'browser';
-    const NO_BROWSER = 'no_browser';
-
-    public $editor;
-
-    protected $keyMap;
+    const WITH_TEAMS = 'with_teams';
 
     public function __construct(array $keyMap)
     {
-        $this->keyMap = $keyMap;
         $settings = $this->getSettings();
 
-        collect($this->keyMap)->each(function ($item, $key) use ($settings) {
+        collect($keyMap)->each(function ($item, $key) use ($settings) {
             $this->$item = $this->get($key, $settings);
         });
     }
