@@ -238,3 +238,19 @@ Inspired by Taylor Otwell and Adam Wathan's work on Valet.
 Name from TJ Miller, inspired by Taylor's love for the lambo.
 
 ![](https://i.imgur.com/CrS803Y.gif)
+
+## Process for release
+
+If you're working with us and are assigned to push a release, here's the easiest process:
+
+1. Visit the [Lambo Releases page](https://github.com/tightenco/lambo/releases); figure out what your next tag will be (increase the third number if it's a patch or fix; increase the second number if it's adding features)
+2. On your local machine, pull down the latest version of `master` (`git checkout master && git pull`)
+3. Build for the version you're targeting (`./lambo app:build`)
+4. Run the build once to make sure it works (`./builds/lambo`)
+5. Commit your build and push it up
+6. [Draft a new release](https://github.com/tightenco/lambo/releases/new) with both the tag version and release title of your tag (e.g. `v1.5.1`)
+7. Set the body to be a bullet-point list with simple descriptions for each of the PRs merged, as well as the PR link in parentheses at the end. For example:
+
+    `- Add a superpower (#92)`
+8. Hit `Publish release`
+9. Profit
