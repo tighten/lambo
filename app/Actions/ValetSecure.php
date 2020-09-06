@@ -30,6 +30,6 @@ class ValetSecure
 
         $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
 
-        $this->consoleWriter->success('valet secure successful');
+        $this->consoleWriter->verbose()->success('valet secure successful');
     }
 }

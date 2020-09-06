@@ -16,12 +16,6 @@ class VerifyDependenciesTest extends TestCase
     {
         parent::setUp();
         $this->executableFinder = $this->mock(ExecutableFinder::class);
-
-        $consoleWriter = $this->mock(ConsoleWriter::class);
-        $consoleWriter->shouldReceive('logstep');
-        $consoleWriter->shouldReceive('success');
-        $consoleWriter->shouldReceive('fail');
-        $consoleWriter->shouldReceive('text');
     }
 
     /** @test */

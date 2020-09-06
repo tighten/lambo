@@ -22,7 +22,9 @@ abstract class TestCase extends BaseTestCase
         $this->consoleWriter->shouldReceive('success');
         $this->consoleWriter->shouldReceive('text');
         $this->consoleWriter->shouldReceive('warn');
+        $this->consoleWriter->shouldReceive('fail');
         $this->consoleWriter->shouldReceive('newLine');
+        $this->consoleWriter->shouldReceive('verbose')->andReturnSelf();
 
         $this->shell = $this->mock(Shell::class);
 

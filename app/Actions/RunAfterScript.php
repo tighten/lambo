@@ -30,7 +30,7 @@ class RunAfterScript
 
             $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
 
-            $this->consoleWriter->success('After script has completed.');
+            $this->consoleWriter->verbose()->success('After script has completed.');
         }
     }
 }

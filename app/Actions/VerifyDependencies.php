@@ -34,11 +34,9 @@ class VerifyDependencies
             list($command, $url) = explode('|', $dependency);
             if (($installedDependency = $this->finder->find($command)) === null) {
                 $fail = true;
-                $this->consoleWriter->fail("${description} is missing. You can find installation instructions at:");
-                $this->consoleWriter->text("       <fg=blue;href={$url}>{$url}</>");
+                $this->consoleWriter->fail("${description} is missing. You can find installation instructions at:\n        <fg=blue;href={$url}>{$url}</>");
             } else {
-                $this->consoleWriter->success("${description} found at:");
-                $this->consoleWriter->text("       <fg=blue>{$installedDependency}</>");
+                $this->consoleWriter->verbose()->success("${description} found at:\n        <fg=blue>{$installedDependency}</>");
             }
         });
 

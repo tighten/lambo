@@ -25,20 +25,20 @@ class DisplayHelpScreen
     public function __invoke()
     {
         $this->consoleWriter->newLine();
-        $this->consoleWriter->ignoreVerbosity()->text("<comment>Usage:</comment>");
-        $this->consoleWriter->ignoreVerbosity()->text("  lambo new myApplication [arguments]\n");
-        $this->consoleWriter->ignoreVerbosity()->text("<comment>Commands (lambo COMMANDNAME):</comment>");
+        $this->consoleWriter->text("<comment>Usage:</comment>");
+        $this->consoleWriter->text("  lambo new myApplication [arguments]\n");
+        $this->consoleWriter->text("<comment>Commands (lambo COMMANDNAME):</comment>");
 
         foreach ($this->commands as $command => $description) {
             $spaces = $this->makeSpaces(strlen($command));
-            $this->consoleWriter->ignoreVerbosity()->text("  <info>{$command}</info>{$spaces}{$description}");
+            $this->consoleWriter->text("  <info>{$command}</info>{$spaces}{$description}");
         }
 
-        $this->consoleWriter->ignoreVerbosity()->newLine();
-        $this->consoleWriter->ignoreVerbosity()->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
 
         foreach ((new Options)->all() as $option) {
-            $this->consoleWriter->ignoreVerbosity()->text($this->createCliStringForOption($option));
+            $this->consoleWriter->text($this->createCliStringForOption($option));
         }
     }
 

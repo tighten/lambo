@@ -42,7 +42,7 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
 
-        $this->consoleWriter->labeledLine('EXEC', $command, 'bg=blue;fg=black');
+        $this->consoleWriter->verbose()->exec( $command);
 
         $process->run(function ($type, $buffer) {
             if (! $this->shouldReportProgress($buffer)) {

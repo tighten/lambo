@@ -40,7 +40,7 @@ class CreateDatabase
 
         $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
 
-        $this->consoleWriter->success('Created a new database ' . config('lambo.store.database_name'));
+        $this->consoleWriter->verbose()->success('Created a new database ' . config('lambo.store.database_name'));
     }
 
     protected function mysqlExists()

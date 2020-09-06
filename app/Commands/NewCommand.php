@@ -80,7 +80,7 @@ class NewCommand extends LamboCommand
 
         $this->setConfig();
 
-        $this->consoleWriter->ignoreVerbosity()->note(sprintf('Creating a Laravel app "%s"', $this->argument('projectName')));
+        $this->consoleWriter->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
             $this->makeAndInvoke(VerifyPathAvailable::class);
@@ -104,12 +104,12 @@ class NewCommand extends LamboCommand
             return;
         }
 
-        $this->consoleWriter->ignoreVerbosity()->newLine();
-        $this->consoleWriter->ignoreVerbosity()->text([
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text([
             '<fg=green>Done, happy coding!</>',
             'Lambo is bought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
         ]);
-        $this->consoleWriter->ignoreVerbosity()->newLine();
+        $this->consoleWriter->newLine();
     }
 
     private function setConfig(): void

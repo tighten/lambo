@@ -28,12 +28,12 @@ class DisplayLamboWelcome
     {
         foreach (explode("\n", $this->lamboLogo) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            $this->consoleWriter->ignoreVerbosity()->text("<info>$line </info>");
+            $this->consoleWriter->text("<info>$line </info>");
         }
 
         foreach (explode("\n", $this->welcomeText) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            $this->consoleWriter->ignoreVerbosity()->text($line . " ");
+            $this->consoleWriter->text($line . " ");
         }
     }
 }

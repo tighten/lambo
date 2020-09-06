@@ -44,7 +44,7 @@ trait Debug
 
     protected function debugReport(): void
     {
-        $this->consoleWriter->foo('Debug', 'Start', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
 
         $this->consoleWriter->section('Computed configuration');
         $this->consoleWriter->text([
@@ -131,6 +131,6 @@ trait Debug
             '$'
         );
 
-        $this->consoleWriter->foo('Debug', 'End', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 }

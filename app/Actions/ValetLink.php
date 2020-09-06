@@ -30,6 +30,6 @@ class ValetLink
 
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
-        $this->consoleWriter->success('valet link successful');
+        $this->consoleWriter->verbose()->success('valet link successful');
     }
 }

@@ -11,15 +11,6 @@ use Tests\TestCase;
 
 class VerifyPathAvailableTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        $consoleWriter = $this->mock(ConsoleWriter::class);
-        $consoleWriter->shouldReceive('logstep');
-        $consoleWriter->shouldReceive('success');
-
-    }
-
     /** @test */
     function it_checks_if_the_required_directories_are_available()
     {

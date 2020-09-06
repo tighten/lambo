@@ -30,6 +30,6 @@ class OpenInEditor
 
         $this->abortIf(! $process->isSuccessful(), sprintf("Failed to open editor %s", config('lambo.store.editor')), $process);
 
-        $this->consoleWriter->success('Opening your project in ' . config('lambo.store.editor'));
+        $this->consoleWriter->verbose()->success('Opening your project in ' . config('lambo.store.editor'));
     }
 }

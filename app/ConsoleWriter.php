@@ -10,49 +10,46 @@ use Symfony\Component\Process\Process;
 
 class ConsoleWriter extends OutputStyle
 {
-    private $ignoreVerbosity = false;
+    private $onlyVerbose = false;
 
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         parent::__construct($input, $output);
     }
 
-    public function foo(string $prefix, string $message, string $style)
+    public function panel(string $prefix, string $message, string $style)
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            parent::block($message, $prefix, $style, ' ', true, false);
-        }
-
-        $this->ignoreVerbosity = false;
+        parent::block($message, $prefix, $style, ' ', true, false);
     }
 
     public function section($sectionTitle)
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            parent::text([
-                "<fg=yellow;bg=default>{$sectionTitle}</>",
-                '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
-                ''
-            ]);
-        }
-
-        $this->ignoreVerbosity = false;
+        $this->text([
+            "",
+            "<fg=yellow;bg=default>{$sectionTitle}</>",
+            '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
+        ]);
     }
 
     public function logStep($message)
     {
         parent::block($message, null, 'fg=yellow;bg=default', ' // ', false, false);
-        $this->ignoreVerbosity = false;
     }
 
     public function success($message, $label = 'PASS'): void
     {
-        $this->labeledLine($label, $message, 'fg=black;bg=green');
+        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
+            $this->labeledLine($label, $message, 'fg=black;bg=green');
+        }
+        $this->onlyVerbose = false;
     }
 
     public function note($message, $label = 'NOTE'): void
     {
-        $this->labeledLine($label, $message, 'fg=black;bg=yellow');
+        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
+            $this->labeledLine($label, $message, 'fg=black;bg=yellow');
+        }
+        $this->onlyVerbose = false;
     }
 
     public function warn($message, $label = 'WARN'): void
@@ -68,81 +65,59 @@ class ConsoleWriter extends OutputStyle
     public function exception($message)
     {
         parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
-
-        $this->ignoreVerbosity = false;
     }
 
     public function text($message)
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            parent::text($message);
-        }
-
-        $this->ignoreVerbosity = false;
+        parent::text($message);
     }
 
     public function listing(array $items): void
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            parent::newLine();
-            $text = collect($items)->map(function ($dependency) {
-                return '  - ' . $dependency;
-            })->toArray();
-            parent::text($text);
-            parent::newLine();
-        }
-
-        $this->ignoreVerbosity = false;
+        parent::newLine();
+        $text = collect($items)->map(function ($dependency) {
+            return '  - ' . $dependency;
+        })->toArray();
+        parent::text($text);
+        parent::newLine();
     }
 
     public function table(array $columnHeadings, array $rowData)
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            parent::table($columnHeadings, $rowData);
-        }
-
-        $this->ignoreVerbosity = false;
-    }
-
-    public function ignoreVerbosity()
-    {
-        $this->ignoreVerbosity = true;
-
-        return $this;
+        parent::table($columnHeadings, $rowData);
     }
 
     public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
     {
-        if ($this->ignoreVerbosity || $this->shouldWriteLine()) {
-            $indentString = str_repeat(' ', $indent);
-            $this->isDecorated()
-                ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
-                : parent::text("{$indentString}[{$label}] {$message}");
+        $indentString = str_repeat(' ', $indent);
+        $this->isDecorated()
+            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
+            : parent::text("{$indentString}[{$label}] {$message}");
+    }
+
+    public function exec(string $command)
+    {
+        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
+            $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
         }
-
-        $this->ignoreVerbosity = false;
-    }
-
-    public function stdERR($line)
-    {
-        $this->labeledLine('!', "<fg=yellow>{$line}</>", 'bg=yellow;fg=black', 3);
-    }
-
-    public function stdOUT($line)
-    {
-        $this->labeledLine('✓', "{$line}", 'bg=blue;fg=black', 3);
+        $this->onlyVerbose = false;
     }
 
     public function consoleOutput(string $line, $type)
     {
         ($type === Process::ERR)
-            ? $this->stdERR($line)
-            : $this->stdOUT($line);
+            ? $this->labeledLine('!', "<fg=yellow>{$line}</>", 'bg=yellow;fg=black', 3)
+            : $this->labeledLine('✓', "{$line}", 'bg=blue;fg=black', 3);
     }
 
-    private function shouldWriteLine()
+    public function verbose()
     {
+        $this->onlyVerbose = true;
+        return $this;
+    }
 
+    public function shouldWriteLine()
+    {
         return $this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL;
     }
 }

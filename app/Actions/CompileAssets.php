@@ -36,7 +36,7 @@ class CompileAssets
 
         $this->silentDevScript->remove();
 
-        $this->consoleWriter->success('Project assets compiled successfully.');
+        $this->consoleWriter->verbose()->success('Project assets compiled successfully.');
     }
     public function extraOptions()
     {

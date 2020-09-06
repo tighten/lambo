@@ -26,7 +26,7 @@ class RunLaravelInstaller
 
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
-        $this->consoleWriter->success($this->getFeedback());
+        $this->consoleWriter->verbose()->success($this->getFeedback());
     }
 
     public function extraOptions()

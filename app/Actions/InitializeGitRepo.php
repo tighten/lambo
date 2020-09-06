@@ -26,7 +26,7 @@ class InitializeGitRepo
         $this->execAndCheck('git add .');
         $this->execAndCheck(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
 
-        $this->consoleWriter->success('New git repository initialized.');
+        $this->consoleWriter->verbose()->success('New git repository initialized.');
     }
 
     public function execAndCheck($command)
