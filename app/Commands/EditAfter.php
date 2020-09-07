@@ -18,7 +18,9 @@ class EditAfter extends LamboCommand
 
     public function handle()
     {
-        parent::handle();
+        app()->bind('console', function () {
+            return $this;
+        });
 
         $commandLineConfiguration = new CommandLineConfiguration([
             'editor' => LamboConfiguration::EDITOR
@@ -41,7 +43,7 @@ class EditAfter extends LamboCommand
         ]);
 
         try {
-            app(SavedConfig::class)->createOrEditConfigFile("after");
+            $this->make(SavedConfig::class)->createOrEditConfigFile("after");
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }

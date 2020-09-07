@@ -18,13 +18,18 @@ abstract class LamboCommand extends Command
         return parent::run($input, $output);
     }
 
-    protected function makeAndInvoke(string $class, array $parameters = [])
+    protected function makeAndInvoke(string $class)
     {
-        app($class, [
+        $this->make($class)();
+    }
+
+    protected function make(string $class)
+    {
+        return app($class, [
             'consoleWriter' => $this->consoleWriter,
-            'shell' => app(Shell::class,[
+            'shell' => app(Shell::class, [
                 'consoleWriter' => $this->consoleWriter
             ])
-        ])();
+        ]);
     }
 }
