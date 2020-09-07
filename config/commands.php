@@ -74,7 +74,7 @@ return [
     */
 
     'remove' => [
-        // ..
+        Symfony\Component\Console\Command\HelpCommand::class,
     ],
 
 ];
