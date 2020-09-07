@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\ConfigureFrontendFramework;
-use App\Actions\Jetstream;
 use App\LamboException;
 use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
@@ -15,9 +14,8 @@ class ConfigureFrontendFrameworkTest extends TestCase
 
     public function setUp(): void
     {
-        $this->markTestSkipped('*** TODO ***');
         parent::setUp();
-        $this->jetstream = $this->mock(Jetstream::class);
+        config(['lambo.store.project_path' => base_path('tests/Feature/Fixtures')]);
     }
 
     /** @test */
