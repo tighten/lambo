@@ -44,6 +44,11 @@ class ConsoleWriter extends OutputStyle
         $this->onlyVerbose = false;
     }
 
+    public function ok($message): void
+    {
+        $this->success($message, ' OK ');
+    }
+
     public function note($message, $label = 'NOTE'): void
     {
         if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
