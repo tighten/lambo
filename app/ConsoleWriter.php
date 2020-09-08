@@ -12,11 +12,6 @@ class ConsoleWriter extends OutputStyle
 {
     private $onlyVerbose = false;
 
-    public function __construct(InputInterface $input, OutputInterface $output)
-    {
-        parent::__construct($input, $output);
-    }
-
     public function panel(string $prefix, string $message, string $style)
     {
         parent::block($message, $prefix, $style, ' ', true, false);
