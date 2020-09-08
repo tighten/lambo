@@ -67,7 +67,7 @@ class VerifyPathAvailableTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app( VerifyPathAvailable::class)();
+        app(VerifyPathAvailable::class)();
     }
 
     /** @test */
