@@ -10,8 +10,6 @@ use Tests\TestCase;
 
 class ConfigureFrontendFrameworkTest extends TestCase
 {
-    protected $jetstream;
-
     public function setUp(): void
     {
         parent::setUp();
