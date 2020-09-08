@@ -104,7 +104,7 @@ class NewCommand extends LamboCommand
         $this->consoleWriter->newLine();
         $this->consoleWriter->text([
             '<fg=green>Done, happy coding!</>',
-            'Lambo is bought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
+            'Lambo is brought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
         ]);
         $this->consoleWriter->newLine();
     }
