@@ -3,24 +3,35 @@
 namespace App\Actions;
 
 use App\ConsoleWriter;
-use App\LamboException;
 use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
 {
+    use AbortsCommands;
+
     protected $finder;
     private $consoleWriter;
+
     private $dependencies = [
-        'The Laravel installer' => 'laravel|https://laravel.com/docs/installation#installing-laravel',
-        'Laravel valet' => 'valet|https://laravel.com/docs/valet',
-        'Git version control' => 'git|https://git-scm.com/',
+        [
+            'command' => 'laravel',
+            'label' => 'The Laravel Installer',
+            'instructions_url' => 'https://laravel.com/docs/installation#installing-laravel',
+        ],
+        [
+            'command' => 'valet',
+            'label' => 'Laravel valet',
+            'instructions_url' => 'https://laravel.com/docs/valet',
+        ],
+        [
+            'command' => 'git',
+            'label' => 'Git version control',
+            'instructions_url' => 'https://git-scm.com',
+        ],
     ];
 
-    public function __construct(
-        ConsoleWriter $consoleWriter,
-        ExecutableFinder $finder
-
-    ) {
+    public function __construct(ConsoleWriter $consoleWriter, ExecutableFinder $finder)
+    {
         $this->finder = $finder;
         $this->consoleWriter = $consoleWriter;
     }
@@ -29,19 +40,16 @@ class VerifyDependencies
     {
         $this->consoleWriter->logStep("Verifying dependencies");
 
-        $fail = false;
-        collect($this->dependencies)->each(function ($dependency, $description) use (&$fail) {
-            list($command, $url) = explode('|', $dependency);
-            if (($installedDependency = $this->finder->find($command)) === null) {
-                $fail = true;
-                $this->consoleWriter->fail("${description} is missing. You can find installation instructions at:\n        <fg=blue;href={$url}>{$url}</>");
-            } else {
-                $this->consoleWriter->verbose()->success("${description} found at:\n        <fg=blue>{$installedDependency}</>");
-            }
-        });
-
-        if ($fail) {
-            throw new LamboException('Please install missing dependencies and try again.');
-        }
+        $this->abortIf(
+            collect($this->dependencies)->reduce(function ($carry, $dependency) {
+                list($command, $label, $instructionsUrl) = array_values($dependency);
+                if (($installedDependency = $this->finder->find($command)) === null) {
+                    $this->consoleWriter->fail("{$command} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                    return true;
+                }
+                $this->consoleWriter->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                return $carry ?? false;
+            }),
+            'Please install missing dependencies and try again.');
     }
 }

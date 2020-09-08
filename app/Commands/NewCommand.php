@@ -100,8 +100,7 @@ class NewCommand extends LamboCommand
             $this->makeAndInvoke(OpenInBrowser::class);
         } catch (LamboException $e) {
             $this->consoleWriter->exception($e->getMessage());
-
-            return;
+            exit;
         }
 
         $this->consoleWriter->newLine();
