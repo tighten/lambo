@@ -19,7 +19,7 @@ class VerifyPathAvailable
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep("Verifying path availability");
+        $this->consoleWriter->logStep('Verifying path availability');
 
         $rootPath = config('lambo.store.root_path');
 
