@@ -48,10 +48,8 @@ class NewCommand extends LamboCommand
     public function buildSignature()
     {
         return collect((new Options)->all())->reduce(
-            function (
-                $carry,
-                $option
-            ) {
+            function ($carry, $option)
+            {
                 return $carry . $this->buildSignatureOption($option);
             },
             "new\n{projectName? : Name of the Laravel project}"
