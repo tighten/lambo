@@ -12,8 +12,8 @@ class VerifyDependencies
     private $consoleWriter;
     private $dependencies = [
         'The Laravel installer' => 'laravel|https://laravel.com/docs/installation#installing-laravel',
-        'Laravel valet'         => 'valet|https://laravel.com/docs/valet',
-        'Git version control'   => 'git|https://git-scm.com/',
+        'Laravel valet' => 'valet|https://laravel.com/docs/valet',
+        'Git version control' => 'git|https://git-scm.com/',
     ];
 
     public function __construct(
