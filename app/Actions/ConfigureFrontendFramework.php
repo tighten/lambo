@@ -12,7 +12,7 @@ class ConfigureFrontendFramework
     use AbortsCommands;
 
     protected $shell;
-    protected $availableFrontends = ['inertia', 'livewire'];
+    protected $availableFrontends = ['inertia', 'livewire', 'none'];
     protected $consoleWriter;
 
     public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
@@ -23,28 +23,32 @@ class ConfigureFrontendFramework
 
     public function __invoke()
     {
-        if (! $this->getFrontend()) {
-            return false;
+        $frontend = $this->getValidatedFrontend();
+        
+        if ($frontend === 'none') {
+            return;
+        }
+            return;
         }
 
         $this->consoleWriter->logStep('Configuring frontend scaffolding');
 
         if (! $this->chooseValidFrontend()) {
-            $this->consoleWriter->verbose()->success('No frontend framework will be installed.', ' OK ');
-            return false;
+            return $this->consoleWriter->verbose()->success('No frontend framework will be installed.', ' OK ');
         }
 
         $this->ensureJetstreamInstalled();
 
-        $process = $this->shell->execInProject(sprintf("php artisan jetstream:install %s%s%s",
-                $this->getFrontend(),
-                $this->withTeams(),
-                $this->withQuiet())
-        );
+        $process = $this->shell->execInProject(sprintf(
+            "php artisan jetstream:install %s%s%s",
+            $this->getFrontend(),
+            $this->withTeams(),
+            $this->withQuiet()
+        ));
 
         $this->abortIf(! $process->isSuccessful(), "Installation of {$this->getFrontend()} UI scaffolding did not complete successfully.", $process);
 
-        $this->consoleWriter->verbose()->success($this->getFrontend() . ' ui scaffolding installed.');
+        $this->consoleWriter->verbose()->success($this->getFrontend() . ' UI scaffolding installed.');
     }
 
     public function ensureJetstreamInstalled()
