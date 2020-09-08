@@ -30,7 +30,7 @@ class VerifyPathAvailable
         $projectPath = config('lambo.store.project_path');
 
         if (empty($projectPath)) {
-            throw new LamboException('configuration \'lambo.store.project_path\' cannot be null or an empty string.');
+            throw new LamboException("Configuration 'lambo.store.project_path' cannot be null or an empty string.");
         }
 
         if (File::isDirectory($projectPath)) {
