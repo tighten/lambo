@@ -9,7 +9,6 @@ abstract class LamboConfiguration
     const EDITOR = 'editor';
     const PROJECT_NAME = 'project_name';
     const ROOT_PATH = 'root_path';
-    const AUTH = 'auth';
     const WITH_OUTPUT = 'with_output';
     const USE_DEVELOP_BRANCH = 'dev';
     const CREATE_DATABASE = 'create_database';

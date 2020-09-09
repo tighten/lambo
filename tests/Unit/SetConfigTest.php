@@ -332,72 +332,36 @@ class SetConfigTest extends TestCase
     function it_sets_the_create_database_configuration()
     {
         $this->withValetTld();
-//        config(['home_dir' => '/home/user']);
 
         $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
         $savedConfiguration = $this->mock(SavedConfiguration::class);
 
         $commandLineConfiguration->full = true;
-        $commandLineConfiguration->auth = false;
+        $commandLineConfiguration->create_database = false;
         (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
             'tld' => null,
             'full' => false,
-            'auth' => false,
+            'create_database' => false,
         ]);
-        $this->assertTrue(config('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.create_database'));
 
         $commandLineConfiguration->full = false;
-        $commandLineConfiguration->auth = true;
+        $commandLineConfiguration->create_database = true;
         (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
             'tld' => null,
             'full' => false,
-            'auth' => false,
+            'create_database' => false,
         ]);
-        $this->assertTrue(config('lambo.store.auth'));
+        $this->assertTrue(config('lambo.store.create_database'));
 
         $commandLineConfiguration->full = false;
-        $commandLineConfiguration->auth = false;
+        $commandLineConfiguration->create_database = false;
         (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
             'tld' => null,
             'full' => false,
-            'auth' => false,
+            'create_database' => false,
         ]);
-        $this->assertFalse(config('lambo.store.auth'));
-    }
-
-    /** @test */
-    function it_sets_the_auth_configuration()
-    {
-        $this->withValetTld('test-domain');
-        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
-        $savedConfiguration = $this->mock(SavedConfiguration::class);
-
-        $commandLineConfiguration->full = true;
-        $commandLineConfiguration->auth = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'auth' => false,
-        ]);
-        $this->assertTrue(config('lambo.store.auth'));
-
-        $commandLineConfiguration->full = false;
-        $commandLineConfiguration->auth = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'auth' => false,
-        ]);
-        $this->assertTrue(config('lambo.store.auth'));
-
-        $commandLineConfiguration->full = false;
-        $commandLineConfiguration->auth = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'auth' => false,
-        ]);
-        $this->assertFalse(config('lambo.store.auth'));
+        $this->assertFalse(config('lambo.store.create_database'));
     }
 
     /** @test */

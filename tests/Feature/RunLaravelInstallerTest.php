@@ -17,56 +17,26 @@ class RunLaravelInstallerTest extends TestCase
         collect([
             [
                 'command' => 'laravel new my-project --quiet',
-                'lambo.store.auth' => false,
                 'lambo.store.dev' => false,
                 'lambo.store.with_output' => false,
             ],
             [
                 'command' => 'laravel new my-project',
-                'lambo.store.auth' => false,
                 'lambo.store.dev' => false,
                 'lambo.store.with_output' => true,
             ],
             [
                 'command' => 'laravel new my-project --dev --quiet',
-                'lambo.store.auth' => false,
                 'lambo.store.dev' => true,
                 'lambo.store.with_output' => false,
             ],
             [
                 'command' => 'laravel new my-project --dev',
-                'lambo.store.auth' => false,
-                'lambo.store.dev' => true,
-                'lambo.store.with_output' => true,
-            ],
-            [
-                'command' => 'laravel new my-project --auth --quiet',
-                'lambo.store.auth' => true,
-                'lambo.store.dev' => false,
-                'lambo.store.with_output' => false,
-            ],
-            [
-                'command' => 'laravel new my-project --auth',
-                'lambo.store.auth' => true,
-                'lambo.store.dev' => false,
-                'lambo.store.with_output' => true,
-            ],
-            [
-                'command' => 'laravel new my-project --auth --dev --quiet',
-                'lambo.store.auth' => true,
-                'lambo.store.dev' => true,
-                'lambo.store.with_output' => false,
-            ],
-
-            [
-                'command' => 'laravel new my-project --auth --dev',
-                'lambo.store.auth' => true,
                 'lambo.store.dev' => true,
                 'lambo.store.with_output' => true,
             ],
         ])->each(function ($options) {
             config(['lambo.store.project_name' => 'my-project']);
-            config(['lambo.store.auth' => $options['lambo.store.auth']]);
             config(['lambo.store.dev' => $options['lambo.store.dev']]);
             config(['lambo.store.with_output' => $options['lambo.store.with_output']]);
 
@@ -83,7 +53,6 @@ class RunLaravelInstallerTest extends TestCase
     function it_throws_an_exception_if_the_laravel_installer_fails()
     {
         config(['lambo.store.project_name' => 'my-project']);
-        config(['lambo.store.auth' => false]);
         config(['lambo.store.dev' => false]);
         config(['lambo.store.with_output' => false]);
 

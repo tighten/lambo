@@ -91,11 +91,6 @@ class SetConfig
         return sprintf("http%s://%s.%s", $protocol, config('lambo.store.project_name'), config('lambo.store.tld'));
     }
 
-    private function getAuth(string $key, $default)
-    {
-        return $this->fullOrConfigured($key, $default);
-    }
-
     private function getValetSecure(string $key, $default)
     {
         return $this->fullOrConfigured($key, $default);

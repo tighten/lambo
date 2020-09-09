@@ -60,11 +60,6 @@ class Options
             'cli_description' => "Scaffold Jetstream UI with team features (must be used with -f, --frontend)",
         ],
         [
-            'short' => 'a',
-            'long' => 'auth',
-            'cli_description' => "Scaffold the routes and views for basic Laravel auth",
-        ],
-        [
             'short' => 'l',
             'long' => 'link',
             'cli_description' => "Create a Valet link to the project directory",
@@ -85,7 +80,7 @@ class Options
         ],
         [
             'long' => 'full',
-            'cli_description' => "Shortcut of --create-db --link --secure --auth",
+            'cli_description' => "Shortcut of --create-db --link --secure",
         ],
     ];
 
