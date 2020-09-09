@@ -20,6 +20,7 @@ abstract class TestCase extends BaseTestCase
         $this->consoleWriter = $this->mock(ConsoleWriter::class);
         $this->consoleWriter->shouldReceive('logstep');
         $this->consoleWriter->shouldReceive('success');
+        $this->consoleWriter->shouldReceive('note');
         $this->consoleWriter->shouldReceive('text');
         $this->consoleWriter->shouldReceive('warn');
         $this->consoleWriter->shouldReceive('fail');

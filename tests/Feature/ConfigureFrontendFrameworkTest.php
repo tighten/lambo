@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Actions\ConfigureFrontendFramework;
 use App\LamboException;
 use App\Shell;
+use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -14,6 +15,46 @@ class ConfigureFrontendFrameworkTest extends TestCase
     {
         parent::setUp();
         config(['lambo.store.project_path' => base_path('tests/Feature/Fixtures')]);
+    }
+
+    /** @test */
+    function it_installs_laravel_jetstream()
+    {
+        config(['lambo.store.project_path' => '/some/project/path']);
+
+        $this->composerMissing();
+
+        $this->shell->shouldReceive('execInProject')
+            ->with('composer require laravel/jetstream --quiet')
+            ->once()
+            ->andReturn(FakeProcess::success())
+            ->globally()
+            ->ordered();
+
+        $this->shouldInstallFramework('inertia');
+
+        app(ConfigureFrontendFramework::class)();
+    }
+
+    /** @test */
+    function it_throws_a_lambo_exception_if_laravel_jetstream_fails_to_install()
+    {
+        config(['lambo.store.project_path' => '/some/project/path']);
+
+        $this->composerMissing();
+
+        $this->shell->shouldReceive('execInProject')
+            ->with('composer require laravel/jetstream --quiet')
+            ->once()
+            ->andReturn(FakeProcess::fail('composer require laravel/jetstream --quiet'))
+            ->globally()
+            ->ordered();
+
+        config(['lambo.store.frontend' => 'inertia']);
+
+        $this->expectException(LamboException::class);
+
+        app(ConfigureFrontendFramework::class)();
     }
 
     /** @test */
@@ -41,13 +82,11 @@ class ConfigureFrontendFrameworkTest extends TestCase
     function it_skips_frontend_framework_installation()
     {
         $shell = $this->spy(Shell::class);
-        $laravelUi = $this->spy(Jetstream::class);
 
         $this->assertEmpty(config('lambo.store.frontend'));
 
         app(ConfigureFrontendFramework::class);
 
-        $laravelUi->shouldNotHaveReceived('install');
         $shell->shouldNotHaveReceived('execInProject');
     }
 
@@ -70,6 +109,18 @@ class ConfigureFrontendFrameworkTest extends TestCase
         $this->shouldInstallFramework('inertia', false, true, true);
 
         app(ConfigureFrontendFramework::class)();
+    }
+
+    protected function composerMissing(): void
+    {
+        $composerJsonFixture = File::get(base_path('tests/Feature/Fixtures/composer-without-laravel-jetstream.json'));
+
+        File::shouldReceive('get')
+            ->with('/some/project/path/composer.json')
+            ->once()
+            ->andReturn($composerJsonFixture)
+            ->globally()
+            ->ordered();
     }
 
     private function shouldFailFrontendFrameworkInstallation(string $frontendFramework)

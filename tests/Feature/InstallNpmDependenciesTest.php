@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Actions\InstallNpmDependencies;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
