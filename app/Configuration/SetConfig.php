@@ -106,15 +106,6 @@ class SetConfig
         return $this->fullOrConfigured($key, $default);
     }
 
-    public function getNode(string $key, $default)
-    {
-        if ($this->get('mix', false)) {
-            return true;
-        }
-
-        return $this->fullOrConfigured($key, $default);
-    }
-
     public function getMix(string $key, $default)
     {
         return $this->fullOrConfigured($key, $default);

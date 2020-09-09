@@ -65,11 +65,6 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
-            // 'short' => 'n',
-            'long' => 'node',
-            'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        ],
-        [
             'short' => 'x',
             'long' => 'mix',
             'cli_description' => "Run <info>'npm run dev'</info> after creating the project",
@@ -84,11 +79,6 @@ class Options
             'long' => 'secure',
             'cli_description' => "Generate and use an HTTPS cert with Valet",
         ],
-//        [
-//            'short'           => 'q',
-//            'long'            => 'quiet',
-//            'cli_description' => "Use quiet mode to hide most messages from lambo",
-//        ],
         [
             'long' => 'with-output',
             'cli_description' => "Show command line output from shell commands",
@@ -100,7 +90,7 @@ class Options
         ],
         [
             'long' => 'full',
-            'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
+            'cli_description' => "Shortcut of --create-db --link --secure --auth --mix",
         ],
     ];
 

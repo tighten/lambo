@@ -10,7 +10,6 @@ use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
-use App\Actions\InstallNpmDependencies;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
@@ -90,7 +89,6 @@ class NewCommand extends LamboCommand
             $this->makeAndInvoke(GenerateAppKey::class);
             $this->makeAndInvoke(ConfigureFrontendFramework::class);
             $this->makeAndInvoke(InitializeGitRepo::class);
-            $this->makeAndInvoke(InstallNpmDependencies::class);
             $this->makeAndInvoke(CompileAssets::class);
             $this->makeAndInvoke(RunAfterScript::class);
             $this->makeAndInvoke(ValetLink::class);
@@ -124,7 +122,6 @@ class NewCommand extends LamboCommand
             'dbpassword' => LamboConfiguration::DATABASE_PASSWORD,
             'create-db' => LamboConfiguration::CREATE_DATABASE,
             'auth' => LamboConfiguration::AUTH,
-            'node' => LamboConfiguration::NODE,
             'mix' => LamboConfiguration::MIX,
             'link' => LamboConfiguration::VALET_LINK,
             'secure' => LamboConfiguration::VALET_SECURE,
@@ -146,7 +143,6 @@ class NewCommand extends LamboCommand
             'DB_PASSWORD' => LamboConfiguration::DATABASE_PASSWORD,
             'CREATE_DATABASE' => LamboConfiguration::CREATE_DATABASE,
             'AUTH' => LamboConfiguration::AUTH,
-            'NODE' => LamboConfiguration::NODE,
             'MIX' => LamboConfiguration::MIX,
             'LINK' => LamboConfiguration::VALET_LINK,
             'SECURE' => LamboConfiguration::VALET_SECURE,
@@ -174,7 +170,6 @@ class NewCommand extends LamboCommand
             LamboConfiguration::DATABASE_PASSWORD => '',
             LamboConfiguration::CREATE_DATABASE => false,
             LamboConfiguration::AUTH => false,
-            LamboConfiguration::NODE => false,
             LamboConfiguration::MIX => false,
             LamboConfiguration::VALET_LINK => false,
             LamboConfiguration::VALET_SECURE => false,

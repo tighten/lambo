@@ -20,10 +20,6 @@ class InstallNpmDependencies
 
     public function __invoke()
     {
-        if (! config('lambo.store.node')) {
-            return;
-        }
-
         $this->consoleWriter->logStep('Installing node dependencies');
 
         $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
