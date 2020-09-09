@@ -106,11 +106,6 @@ class SetConfig
         return $this->fullOrConfigured($key, $default);
     }
 
-    public function getMix(string $key, $default)
-    {
-        return $this->fullOrConfigured($key, $default);
-    }
-
     public function getValetLink(string $key, $default)
     {
         return $this->fullOrConfigured($key, $default);

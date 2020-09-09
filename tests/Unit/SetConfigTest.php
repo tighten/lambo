@@ -366,43 +366,6 @@ class SetConfigTest extends TestCase
     }
 
     /** @test */
-    function it_sets_the_mix_configuration()
-    {
-
-        $this->withValetTld('test-domain');
-        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
-        $savedConfiguration = $this->mock(SavedConfiguration::class);
-
-        $commandLineConfiguration->full = true;
-        $commandLineConfiguration->mix = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'mix' => false,
-        ]);
-        $this->assertTrue(config('lambo.store.mix'));
-
-        $commandLineConfiguration->full = false;
-        $commandLineConfiguration->mix = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'mix' => false,
-        ]);
-        $this->assertTrue(config('lambo.store.mix'));
-
-        $commandLineConfiguration->full = false;
-        $commandLineConfiguration->mix = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
-            'tld' => null,
-            'full' => false,
-            'mix' => false,
-        ]);
-        $this->assertFalse(config('lambo.store.mix'));
-
-    }
-
-    /** @test */
     function it_sets_the_auth_configuration()
     {
         $this->withValetTld('test-domain');

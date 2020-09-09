@@ -22,8 +22,6 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()
     {
-        config(['lambo.store.mix' => true]);
-
         $this->silentDevScript->shouldReceive('add')
             ->once()
             ->globally()
@@ -45,25 +43,8 @@ class CompileAssetsTest extends TestCase
     }
 
     /** @test */
-    function it_skips_asset_compilation()
-    {
-        $this->silentDevScript = $this->spy(SilentDevScript::class);
-        $this->shell = $this->spy(Shell::class);
-
-        config(['lambo.store.mix' => false]);
-
-        app(CompileAssets::class)();
-
-        $this->silentDevScript->shouldNotHaveReceived('add');
-        $this->shell->shouldNotHaveReceived('execInProject');
-        $this->silentDevScript->shouldNotHaveReceived('remove');
-    }
-
-    /** @test */
     function it_throws_an_exception_if_asset_compilation_fails()
     {
-        config(['lambo.store.mix' => true]);
-
         $this->silentDevScript->shouldReceive('add')
             ->once()
             ->globally()

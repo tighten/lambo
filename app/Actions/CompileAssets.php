@@ -22,10 +22,6 @@ class CompileAssets
 
     public function __invoke()
     {
-        if (! config('lambo.store.mix')) {
-            return;
-        }
-
         $this->silentDevScript->add();
 
         $this->consoleWriter->logStep('Compiling project assets');

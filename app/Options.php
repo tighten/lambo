@@ -65,11 +65,6 @@ class Options
             'cli_description' => "Scaffold the routes and views for basic Laravel auth",
         ],
         [
-            'short' => 'x',
-            'long' => 'mix',
-            'cli_description' => "Run <info>'npm run dev'</info> after creating the project",
-        ],
-        [
             'short' => 'l',
             'long' => 'link',
             'cli_description' => "Create a Valet link to the project directory",
@@ -90,7 +85,7 @@ class Options
         ],
         [
             'long' => 'full',
-            'cli_description' => "Shortcut of --create-db --link --secure --auth --mix",
+            'cli_description' => "Shortcut of --create-db --link --secure --auth",
         ],
     ];
 

@@ -89,7 +89,6 @@ class NewCommand extends LamboCommand
             $this->makeAndInvoke(GenerateAppKey::class);
             $this->makeAndInvoke(ConfigureFrontendFramework::class);
             $this->makeAndInvoke(InitializeGitRepo::class);
-            $this->makeAndInvoke(CompileAssets::class);
             $this->makeAndInvoke(RunAfterScript::class);
             $this->makeAndInvoke(ValetLink::class);
             $this->makeAndInvoke(ValetSecure::class);
@@ -122,7 +121,6 @@ class NewCommand extends LamboCommand
             'dbpassword' => LamboConfiguration::DATABASE_PASSWORD,
             'create-db' => LamboConfiguration::CREATE_DATABASE,
             'auth' => LamboConfiguration::AUTH,
-            'mix' => LamboConfiguration::MIX,
             'link' => LamboConfiguration::VALET_LINK,
             'secure' => LamboConfiguration::VALET_SECURE,
             'with-output' => LamboConfiguration::WITH_OUTPUT,
@@ -143,7 +141,6 @@ class NewCommand extends LamboCommand
             'DB_PASSWORD' => LamboConfiguration::DATABASE_PASSWORD,
             'CREATE_DATABASE' => LamboConfiguration::CREATE_DATABASE,
             'AUTH' => LamboConfiguration::AUTH,
-            'MIX' => LamboConfiguration::MIX,
             'LINK' => LamboConfiguration::VALET_LINK,
             'SECURE' => LamboConfiguration::VALET_SECURE,
             'WITH_OUTPUT' => LamboConfiguration::WITH_OUTPUT,
@@ -170,7 +167,6 @@ class NewCommand extends LamboCommand
             LamboConfiguration::DATABASE_PASSWORD => '',
             LamboConfiguration::CREATE_DATABASE => false,
             LamboConfiguration::AUTH => false,
-            LamboConfiguration::MIX => false,
             LamboConfiguration::VALET_LINK => false,
             LamboConfiguration::VALET_SECURE => false,
             LamboConfiguration::WITH_OUTPUT => false,
