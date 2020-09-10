@@ -9,11 +9,6 @@ use Tests\TestCase;
 
 class InstallNpmDependenciesTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        }
-
     /** @test */
     function it_installs_npm_dependencies()
     {

@@ -24,6 +24,7 @@ class SetConfig
     {
         foreach ($defaultConfiguration as $configurationKey => $default) {
             $methodName = 'get' . Str::of($configurationKey)->studly();
+
             if (method_exists($this, $methodName)) {
                 config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
                 continue;

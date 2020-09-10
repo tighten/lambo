@@ -40,7 +40,6 @@ abstract class LamboConfiguration
     protected function get(string $key, array $array)
     {
         if (array_key_exists($key, $array)) {
-
             if ($array[$key] === '') {
                 return null;
             }
