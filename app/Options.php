@@ -28,13 +28,13 @@ class Options
             'short' => 'b',
             'long' => 'browser',
             'param_description' => '"BROWSER"',
-            'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>'Google Chrome'</info> or <info>'Safari'</info> (macOS)",
+            'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>firefox</info>",
         ],
         [
             'short' => 'f',
             'long' => 'frontend',
-            'param_description' => '"FRONTEND"',
-            'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of <info>inertia</info> or <info>livewire</info>",
+            'param_description' => '"STACK"',
+            'cli_description' => "Specify the <info>STACK</info> to use. Must be one of <info>inertia</info> or <info>livewire</info>",
         ],
         [
             'long' => 'dbname',
@@ -57,7 +57,7 @@ class Options
         ],
         [
             'long' => 'with-teams',
-            'cli_description' => "Scaffold Jetstream UI with team features (must be used with -f, --frontend)",
+            'cli_description' => "Use Jetstream team features (must be used with -f, --frontend)",
         ],
         [
             'short' => 'l',
