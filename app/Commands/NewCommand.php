@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Actions\CompileAssets;
 use App\Actions\ConfigureFrontendFramework;
 use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
@@ -16,6 +15,7 @@ use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
+use App\Actions\ValidateConfiguration;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Configuration\CommandLineConfiguration;
@@ -80,6 +80,7 @@ class NewCommand extends LamboCommand
         $this->consoleWriter->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
+            $this->makeAndInvoke(ValidateConfiguration::class);
             $this->makeAndInvoke(VerifyPathAvailable::class);
             $this->makeAndInvoke(VerifyDependencies::class);
             $this->makeAndInvoke(RunLaravelInstaller::class);
@@ -125,7 +126,9 @@ class NewCommand extends LamboCommand
             'with-output' => LamboConfiguration::WITH_OUTPUT,
             'dev' => LamboConfiguration::USE_DEVELOP_BRANCH,
             'full' => LamboConfiguration::FULL,
-            'with-teams' => LamboConfiguration::WITH_TEAMS,
+            'teams' => LamboConfiguration::TEAMS,
+            'inertia' => LamboConfiguration::INERTIA,
+            'livewire' => LamboConfiguration::LIVEWIRE,
             'projectName' => LamboConfiguration::PROJECT_NAME,
         ]);
 
@@ -143,7 +146,7 @@ class NewCommand extends LamboCommand
             'SECURE' => LamboConfiguration::VALET_SECURE,
             'WITH_OUTPUT' => LamboConfiguration::WITH_OUTPUT,
             'DEVELOP' => LamboConfiguration::USE_DEVELOP_BRANCH,
-            'WITH_TEAMS' => LamboConfiguration::WITH_TEAMS,
+            'WITH_TEAMS' => LamboConfiguration::TEAMS,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
@@ -159,7 +162,6 @@ class NewCommand extends LamboCommand
             LamboConfiguration::COMMIT_MESSAGE => 'Initial commit',
             LamboConfiguration::ROOT_PATH => getcwd(),
             LamboConfiguration::BROWSER => null,
-            LamboConfiguration::FRONTEND_FRAMEWORK => null,
             LamboConfiguration::DATABASE_NAME => $this->argument('projectName'),
             LamboConfiguration::DATABASE_USERNAME => 'root',
             LamboConfiguration::DATABASE_PASSWORD => '',
@@ -169,7 +171,9 @@ class NewCommand extends LamboCommand
             LamboConfiguration::WITH_OUTPUT => false,
             LamboConfiguration::USE_DEVELOP_BRANCH => false,
             LamboConfiguration::FULL => false,
-            LamboConfiguration::WITH_TEAMS => false,
+            LamboConfiguration::INERTIA => false,
+            LamboConfiguration::LIVEWIRE => false,
+            LamboConfiguration::TEAMS => false,
             LamboConfiguration::PROJECT_NAME => null,
             LamboConfiguration::TLD => null,
         ]);

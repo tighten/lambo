@@ -31,12 +31,6 @@ class Options
             'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>firefox</info>",
         ],
         [
-            'short' => 'f',
-            'long' => 'frontend',
-            'param_description' => '"STACK"',
-            'cli_description' => "Specify the <info>STACK</info> to use. Must be one of <info>inertia</info> or <info>livewire</info>",
-        ],
-        [
             'long' => 'dbname',
             'param_description' => 'DBNAME',
             'cli_description' => "Specify the database name",
@@ -56,8 +50,16 @@ class Options
             'cli_description' => "Create a new MySQL database",
         ],
         [
-            'long' => 'with-teams',
-            'cli_description' => "Use Jetstream team features (must be used with -f, --frontend)",
+            'long' => 'inertia',
+            'cli_description' => "Use inertia frontend scaffolding",
+        ],
+        [
+            'long' => 'livewire',
+            'cli_description' => "Use livewire frontend scaffolding",
+        ],
+        [
+            'long' => 'teams',
+            'cli_description' => "Use team features with inertia or livewire",
         ],
         [
             'short' => 'l',

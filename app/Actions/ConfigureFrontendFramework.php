@@ -24,30 +24,24 @@ class ConfigureFrontendFramework
     {
         $configuredFrontend = config('lambo.store.frontend');
 
-        if (is_null($configuredFrontend)) {
+        if ($configuredFrontend === 'none') {
             return;
         }
 
         $this->consoleWriter->logStep('Configuring frontend scaffolding');
 
-        $chosenFrontend = $this->validatedFrontendChoice($configuredFrontend);
-
-        if ($chosenFrontend === 'none') {
-            return $this->consoleWriter->verbose()->ok('No frontend framework will be installed.');
-        }
-
         $this->ensureJetstreamInstalled();
 
         $process = $this->shell->execInProject(sprintf(
             "php artisan jetstream:install %s%s%s",
-            $chosenFrontend,
-            config('lambo.store.with_teams') ? ' --teams' : '',
+            $configuredFrontend,
+            config('lambo.store.teams') ? ' --teams' : '',
             config('lambo.store.with_output') ? '' : ' --quiet'
         ));
 
-        $this->abortIf(! $process->isSuccessful(), "Installation of {$chosenFrontend} UI scaffolding did not complete successfully.", $process);
+        $this->abortIf(! $process->isSuccessful(), "Installation of {$configuredFrontend} UI scaffolding did not complete successfully.", $process);
 
-        if ($chosenFrontend === 'inertia') {
+        if ($configuredFrontend === 'inertia') {
             /* @todo temporary manual creation
                    This will be fixed when binding of App\ConsoleWriter and Shell
                    into the container is implemented. */
@@ -63,23 +57,7 @@ class ConfigureFrontendFramework
             ])();
         }
 
-        $this->consoleWriter->verbose()->success( "{$chosenFrontend} UI scaffolding installed.");
-    }
-
-    private function validatedFrontendChoice(string $configuredFrontend): string
-    {
-        $availableFrontends = ['inertia', 'livewire', 'none'];
-
-        if (in_array(strtolower($configuredFrontend), $availableFrontends)) {
-            return $configuredFrontend;
-        }
-
-        $configuredFrontend = app('console')->choice("<fg=yellow>{$configuredFrontend}</> is not a framework I can install. Please choose one of the following options", $availableFrontends, count($availableFrontends) - 1);
-        config(['lambo.store.frontend' => $configuredFrontend]);
-
-        $this->consoleWriter->verbose()->ok("Using {$configuredFrontend} ui scaffolding.");
-
-        return $configuredFrontend;
+        $this->consoleWriter->verbose()->success( "{$configuredFrontend} UI scaffolding installed.");
     }
 
     public function ensureJetstreamInstalled()

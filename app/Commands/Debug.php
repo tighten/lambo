@@ -83,6 +83,8 @@ trait Debug
                 'with-output',
                 'dev',
                 'full',
+                'inertia',
+                'livewire',
                 'with-teams',
                 'projectName',
             ], '--'

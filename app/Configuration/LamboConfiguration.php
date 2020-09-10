@@ -22,7 +22,9 @@ abstract class LamboConfiguration
     const VALET_LINK = 'valet_link';
     const VALET_SECURE = 'valet_secure';
     const BROWSER = 'browser';
-    const WITH_TEAMS = 'with_teams';
+    const INERTIA = 'inertia';
+    const LIVEWIRE = 'livewire';
+    const TEAMS = 'teams';
 
     public function __construct(array $keyMap)
     {
