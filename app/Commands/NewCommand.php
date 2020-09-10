@@ -77,8 +77,6 @@ class NewCommand extends LamboCommand
 
         $this->setConfig();
 
-//        exit("Aww, shiiiiiit.\n\n");
-
         $this->consoleWriter->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
