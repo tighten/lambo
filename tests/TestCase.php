@@ -51,4 +51,18 @@ abstract class TestCase extends BaseTestCase
             };
         });
     }
+
+    protected function center(string $title, string $padChar = ' ', int $lineLength = 80): string
+    {
+        return str_pad(str_repeat($padChar, ($lineLength - strlen($title)) / 2) . $title . str_repeat($padChar, ($lineLength - strlen($title)) / 2), $lineLength, $padChar);
+    }
+
+    protected function skipWithMessage(array $lines): void
+    {
+        $lineLength = 80;
+        $header = $this->center(' [ SKIPPED ] ', '=', $lineLength);
+        $section = str_repeat('=', $lineLength);
+        $message = implode(PHP_EOL, $lines);
+        $this->markTestSkipped("{$header}\n{$message}\n{$section}");
+    }
 }

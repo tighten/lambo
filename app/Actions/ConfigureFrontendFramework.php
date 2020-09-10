@@ -33,7 +33,7 @@ class ConfigureFrontendFramework
         $chosenFrontend = $this->validatedFrontendChoice($configuredFrontend);
 
         if ($chosenFrontend === 'none') {
-            return;
+            return $this->consoleWriter->verbose()->ok('No frontend framework will be installed.');
         }
 
         $this->ensureJetstreamInstalled();
@@ -47,6 +47,22 @@ class ConfigureFrontendFramework
 
         $this->abortIf(! $process->isSuccessful(), "Installation of {$chosenFrontend} UI scaffolding did not complete successfully.", $process);
 
+        if ($chosenFrontend === 'inertia') {
+            /* @todo temporary manual creation
+                   This will be fixed when binding of App\ConsoleWriter and Shell
+                   into the container is implemented. */
+
+            app(InstallNpmDependencies::class,[
+                'shell' => $this->shell,
+                'consoleWriter' => $this->consoleWriter
+            ])();
+
+            app(CompileAssets::class, [
+                'shell' => $this->shell,
+                'consoleWriter' => $this->consoleWriter
+            ])();
+        }
+
         $this->consoleWriter->verbose()->success( "{$chosenFrontend} UI scaffolding installed.");
     }
 
@@ -59,11 +75,9 @@ class ConfigureFrontendFramework
         }
 
         $configuredFrontend = app('console')->choice("<fg=yellow>{$configuredFrontend}</> is not a framework I can install. Please choose one of the following options", $availableFrontends, count($availableFrontends) - 1);
-        ($configuredFrontend === 'none')
-            ? $this->consoleWriter->verbose()->ok('No frontend framework will be installed.')
-            : $this->consoleWriter->verbose()->ok("Using {$configuredFrontend} ui scaffolding.");
-
         config(['lambo.store.frontend' => $configuredFrontend]);
+
+        $this->consoleWriter->verbose()->ok("Using {$configuredFrontend} ui scaffolding.");
 
         return $configuredFrontend;
     }
