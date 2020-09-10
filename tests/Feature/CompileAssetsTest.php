@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\CompileAssets;
 use App\Actions\SilentDevScript;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -17,7 +16,7 @@ class CompileAssetsTest extends TestCase
     {
         parent::setUp();
         $this->silentDevScript = $this->mock(SilentDevScript::class);
-        }
+    }
 
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()
