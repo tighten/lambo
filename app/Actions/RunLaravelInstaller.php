@@ -33,7 +33,9 @@ class RunLaravelInstaller
     {
         return sprintf('%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
-            config('lambo.store.with_output') ? '' : ' --quiet'
+            ''
+            /* @todo: while laravel installer is busted we must not use --quiet
+            config('lambo.store.with_output') ? '' : ' --quiet' */
         );
     }
 
