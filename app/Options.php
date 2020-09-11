@@ -31,6 +31,11 @@ class Options
             'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>firefox</info>",
         ],
         [
+            'long' => 'dbport',
+            'param_description' => 'PORT',
+            'cli_description' => "Specify the database port",
+        ],
+        [
             'long' => 'dbname',
             'param_description' => 'DBNAME',
             'cli_description' => "Specify the database name",

@@ -12,6 +12,7 @@ abstract class LamboConfiguration
     const WITH_OUTPUT = 'with_output';
     const USE_DEVELOP_BRANCH = 'dev';
     const CREATE_DATABASE = 'create_database';
+    const DATABASE_PORT = 'database_port';
     const DATABASE_NAME = 'database_name';
     const DATABASE_USERNAME = 'database_username';
     const DATABASE_PASSWORD = 'database_password';
