@@ -21,7 +21,6 @@ class ValidateConfiguration
 
         $this->checkTeamsConfiguration();
 
-
         $this->consoleWriter->verbose()->success('Configuration is valid.');
     }
 
@@ -66,5 +65,9 @@ class ValidateConfiguration
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
             $this->consoleWriter->verbose()->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
+    }
+
+    private function checkDatabaseConfiguration()
+    {
     }
 }
