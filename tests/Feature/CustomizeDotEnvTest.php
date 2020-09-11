@@ -11,13 +11,6 @@ class CustomizeDotEnvTest extends TestCase
     /** @test */
     function it_saves_the_customized_dot_env_files()
     {
-        app()->bind('console', function () {
-            return new class{
-                public function comment(){}
-                public function info(){}
-            };
-        });
-
         config(['lambo.store.project_name' => 'my-project']);
         config(['lambo.store.database_name' => 'my_project']);
         config(['lambo.store.project_url' => 'http://my-project.example.com']);
