@@ -2,7 +2,19 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
-> NOTE: If you're working with the alpha, you'll need PHP 7.2, and this readme is currently out of date.The major change is that you'll want to run `lambo new myApplication` instead of `lambo myApplication`.
+>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
+>
+>If you are interested in checking out the beta, please read the *For beta testers* section below.
+
+# For beta testers
+
+This readme still references the current Lambo version, so please note the following major changes: 
+- You'll need PHP 7.2+ to run Lambo.
+- You'll want to run `lambo new myApplication` instead of `lambo myApplication`.
+- Lambo now targets Laravel 8+ and [Laravel Jetstream](https://jetstream.laravel.com/1.x/introduction.html) which means the current options, `--vue`, `--bootstrap` and `--react` have been replaced by `--inertia` and `--livewire`. You may add the `--teams` option to enable team support with inertia and livewire.
+- The `--quiet` option has been removed. Lambo now uses quiet/silent mode for git, npm and the laravel installer by default. You may use `--with-output` if terminal output is required.
+  
+# Current version
 
 ## Installation
 
