@@ -28,7 +28,7 @@ class ConfigureFrontendFramework
             return;
         }
 
-        $this->consoleWriter->logStep('Configuring frontend scaffolding');
+        $this->consoleWriter->logStep('Installing {$configuredFrontend} UI scaffolding');
 
         $this->ensureJetstreamInstalled();
 
@@ -41,12 +41,13 @@ class ConfigureFrontendFramework
 
         $this->abortIf(! $process->isSuccessful(), "Installation of {$configuredFrontend} UI scaffolding did not complete successfully.", $process);
 
-        if ($configuredFrontend === 'inertia') {
-            /* @todo temporary manual creation
-                   This will be fixed when binding of App\ConsoleWriter and Shell
-                   into the container is implemented. */
 
-            app(InstallNpmDependencies::class,[
+        // START temporary workaround ------------------ @jonsugar (11-Sep-2020)
+        // @TODO Remove manual dependency injection when App\ConsoleWriter and
+        //       App\Shell are being bound into the container.
+
+        if ($configuredFrontend === 'inertia') {
+            app(InstallNpmDependencies::class, [
                 'shell' => $this->shell,
                 'consoleWriter' => $this->consoleWriter
             ])();
@@ -57,7 +58,14 @@ class ConfigureFrontendFramework
             ])();
         }
 
-        $this->consoleWriter->verbose()->success( "{$configuredFrontend} UI scaffolding installed.");
+        app(MigrateDatabase::class, [
+            'shell' => $this->shell,
+            'consoleWriter' => $this->consoleWriter
+        ])();
+
+        // END temporary workaround -------------------- @jonsugar (11-Sep-2020)
+
+        $this->consoleWriter->verbose()->success("{$configuredFrontend} UI scaffolding installed.");
     }
 
     public function ensureJetstreamInstalled()
