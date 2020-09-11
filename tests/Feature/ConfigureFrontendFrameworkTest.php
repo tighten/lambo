@@ -176,6 +176,13 @@ class ConfigureFrontendFrameworkTest extends TestCase
                 ->andReturn(FakeProcess::success());
         }
 
+        $this->shell->shouldReceive('execInProject')
+            ->with('php artisan migrate --quiet')
+            ->once()
+            ->globally()
+            ->ordered()
+            ->andReturn(FakeProcess::success());
+
         if ($success) {
             $expectation->andReturn(FakeProcess::success());
         } else {
