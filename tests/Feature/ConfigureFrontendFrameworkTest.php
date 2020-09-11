@@ -147,7 +147,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
     private function shouldInstallFramework(string $frontendFramework, bool $withTeams = false, bool $success = true, bool $withOutput = false): void
     {
         config(['lambo.store.frontend' => $frontendFramework]);
-        config(['lambo.store.with_teams' => $withTeams]);
+        config(['lambo.store.teams' => $withTeams]);
 
         $command = sprintf("php artisan jetstream:install %s%s%s",
             $frontendFramework,
