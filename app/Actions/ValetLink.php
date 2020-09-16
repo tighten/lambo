@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Shell;
 
 class ValetLink
@@ -12,11 +11,11 @@ class ValetLink
     protected $shell;
     private $consoleWriter;
 
-    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell)
     {
         $this->shell = $shell;
-        $this->consoleWriter = $consoleWriter;
     }
+
 
     public function __invoke()
     {
@@ -24,12 +23,12 @@ class ValetLink
             return;
         }
 
-        $this->consoleWriter->logStep('Running valet link');
+        app('console-writer')->logStep('Running valet link');
 
         $process = $this->shell->execInProject('valet link');
 
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
-        $this->consoleWriter->verbose()->success('valet link successful');
+        app('console-writer')->verbose()->success('valet link successful');
     }
 }

@@ -11,13 +11,11 @@ class Shell
     protected $projectPath;
 
     private $useTTY = false;
-    private $consoleWriter;
 
-    public function __construct(ConsoleWriter $consoleWriter, Repository $config)
+    public function __construct(Repository $config)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
-        $this->consoleWriter = $consoleWriter;
     }
 
     public function execInRoot($command)
@@ -35,22 +33,28 @@ class Shell
         return $this->exec("cd {$directory} && $command");
     }
 
-    public function exec(string $command)
+    public function execQuietly(string $command, bool $quiet = false) {
+        return $this->exec($command, true);
+    }
+
+    public function exec(string $command, bool $quiet = false)
     {
         $process = Process::fromShellCommandline($command)
             ->setTty($this->useTTY)
             ->setTimeout(null)
             ->enableOutput();
 
-        $this->consoleWriter->verbose()->exec($command);
+        if (! $quiet) {
+            app('console-writer')->verbose()->exec($command);
+        }
 
-        $process->run(function ($type, $buffer) {
-            if (! $this->shouldReportProgress($buffer)) {
+        $process->run(function ($type, $buffer) use ($quiet) {
+            if (! $this->shouldReportProgress($buffer) || $quiet) {
                 return;
             }
 
             foreach (explode(PHP_EOL, trim($buffer)) as $line) {
-                $this->consoleWriter->consoleOutput($line, $type);
+                app('console-writer')->consoleOutput($line, $type);
             }
         });
 
@@ -70,6 +74,6 @@ class Shell
             return false;
         }
 
-        return $this->consoleWriter->isVerbose() || config('lambo.store.with_output');
+        return app('console-writer')->isVerbose() || config('lambo.store.with_output');
     }
 }

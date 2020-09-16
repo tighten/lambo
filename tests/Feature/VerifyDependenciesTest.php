@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\VerifyDependencies;
-use App\ConsoleWriter;
 use App\LamboException;
 use Symfony\Component\Process\ExecutableFinder;
 use Tests\TestCase;

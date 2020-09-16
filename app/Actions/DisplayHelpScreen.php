@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Options;
 
 class DisplayHelpScreen
@@ -15,30 +14,23 @@ class DisplayHelpScreen
         'edit-after' => 'Edit "after" file',
     ];
 
-    private $consoleWriter;
-
-    public function __construct(ConsoleWriter $consoleWriter)
-    {
-        $this->consoleWriter = $consoleWriter;
-    }
-
     public function __invoke()
     {
-        $this->consoleWriter->newLine();
-        $this->consoleWriter->text("<comment>Usage:</comment>");
-        $this->consoleWriter->text("  lambo new myApplication [arguments]\n");
-        $this->consoleWriter->text("<comment>Commands (lambo COMMANDNAME):</comment>");
+        app('console-writer')->newLine();
+        app('console-writer')->text("<comment>Usage:</comment>");
+        app('console-writer')->text("  lambo new myApplication [arguments]\n");
+        app('console-writer')->text("<comment>Commands (lambo COMMANDNAME):</comment>");
 
         foreach ($this->commands as $command => $description) {
             $spaces = $this->makeSpaces(strlen($command));
-            $this->consoleWriter->text("  <info>{$command}</info>{$spaces}{$description}");
+            app('console-writer')->text("  <info>{$command}</info>{$spaces}{$description}");
         }
 
-        $this->consoleWriter->newLine();
-        $this->consoleWriter->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        app('console-writer')->newLine();
+        app('console-writer')->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
 
         foreach ((new Options)->all() as $option) {
-            $this->consoleWriter->text($this->createCliStringForOption($option));
+            app('console-writer')->text($this->createCliStringForOption($option));
         }
     }
 

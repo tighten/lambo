@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Shell;
 
 class MigrateDatabase
@@ -12,17 +11,17 @@ class MigrateDatabase
     protected $shell;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell)
     {
         $this->shell = $shell;
-        $this->consoleWriter = $consoleWriter;
     }
+
 
     public function __invoke()
     {
         $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
         $this->abortIf(! $process->isSuccessful(), 'Failed to run database migrations successfully', $process);
-        $this->consoleWriter->verbose()->success('Database migrated');
+        app('console-writer')->verbose()->success('Database migrated');
     }
 
     private function withQuiet()

@@ -43,7 +43,7 @@ class EditAfter extends LamboCommand
         ]);
 
         try {
-            $this->make(SavedConfig::class)->createOrEditConfigFile("after");
+            app(SavedConfig::class)->createOrEditConfigFile("after");
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }

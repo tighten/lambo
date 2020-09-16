@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
@@ -10,7 +9,6 @@ class VerifyDependencies
     use AbortsCommands;
 
     protected $finder;
-    private $consoleWriter;
 
     private $dependencies = [
         [
@@ -30,24 +28,23 @@ class VerifyDependencies
         ],
     ];
 
-    public function __construct(ConsoleWriter $consoleWriter, ExecutableFinder $finder)
+    public function __construct(ExecutableFinder $finder)
     {
         $this->finder = $finder;
-        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep("Verifying dependencies");
+        app('console-writer')->logStep("Verifying dependencies");
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
                 list($command, $label, $instructionsUrl) = array_values($dependency);
                 if (($installedDependency = $this->finder->find($command)) === null) {
-                    $this->consoleWriter->fail("{$command} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                    app('console-writer')->fail("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
                     return true;
                 }
-                $this->consoleWriter->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                app('console-writer')->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
                 return $carry ?? false;
             }),
             'Please install missing dependencies and try again.');

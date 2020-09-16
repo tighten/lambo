@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Shell;
 
 class CompileAssets
@@ -11,20 +10,18 @@ class CompileAssets
 
     protected $shell;
     protected $silentDevScript;
-    protected $consoleWriter;
 
-    public function __construct(Shell $shell, SilentDevScript $silentDevScript, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell, SilentDevScript $silentDevScript)
     {
         $this->shell = $shell;
         $this->silentDevScript = $silentDevScript;
-        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
         $this->silentDevScript->add();
 
-        $this->consoleWriter->logStep('Compiling project assets');
+        app('console-writer')->logStep('Compiling project assets');
 
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
 
@@ -32,7 +29,7 @@ class CompileAssets
 
         $this->silentDevScript->remove();
 
-        $this->consoleWriter->verbose()->success('Project assets compiled successfully.');
+        app('console-writer')->verbose()->success('Project assets compiled successfully.');
     }
     public function extraOptions()
     {

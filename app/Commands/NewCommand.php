@@ -68,43 +68,43 @@ class NewCommand extends LamboCommand
 
     public function handle()
     {
-        $this->makeAndInvoke(DisplayLamboWelcome::class);
+        app(DisplayLamboWelcome::class)();
 
         if (! $this->argument('projectName')) {
-            $this->makeAndInvoke(DisplayHelpScreen::class);
+            app(DisplayHelpScreen::class)();
             exit;
         }
 
         $this->setConfig();
 
-        $this->consoleWriter->section("Creating a new Laravel app '{$this->argument('projectName')}'");
+        app('console-writer')->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
-            $this->makeAndInvoke(ValidateConfiguration::class);
-            $this->makeAndInvoke(VerifyPathAvailable::class);
-            $this->makeAndInvoke(VerifyDependencies::class);
-            $this->makeAndInvoke(RunLaravelInstaller::class);
-            $this->makeAndInvoke(OpenInEditor::class);
-            $this->makeAndInvoke(CustomizeDotEnv::class);
-            $this->makeAndInvoke(CreateDatabase::class);
-            $this->makeAndInvoke(GenerateAppKey::class);
-            $this->makeAndInvoke(ConfigureFrontendFramework::class);
-            $this->makeAndInvoke(InitializeGitRepo::class);
-            $this->makeAndInvoke(RunAfterScript::class);
-            $this->makeAndInvoke(ValetLink::class);
-            $this->makeAndInvoke(ValetSecure::class);
-            $this->makeAndInvoke(OpenInBrowser::class);
+            app(ValidateConfiguration::class)();
+            app(VerifyPathAvailable::class)();
+            app(VerifyDependencies::class)();
+            app(RunLaravelInstaller::class)();
+            app(OpenInEditor::class)();
+            app(CustomizeDotEnv::class)();
+            app(CreateDatabase::class)();
+            app(GenerateAppKey::class)();
+            app(ConfigureFrontendFramework::class)();
+            app(InitializeGitRepo::class)();
+            app(RunAfterScript::class)();
+            app(ValetLink::class)();
+            app(ValetSecure::class)();
+            app(OpenInBrowser::class)();
         } catch (LamboException $e) {
-            $this->consoleWriter->exception($e->getMessage());
+            app('console-writer')->exception($e->getMessage());
             exit;
         }
 
-        $this->consoleWriter->newLine();
-        $this->consoleWriter->text([
+        app('console-writer')->newLine();
+        app('console-writer')->text([
             '<fg=green>Done, happy coding!</>',
             'Lambo is brought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
         ]);
-        $this->consoleWriter->newLine();
+        app('console-writer')->newLine();
     }
 
     private function setConfig(): void
@@ -117,6 +117,7 @@ class NewCommand extends LamboCommand
             'path' => LamboConfiguration::ROOT_PATH,
             'browser' => LamboConfiguration::BROWSER,
             'frontend' => LamboConfiguration::FRONTEND_FRAMEWORK,
+            'dbhost' => LamboConfiguration::DATABASE_HOST,
             'dbport' => LamboConfiguration::DATABASE_PORT,
             'dbname' => LamboConfiguration::DATABASE_NAME,
             'dbuser' => LamboConfiguration::DATABASE_USERNAME,
@@ -139,6 +140,7 @@ class NewCommand extends LamboCommand
             'PROJECTPATH' => LamboConfiguration::ROOT_PATH,
             'BROWSER' => LamboConfiguration::BROWSER,
             'FRONTEND' => LamboConfiguration::FRONTEND_FRAMEWORK,
+            'DB_HOST' => LamboConfiguration::DATABASE_HOST,
             'DB_PORT' => LamboConfiguration::DATABASE_PORT,
             'DB_NAME' => LamboConfiguration::DATABASE_NAME,
             'DB_USERNAME' => LamboConfiguration::DATABASE_USERNAME,
@@ -164,6 +166,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::COMMIT_MESSAGE => 'Initial commit',
             LamboConfiguration::ROOT_PATH => getcwd(),
             LamboConfiguration::BROWSER => null,
+            LamboConfiguration::DATABASE_HOST => '127.0.0.1',
             LamboConfiguration::DATABASE_PORT => 3306,
             LamboConfiguration::DATABASE_NAME => $this->argument('projectName'),
             LamboConfiguration::DATABASE_USERNAME => 'root',
@@ -181,7 +184,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::TLD => null,
         ]);
 
-        if ($this->consoleWriter->isDebug()) {
+        if (app('console-writer')->isDebug()) {
             $this->debugReport();
         }
     }

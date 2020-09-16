@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Shell;
 
 class InstallNpmDependencies
@@ -12,22 +11,22 @@ class InstallNpmDependencies
     protected $shell;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell)
     {
         $this->shell = $shell;
-        $this->consoleWriter = $consoleWriter;
     }
+
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep('Installing node dependencies');
+        app('console-writer')->logStep('Installing node dependencies');
 
         $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
-        $this->consoleWriter->newLine();
-        $this->consoleWriter->verbose()->success('Npm dependencies installed.');
+        app('console-writer')->newLine();
+        app('console-writer')->verbose()->success('Npm dependencies installed.');
     }
 
     public function withQuiet()

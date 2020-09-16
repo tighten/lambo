@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\ConsoleWriter;
 use App\Shell;
 
 class GenerateAppKey
@@ -12,21 +11,21 @@ class GenerateAppKey
     protected $shell;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell)
     {
         $this->shell = $shell;
-        $this->consoleWriter = $consoleWriter;
     }
+
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep('Setting APP_KEY in .env');
+        app('console-writer')->logStep('Setting APP_KEY in .env');
 
         $process = $this->shell->execInProject("php artisan key:generate{$this->withQuiet()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Failed to generated APP_KEY successfully', $process);
 
-        $this->consoleWriter->verbose()->success('APP_KEY has been set.');
+        app('console-writer')->verbose()->success('APP_KEY has been set.');
     }
 
     private function withQuiet()

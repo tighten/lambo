@@ -101,7 +101,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
         // '@todo < *** FIGURE THIS OUT *** >'
         $this->skipWithMessage([
             'Currently failing due to WIP refactor.',
-            'the App\Shell mock needs to be able to return both a successful and a failed',
+            'the App\Shell mock needs to return both a successful and a failed',
             'process execution.'
         ]);
         $this->shouldFailFrontendFrameworkInstallation('inertia');

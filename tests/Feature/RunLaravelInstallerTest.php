@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\RunLaravelInstaller;
-use App\ConsoleWriter;
 use App\LamboException;
 use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
