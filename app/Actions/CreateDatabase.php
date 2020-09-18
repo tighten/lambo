@@ -3,8 +3,7 @@
 namespace App\Actions;
 
 use App\Shell;
-use Illuminate\Support\Str;
-use Symfony\Component\Process\ExecutableFinder;
+use App\Tools\Database;
 
 class CreateDatabase
 {
@@ -14,9 +13,8 @@ class CreateDatabase
     protected $shell;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, ExecutableFinder $finder)
+    public function __construct(Shell $shell)
     {
-        $this->finder = $finder;
         $this->shell = $shell;
     }
 
@@ -28,38 +26,26 @@ class CreateDatabase
 
         app('console-writer')->logStep('Creating database');
 
-        if (! $this->mysqlExists() || ! $this->mysqlServerRunning()) {
-            app('console-writer')->warn('Skipping database creation');
-            app('console-writer')->warn("Either MySQL is not installed or it's not running.");
-            return;
+        $host = config('lambo.store.database_host');
+        $user = config('lambo.store.database_username');
+        $password = config('lambo.store.database_password');
+        $port = config('lambo.store.database_port');
+        $schema = config('lambo.store.database_name');
+
+        $mysqlAvailable = app(Database::class)
+            ->url("mysql://{$user}:{$password}@{$host}:{$port}")
+            ->find();
+
+        if (! $mysqlAvailable) {
+            app('console-writer')->warn('Skipping database creation.');
+            app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            return app('console-writer')->warn("You will need to configure your database manually.");
         }
 
-        $process = $this->shell->exec($this->command());
-
-        $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
-
-        app('console-writer')->verbose()->success('Created a new database ' . config('lambo.store.database_name'));
-    }
-
-    protected function mysqlExists()
-    {
-        return ! is_null($this->finder->find('mysql'));
-    }
-
-    private function mysqlServerRunning(): bool
-    {
-        app('console-writer')->text('Searching for a running MySQL server');
-        $output = $this->shell->exec('mysql.server status')->getOutput();
-        return Str::of($output)->contains('MySQL running');
-    }
-
-    private function command()
-    {
-        return sprintf(
-            'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',
-            config('lambo.store.database_username'),
-            config('lambo.store.database_password'),
-            config('lambo.store.database_name')
-        );
+        return app(Database::class)
+            ->url("mysql://{$user}:{$password}@{$host}:{$port}")
+            ->createSchema($schema)
+            ? app('console-writer')->verbose()->success('Created a new database ' . $schema)
+            : app('console-writer')->verbose()->warn("Failed to create database {$schema} You will need to configure your database manually.");
     }
 }

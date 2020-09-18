@@ -57,7 +57,7 @@ class ConsoleWriter extends OutputStyle
 
     public function fail($message, $label = 'FAIL'): void
     {
-        $this->labeledLine($label, $message, 'fg=black;bg=red');
+        throw new LamboException($message);
     }
 
     public function exception($message)

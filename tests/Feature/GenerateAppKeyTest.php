@@ -9,11 +9,6 @@ use Tests\TestCase;
 
 class GenerateAppKeyTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     function it_generates_a_new_app_key()
     {

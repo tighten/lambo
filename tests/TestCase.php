@@ -28,7 +28,7 @@ abstract class TestCase extends BaseTestCase
     protected function skipWithMessage(array $lines, $title = 'SKIPPED'): void
     {
         $lineLength = 80;
-        $header = $this->center(' [ SKIPPED ] ', '=', $lineLength);
+        $header = $this->center(" [ {$title} ] ", '=', $lineLength);
         $section = str_repeat('=', $lineLength);
         $message = implode(PHP_EOL, $lines);
         $this->markTestSkipped("{$header}\n{$message}\n{$section}");

@@ -80,20 +80,20 @@ class NewCommand extends LamboCommand
         app('console-writer')->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
-            app(ValidateConfiguration::class)();
-            app(VerifyPathAvailable::class)();
-            app(VerifyDependencies::class)();
-            app(RunLaravelInstaller::class)();
-            app(OpenInEditor::class)();
-            app(CustomizeDotEnv::class)();
+            //app(ValidateConfiguration::class)();
+            //app(VerifyPathAvailable::class)();
+            //app(VerifyDependencies::class)();
+            //app(RunLaravelInstaller::class)();
+            //app(OpenInEditor::class)();
+            //app(CustomizeDotEnv::class)();
+            //app(GenerateAppKey::class)();
             app(CreateDatabase::class)();
-            app(GenerateAppKey::class)();
-            app(ConfigureFrontendFramework::class)();
-            app(InitializeGitRepo::class)();
-            app(RunAfterScript::class)();
-            app(ValetLink::class)();
-            app(ValetSecure::class)();
-            app(OpenInBrowser::class)();
+            //app(ConfigureFrontendFramework::class)();
+            //app(InitializeGitRepo::class)();
+            //app(RunAfterScript::class)();
+            //app(ValetLink::class)();
+            //app(ValetSecure::class)();
+            //app(OpenInBrowser::class)();
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
             exit;

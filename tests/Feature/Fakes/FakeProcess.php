@@ -44,4 +44,9 @@ class FakeProcess
     {
         return $this->output;
     }
+
+    public function getExitCode()
+    {
+        return $this->isSuccessful ? 0 : 1;
+    }
 }
