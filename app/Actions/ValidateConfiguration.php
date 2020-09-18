@@ -66,8 +66,4 @@ class ValidateConfiguration
             $this->consoleWriter->verbose()->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
     }
-
-    private function checkDatabaseConfiguration()
-    {
-    }
 }
