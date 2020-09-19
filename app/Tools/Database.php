@@ -2,29 +2,33 @@
 
 namespace App\Tools;
 
+use PDO;
+
 class Database
 {
     private $databaseType;
-    private $pass;
     private $host;
     private $port;
-    private $user;
+    private $username;
+    private $password;
 
     public function url(string $url)
     {
-        list($this->databaseType, $this->host, $this->port, $this->user, $this->pass) = array_values(parse_url($url));
+        list($this->databaseType, $this->host, $this->port, $this->username, $this->password) = array_values(parse_url($url));
         return $this;
     }
 
     public function find(string $schema = null): bool
     {
-        return is_null($schema)
-            ?  (app(DatabaseConnection::class))->testConnection($this->databaseType, $this->host, $this->user, $this->pass, $this->port)
-            :  (app(DatabaseConnection::class))->testConnection($this->databaseType, $this->host, $this->user, $this->pass, $this->port, $schema);
+        $dsn = "{$this->databaseType}:host={$this->host};port={$this->port};" . is_null($schema) ? '' : ";dbname={$schema}";
+        new PDO($dsn, $this->username, $this->password);
+        return true;
     }
 
     public function createSchema(string $databaseName): bool
     {
-        return (app(DatabaseConnection::class))->createSchema($this->databaseType, $this->host, $this->user, $this->pass, $this->port, $databaseName);
+        $connection = new PDO("{$this->databaseType}:host={$this->host};port={$this->port};", $this->username, $this->password);
+        $connection->exec("CREATE DATABASE {$databaseName};");
+        return true;
     }
 }

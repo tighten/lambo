@@ -3,52 +3,69 @@
 namespace Tests\Feature;
 
 use App\Actions\CreateDatabase;
-use App\LamboException;
-use Symfony\Component\Process\ExecutableFinder;
-use Tests\Feature\Fakes\FakeProcess;
+use App\Tools\Database;
 use Tests\TestCase;
 
 class CreateDatabaseTest extends TestCase
 {
+    private $database;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->database = $this->mock(Database::class);
+    }
+
     /** @test */
     function it_creates_a_mysql_database()
     {
+        $this->database->shouldReceive('url')
+            ->with('mysql://user:password@example.test:3306')
+            ->once()
+            ->andReturnSelf();
+
+        $this->database->shouldReceive('find')
+            ->once()
+            ->andReturnTrue();
+
+        $this->database->shouldReceive('url')
+            ->with('mysql://user:password@example.test:3306')
+            ->once()
+            ->andReturnSelf();
+
+        $this->database->shouldReceive('createSchema')
+            ->once()
+            ->globally()
+            ->andReturnTrue()
+            ->ordered();
+
         config(['lambo.store.create_database' => true]);
+
+        config(['lambo.store.database_host' => 'example.test']);
+        config(['lambo.store.database_port' => 3306]);
         config(['lambo.store.database_username' => 'user']);
         config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'database_name']);
-
-
+        config(['lambo.store.database_name' => 'foo']);
 
         app(CreateDatabase::class)();
     }
 
     /** @test */
-    function it_throws_an_exception_if_database_creation_fails()
+    function it_skips_database_creation()
     {
-        $this->mock(ExecutableFinder::class)
-            ->shouldReceive('find')
-            ->with('mysql')
-            ->once()
-            ->andReturn('/path/to/mysql');
+        $spy = $this->spy(Database::class);
 
-        config(['lambo.store.create_database' => true]);
+        config(['lambo.store.create_database' => false]);
+
+        config(['lambo.store.database_host' => 'example.test']);
+        config(['lambo.store.database_port' => 3306]);
         config(['lambo.store.database_username' => 'user']);
         config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'database_name']);
-
-        $this->shell->shouldReceive('exec')
-            ->with('mysql.server status')
-            ->once()
-            ->andReturn(FakeProcess::success()->withOutput('MySQL running'));
-
-        $this->shell->shouldReceive('exec')
-            ->with('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";')
-            ->once()
-            ->andReturn(FakeProcess::fail('mysql --user=user --password=password -e "CREATE DATABASE IF NOT EXISTS database_name";'));
-
-        $this->expectException(LamboException::class);
+        config(['lambo.store.database_name' => 'foo']);
 
         app(CreateDatabase::class)();
+
+        $spy->shouldNotHaveReceived('find');
+        $spy->shouldNotHaveReceived('createSchema');
     }
 }
