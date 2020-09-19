@@ -28,7 +28,7 @@ class ConfigureFrontendFramework
             return;
         }
 
-        $this->consoleWriter->logStep('Installing {$configuredFrontend} UI scaffolding');
+        $this->consoleWriter->logStep("Installing {$configuredFrontend} UI scaffolding");
 
         $this->ensureJetstreamInstalled();
 
