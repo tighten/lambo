@@ -10,19 +10,23 @@ Super-powered `laravel new` for Laravel and Valet.
 
 To try the beta:
 
-```
-git https://github.com/tightenco/lambo.git lambo
+```bash
+git clone https://github.com/tightenco/lambo.git
 cd lambo
 ./lambo
-```  
+```
 
-This readme still references the current Lambo version, so please note the following major changes: 
+This readme still references the current Lambo version, so please note the following major changes:
+
 - You'll need PHP 7.2+ to run Lambo.
 - You'll want to run `lambo new myApplication` instead of `lambo myApplication`.
 - Lambo now targets Laravel 8+ and [Laravel Jetstream](https://jetstream.laravel.com/1.x/introduction.html) which means the current options, `--vue`, `--bootstrap` and `--react` have been replaced by `--inertia` and `--livewire`. You may add the `--teams` option to enable team support with inertia and livewire.
 - The `--quiet` option has been removed. Lambo now uses quiet/silent mode for git, npm and the laravel installer by default. You may use `--with-output` if terminal output is required.
   
-# Current version
+
+-----
+
+# Current non-betaversion
 
 ## Installation
 
