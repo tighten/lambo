@@ -4,7 +4,7 @@ Super-powered `laravel new` for Laravel and Valet.
 
 >A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
 >
->If you are interested in checking out the beta, please read the *For beta testers* section below.
+>There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch.
 
 # For beta testers
 
@@ -16,7 +16,7 @@ cd lambo
 ./lambo
 ```
 
-This readme still references the current Lambo version, so please note the following major changes:
+The below readme is still being cleaned up from references to the current Lambo version, so please note the following major changes:
 
 - You'll need PHP 7.2+ to run Lambo.
 - You'll want to run `lambo new myApplication` instead of `lambo myApplication`.
@@ -26,7 +26,7 @@ This readme still references the current Lambo version, so please note the follo
 
 -----
 
-# Current non-betaversion
+# Current non-beta version
 
 ## Installation
 
