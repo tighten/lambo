@@ -2,19 +2,27 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
->A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
->
->There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch and the [v0.5.5](https://github.com/tighten/lambo/releases/tag/v0.5.5) release.
+<strong>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
+
+There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch and the [v0.5.5](https://github.com/tighten/lambo/releases/tag/v0.5.5) release.</strong>
 
 # For beta testers
 
-To try the beta:
+To try the beta without installing it globally:
 
 ```bash
 git clone https://github.com/tightenco/lambo.git
 cd lambo
 ./lambo
 ```
+
+To try the beta globally:
+
+1. Open `~/.composer/composer.json`
+2. Modify your `tightenco/lambo` line to have the version constraint of `v1.0.0beta1@dev`
+3. Save that, and exit
+4. Run `composer global update tightenco/lambo`
+5. Cross your fingers
 
 The below readme is still being cleaned up from references to the current Lambo version, so please note the following major changes:
 
