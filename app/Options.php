@@ -28,13 +28,12 @@ class Options
             'short' => 'b',
             'long' => 'browser',
             'param_description' => '"BROWSER"',
-            'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>'Google Chrome'</info> or <info>'Safari'</info> (macOS)",
+            'cli_description' => "Open the site in the specified <info>BROWSER</info>. E.g. <info>firefox</info>",
         ],
         [
-            'short' => 'f',
-            'long' => 'frontend',
-            'param_description' => '"FRONTEND"',
-            'cli_description' => "Specify the <info>FRONTEND</info> framework to use. Must be one of bootstrap, react or vue",
+            'long' => 'dbport',
+            'param_description' => 'PORT',
+            'cli_description' => "Specify the database port",
         ],
         [
             'long' => 'dbname',
@@ -56,24 +55,16 @@ class Options
             'cli_description' => "Create a new MySQL database",
         ],
         [
-            'short' => 'd',
-            'long' => 'dev',
-            'cli_description' => "Install Laravel using the develop branch",
+            'long' => 'inertia',
+            'cli_description' => "Use inertia frontend scaffolding",
         ],
         [
-            'short' => 'a',
-            'long' => 'auth',
-            'cli_description' => "Scaffold the routes and views for basic Laravel auth",
+            'long' => 'livewire',
+            'cli_description' => "Use livewire frontend scaffolding",
         ],
         [
-            // 'short' => 'n',
-            'long' => 'node',
-            'cli_description' => "Run <info>'npm install'</info> after creating the project",
-        ],
-        [
-            'short' => 'x',
-            'long' => 'mix',
-            'cli_description' => "Run <info>'npm run dev'</info> after creating the project",
+            'long' => 'teams',
+            'cli_description' => "Use team features with inertia or livewire",
         ],
         [
             'short' => 'l',
@@ -86,17 +77,17 @@ class Options
             'cli_description' => "Generate and use an HTTPS cert with Valet",
         ],
         [
-            'long' => 'full',
-            'cli_description' => "Shortcut of --create-db --link --secure --auth --node --mix",
-        ],
-        [
             'long' => 'with-output',
             'cli_description' => "Show command line output from shell commands",
         ],
         [
-            'short' => 'q',
-            'long' => 'quiet',
-            'cli_description' => "Use quiet mode to hide most messages from lambo",
+            'short' => 'd',
+            'long' => 'dev',
+            'cli_description' => "Install Laravel using the develop branch",
+        ],
+        [
+            'long' => 'full',
+            'cli_description' => "Shortcut of --create-db --link --secure",
         ],
     ];
 

@@ -3,26 +3,22 @@
 namespace Tests\Feature;
 
 use App\Actions\ValetLink;
-use App\Shell\Shell;
-use Exception;
-use Illuminate\Support\Facades\Config;
+use App\LamboException;
+use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class ValetLinkTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
     function it_runs_valet_link()
     {
-        Config::set('lambo.store.valet_link', true);
+        config(['lambo.store.valet_link' => true]);
 
         $this->shell->shouldReceive('execInProject')
             ->with('valet link')
@@ -33,9 +29,9 @@ class ValetLinkTest extends TestCase
     }
 
     /** @test */
-    function it_throws_an_exception_if_the_after_script_fails()
+    function it_throws_an_exception_if_valet_link_fails()
     {
-        Config::set('lambo.store.valet_link', true);
+        config(['lambo.store.valet_link' => true]);
 
         $command = 'valet link';
         $this->shell->shouldReceive('execInProject')
@@ -43,7 +39,7 @@ class ValetLinkTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::fail($command));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(ValetLink::class)();
     }
