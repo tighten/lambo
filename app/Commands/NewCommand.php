@@ -9,6 +9,7 @@ use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
+use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
@@ -80,14 +81,15 @@ class NewCommand extends LamboCommand
         app('console-writer')->section("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
-            //app(ValidateConfiguration::class)();
+            app(ValidateConfiguration::class)();
+            app(MigrateDatabase::class)();
             //app(VerifyPathAvailable::class)();
             //app(VerifyDependencies::class)();
             //app(RunLaravelInstaller::class)();
             //app(OpenInEditor::class)();
             //app(CustomizeDotEnv::class)();
             //app(GenerateAppKey::class)();
-            app(CreateDatabase::class)();
+            //app(CreateDatabase::class)();
             //app(ConfigureFrontendFramework::class)();
             //app(InitializeGitRepo::class)();
             //app(RunAfterScript::class)();

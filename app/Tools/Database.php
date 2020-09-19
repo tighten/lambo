@@ -2,33 +2,44 @@
 
 namespace App\Tools;
 
+use Exception;
 use PDO;
 
 class Database
 {
-    private $databaseType;
-    private $host;
-    private $port;
+    private $dsn;
     private $username;
     private $password;
 
     public function url(string $url)
     {
-        list($this->databaseType, $this->host, $this->port, $this->username, $this->password) = array_values(parse_url($url));
+        list($databaseType, $host, $port, $this->username, $this->password) = array_values(parse_url($url));
+        $this->dsn = "{$databaseType}:host={$host};port={$port}";
         return $this;
     }
 
     public function find(string $schema = null): bool
     {
-        $dsn = "{$this->databaseType}:host={$this->host};port={$this->port};" . is_null($schema) ? '' : ";dbname={$schema}";
-        new PDO($dsn, $this->username, $this->password);
-        return true;
+        $dsn = is_null($schema)
+            ? $this->dsn
+            : "{$this->dsn};dbname={$schema}";
+
+        try {
+            new PDO($dsn, $this->username, $this->password);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     public function createSchema(string $databaseName): bool
     {
-        $connection = new PDO("{$this->databaseType}:host={$this->host};port={$this->port};", $this->username, $this->password);
-        $connection->exec("CREATE DATABASE {$databaseName};");
-        return true;
+        try {
+            $connection = new PDO($this->dsn, $this->username, $this->password);
+            $connection->exec("CREATE DATABASE {$databaseName};");
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
