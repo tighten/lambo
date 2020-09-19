@@ -13,6 +13,9 @@
         {
             "name": "Matt Stauffer",
             "email": "matt@tighten.co"
+        },
+        {
+            "name": "Jon Sugar"
         }
     ],
     "require": {
@@ -40,11 +43,6 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
-    },
-    "scripts": {
-        "post-create-project-cmd": [
-            "@php application app:rename"
-        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
