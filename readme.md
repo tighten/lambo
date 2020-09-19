@@ -1,4 +1,4 @@
-![Lambo logo](https://raw.githubusercontent.com/tighten/lambo/master/lambo-banner.png)
+![Lambo logo](https://raw.githubusercontent.com/tighten/lambo/main/lambo-banner.png)
 
 Super-powered `laravel new` for Laravel and Valet.
 
@@ -248,7 +248,7 @@ Name from TJ Miller, inspired by Taylor's love for the lambo.
 If you're working with us and are assigned to push a release, here's the easiest process:
 
 1. Visit the [Lambo Releases page](https://github.com/tighten/lambo/releases); figure out what your next tag will be (increase the third number if it's a patch or fix; increase the second number if it's adding features)
-2. On your local machine, pull down the latest version of `master` (`git checkout master && git pull`)
+2. On your local machine, pull down the latest version of `main` (`git checkout main && git pull`)
 3. Build for the version you're targeting (`./lambo app:build`)
 4. Run the build once to make sure it works (`./builds/lambo`)
 5. Commit your build and push it up
