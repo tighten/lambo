@@ -4,7 +4,7 @@ Super-powered `laravel new` for Laravel and Valet.
 
 >A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
 >
->There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch.
+>There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch and the [v0.5.5](https://github.com/tighten/lambo/releases/tag/v0.5.5) release.
 
 # For beta testers
 
