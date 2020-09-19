@@ -23,7 +23,7 @@ class OpenInEditor
 
         app('console-writer')->logStep('Opening In Editor');
 
-        $process = $this->shell->execInProject(sprintf("%s .", config('lambo.store.editor')));
+        $process = $this->shell->withTTY()->execInProject(sprintf("%s .", config('lambo.store.editor')));
 
         $this->abortIf(! $process->isSuccessful(), sprintf("Failed to open editor %s", config('lambo.store.editor')), $process);
 
