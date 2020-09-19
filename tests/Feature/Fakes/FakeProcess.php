@@ -6,6 +6,13 @@ class FakeProcess
 {
     public $isSuccessful;
     public $failedCommand;
+    private $output;
+
+    public function __construct(bool $isSuccessful, string $failedCommand = '')
+    {
+        $this->isSuccessful = $isSuccessful;
+        $this->failedCommand = $failedCommand;
+    }
 
     public static function success()
     {
@@ -17,12 +24,6 @@ class FakeProcess
         return new self(false, $failedCommand);
     }
 
-    public function __construct(bool $isSuccessful, string $failedCommand = '')
-    {
-        $this->isSuccessful = $isSuccessful;
-        $this->failedCommand = $failedCommand;
-    }
-
     public function isSuccessful()
     {
         return $this->isSuccessful;
@@ -31,5 +32,16 @@ class FakeProcess
     public function getCommandLine()
     {
         return $this->failedCommand;
+    }
+
+    public function withOutput(string $output)
+    {
+        $this->output = $output;
+        return $this;
+    }
+
+    public function getOutput()
+    {
+        return $this->output;
     }
 }

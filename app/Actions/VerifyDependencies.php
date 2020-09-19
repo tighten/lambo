@@ -2,28 +2,54 @@
 
 namespace App\Actions;
 
-use Exception;
+use App\ConsoleWriter;
 use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $finder;
+    private $consoleWriter;
 
-    public function __construct(ExecutableFinder $finder)
+    private $dependencies = [
+        [
+            'command' => 'laravel',
+            'label' => 'The Laravel Installer',
+            'instructions_url' => 'https://laravel.com/docs/installation#installing-laravel',
+        ],
+        [
+            'command' => 'valet',
+            'label' => 'Laravel valet',
+            'instructions_url' => 'https://laravel.com/docs/valet',
+        ],
+        [
+            'command' => 'git',
+            'label' => 'Git version control',
+            'instructions_url' => 'https://git-scm.com',
+        ],
+    ];
+
+    public function __construct(ConsoleWriter $consoleWriter, ExecutableFinder $finder)
     {
         $this->finder = $finder;
+        $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke(array $dependencies)
+    public function __invoke()
     {
-        $this->logStep('Verifying dependencies');
-        foreach ($dependencies as $dependency) {
-            if ($this->finder->find($dependency) === null) {
-                throw new Exception($dependency . ' not installed');
-            }
-        }
-        $this->info('Dependencies: ' . implode(', ', $dependencies) . ' are available.');
+        $this->consoleWriter->logStep("Verifying dependencies");
+
+        $this->abortIf(
+            collect($this->dependencies)->reduce(function ($carry, $dependency) {
+                list($command, $label, $instructionsUrl) = array_values($dependency);
+                if (($installedDependency = $this->finder->find($command)) === null) {
+                    $this->consoleWriter->fail("{$command} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                    return true;
+                }
+                $this->consoleWriter->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                return $carry ?? false;
+            }),
+            'Please install missing dependencies and try again.');
     }
 }

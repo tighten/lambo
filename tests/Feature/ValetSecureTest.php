@@ -3,26 +3,22 @@
 namespace Tests\Feature;
 
 use App\Actions\ValetSecure;
-use App\Shell\Shell;
-use Exception;
-use Illuminate\Support\Facades\Config;
+use App\LamboException;
+use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class ValetSecureTest extends TestCase
 {
-    private $shell;
-
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
-    }
+        }
 
     /** @test */
-    function it_runs_valet_link()
+    function it_runs_valet_secure()
     {
-        Config::set('lambo.store.valet_secure', true);
+        config(['lambo.store.valet_secure' => true]);
 
         $this->shell->shouldReceive('execInProject')
             ->with('valet secure')
@@ -33,16 +29,16 @@ class ValetSecureTest extends TestCase
     }
 
     /** @test */
-    function it_throws_an_exception_if_the_after_script_fails()
+    function it_throws_an_exception_if_valet_secure_fails()
     {
-        Config::set('lambo.store.valet_secure', true);
+        config(['lambo.store.valet_secure' => true]);
 
         $this->shell->shouldReceive('execInProject')
             ->with('valet secure')
             ->once()
             ->andReturn(FakeProcess::fail('valet secure'));
 
-        $this->expectException(Exception::class);
+        $this->expectException(LamboException::class);
 
         app(ValetSecure::class)();
     }

@@ -2,30 +2,29 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\ConsoleWriter;
+use App\Shell;
 
 class CompileAssets
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
     protected $silentDevScript;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell, SilentDevScript $silentDevScript)
+    public function __construct(Shell $shell, SilentDevScript $silentDevScript, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
         $this->silentDevScript = $silentDevScript;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        if (! config('lambo.store.mix')) {
-            return;
-        }
-
         $this->silentDevScript->add();
 
-        $this->logStep('Compiling project assets');
+        $this->consoleWriter->logStep('Compiling project assets');
 
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
 
@@ -33,7 +32,7 @@ class CompileAssets
 
         $this->silentDevScript->remove();
 
-        $this->info('Project assets compiled successfully.');
+        $this->consoleWriter->verbose()->success('Project assets compiled successfully.');
     }
     public function extraOptions()
     {

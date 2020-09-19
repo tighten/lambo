@@ -3,27 +3,24 @@
 namespace Tests\Feature;
 
 use App\Actions\OpenInBrowser;
-use App\Shell\Shell;
-use Illuminate\Support\Facades\Config;
+use App\Shell;
 use Tests\TestCase;
 
 class OpenInBrowserTest extends TestCase
 {
-    private $shell;
     private $environment;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->shell = $this->mock(Shell::class);
         $this->environment = $this->mock('alias:App\Environment');
     }
 
     /** @test */
-    function it_opens_the_project_homepage_using_the_specified_browser_on_mac()
+    function it_uses_the_open_command_on_mac_when_a_browser_is_specified()
     {
-        Config::set('lambo.store.browser', '/Applications/my/browser.app');
-        Config::set('lambo.store.project_url', 'http://my-project.test');
+        config(['lambo.store.browser' => '/Applications/my/browser.app']);
+        config(['lambo.store.project_url' => 'http://my-project.test']);
 
         $this->environment->shouldReceive('isMac')
             ->once()
@@ -37,9 +34,9 @@ class OpenInBrowserTest extends TestCase
     }
 
     /** @test */
-    function it_opens_the_project_homepage_using_valet_open_when_no_browser_is_specified_on_mac()
+    function it_uses_valet_open_on_mac_when_no_browser_is_specified()
     {
-        $this->assertEmpty(Config::get('lambo.store.browser'));
+        $this->assertEmpty(config('lambo.store.browser'));
 
         $this->environment->shouldReceive('isMac')
             ->once()
@@ -69,8 +66,8 @@ class OpenInBrowserTest extends TestCase
     /** @test */
     function it_ignores_the_specified_browser_when_not_running_on_mac()
     {
-        Config::set('lambo.store.browser', '/path/to/a/browser');
-        Config::set('lambo.store.project_url', 'http://my-project.test');
+        config(['lambo.store.browser' => '/path/to/a/browser']);
+        config(['lambo.store.project_url' => 'http://my-project.test']);
 
         $this->environment->shouldReceive('isMac')
             ->once()
@@ -81,5 +78,17 @@ class OpenInBrowserTest extends TestCase
             ->with('valet open');
 
         app(OpenInBrowser::class)();
+    }
+
+    /** @test */
+    function it_skips_opening_the_site()
+    {
+        $shell = $this->spy(Shell::class);
+
+        config(['lambo.store.no_browser' => false]);
+
+        app(OpenInBrowser::class);
+
+        $shell->shouldNotHaveReceived('execInProject');
     }
 }

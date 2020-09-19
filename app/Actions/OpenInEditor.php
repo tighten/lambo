@@ -2,33 +2,34 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\ConsoleWriter;
+use App\Shell;
 
 class OpenInEditor
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        if (! $this->editor()) {
+        if (config('lambo.store.no_editor')) {
             return;
         }
 
-        $this->logStep('Opening In Editor');
+        $this->consoleWriter->logStep('Opening In Editor');
 
-        $this->shell->execInProject($this->editor() . " .");
-        $this->info('Opening your project in ' . $this->editor());
-    }
+        $process = $this->shell->execInProject(sprintf("%s .", config('lambo.store.editor')));
 
-    public function editor()
-    {
-        return config('lambo.store.editor');
+        $this->abortIf(! $process->isSuccessful(), sprintf("Failed to open editor %s", config('lambo.store.editor')), $process);
+
+        $this->consoleWriter->verbose()->success('Opening your project in ' . config('lambo.store.editor'));
     }
 }

@@ -2,23 +2,30 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Environment;
-use App\Shell\Shell;
+use App\Shell;
 
 class OpenInBrowser
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        $this->logStep('Opening in Browser');
+        if (config('lambo.store.no_browser')) {
+            return;
+        }
+
+        $this->consoleWriter->logStep('Opening in Browser');
 
         if (Environment::isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(

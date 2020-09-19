@@ -2,10 +2,15 @@
 
 namespace App\Commands;
 
-use App\Actions\EditConfig as EditConfigAction;
-use LaravelZero\Framework\Commands\Command;
+use App\Actions\SavedConfig;
+use App\Configuration\CommandLineConfiguration;
+use App\Configuration\LamboConfiguration;
+use App\Configuration\SavedConfiguration;
+use App\Configuration\SetConfig;
+use App\Configuration\ShellConfiguration;
+use App\LamboException;
 
-class EditConfig extends Command
+class EditConfig extends LamboCommand
 {
     protected $signature = 'edit-config {--editor= : Open the config file in the specified <info>EDITOR</info> or the system default if none is specified.}';
 
@@ -17,6 +22,30 @@ class EditConfig extends Command
             return $this;
         });
 
-        app(EditConfigAction::class)();
+        $commandLineConfiguration = new CommandLineConfiguration([
+            'editor' => LamboConfiguration::EDITOR
+        ]);
+
+        $savedConfiguration = new SavedConfiguration([
+            'CODEEDITOR' => LamboConfiguration::EDITOR
+        ]);
+
+        $shellConfiguration = new ShellConfiguration([
+            'EDITOR' => LamboConfiguration::EDITOR
+        ]);
+
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $shellConfiguration
+        ))([
+            LamboConfiguration::EDITOR => 'nano'
+        ]);
+
+        try {
+            $this->make(SavedConfig::class)->createOrEditConfigFile("config");
+        } catch (LamboException $e) {
+            app('console-writer')->exception($e->getMessage());
+        }
     }
 }

@@ -2,47 +2,47 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\ConsoleWriter;
+use App\Shell;
 
 class RunLaravelInstaller
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
+    private $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        $this->logStep('Running the Laravel installer');
+        $this->consoleWriter->logStep("Running the Laravel installer");
 
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
 
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
-        if ($process->isSuccessful()) {
-            $this->info($this->getFeedback());
-            return;
-        }
+        $this->consoleWriter->verbose()->success($this->getFeedback());
     }
 
     public function extraOptions()
     {
-        return sprintf('%s%s%s',
-            config('lambo.store.auth') ? ' --auth' : '',
+        return sprintf('%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
-            config('lambo.store.with_output') ? '' : ' --quiet'
+            ''
+            /* @todo: while laravel installer is busted we must not use --quiet
+            config('lambo.store.with_output') ? '' : ' --quiet' */
         );
     }
 
     public function getFeedback(): string
     {
-        return sprintf("A new application '%s'%s has been created from the %s branch.",
+        return sprintf("A new application '%s' has been created from the %s branch.",
             config('lambo.store.project_name'),
-            config('lambo.store.auth') ? ' with auth scaffolding' : '',
             config('lambo.store.dev') ? 'develop' : 'release'
         );
     }

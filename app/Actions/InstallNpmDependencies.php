@@ -2,34 +2,36 @@
 
 namespace App\Actions;
 
-use App\Shell\Shell;
+use App\ConsoleWriter;
+use App\Shell;
 
 class InstallNpmDependencies
 {
-    use LamboAction;
+    use AbortsCommands;
 
     protected $shell;
+    protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        if (! config('lambo.store.node')) {
-            return;
-        }
+        $this->consoleWriter->logStep('Installing node dependencies');
 
-        $process = $this->shell->execInProject("npm install{$this->extraOptions()}");
+        $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
 
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
-        $this->info('Npm dependencies installed.');
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->verbose()->success('Npm dependencies installed.');
     }
 
-    public function extraOptions()
+    public function withQuiet()
     {
-        return config('lambo.store.with-output') ? '' : ' --silent';
+        return config('lambo.store.with_output') ? '' : ' --silent';
     }
 }
