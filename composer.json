@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^7.2.5",
-        "laravel/installer": "^3.0.1",
+        "laravel/installer": "^4.0",
         "ext-json": "*"
     },
     "require-dev": {
