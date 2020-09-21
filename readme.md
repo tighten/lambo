@@ -39,14 +39,9 @@ The below readme is still being cleaned up from references to the current Lambo 
 
 ## Installation
 
-### For Laravel >= 6
+### For Laravel 8+ once we release this from beta
 ```bash
 composer global require tightenco/lambo
-```
-
-### For Laravel 5.*
-```bash
-composer global require tightenco/lambo:"^0.4.7"
 ```
 
 ## Upgrading
@@ -55,32 +50,32 @@ composer global require tightenco/lambo:"^0.4.7"
 composer global update tightenco/lambo
 ```
 
-If this doesn't get you the latest version, check the file at `~/.composer/composer.json`. If your version spec for Lambo is `^0.1.#`, change it to be `~0.1`.
-
 ## Usage
 
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
 ```bash
 cd ~/Sites
-lambo superApplication
+lambo new superApplication
 ```
 
 ### What exactly does it do?
 
 - `laravel new $PROJECTNAME`
-- `cd $PROJECTNAME`
 - Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
 - Open the project in your editor
-- Replace the `.env` database credentials with the default Mac MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
+- Replace the `.env` database credentials with the default macOS MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
+- TODO: What else does it do in the new version? Anything else?
 
-Note that, in case your `$PROJECTNAME` has dashes (`-`) in it, they will be replaced with underscores (`_`) in the database name.
+> Note: If your `$PROJECTNAME` has dashes (`-`) in it, they will be replaced with underscores (`_`) in the database name.
 
 There are also a few optional behaviors based on the parameters you pass (or define in your config file).
 
 ### Optional Arguments
+
+TODO: Update all of these for the new version
 
 - `-h` or `--help` to get the help dialog
 
@@ -200,11 +195,7 @@ There are also a few optional behaviors based on the parameters you pass (or def
 
 You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
 
-```bash
-lambo make-config
-```
-
-If you wish to edit your config file later on you can always use the edit command:
+The following command creates the file, if it doesn't exist, and edits it:
 
 ```bash
 lambo edit-config
@@ -214,11 +205,13 @@ lambo edit-config
 
 You can create an after file at `~/.lambo/after` to run additional commands after you create a new project.
 
+The following command creates the file, if it doesn't exist, and edits it:
+
 ```bash
-lambo make-after
+lambo edit-after
 ```
 
-The after file is a bash script so you can include any commands here such as installing additional composer dependencies
+The after file is interpreted as a bash script, so you can include any commands here such as installing additional composer dependencies...
 
 ```bash
 # Install additional composer dependencies as you would from the command line.
@@ -226,7 +219,7 @@ echo "Installing Composer Dependencies"
 composer require tightenco/mailthief tightenco/quicksand
 ```
 
-or copying additional files to your new project.
+...or copying additional files to your new project.
 
 ```bash
 # To copy standard files to new lambo project place them in ~/.lambo/includes directory.
@@ -238,19 +231,11 @@ You also have access to variables from your config file such as `$PROJECTPATH` a
 
 ## Requirements
 
-- Mac or Linux.
+- macOS or Linux.
 - [Git](https://git-scm.com).
-- Requires the [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) to be globally installed.
+- The [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) installed globally.
 
 > A Linux fork of Valet can be found [here](https://github.com/cpriego/valet-linux)
-
-## Acknowledgements
-
-Inspired by Taylor Otwell and Adam Wathan's work on Valet.
-
-Name from TJ Miller, inspired by Taylor's love for the lambo.
-
-![](https://i.imgur.com/CrS803Y.gif)
 
 ## Process for release
 
