@@ -38,8 +38,7 @@ class CreateDatabase
 
         if (! $mysqlAvailable) {
             app('console-writer')->warn('Skipping database creation.');
-            app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
-            return app('console-writer')->warn("You will need to configure your database manually.");
+            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
         }
 
         return app(Database::class)

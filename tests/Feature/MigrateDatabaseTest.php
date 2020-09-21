@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\MigrateDatabase;
-use App\LamboException;
 use App\Tools\Database;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;

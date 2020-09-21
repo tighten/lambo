@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Shell;
 use App\Tools\Database;
-use Illuminate\Support\Str;
 
 class MigrateDatabase
 {
@@ -33,24 +32,18 @@ class MigrateDatabase
 
         if (! $mysqlAvailable) {
             app('console-writer')->warn('Skipping database migration.');
-            app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
-            return app('console-writer')->warn($this->getFailMessage());
+            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
         }
 
         $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
 
         if (! $process->isSuccessful()) {
             app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
-            return app('console-writer')->warn($this->getFailMessage());
+            $process->getErrorOutput();
+            return app('console-writer')->warn($process->getErrorOutput());
         }
 
         return app('console-writer')->verbose()->success('Database migrated');
-    }
-
-    protected function getFailMessage(): string
-    {
-        $frontend = Str::of(config('lambo.store.frontend'))->title();
-        return  "{$frontend} will not run without a migrated database. You will need to run database migrations manually.";
     }
 
     private function withQuiet()
