@@ -19,10 +19,11 @@ cd lambo
 To try the beta globally:
 
 1. Open `~/.composer/composer.json`
-2. Modify your `tightenco/lambo` line to have the version constraint of `v1.0.0beta1@dev`
-3. Save that, and exit
-4. Run `composer global update tightenco/lambo`
-5. Cross your fingers
+2. Make sure you have the Laravel installer required at `^4.0`
+3. Modify your `tightenco/lambo` line to have the version constraint of `^1.0@dev`
+4. Save that, and exit
+5. Run `composer global update tightenco/lambo`
+6. Cross your fingers
 
 The below readme is still being cleaned up from references to the current Lambo version, so please note the following major changes:
 
