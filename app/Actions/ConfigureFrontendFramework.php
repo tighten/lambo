@@ -39,25 +39,10 @@ class ConfigureFrontendFramework
 
         $this->abortIf(! $process->isSuccessful(), "Installation of {$configuredFrontend} UI scaffolding did not complete successfully.", $process);
 
-        // START temporary workaround ------------------ @jonsugar (11-Sep-2020)
-        // @TODO Remove manual dependency injection when App\ConsoleWriter and
-        //       App\Shell are being bound into the container.
-
         if ($configuredFrontend === 'inertia') {
-            app(InstallNpmDependencies::class, [
-                'shell' => $this->shell,
-            ])();
-
-            app(CompileAssets::class, [
-                'shell' => $this->shell,
-            ])();
+            app(InstallNpmDependencies::class)();
+            app(CompileAssets::class)();
         }
-
-        app(MigrateDatabase::class, [
-            'shell' => $this->shell,
-        ])();
-
-        // END temporary workaround -------------------- @jonsugar (11-Sep-2020)
 
         app('console-writer')->verbose()->success("{$configuredFrontend} UI scaffolding installed.");
     }

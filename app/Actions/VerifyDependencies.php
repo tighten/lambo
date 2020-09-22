@@ -41,7 +41,7 @@ class VerifyDependencies
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
                 list($command, $label, $instructionsUrl) = array_values($dependency);
                 if (($installedDependency = $this->finder->find($command)) === null) {
-                    app('console-writer')->fail("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                    app('console-writer')->warn("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
                     return true;
                 }
                 app('console-writer')->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");

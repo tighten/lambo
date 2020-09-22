@@ -39,18 +39,18 @@ trait Debug
                 return [$keyPrefix . $key, $value, $type];
             })->values()->toArray();
 
-        app('console-writer')->table($headers ? $headers : ['key', 'value', 'type'], $rows);
+        app('console-writer')->verbose()->table($headers ? $headers : ['key', 'value', 'type'], $rows);
     }
 
     protected function debugReport(): void
     {
         app('console-writer')->panel('Debug', 'Start', 'fg=black;bg=white');
 
-        app('console-writer')->section('Computed configuration');
+        app('console-writer')->sectionTitle('Computed configuration');
         app('console-writer')->text([
             'The following is the configuration lambo has computed by merging:',
         ]);
-        app('console-writer')->listing([
+        app('console-writer')->verbose()->listing([
             'command line parameters',
             'saved configuration',
             'shell environment variables.',
@@ -58,7 +58,7 @@ trait Debug
 
         $this->configToTable();
 
-        app('console-writer')->section('Pre-flight Configuration');
+        app('console-writer')->sectionTitle('Pre-flight Configuration');
 
         app('console-writer')->text('Command line arguments:');
         $this->arrayToTable($this->arguments());

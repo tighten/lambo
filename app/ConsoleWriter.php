@@ -12,57 +12,69 @@ class ConsoleWriter extends OutputStyle
 
     public function panel(string $prefix, string $message, string $style)
     {
-        parent::block($message, $prefix, $style, ' ', true, false);
+        if ($this->shouldWriteLine(false)) {
+            parent::block($message, $prefix, $style, ' ', true, false);
+        }
     }
 
-    public function section($sectionTitle)
+    public function sectionTitle($sectionTitle)
     {
-        $this->text([
-            "",
-            "<fg=yellow;bg=default>{$sectionTitle}</>",
-            '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
-        ]);
+        if ($this->shouldWriteLine(false)) {
+            $this->text([
+                "",
+                "<fg=yellow;bg=default>{$sectionTitle}</>",
+                '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
+            ]);
+        }
     }
 
     public function logStep($message)
     {
-        parent::block($message, null, 'fg=yellow;bg=default', ' // ', false, false);
+        if ($this->shouldWriteLine(true)) {
+            parent::block($message, null, 'fg=yellow;bg=default', ' // ', false, false);
+        }
+    }
+
+    public function exec(string $command)
+    {
+        if ($this->shouldWriteLine(true)) {
+            $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
+        }
     }
 
     public function success($message, $label = 'PASS'): void
     {
-        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
+        if ($this->shouldWriteLine(true)) {
             $this->labeledLine($label, $message, 'fg=black;bg=green');
         }
-        $this->onlyVerbose = false;
     }
 
     public function ok($message): void
     {
-        $this->success($message, ' OK ');
+        if ($this->shouldWriteLine(false)) {
+            $this->success($message, ' OK ');
+        }
     }
 
     public function note($message, $label = 'NOTE'): void
     {
-        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
+        if ($this->shouldWriteLine(false)) {
             $this->labeledLine($label, $message, 'fg=black;bg=yellow');
         }
-        $this->onlyVerbose = false;
     }
 
     public function warn($message, $label = 'WARN'): void
     {
-        $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
-    }
-
-    public function fail($message, $label = 'FAIL'): void
-    {
-        throw new LamboException($message);
+        if ($this->shouldWriteLine(true)) {
+            $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
+        }
     }
 
     public function exception($message)
     {
-        parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
+        if ($this->shouldWriteLine(true)) {
+            parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
+        }
     }
 
     public function text($message)
@@ -72,40 +84,30 @@ class ConsoleWriter extends OutputStyle
 
     public function listing(array $items): void
     {
-        parent::newLine();
-        $text = collect($items)->map(function ($dependency) {
-            return '  - ' . $dependency;
-        })->toArray();
-        parent::text($text);
-        parent::newLine();
+        if ($this->shouldWriteLine(false)) {
+            parent::newLine();
+            $text = collect($items)->map(function ($dependency) {
+                return '  - ' . $dependency;
+            })->toArray();
+            parent::text($text);
+            parent::newLine();
+        }
     }
 
     public function table(array $columnHeadings, array $rowData)
     {
-        parent::table($columnHeadings, $rowData);
-    }
-
-    public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
-    {
-        $indentString = str_repeat(' ', $indent);
-        $this->isDecorated()
-            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
-            : parent::text("{$indentString}[{$label}] {$message}");
-    }
-
-    public function exec(string $command)
-    {
-        if ($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL && $this->onlyVerbose) {
-            $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
+        if ($this->shouldWriteLine(false)) {
+            parent::table($columnHeadings, $rowData);
         }
-        $this->onlyVerbose = false;
     }
 
     public function consoleOutput(string $line, $type)
     {
-        ($type === Process::ERR)
-            ? $this->labeledLine('!', "<fg=yellow>{$line}</>", 'bg=yellow;fg=black', 3)
-            : $this->labeledLine('✓', "{$line}", 'bg=blue;fg=black', 3);
+        if ($this->shouldWriteLine(true)) {
+            ($type === Process::ERR)
+                ? $this->labeledLine('!', "<fg=yellow>{$line}</>", 'bg=yellow;fg=black', 3)
+                : $this->labeledLine('✓', "{$line}", 'bg=blue;fg=black', 3);
+        }
     }
 
     public function verbose()
@@ -114,8 +116,30 @@ class ConsoleWriter extends OutputStyle
         return $this;
     }
 
-    public function shouldWriteLine()
+    private function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
     {
-        return $this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL;
+        $indentString = str_repeat(' ', $indent);
+        $this->isDecorated()
+            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
+            : parent::text("{$indentString}[{$label}] {$message}");
+    }
+
+    private function shouldWriteLine($ignoreVerbosity = true)
+    {
+        if ($this->isDebug()) {
+            return true;
+        }
+
+        if ($ignoreVerbosity) {
+            $this->onlyVerbose = false;
+            return true;
+        }
+
+        if (($this->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL) && $this->onlyVerbose) {
+            $this->onlyVerbose = false;
+            return true;
+        }
+
+        return false;
     }
 }

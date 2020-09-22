@@ -7,6 +7,9 @@
 # installation of Laravel rather than running the Laravel Installer every time.
 # Useful when running lambo over and over during testing.
 #
+# NOTE: on first run since boot the scrip will install a fresh version of the
+# Laravel template.
+#
 # 1. Comment out the following in app/Commands/NewCommand:
 #    app(VerifyPathAvailable::class)()
 #    app(RunLaravelInstaller::class)()
@@ -74,8 +77,9 @@ fi
 
 cp -r $TEMPLATE_PATH $PROJECT_PATH
 echo "✅ Copied laravel template '$TEMPLATE_PATH' to '$PROJECT_PATH'"
-cd $SCRIPT_PATH
-../lambo new $NAME --path $TEST_DIR $*
 
 cd $TEST_DIR
 echo $PROJECT_PATH > .last-run
+
+cd $SCRIPT_PATH
+../lambo new $NAME --path $TEST_DIR $*
