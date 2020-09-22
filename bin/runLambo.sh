@@ -1,30 +1,81 @@
 #!/usr/bin/env bash
 
-# Quick and dirty manual testing script that speeds things up by copying a
-# "template" installation of Laravel rather than running the Laravel Installer.
+# ------------------------------------------------------------------------------
+# THIS SCRIPT WILL ONLY WORK ON *NIX SYSTEMS. SORRY WINDOWS USERS.
+#
+# Manual testing script that speeds things up by copying a "template"
+# installation of Laravel rather than running the Laravel Installer every time.
 # Useful when running lambo over and over during testing.
 #
 # 1. Comment out the following in app/Commands/NewCommand:
 #    app(VerifyPathAvailable::class)()
 #    app(RunLaravelInstaller::class)()
 #
-# 2. run the laravel installer to create a 'template' installation in this dir.
-#    cd <project_root>/bin
-#    laravel new template
+# 3. run this script passing any regular lambo flags and/or options while
+#    omitting new, Example:
 #
-# 3. run sh bin/runLambo.sh from the project root dir (without new) passing any
-#    regular lambo flags and options. E.g.
-#    ./bin/runLambo.sh my-project --create-db --link etc...
+#   /path/to/runLambo.sh my-project  [other lambo flags]
+# ------------------------------------------------------------------------------
 
-[ ! -d "./template" ] && echo "Laravel template does not exist, creating it now…" && laravel new template --quiet
+DEBUG=false
+
+if [ "$#" -lt "1" ]; then
+  echo "usage: $0 name [regular lambo parameters]"
+  exit
+fi
+
+START_DIR=$(pwd)
+cd $(dirname $0)
+SCRIPT_PATH=$(pwd)
 
 NAME=$1
 shift
 
-# remove previous run before execution.
-# We may need to examine the created project after execution.
-rm -rf _TMP_
-mkdir _TMP_
-cd _TMP_
-cp -r ../bin/template ./$NAME
-../lambo new $NAME --path . $*
+TEST_DIR="/tmp/lambo"
+TEMPLATE_NAME="template"
+PROJECT_PATH="$TEST_DIR/$NAME"
+TEMPLATE_PATH="$TEST_DIR/$TEMPLATE_NAME"
+
+if [ "$DEBUG" = true ]; then
+  echo "ℹ️  Start directory: $START_DIR"
+  echo "ℹ️  Script path: $SCRIPT_PATH"
+  echo "ℹ️  Test directory: $TEST_DIR"
+  echo "ℹ️  Project name: $NAME"
+  echo "ℹ️  Project path: $PROJECT_PATH"
+  echo "ℹ️  Template name: $TEMPLATE_NAME"
+  echo "ℹ️  Template path: $TEMPLATE_PATH"
+fi
+
+# Create test directory
+if [ ! -d "$TEST_DIR" ]; then
+  echo "⚠️  Test directory '$TEST_DIR' does not exist, creating it now…"
+  mkdir $TEST_DIR
+else
+  echo "✅ Using test directory '$TEST_DIR'"
+fi
+
+# Create template Laravel installation
+if [ ! -d "$TEMPLATE_PATH" ]; then
+  echo "⚠️  Laravel template '$TEMPLATE_PATH' does not exist, creating it now…"
+  cd $TEST_DIR
+  laravel new $TEMPLATE_NAME --quiet
+  cd $START_DIR
+  echo "✅ Created template '$TEMPLATE_PATH'"
+else
+  echo "✅ Using template '$TEMPLATE_PATH'"
+fi
+
+# remove previous run.
+if [ -f "$TEST_DIR/.last-run" ]; then
+  last_run=$(cat $TEST_DIR/.last-run)
+  rm -rf $last_run
+  echo "✅ Deleted previous run '$last_run'"
+fi
+
+cp -r $TEMPLATE_PATH $PROJECT_PATH
+echo "✅ Copied laravel template '$TEMPLATE_PATH' to '$PROJECT_PATH'"
+cd $SCRIPT_PATH
+../lambo new $NAME --path $TEST_DIR $*
+
+cd $TEST_DIR
+echo $PROJECT_PATH > .last-run

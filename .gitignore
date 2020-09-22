@@ -2,4 +2,3 @@
 .phpunit.result.cache
 /storage/framework/
 /bin/template/
-/_TMP_/
