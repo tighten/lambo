@@ -102,6 +102,14 @@ class SetConfig
         return $this->fullOrConfigured($key, $default);
     }
 
+    private function getMigrateDatabase(string $key, $default)
+    {
+        if ($this->commandLineConfiguration->inertia || $this->commandLineConfiguration->livewire) {
+            return true;
+        }
+        return $this->fullOrConfigured($key, $default);
+    }
+
     public function getValetLink(string $key, $default)
     {
         return $this->fullOrConfigured($key, $default);

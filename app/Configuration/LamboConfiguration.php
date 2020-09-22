@@ -12,6 +12,7 @@ abstract class LamboConfiguration
     const WITH_OUTPUT = 'with_output';
     const USE_DEVELOP_BRANCH = 'dev';
     const CREATE_DATABASE = 'create_database';
+    const MIGRATE_DATABASE = 'migrate_database';
     const DATABASE_HOST = 'database_host';
     const DATABASE_PORT = 'database_port';
     const DATABASE_NAME = 'database_name';
@@ -37,6 +38,11 @@ abstract class LamboConfiguration
         });
     }
 
+    public function __get($name)
+    {
+        return null;
+    }
+
     abstract protected function getSettings(): array;
 
     protected function get(string $key, array $array)
@@ -57,11 +63,6 @@ abstract class LamboConfiguration
             return $array[$key];
         }
 
-        return null;
-    }
-
-    public function __get($name)
-    {
         return null;
     }
 }

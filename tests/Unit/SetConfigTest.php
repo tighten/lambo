@@ -365,6 +365,80 @@ class SetConfigTest extends TestCase
     }
 
     /** @test */
+    function it_sets_the_migrate_database_configuration()
+    {
+        $this->withValetTld();
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+        $savedConfiguration = $this->mock(SavedConfiguration::class);
+
+        $commandLineConfiguration->full = true;
+        $commandLineConfiguration->migrate_database = false;
+        $commandLineConfiguration->inertia = false;
+        $commandLineConfiguration->livewire = false;
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+            'tld' => null,
+            'full' => false,
+            'migrate_database' => false,
+            'inertia' => false,
+            'livewire' => false,
+        ]);
+        $this->assertTrue(config('lambo.store.migrate_database'));
+
+        $commandLineConfiguration->full = false;
+        $commandLineConfiguration->migrate_database = true;
+        $commandLineConfiguration->inertia = false;
+        $commandLineConfiguration->livewire = false;
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+            'tld' => null,
+            'full' => false,
+            'migrate_database' => false,
+            'inertia' => false,
+            'livewire' => false,
+        ]);
+        $this->assertTrue(config('lambo.store.migrate_database'));
+
+        $commandLineConfiguration->full = false;
+        $commandLineConfiguration->migrate_database = false;
+        $commandLineConfiguration->inertia = false;
+        $commandLineConfiguration->livewire = false;
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+            'tld' => null,
+            'full' => false,
+            'migrate_database' => false,
+            'inertia' => false,
+            'livewire' => false,
+        ]);
+        $this->assertFalse(config('lambo.store.migrate_database'));
+
+        $commandLineConfiguration->full = false;
+        $commandLineConfiguration->migrate_database = false;
+        $commandLineConfiguration->inertia = true;
+        $commandLineConfiguration->livewire = false;
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+            'tld' => null,
+            'full' => false,
+            'migrate_database' => false,
+            'inertia' => false,
+            'livewire' => false,
+        ]);
+        $this->assertTrue(config('lambo.store.migrate_database'));
+
+        $commandLineConfiguration->full = false;
+        $commandLineConfiguration->migrate_database = false;
+        $commandLineConfiguration->inertia = false;
+        $commandLineConfiguration->livewire = true;
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+            'tld' => null,
+            'full' => false,
+            'migrate_database' => false,
+            'inertia' => false,
+            'livewire' => false,
+        ]);
+        $this->assertTrue(config('lambo.store.migrate_database'));
+    }
+
+    /** @test */
     function it_sets_the_valet_link_configuration()
     {
         $this->withValetTld('test-domain');

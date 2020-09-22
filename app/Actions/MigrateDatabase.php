@@ -19,6 +19,10 @@ class MigrateDatabase
 
     public function __invoke()
     {
+        if (! config('lambo.store.migrate_database')) {
+            return;
+        }
+
         app('console-writer')->logStep('Running database migrations');
 
         $host = config('lambo.store.database_host');
@@ -36,14 +40,9 @@ class MigrateDatabase
         }
 
         $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
-
-        if (! $process->isSuccessful()) {
-            app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
-            $process->getErrorOutput();
-            return app('console-writer')->warn($process->getErrorOutput());
-        }
-
-        return app('console-writer')->verbose()->success('Database migrated');
+        return $process->isSuccessful()
+            ? app('console-writer')->verbose()->success('Database migrated')
+            : app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
     }
 
     private function withQuiet()

@@ -82,20 +82,20 @@ class NewCommand extends LamboCommand
 
         try {
             app(ValidateConfiguration::class)();
+            app(VerifyPathAvailable::class)();
+            app(VerifyDependencies::class)();
+            app(RunLaravelInstaller::class)();
+            app(CustomizeDotEnv::class)();
+            app(GenerateAppKey::class)();
+            app(CreateDatabase::class)();
+            app(ConfigureFrontendFramework::class)();
             app(MigrateDatabase::class)();
-            //app(VerifyPathAvailable::class)();
-            //app(VerifyDependencies::class)();
-            //app(RunLaravelInstaller::class)();
-            //app(OpenInEditor::class)();
-            //app(CustomizeDotEnv::class)();
-            //app(GenerateAppKey::class)();
-            //app(CreateDatabase::class)();
-            //app(ConfigureFrontendFramework::class)();
-            //app(InitializeGitRepo::class)();
-            //app(RunAfterScript::class)();
-            //app(ValetLink::class)();
-            //app(ValetSecure::class)();
-            //app(OpenInBrowser::class)();
+            app(InitializeGitRepo::class)();
+            app(RunAfterScript::class)();
+            app(ValetLink::class)();
+            app(ValetSecure::class)();
+            app(OpenInEditor::class)();
+            app(OpenInBrowser::class)();
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
             exit;
@@ -125,6 +125,7 @@ class NewCommand extends LamboCommand
             'dbuser' => LamboConfiguration::DATABASE_USERNAME,
             'dbpassword' => LamboConfiguration::DATABASE_PASSWORD,
             'create-db' => LamboConfiguration::CREATE_DATABASE,
+            'migrate-db' => LamboConfiguration::MIGRATE_DATABASE,
             'link' => LamboConfiguration::VALET_LINK,
             'secure' => LamboConfiguration::VALET_SECURE,
             'with-output' => LamboConfiguration::WITH_OUTPUT,
@@ -148,6 +149,7 @@ class NewCommand extends LamboCommand
             'DB_USERNAME' => LamboConfiguration::DATABASE_USERNAME,
             'DB_PASSWORD' => LamboConfiguration::DATABASE_PASSWORD,
             'CREATE_DATABASE' => LamboConfiguration::CREATE_DATABASE,
+            'MIGRATE_DATABASE' => LamboConfiguration::MIGRATE_DATABASE,
             'LINK' => LamboConfiguration::VALET_LINK,
             'SECURE' => LamboConfiguration::VALET_SECURE,
             'WITH_OUTPUT' => LamboConfiguration::WITH_OUTPUT,
@@ -174,6 +176,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::DATABASE_USERNAME => 'root',
             LamboConfiguration::DATABASE_PASSWORD => '',
             LamboConfiguration::CREATE_DATABASE => false,
+            LamboConfiguration::MIGRATE_DATABASE => false,
             LamboConfiguration::VALET_LINK => false,
             LamboConfiguration::VALET_SECURE => false,
             LamboConfiguration::WITH_OUTPUT => false,

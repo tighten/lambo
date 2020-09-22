@@ -55,6 +55,10 @@ class Options
             'cli_description' => "Create a new MySQL database",
         ],
         [
+            'long' => 'migrate-db',
+            'cli_description' => "Run database migrations",
+        ],
+        [
             'long' => 'inertia',
             'cli_description' => "Use inertia frontend scaffolding",
         ],
