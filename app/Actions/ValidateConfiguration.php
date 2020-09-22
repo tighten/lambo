@@ -34,12 +34,24 @@ class ValidateConfiguration
         }
     }
 
-    protected function getFrontendConfiguration(): string
+    private function getFrontendConfiguration(): string
     {
-        if ($configuration = $this->validateFrontendConfiguration()) {
-            return $configuration;
+        $inertia = config('lambo.store.inertia');
+        $livewire = config('lambo.store.livewire');
+
+        if ($inertia && $livewire) {
+            return $this->chooseBetweenFrontends();
         }
 
+        if (! $inertia && ! $livewire) {
+            return 'none';
+        }
+
+        return $inertia ? 'inertia' : 'livewire';
+    }
+
+    private function chooseBetweenFrontends()
+    {
         app('console-writer')->warn('inertia and livewire cannot be used together. ');
         $options = [
             'use inertia' => 'inertia',
@@ -54,23 +66,7 @@ class ValidateConfiguration
         return $options[$choice];
     }
 
-    protected function validateFrontendConfiguration()
-    {
-        $inertia = config('lambo.store.inertia');
-        $livewire = config('lambo.store.livewire');
-
-        if ($inertia xor $livewire) {
-            return $inertia ? 'inertia' : 'livewire';
-        }
-
-        if (! ($inertia && $livewire)) {
-            return 'none';
-        }
-
-        return false;
-    }
-
-    protected function checkTeamsConfiguration()
+    private function checkTeamsConfiguration()
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
             app('console-writer')->verbose()->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
