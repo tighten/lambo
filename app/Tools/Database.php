@@ -3,6 +3,7 @@
 namespace App\Tools;
 
 use Exception;
+use Illuminate\Support\Str;
 use PDO;
 
 class Database
@@ -13,7 +14,13 @@ class Database
 
     public function url(string $url)
     {
-        list($databaseType, $host, $port, $this->username, $this->password) = array_values(parse_url($url));
+        $url = parse_url($url);
+        $databaseType = $url['scheme'];
+        $host = $url['host'];
+        $port = $url['port'];
+        $this->username = $url['user'];
+        $this->password = $url['pass'];
+
         $this->dsn = "{$databaseType}:host={$host};port={$port}";
         return $this;
     }

@@ -29,14 +29,15 @@ class MigrateDatabase
         $user = config('lambo.store.database_username');
         $password = config('lambo.store.database_password');
         $port = config('lambo.store.database_port');
+        $schema = config('lambo.store.database_name');
 
         $mysqlAvailable = app(Database::class)
             ->url("mysql://{$user}:{$password}@{$host}:{$port}")
-            ->find();
+            ->find($schema);
 
         if (! $mysqlAvailable) {
             app('console-writer')->warn('Skipping database migration.');
-            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}/{$schema}</>");
         }
 
         $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
