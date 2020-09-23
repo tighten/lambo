@@ -21,7 +21,6 @@ class RunLaravelInstaller
         app('console-writer')->logStep("Running the Laravel installer");
 
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
-
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
         app('console-writer')->verbose()->success($this->getFeedback());
@@ -31,9 +30,7 @@ class RunLaravelInstaller
     {
         return sprintf('%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
-            ''
-            /* @todo: while laravel installer is busted we must not use --quiet
-            config('lambo.store.with_output') ? '' : ' --quiet' */
+            config('lambo.store.with_output') ? '' : ' --quiet'
         );
     }
 
