@@ -78,7 +78,7 @@ class NewCommand extends LamboCommand
 
         $this->setConfig();
 
-        app('console-writer')->section("Creating a new Laravel app '{$this->argument('projectName')}'");
+        app('console-writer')->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
             app(ValidateConfiguration::class)();
