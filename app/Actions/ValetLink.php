@@ -16,7 +16,6 @@ class ValetLink
         $this->shell = $shell;
     }
 
-
     public function __invoke()
     {
         if (! config('lambo.store.valet_link')) {
@@ -26,7 +25,6 @@ class ValetLink
         app('console-writer')->logStep('Running valet link');
 
         $process = $this->shell->execInProject('valet link');
-
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
         app('console-writer')->verbose()->success('valet link successful');

@@ -16,7 +16,6 @@ class GenerateAppKey
         $this->shell = $shell;
     }
 
-
     public function __invoke()
     {
         app('console-writer')->logStep('Setting APP_KEY in .env');

@@ -17,7 +17,6 @@ class OpenInBrowser
         $this->shell = $shell;
     }
 
-
     public function __invoke()
     {
         if (config('lambo.store.no_browser')) {

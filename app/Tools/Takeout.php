@@ -29,11 +29,11 @@ class Takeout
         }
 
         return collect($containers)->filter(function ($container) {
-            return Str::contains($container['names'], $this->filterList);
+            return Str::of($container['names'])->contains($this->filterList);
         })->values()->all();
     }
 
-    public function exists()
+    public function find()
     {
         return ! is_null($this->finder->find('takeout'));
     }

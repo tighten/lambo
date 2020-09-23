@@ -16,22 +16,20 @@ class InitializeGitRepo
         $this->shell = $shell;
     }
 
-
     public function __invoke()
     {
         app('console-writer')->logStep('Initializing git repository');
 
-        $this->execAndCheck("git init{$this->withQuiet()}");
-        $this->execAndCheck('git add .');
-        $this->execAndCheck(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
+        $this->exec("git init{$this->withQuiet()}");
+        $this->exec('git add .');
+        $this->exec(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
 
         app('console-writer')->verbose()->success('New git repository initialized.');
     }
 
-    public function execAndCheck($command)
+    public function exec($command)
     {
         $process = $this->shell->execInProject($command);
-
         $this->abortIf(! $process->isSuccessful(), 'Initialization of git repository did not complete successfully.', $process);
     }
 

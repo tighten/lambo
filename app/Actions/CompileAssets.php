@@ -19,14 +19,11 @@ class CompileAssets
 
     public function __invoke()
     {
-        $this->silentDevScript->add();
-
         app('console-writer')->logStep('Compiling project assets');
 
+        $this->silentDevScript->add();
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
-
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
-
         $this->silentDevScript->remove();
 
         app('console-writer')->verbose()->success('Project assets compiled successfully.');

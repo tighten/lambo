@@ -20,20 +20,6 @@ abstract class TestCase extends BaseTestCase
         $this->shell = $this->mock(Shell::class);
     }
 
-    protected function todo(array $lines)
-    {
-        $this->skipWithMessage($lines, 'TODO');
-    }
-
-    protected function skipWithMessage(array $lines, $title = 'SKIPPED'): void
-    {
-        $lineLength = 80;
-        $header = $this->center(" [ {$title} ] ", '=', $lineLength);
-        $section = str_repeat('=', $lineLength);
-        $message = implode(PHP_EOL, $lines);
-        $this->markTestSkipped("{$header}\n{$message}\n{$section}");
-    }
-
     protected function mockConsoleWriter(): void
     {
         $consoleWriter = $this->mock(ConsoleWriter::class);
@@ -46,6 +32,20 @@ abstract class TestCase extends BaseTestCase
         $consoleWriter->shouldReceive('newLine');
         $consoleWriter->shouldReceive('verbose')->andReturnSelf();
         $this->swap('console-writer', $consoleWriter);
+    }
+
+    protected function todo(array $lines)
+    {
+        $this->skipWithMessage($lines, 'TODO');
+    }
+
+    protected function skipWithMessage(array $lines, $title = 'SKIPPED'): void
+    {
+        $lineLength = 80;
+        $header = $this->center(" [ {$title} ] ", '=', $lineLength);
+        $section = str_repeat('=', $lineLength);
+        $message = implode(PHP_EOL, $lines);
+        $this->markTestSkipped("{$header}\n{$message}\n{$section}");
     }
 
     protected function center(string $title, string $padChar = ' ', int $lineLength = 80): string

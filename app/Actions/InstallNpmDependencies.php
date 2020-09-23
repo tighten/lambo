@@ -16,13 +16,11 @@ class InstallNpmDependencies
         $this->shell = $shell;
     }
 
-
     public function __invoke()
     {
         app('console-writer')->logStep('Installing node dependencies');
 
         $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
-
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
         app('console-writer')->newLine();

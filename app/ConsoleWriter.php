@@ -19,9 +19,9 @@ class ConsoleWriter extends OutputStyle
 
     public function sectionTitle($sectionTitle)
     {
-        if ($this->shouldWriteLine(false)) {
+        if ($this->shouldWriteLine(true)) {
+            $this->newLine();
             $this->text([
-                "",
                 "<fg=yellow;bg=default>{$sectionTitle}</>",
                 '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
             ]);

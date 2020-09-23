@@ -78,7 +78,7 @@ class MigrateDatabaseTest extends TestCase
         $databaseSpy = $this->spy(Database::class);
         $shellSpy = $this->spy(Shell::class);
 
-        // Mock the Database->url() method so that if it is called it
+        // Mock the Database->url() so that if it is called it
         // returns properly.
         $databaseSpy->shouldReceive('url')->andReturnSelf();
 
