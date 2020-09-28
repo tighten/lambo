@@ -10,14 +10,15 @@
 # NOTE: on first run since boot the script will install a fresh version of the
 # Laravel template.
 #
-# 1. Comment out the following in app/Commands/NewCommand:
-#    app(VerifyPathAvailable::class)()
-#    app(RunLaravelInstaller::class)()
+# 1. In app/Commands/NewCommand do the following:
+#    - Comment out app(VerifyPathAvailable::class)() or use --force on the
+#      command-line.
+#    - Comment out app(RunLaravelInstaller::class)()
 #
 # 3. run this script passing any regular lambo flags and/or options while
 #    omitting new, Example:
 #
-#   /path/to/runLambo.sh my-project  [other lambo flags]
+#   /path/to/testLambo.sh my-project [other lambo flags]
 # ------------------------------------------------------------------------------
 
 DEBUG=false
