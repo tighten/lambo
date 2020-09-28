@@ -24,16 +24,7 @@ class CreateDatabaseTest extends TestCase
             ->once()
             ->andReturnSelf();
 
-        $this->database->shouldReceive('find')
-            ->once()
-            ->andReturnTrue();
-
-        $this->database->shouldReceive('url')
-            ->with('mysql://user:password@example.test:3306')
-            ->once()
-            ->andReturnSelf();
-
-        $this->database->shouldReceive('createSchema')
+        $this->database->shouldReceive('create')
             ->once()
             ->globally()
             ->andReturnTrue()
