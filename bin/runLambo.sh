@@ -7,7 +7,7 @@
 # installation of Laravel rather than running the Laravel Installer every time.
 # Useful when running lambo over and over during testing.
 #
-# NOTE: on first run since boot the scrip will install a fresh version of the
+# NOTE: on first run since boot the script will install a fresh version of the
 # Laravel template.
 #
 # 1. Comment out the following in app/Commands/NewCommand:
