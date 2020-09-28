@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Shell;
 use App\Tools\Database;
+use PDOException;
 
 class CreateDatabase
 {
@@ -12,10 +13,12 @@ class CreateDatabase
     protected $finder;
     protected $shell;
     protected $consoleWriter;
+    protected $databaseUtil;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, Database $database)
     {
         $this->shell = $shell;
+        $this->databaseUtil = $database;
     }
 
     public function __invoke()
@@ -32,19 +35,19 @@ class CreateDatabase
         $port = config('lambo.store.database_port');
         $schema = config('lambo.store.database_name');
 
-        $mysqlAvailable = app(Database::class)
-            ->url("mysql://{$user}:{$password}@{$host}:{$port}")
-            ->find();
+        try {
+            $databaseCreated = $this->databaseUtil
+                ->url("mysql://{$user}:{$password}@{$host}:{$port}")
+                ->create($schema);
 
-        if (! $mysqlAvailable) {
-            app('console-writer')->warn('Skipping database creation.');
-            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            if (! $databaseCreated) {
+                return app('console-writer')->verbose()->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            }
+        } catch (PDOException $e) {
+            app('console-writer')->verbose()->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            return app('console-writer')->verbose()->warn("REASON: {$e->getMessage()}");
         }
 
-        return app(Database::class)
-            ->url("mysql://{$user}:{$password}@{$host}:{$port}")
-            ->createSchema($schema)
-            ? app('console-writer')->verbose()->success('Created a new database ' . $schema)
-            : app('console-writer')->verbose()->warn("Failed to create database {$schema} You will need to configure your database manually.");
+        return app('console-writer')->verbose()->success("Created a new database '{$schema}'");
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Tools;
 
-use Exception;
-use Illuminate\Support\Str;
 use PDO;
 
 class Database
@@ -25,28 +23,18 @@ class Database
         return $this;
     }
 
-    public function find(string $schema = null): bool
+    public function exists(string $databaseName = null)
     {
-        $dsn = is_null($schema)
+        $dsn = is_null($databaseName)
             ? $this->dsn
-            : "{$this->dsn};dbname={$schema}";
+            : "{$this->dsn};dbname={$databaseName}";
 
-        try {
-            new PDO($dsn, $this->username, $this->password);
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        new PDO($dsn, $this->username, $this->password);
     }
 
-    public function createSchema(string $databaseName): bool
+    public function create(string $databaseName)
     {
-        try {
-            $connection = new PDO($this->dsn, $this->username, $this->password);
-            $connection->exec("CREATE DATABASE {$databaseName};");
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        $connection = new PDO($this->dsn, $this->username, $this->password);
+        return $connection->exec("CREATE DATABASE IF NOT EXISTS {$databaseName};") === 1;
     }
 }
