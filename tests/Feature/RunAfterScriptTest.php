@@ -4,18 +4,12 @@ namespace Tests\Feature;
 
 use App\Actions\RunAfterScript;
 use App\LamboException;
-use App\Shell;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class RunAfterScriptTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        }
-
     /** @test */
     function it_runs_the_after_script_if_one_exists()
     {
