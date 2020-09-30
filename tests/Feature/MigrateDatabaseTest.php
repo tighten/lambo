@@ -33,7 +33,7 @@ class MigrateDatabaseTest extends TestCase
             ->once()
             ->andReturnSelf();
 
-        $this->database->shouldReceive('find')
+        $this->database->shouldReceive('exists')
             ->once()
             ->andReturnTrue();
 
@@ -60,7 +60,7 @@ class MigrateDatabaseTest extends TestCase
             ->once()
             ->andReturnSelf();
 
-        $this->database->shouldReceive('find')
+        $this->database->shouldReceive('exists')
             ->once()
             ->andReturnTrue();
 
@@ -93,7 +93,7 @@ class MigrateDatabaseTest extends TestCase
         app(MigrateDatabase::class)();
 
         $databaseSpy->shouldNotHaveReceived('url');
-        $databaseSpy->shouldNotHaveReceived('find');
+        $databaseSpy->shouldNotHaveReceived('exists');
         $shellSpy->shouldNotHaveReceived('execInProject');
     }
 }

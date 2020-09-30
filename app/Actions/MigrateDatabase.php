@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Shell;
 use App\Tools\Database;
+use PDOException;
 
 class MigrateDatabase
 {
@@ -11,10 +12,12 @@ class MigrateDatabase
 
     protected $shell;
     protected $consoleWriter;
+    protected $database;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, Database $database)
     {
         $this->shell = $shell;
+        $this->database = $database;
     }
 
     public function __invoke()
@@ -31,19 +34,20 @@ class MigrateDatabase
         $port = config('lambo.store.database_port');
         $schema = config('lambo.store.database_name');
 
-        $mysqlAvailable = app(Database::class)
-            ->url("mysql://{$user}:{$password}@{$host}:{$port}")
-            ->find($schema);
+        try {
+            $this->database
+                ->url("mysql://{$user}:{$password}@{$host}:{$port}")
+                ->exists($schema);
 
-        if (! $mysqlAvailable) {
-            app('console-writer')->warn('Skipping database migration.');
-            return app('console-writer')->warn("No database connection available using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}/{$schema}</>");
+            $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
+            return $process->isSuccessful()
+                ? app('console-writer')->verbose()->success('Database migrated')
+                : app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
+        } catch (PDOException $e) {
+            app('console-writer')->warn("Skipping database migration using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            app('console-writer')->verbose()->warn($e->getMessage());
+            return app('console-writer')->verbose()->warn('You will need to run the migrations manually.');
         }
-
-        $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
-        return $process->isSuccessful()
-            ? app('console-writer')->verbose()->success('Database migrated')
-            : app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
     }
 
     private function withQuiet()
