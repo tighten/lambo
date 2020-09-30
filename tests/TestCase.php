@@ -22,16 +22,16 @@ abstract class TestCase extends BaseTestCase
 
     protected function mockConsoleWriter(): void
     {
-        $consoleWriter = $this->mock(ConsoleWriter::class);
-        $consoleWriter->shouldReceive('logstep');
-        $consoleWriter->shouldReceive('success');
-        $consoleWriter->shouldReceive('note');
-        $consoleWriter->shouldReceive('text');
-        $consoleWriter->shouldReceive('warn');
-        $consoleWriter->shouldReceive('fail');
-        $consoleWriter->shouldReceive('newLine');
-        $consoleWriter->shouldReceive('verbose')->andReturnSelf();
-        $this->swap('console-writer', $consoleWriter);
+        $this->swap('console-writer', $this->mock(ConsoleWriter::class, function ($consoleWriter){
+            $consoleWriter->shouldReceive('logstep');
+            $consoleWriter->shouldReceive('success');
+            $consoleWriter->shouldReceive('note');
+            $consoleWriter->shouldReceive('text');
+            $consoleWriter->shouldReceive('warn');
+            $consoleWriter->shouldReceive('fail');
+            $consoleWriter->shouldReceive('newLine');
+            $consoleWriter->shouldReceive('verbose')->andReturnSelf();
+        }));
     }
 
     protected function todo(array $lines)
