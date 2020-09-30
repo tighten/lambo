@@ -17,7 +17,7 @@ class ValidateConfiguration
         config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
         $this->checkTeamsConfiguration();
 
-        app('console-writer')->verbose()->success('Configuration is valid.');
+        app('console-writer')->success('Configuration is valid.');
 
         if (app('console-writer')->isDebug()) {
             $this->debugReport();
@@ -51,7 +51,7 @@ class ValidateConfiguration
         ];
         $choice = app('console')->choice('What would you like to do?', array_keys($options), 2);
 
-        app('console-writer')->verbose()->ok($choice);
+        app('console-writer')->ok($choice);
 
         return $options[$choice];
     }
@@ -59,7 +59,7 @@ class ValidateConfiguration
     private function checkTeamsConfiguration()
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
-            app('console-writer')->verbose()->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
+            app('console-writer')->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
     }
 

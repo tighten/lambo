@@ -30,7 +30,6 @@ abstract class TestCase extends BaseTestCase
             $consoleWriter->shouldReceive('warn');
             $consoleWriter->shouldReceive('fail');
             $consoleWriter->shouldReceive('newLine');
-            $consoleWriter->shouldReceive('verbose')->andReturnSelf();
         }));
     }
 

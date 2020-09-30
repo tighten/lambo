@@ -39,7 +39,7 @@ trait Debug
                 return [$keyPrefix . $key, $value, $type];
             })->values()->toArray();
 
-        app('console-writer')->verbose()->table($headers ? $headers : ['key', 'value', 'type'], $rows);
+        app('console-writer')->table($headers ? $headers : ['key', 'value', 'type'], $rows);
     }
 
     protected function debugReport(): void
@@ -50,7 +50,7 @@ trait Debug
         app('console-writer')->text([
             'The following is the configuration lambo has computed by merging:',
         ]);
-        app('console-writer')->verbose()->listing([
+        app('console-writer')->listing([
             'command line parameters',
             'saved configuration',
             'shell environment variables.',

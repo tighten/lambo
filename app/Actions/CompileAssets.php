@@ -26,7 +26,7 @@ class CompileAssets
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
         $this->silentDevScript->remove();
 
-        app('console-writer')->verbose()->success('Project assets compiled successfully.');
+        app('console-writer')->success('Project assets compiled successfully.');
     }
     public function extraOptions()
     {

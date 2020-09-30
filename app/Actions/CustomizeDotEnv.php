@@ -20,7 +20,7 @@ class CustomizeDotEnv
         File::put($filePath, $output);
         File::put(str_replace('.env.example', '.env', $filePath), $output);
 
-        app('console-writer')->verbose()->success('.env files configured.');
+        app('console-writer')->success('.env files configured.');
     }
 
     public function customize($contents)

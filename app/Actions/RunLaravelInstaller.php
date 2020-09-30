@@ -23,7 +23,7 @@ class RunLaravelInstaller
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
-        app('console-writer')->verbose()->success($this->getFeedback());
+        app('console-writer')->success($this->getFeedback());
     }
 
     public function extraOptions()

@@ -24,7 +24,7 @@ class InstallNpmDependencies
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
         app('console-writer')->newLine();
-        app('console-writer')->verbose()->success('Npm dependencies installed.');
+        app('console-writer')->success('Npm dependencies installed.');
     }
 
     public function withQuiet()

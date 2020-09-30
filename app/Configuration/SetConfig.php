@@ -6,6 +6,7 @@ use App\LamboException;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SetConfig
 {
@@ -118,6 +119,15 @@ class SetConfig
     private function fullOrConfigured(string $key, $default): bool
     {
         if ($this->commandLineConfiguration->full) {
+            return true;
+        }
+
+        return $this->get($key, $default);
+    }
+
+    private function getWithOutput(string $key, $default): bool
+    {
+        if(app('console-writer')->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL) {
             return true;
         }
 

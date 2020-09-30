@@ -41,14 +41,14 @@ class CreateDatabase
                 ->create($schema);
 
             if (! $databaseCreated) {
-                return app('console-writer')->verbose()->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+                return app('console-writer')->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
             }
         } catch (PDOException $e) {
-            app('console-writer')->verbose()->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
-            app('console-writer')->verbose()->warn($e->getMessage());
-            return app('console-writer')->verbose()->warn('You will need to create the database manually.');
+            app('console-writer')->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+            app('console-writer')->warn($e->getMessage());
+            return app('console-writer')->warn('You will need to create the database manually.');
         }
 
-        return app('console-writer')->verbose()->success("Created a new database '{$schema}'");
+        return app('console-writer')->success("Created a new database '{$schema}'");
     }
 }

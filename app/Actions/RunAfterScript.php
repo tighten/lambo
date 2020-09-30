@@ -29,6 +29,6 @@ class RunAfterScript
         $process = $this->shell->execInProject("sh " . $afterScriptPath);
         $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
 
-        app('console-writer')->verbose()->success('After script has completed.');
+        app('console-writer')->success('After script has completed.');
     }
 }

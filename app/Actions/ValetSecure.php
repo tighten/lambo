@@ -27,6 +27,6 @@ class ValetSecure
         $process = $this->shell->execInProject("valet secure");
         $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
 
-        app('console-writer')->verbose()->success('valet secure successful');
+        app('console-writer')->success('valet secure successful');
     }
 }

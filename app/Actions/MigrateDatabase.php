@@ -41,12 +41,12 @@ class MigrateDatabase
 
             $process = $this->shell->execInProject("php artisan migrate{$this->withQuiet()}");
             return $process->isSuccessful()
-                ? app('console-writer')->verbose()->success('Database migrated')
+                ? app('console-writer')->success('Database migrated')
                 : app('console-writer')->warn("Failed to run {$process->getCommandLine()}");
         } catch (PDOException $e) {
             app('console-writer')->warn("Skipping database migration using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
-            app('console-writer')->verbose()->warn($e->getMessage());
-            return app('console-writer')->verbose()->warn('You will need to run the migrations manually.');
+            app('console-writer')->warn($e->getMessage());
+            return app('console-writer')->warn('You will need to run the database migrations manually.');
         }
     }
 

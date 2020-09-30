@@ -40,7 +40,7 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
 
-        app('console-writer')->verbose()->exec($command);
+        app('console-writer')->exec($command);
 
         $process->run(function ($type, $buffer) {
             if (empty(trim($buffer)) || $buffer === PHP_EOL) {

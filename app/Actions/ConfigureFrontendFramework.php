@@ -44,7 +44,7 @@ class ConfigureFrontendFramework
             app(CompileAssets::class)();
         }
 
-        app('console-writer')->verbose()->success("{$configuredFrontend} UI scaffolding installed.");
+        app('console-writer')->success("{$configuredFrontend} UI scaffolding installed.");
     }
 
     public function ensureJetstreamInstalled()
@@ -54,12 +54,12 @@ class ConfigureFrontendFramework
             return;
         }
 
-        app('console-writer')->verbose()->note('Installing required composer package laravel/jetstream.');
+        app('console-writer')->note('Installing required composer package laravel/jetstream.');
 
         $process = $this->shell->execInProject('composer require laravel/jetstream' . (config('lambo.store.with_output') ? '' : ' --quiet'));
 
         $this->abortIf(! $process->isSuccessful(), "Installation of laravel/jetstream did not complete successfully.", $process);
 
-        app('console-writer')->verbose()->success('laravel/jetstream installed.');
+        app('console-writer')->success('laravel/jetstream installed.');
     }
 }

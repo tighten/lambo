@@ -31,6 +31,6 @@ class VerifyPathAvailable
             throw new LamboException($projectPath . ' is already a directory.');
         }
 
-        app('console-writer')->verbose()->success(sprintf('Directory "%s" is available.', config('lambo.store.project_path')));
+        app('console-writer')->success(sprintf('Directory "%s" is available.', config('lambo.store.project_path')));
     }
 }

@@ -27,6 +27,6 @@ class ValetLink
         $process = $this->shell->execInProject('valet link');
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
-        app('console-writer')->verbose()->success('valet link successful');
+        app('console-writer')->success('valet link successful');
     }
 }

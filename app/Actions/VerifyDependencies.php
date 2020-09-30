@@ -16,11 +16,11 @@ class VerifyDependencies
             'label' => 'The Laravel Installer',
             'instructions_url' => 'https://laravel.com/docs/installation#installing-laravel',
         ],
-        [
-            'command' => 'valet',
-            'label' => 'Laravel valet',
-            'instructions_url' => 'https://laravel.com/docs/valet',
-        ],
+        //[
+        //    'command' => 'valet',
+        //    'label' => 'Laravel valet',
+        //    'instructions_url' => 'https://laravel.com/docs/valet',
+        //],
         [
             'command' => 'git',
             'label' => 'Git version control',
@@ -44,7 +44,7 @@ class VerifyDependencies
                     app('console-writer')->warn("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
                     return true;
                 }
-                app('console-writer')->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                app('console-writer')->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
                 return $carry ?? false;
             }),
             'Please install missing dependencies and try again.');
