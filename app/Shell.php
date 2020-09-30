@@ -33,23 +33,17 @@ class Shell
         return $this->exec("cd {$directory} && $command");
     }
 
-    public function execQuietly(string $command, bool $quiet = false) {
-        return $this->exec($command, true);
-    }
-
-    public function exec(string $command, bool $quiet = false)
+    public function exec(string $command)
     {
         $process = Process::fromShellCommandline($command)
             ->setTty($this->useTTY)
             ->setTimeout(null)
             ->enableOutput();
 
-        if (! $quiet) {
-            app('console-writer')->verbose()->exec($command);
-        }
+        app('console-writer')->verbose()->exec($command);
 
-        $process->run(function ($type, $buffer) use ($quiet) {
-            if (! $this->shouldReportProgress($buffer) || $quiet) {
+        $process->run(function ($type, $buffer) {
+            if (empty(trim($buffer)) || $buffer === PHP_EOL) {
                 return;
             }
 
@@ -66,14 +60,5 @@ class Shell
     {
         $this->useTTY = true;
         return $this;
-    }
-
-    private function shouldReportProgress($buffer): bool
-    {
-        if (empty(trim($buffer)) || $buffer === PHP_EOL) {
-            return false;
-        }
-
-        return app('console-writer')->isVerbose() || config('lambo.store.with_output');
     }
 }
