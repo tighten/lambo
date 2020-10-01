@@ -40,7 +40,7 @@ class NewCommand extends LamboCommand
 
         parent::__construct();
 
-        app()->bindIf('console', function () {
+        app()->bind('console', function () {
             return $this;
         });
     }
