@@ -3,7 +3,6 @@
 namespace App\Configuration;
 
 use App\LamboException;
-
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -13,6 +12,13 @@ class SetConfig
     private $commandLineConfiguration;
     private $savedConfiguration;
     private $shellConfiguration;
+
+    protected $fullFlags = [
+        LamboConfiguration::CREATE_DATABASE,
+        LamboConfiguration::MIGRATE_DATABASE,
+        LamboConfiguration::VALET_LINK,
+        LamboConfiguration::VALET_SECURE,
+    ];
 
     public function __construct(CommandLineConfiguration $commandLineConfiguration, SavedConfiguration $savedConfiguration, ShellConfiguration $shellConfiguration)
     {
@@ -24,8 +30,8 @@ class SetConfig
     public function __invoke($defaultConfiguration)
     {
         foreach ($defaultConfiguration as $configurationKey => $default) {
-            $methodName = 'get' . Str::of($configurationKey)->studly();
 
+            $methodName = 'get' . Str::of($configurationKey)->studly();
             if (method_exists($this, $methodName)) {
                 config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
                 continue;
@@ -38,6 +44,12 @@ class SetConfig
         // @todo: vvv should we check that the required config variables are set? vvv
         config(["lambo.store.project_path" => config('lambo.store.root_path') . "/" . config('lambo.store.project_name')]);
         config(["lambo.store.project_url" => $this->getProjectURL()]);
+
+        if (config('lambo.store.full')) {
+            foreach ($this->fullFlags as $fullFlag) {
+                config(["lambo.store.{$fullFlag}" => true]);
+            }
+        }
     }
 
     private function get(string $configurationKey, $default)
@@ -93,35 +105,11 @@ class SetConfig
         return sprintf("http%s://%s.%s", $protocol, config('lambo.store.project_name'), config('lambo.store.tld'));
     }
 
-    private function getValetSecure(string $key, $default)
-    {
-        return $this->fullOrConfigured($key, $default);
-    }
-
-    private function getCreateDatabase(string $key, $default)
-    {
-        return $this->fullOrConfigured($key, $default);
-    }
-
     private function getMigrateDatabase(string $key, $default)
     {
         if ($this->commandLineConfiguration->inertia || $this->commandLineConfiguration->livewire) {
             return true;
         }
-        return $this->fullOrConfigured($key, $default);
-    }
-
-    public function getValetLink(string $key, $default)
-    {
-        return $this->fullOrConfigured($key, $default);
-    }
-
-    private function fullOrConfigured(string $key, $default): bool
-    {
-        if ($this->commandLineConfiguration->full) {
-            return true;
-        }
-
         return $this->get($key, $default);
     }
 

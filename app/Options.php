@@ -81,17 +81,13 @@ class Options
             'cli_description' => "Generate and use an HTTPS cert with Valet",
         ],
         [
-            'long' => 'with-output',
-            'cli_description' => "Show command line output from shell commands",
-        ],
-        [
             'short' => 'd',
             'long' => 'dev',
             'cli_description' => "Install Laravel using the develop branch",
         ],
         [
             'long' => 'full',
-            'cli_description' => "Shortcut of --create-db --link --secure",
+            'cli_description' => "Shortcut of --create-db --migrate-db --link --secure",
         ],
     ];
 
