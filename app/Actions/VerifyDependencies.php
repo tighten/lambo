@@ -16,11 +16,11 @@ class VerifyDependencies
             'label' => 'The Laravel Installer',
             'instructions_url' => 'https://laravel.com/docs/installation#installing-laravel',
         ],
-        //[
-        //    'command' => 'valet',
-        //    'label' => 'Laravel valet',
-        //    'instructions_url' => 'https://laravel.com/docs/valet',
-        //],
+        [
+            'command' => 'valet',
+            'label' => 'Laravel valet',
+            'instructions_url' => 'https://laravel.com/docs/valet',
+        ],
         [
             'command' => 'git',
             'label' => 'Git version control',
