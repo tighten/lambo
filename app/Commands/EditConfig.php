@@ -16,12 +16,17 @@ class EditConfig extends LamboCommand
 
     protected $description = 'Edit Config File. A new config file is created if one does not already exist.';
 
-    public function handle()
+    public function __construct()
     {
-        app()->bind('console', function () {
+        parent::__construct();
+
+        app()->bindIf('console', function () {
             return $this;
         });
+    }
 
+    public function handle()
+    {
         $commandLineConfiguration = new CommandLineConfiguration([
             'editor' => LamboConfiguration::EDITOR
         ]);
