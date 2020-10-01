@@ -30,18 +30,16 @@ class SetConfig
     public function __invoke($defaultConfiguration)
     {
         foreach ($defaultConfiguration as $configurationKey => $default) {
-
             $methodName = 'get' . Str::of($configurationKey)->studly();
             if (method_exists($this, $methodName)) {
                 config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
-                continue;
+            } else {
+                config(["lambo.store.{$configurationKey}" => $this->get($configurationKey, $default)]);
             }
-            config(["lambo.store.{$configurationKey}" => $this->get($configurationKey, $default)]);
         }
-        // These are set here because they require that the, command line
-        // arguments/options, saved configuration and shell environment
-        // configurations have been merged prior to setting.
-        // @todo: vvv should we check that the required config variables are set? vvv
+
+        // The following are set here because they require config('lambo.store.*')
+        // to have been set prior to processing.
         config(["lambo.store.project_path" => config('lambo.store.root_path') . "/" . config('lambo.store.project_name')]);
         config(["lambo.store.project_url" => $this->getProjectURL()]);
 
