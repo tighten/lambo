@@ -138,11 +138,11 @@ class NewCommand extends LamboCommand
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'CODEEDITOR' => LamboConfiguration::EDITOR,
-            'MESSAGE' => LamboConfiguration::COMMIT_MESSAGE,
             'PROJECTPATH' => LamboConfiguration::ROOT_PATH,
+            'MESSAGE' => LamboConfiguration::COMMIT_MESSAGE,
+            'DEVELOP' => LamboConfiguration::USE_DEVELOP_BRANCH,
+            'CODEEDITOR' => LamboConfiguration::EDITOR,
             'BROWSER' => LamboConfiguration::BROWSER,
-            'FRONTEND' => LamboConfiguration::FRONTEND_FRAMEWORK,
             'DB_HOST' => LamboConfiguration::DATABASE_HOST,
             'DB_PORT' => LamboConfiguration::DATABASE_PORT,
             'DB_NAME' => LamboConfiguration::DATABASE_NAME,
@@ -152,9 +152,6 @@ class NewCommand extends LamboCommand
             'MIGRATE_DATABASE' => LamboConfiguration::MIGRATE_DATABASE,
             'LINK' => LamboConfiguration::VALET_LINK,
             'SECURE' => LamboConfiguration::VALET_SECURE,
-            'WITH_OUTPUT' => LamboConfiguration::WITH_OUTPUT,
-            'DEVELOP' => LamboConfiguration::USE_DEVELOP_BRANCH,
-            'WITH_TEAMS' => LamboConfiguration::TEAMS,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
