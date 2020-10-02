@@ -166,6 +166,7 @@ class NewCommand extends LamboCommand
             $savedConfiguration,
             $shellConfiguration
         ))([
+            LamboConfiguration::COMMAND => self::class,
             LamboConfiguration::EDITOR => 'nano',
             LamboConfiguration::COMMIT_MESSAGE => 'Initial commit',
             LamboConfiguration::ROOT_PATH => getcwd(),

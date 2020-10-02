@@ -28,6 +28,7 @@ abstract class LamboConfiguration
     const INERTIA = 'inertia';
     const LIVEWIRE = 'livewire';
     const TEAMS = 'teams';
+    const COMMAND = 'command';
 
     public function __construct(array $keyMap)
     {

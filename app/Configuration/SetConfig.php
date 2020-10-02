@@ -2,6 +2,7 @@
 
 namespace App\Configuration;
 
+use App\Commands\NewCommand;
 use App\LamboException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -38,10 +39,12 @@ class SetConfig
             }
         }
 
-        // The following are set here because they require config('lambo.store.*')
-        // to have been set prior to processing.
-        config(["lambo.store.project_path" => config('lambo.store.root_path') . "/" . config('lambo.store.project_name')]);
-        config(["lambo.store.project_url" => $this->getProjectURL()]);
+        // If we're in the "new" command, generate a few config items which
+        // require others to be set above first.
+        if (config('lambo.store.command') === NewCommand::class) {
+            config(['lambo.store.project_path' => config('lambo.store.root_path') . '/' . config('lambo.store.project_name')]);
+            config(['lambo.store.project_url' => $this->getProjectURL()]);
+        }
 
         if (config('lambo.store.full')) {
             foreach ($this->fullFlags as $fullFlag) {
@@ -99,8 +102,10 @@ class SetConfig
 
     private function getProjectURL(): string
     {
-        $protocol = config("lambo.store.valet_secure") ? 's' : '';
-        return sprintf("http%s://%s.%s", $protocol, config('lambo.store.project_name'), config('lambo.store.tld'));
+        return sprintf("http%s://%s.%s",
+            config('lambo.store.valet_secure') ? 's' : '',
+            config('lambo.store.project_name'),
+            config('lambo.store.tld'));
     }
 
     private function getMigrateDatabase(string $key, $default)
