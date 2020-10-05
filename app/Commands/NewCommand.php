@@ -14,6 +14,7 @@ use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
+use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
 use App\Actions\ValidateConfiguration;
@@ -81,21 +82,22 @@ class NewCommand extends LamboCommand
         app('console-writer')->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
-            app(ValidateConfiguration::class)();
-            app(VerifyPathAvailable::class)();
-            app(VerifyDependencies::class)();
-            app(RunLaravelInstaller::class)();
-            app(CustomizeDotEnv::class)();
-            app(GenerateAppKey::class)();
-            app(CreateDatabase::class)();
-            app(ConfigureFrontendFramework::class)();
-            app(MigrateDatabase::class)();
-            app(InitializeGitRepo::class)();
-            app(RunAfterScript::class)();
-            app(ValetLink::class)();
-            app(ValetSecure::class)();
-            app(OpenInEditor::class)();
-            app(OpenInBrowser::class)();
+            app(UpgradeSavedConfiguration::class)();
+            //app(ValidateConfiguration::class)();
+            //app(VerifyPathAvailable::class)();
+            //app(VerifyDependencies::class)();
+            //app(RunLaravelInstaller::class)();
+            //app(CustomizeDotEnv::class)();
+            //app(GenerateAppKey::class)();
+            //app(CreateDatabase::class)();
+            //app(ConfigureFrontendFramework::class)();
+            //app(MigrateDatabase::class)();
+            //app(InitializeGitRepo::class)();
+            //app(RunAfterScript::class)();
+            //app(ValetLink::class)();
+            //app(ValetSecure::class)();
+            //app(OpenInEditor::class)();
+            //app(OpenInBrowser::class)();
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
             exit;

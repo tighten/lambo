@@ -22,7 +22,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function mockConsoleWriter(): void
     {
-        $this->swap('console-writer', $this->mock(ConsoleWriter::class, function ($consoleWriter){
+        $this->swap('console-writer', $this->mock(ConsoleWriter::class, function ($consoleWriter) {
             $consoleWriter->shouldReceive('logstep');
             $consoleWriter->shouldReceive('success');
             $consoleWriter->shouldReceive('note');
@@ -50,5 +50,11 @@ abstract class TestCase extends BaseTestCase
     protected function center(string $title, string $padChar = ' ', int $lineLength = 80): string
     {
         return str_pad(str_repeat($padChar, ($lineLength - strlen($title)) / 2) . $title . str_repeat($padChar, ($lineLength - strlen($title)) / 2), $lineLength, $padChar);
+    }
+
+    protected function toSTDOUT($out, string $title = null): void
+    {
+        $message = sprintf("%s%s\n", $title ? "{$title}\n" : '', print_r($out, true));
+        fwrite(STDOUT, $message);
     }
 }
