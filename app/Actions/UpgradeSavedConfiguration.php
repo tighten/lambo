@@ -8,7 +8,9 @@ use Illuminate\Support\Str;
 
 class UpgradeSavedConfiguration
 {
-   private $removedConfigurationKeys = [
+    private $currentVersion = 2;
+
+    private $removedConfigurationKeys = [
         'NODE',
         'MIX',
         'AUTH',
@@ -16,47 +18,77 @@ class UpgradeSavedConfiguration
     ];
 
     private $newConfiguration = [
-        'THING' => [
-            'commented' => true,
-            'default' => 'flibble',
-            'description' => [
-                '# The THING parameter enables Lambo to do a thing.',
-                '# Valid options are foo, bar and flibble (default if not specified).',
-            ]
-        ],
-        'ANOTHER_THING' => [
+        'MIGRATE_DATABASE' => [
             'commented' => false,
             'default' => 'false',
             'description' => [
-                '# The ANOTHER_THING parameter enables Lambo to do a another thing.',
-                '# Valid options are true or false (default if not specified).',
+                '# Run the standard Laravel database migrations.',
+                '# options:',
+                '#   true, 1, "yes" or "on"',
+                '#   false (default), 0, "no" or "off"',
+            ]
+        ],
+        'DB_HOST' => [
+            'commented' => false,
+            'default' => '127.0.0.1',
+            'description' => [
+                '# The database host.',
+            ]
+        ],
+        'DB_PORT' => [
+            'commented' => true,
+            'default' => '',
+            'description' => [
+                '# The database port.',
+            ]
+        ],
+        'DB_NAME' => [
+            'commented' => true,
+            'default' => '',
+            'description' => [
+                '# The database name.',
             ]
         ],
     ];
 
+    private $configDir;
+    private $configFilePath;
+    private $lastVersionUpdateFilePath;
+
     private $commented = [];
+
+    public function __construct()
+    {
+        $this->configDir = config('home_dir') . '/.lambo';
+        $this->configFilePath = "{$this->configDir}/config";
+        $this->lastVersionUpdateFilePath = "{$this->configDir}/.last_version_update";
+    }
 
     public function __invoke()
     {
-        $configDir = config('home_dir') . '/.lambo';
-        $configFilePath = $configDir . "/config";
-
-        if (! File::isDirectory($configDir)) {
+        if (! $this->shouldUpgrade()) {
             return;
         }
 
-        if (! File::isFile($configFilePath)) {
-            return;
-        }
+        File::put($this->configFilePath, $this->upgrade($this->getSavedConfiguration(), $this->removedConfigurationKeys, $this->newConfiguration));
 
-        $savedConfiguration = File::get($configFilePath);
-        File::move($configFilePath, $configFilePath . '.' . Carbon::now()->format('Ymdhis'));
-        File::put($configFilePath, $this->upgrade($savedConfiguration, $this->removedConfigurationKeys, $this->newConfiguration));
+        File::delete($this->lastVersionUpdateFilePath);
+        File::put($this->lastVersionUpdateFilePath, $this->currentVersion);
     }
 
     public function upgrade(string $savedConfiguration, array $oldConfigurationKeys, array $newConfiguration = []): string
     {
-        $commentedConfiguration = collect(explode("\n", $savedConfiguration))->transform(function ($item) use ($oldConfigurationKeys) {
+        return sprintf(
+            "%s\n%s#\n%s",
+            $this->commentConfiguration($savedConfiguration, $oldConfigurationKeys),
+            $this->summarizeComments(),
+            $this->addNewConfiguration($newConfiguration)
+        );
+    }
+
+    private function commentConfiguration(string $savedConfiguration, array $oldConfigurationKeys): string
+    {
+        return collect(explode("\n", $savedConfiguration))->transform(function ($item) use ($oldConfigurationKeys) {
             $matched = collect($oldConfigurationKeys)->reduce(function ($carry, $oldKey) use ($item) {
                 return $carry || Str::of($item)->startsWith($oldKey);
             }, false);
@@ -66,8 +98,6 @@ class UpgradeSavedConfiguration
             }
             return $item;
         })->implode("\n");
-
-        return "{$commentedConfiguration}\n{$this->summarizeComments()}#\n{$this->addNewConfiguration($newConfiguration)}";
     }
 
     private function summarizeComments()
@@ -83,13 +113,6 @@ class UpgradeSavedConfiguration
         ];
 
         return implode(PHP_EOL, $lines);
-    }
-
-    private function formatCommented(): string
-    {
-        return collect($this->commented)->reduce(function ($carry, $item) {
-            return "$carry#   {$item}\n";
-        },'');
     }
 
     private function addNewConfiguration(array $newConfiguration): string
@@ -113,5 +136,37 @@ class UpgradeSavedConfiguration
             return "{$carry}{$description}{$configurationItem}";
             //return $carry . $description;
         }, "# Lambo has introduced new configuration options. They have been added here\n# with sensible defaults, however, you should review them.\n#\n");
+    }
+
+    private function formatCommented(): string
+    {
+        return collect($this->commented)->reduce(function ($carry, $item) {
+            return "$carry#   {$item}\n";
+        }, '');
+    }
+
+    private function getSavedConfiguration(): string
+    {
+        $savedConfiguration = File::get($this->configFilePath);
+        File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->format('Ymdhis'));
+        return $savedConfiguration;
+    }
+
+    private function shouldUpgrade()
+    {
+        if (! File::isFile($this->configFilePath)) {
+            return false;
+        }
+
+        if ($this->getLastUpdateVersion() < $this->currentVersion) {
+            return true;
+        }
+    }
+
+    private function getLastUpdateVersion()
+    {
+        return File::isFile($this->lastVersionUpdateFilePath)
+            ? (int)File::get($this->lastVersionUpdateFilePath)
+            : 0;
     }
 }
