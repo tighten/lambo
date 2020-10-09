@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class UpgradeSavedConfiguration
 {
-    private $configurationVersion = 2;
+    private $configurationVersion = 1;
 
     private $removedConfigurationKeys = [
         'NODE',
@@ -72,7 +72,9 @@ class UpgradeSavedConfiguration
 
         $savedConfiguration = File::get($this->configFilePath);
         File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->toDateTimeLocalString());
+
         File::put($this->configFilePath, $this->upgrade($savedConfiguration, $this->removedConfigurationKeys, $this->newConfiguration));
+
         File::delete($this->lastVersionUpdateFilePath);
         File::put($this->lastVersionUpdateFilePath, $this->configurationVersion);
 
