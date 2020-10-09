@@ -14,6 +14,7 @@ use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
+use App\Actions\SavedConfig;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
@@ -79,25 +80,35 @@ class NewCommand extends LamboCommand
 
         $this->setConfig();
 
+        if (app(UpgradeSavedConfiguration::class)()) {
+            app('console-writer')->newLine();
+            app('console-writer')->note('Your Lambo configuration (~/.lambo/config) has been updated.');
+            app('console-writer')->note('Please review the changes then run lambo again.');
+            $editor = config('lambo.store.editor');
+            if ($this->confirm("Review the changes now in {$editor}?")) {
+                app(SavedConfig::class)->createOrEditConfigFile("config");
+            }
+            return;
+        }
+
         app('console-writer')->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
-            app(UpgradeSavedConfiguration::class)();
-            //app(ValidateConfiguration::class)();
-            //app(VerifyPathAvailable::class)();
-            //app(VerifyDependencies::class)();
-            //app(RunLaravelInstaller::class)();
-            //app(CustomizeDotEnv::class)();
-            //app(GenerateAppKey::class)();
-            //app(CreateDatabase::class)();
-            //app(ConfigureFrontendFramework::class)();
-            //app(MigrateDatabase::class)();
-            //app(InitializeGitRepo::class)();
-            //app(RunAfterScript::class)();
-            //app(ValetLink::class)();
-            //app(ValetSecure::class)();
-            //app(OpenInEditor::class)();
-            //app(OpenInBrowser::class)();
+            app(ValidateConfiguration::class)();
+            app(VerifyPathAvailable::class)();
+            app(VerifyDependencies::class)();
+            app(RunLaravelInstaller::class)();
+            app(CustomizeDotEnv::class)();
+            app(GenerateAppKey::class)();
+            app(CreateDatabase::class)();
+            app(ConfigureFrontendFramework::class)();
+            app(MigrateDatabase::class)();
+            app(InitializeGitRepo::class)();
+            app(RunAfterScript::class)();
+            app(ValetLink::class)();
+            app(ValetSecure::class)();
+            app(OpenInEditor::class)();
+            app(OpenInBrowser::class)();
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
             exit;

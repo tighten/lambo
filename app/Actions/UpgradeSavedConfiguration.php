@@ -67,14 +67,16 @@ class UpgradeSavedConfiguration
     public function __invoke()
     {
         if (! $this->shouldUpgrade()) {
-            return;
+            return false;
         }
 
         $savedConfiguration = File::get($this->configFilePath);
-        File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->format('Ymdhis'));
+        File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->toDateTimeLocalString());
         File::put($this->configFilePath, $this->upgrade($savedConfiguration, $this->removedConfigurationKeys, $this->newConfiguration));
         File::delete($this->lastVersionUpdateFilePath);
         File::put($this->lastVersionUpdateFilePath, $this->configurationVersion);
+
+        return true;
     }
 
     private function shouldUpgrade()
