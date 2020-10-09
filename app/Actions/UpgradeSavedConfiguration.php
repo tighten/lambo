@@ -22,31 +22,31 @@ class UpgradeSavedConfiguration
             'commented' => false,
             'default' => 'false',
             'description' => [
-                '# Run the standard Laravel database migrations.',
-                '# options:',
-                '#   true, 1, "yes" or "on"',
-                '#   false (default), 0, "no" or "off"',
+                'Run the standard Laravel database migrations.',
+                'options:',
+                '  true, 1, "yes" or "on"',
+                '  false (default), 0, "no" or "off"',
             ]
         ],
         'DB_HOST' => [
             'commented' => false,
             'default' => '127.0.0.1',
             'description' => [
-                '# The database host.',
+                'The database host.',
             ]
         ],
         'DB_PORT' => [
             'commented' => true,
             'default' => '',
             'description' => [
-                '# The database port.',
+                'The database port.',
             ]
         ],
         'DB_NAME' => [
             'commented' => true,
             'default' => '',
             'description' => [
-                '# The database name.',
+                'The database name.',
             ]
         ],
     ];
