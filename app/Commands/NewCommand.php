@@ -85,8 +85,9 @@ class NewCommand extends LamboCommand
             app('console-writer')->note('Your Lambo configuration (~/.lambo/config) has been updated.');
             app('console-writer')->note('Please review the changes then run lambo again.');
             if ($this->confirm(sprintf("Review the changes now in %s?", config('lambo.store.editor')))) {
-                return app(SavedConfig::class)->createOrEditConfigFile("config");
+                app(SavedConfig::class)->createOrEditConfigFile("config");
             }
+            return;
         }
 
         app('console-writer')->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
