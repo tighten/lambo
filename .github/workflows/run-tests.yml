@@ -2,7 +2,7 @@ name: Run Tests
 
 on:
   push:
-    branches: [ krc/add-github-actions ]
+    branches: [ main ]
   pull_request:
 
 jobs:
