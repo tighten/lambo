@@ -1,5 +1,7 @@
 ![Lambo logo](https://raw.githubusercontent.com/tighten/lambo/main/lambo-banner.png)
 
+[![Run tests](https://github.com/tighten/takeout/workflows/Run%20tests/badge.svg?branch=main)](https://github.com/tighten/lambo/actions?query=workflow%3A%22Run+Tests%22)
+
 Super-powered `laravel new` for Laravel and Valet.
 
 <strong>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
