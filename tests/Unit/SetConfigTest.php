@@ -7,6 +7,7 @@ use App\Configuration\CommandLineConfiguration;
 use App\Configuration\SavedConfiguration;
 use App\Configuration\SetConfig;
 use App\Configuration\ShellConfiguration;
+use App\ConsoleWriter;
 use App\LamboException;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\LamboTestEnvironment;
@@ -14,7 +15,6 @@ use Tests\TestCase;
 
 class SetConfigTest extends TestCase
 {
-
     use LamboTestEnvironment;
 
     /** @test */
@@ -37,7 +37,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['tld' => null]);
 
         $this->assertEquals('mytld', config('lambo.store.tld'));
@@ -70,7 +71,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['tld' => null]);
 
         $this->assertEquals('mytld', config('lambo.store.tld'));
@@ -98,7 +100,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['tld' => null]);
     }
 
@@ -119,7 +122,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            app(ConsoleWriter::class)
         ))([
             'testKey' => 'default',
         ]);
@@ -144,7 +148,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            app(ConsoleWriter::class)
         ))([
             'testKey' => 'default',
         ]);
@@ -169,7 +174,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            app(ConsoleWriter::class)
         ))([
             'testKey' => 'default',
         ]);
@@ -194,7 +200,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            app(ConsoleWriter::class)
         ))([
             'testKey' => 'default',
         ]);
@@ -215,7 +222,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['root_path' => getcwd()]);
 
         $this->assertEquals('/home/user/path/from/command/line', config('lambo.store.root_path'));
@@ -228,7 +236,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $this->mock(CommandLineConfiguration::class),
             $savedConfiguration,
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['root_path' => getcwd()]);
 
         $this->assertEquals('/home/user/path/from/saved/configuration', config('lambo.store.root_path'));
@@ -247,7 +256,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))([
             'root_path' => getcwd(),
             'project_name' => null,
@@ -268,7 +278,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))([
             'command' => NewCommand::class,
             'tld' => null,
@@ -286,7 +297,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))([
             'command' => NewCommand::class,
             'tld' => null,
@@ -309,7 +321,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))(['project_name' => null]);
 
         $this->assertEquals('foo', config('lambo.store.project_name'));
@@ -328,7 +341,8 @@ class SetConfigTest extends TestCase
         (new SetConfig(
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
-            $this->mock(ShellConfiguration::class)
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class)
         ))([
             'command' => NewCommand::class,
             'root_path' => getcwd(),
@@ -348,7 +362,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->create_database = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -359,7 +373,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->create_database = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -370,7 +384,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->create_database = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -390,7 +404,7 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -405,7 +419,7 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = true;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -420,7 +434,7 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -435,7 +449,7 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = true;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -450,7 +464,7 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -469,7 +483,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->valet_link = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -480,7 +494,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -491,7 +505,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -508,7 +522,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->valet_secure = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => true,
             'valet_secure' => false,
@@ -519,7 +533,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'valet_secure' => true,
@@ -530,7 +544,7 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class)))([
+        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
             'tld' => null,
             'full' => false,
             'valet_secure' => false,

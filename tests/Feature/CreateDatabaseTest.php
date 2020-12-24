@@ -13,14 +13,24 @@ class CreateDatabaseTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $this->database = $this->mock(Database::class);
     }
 
     /** @test */
     function it_creates_a_mysql_database()
     {
-        $this->database->shouldReceive('url')
-            ->with('mysql://user:password@example.test:3306')
+        $fakeStore = [
+            'create_database' => true,
+            'database_host' => 'example.test',
+            'database_port' => 3306,
+            'database_username' => 'user',
+            'database_password' => 'password',
+            'database_name' => 'foo',
+        ];
+
+        $this->database->shouldReceive('fillFromLamboStore')
+            ->with($fakeStore)
             ->once()
             ->andReturnSelf();
 
@@ -30,13 +40,7 @@ class CreateDatabaseTest extends TestCase
             ->andReturnTrue()
             ->ordered();
 
-        config(['lambo.store.create_database' => true]);
-
-        config(['lambo.store.database_host' => 'example.test']);
-        config(['lambo.store.database_port' => 3306]);
-        config(['lambo.store.database_username' => 'user']);
-        config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'foo']);
+        config(['lambo.store' => $fakeStore]);
 
         app(CreateDatabase::class)();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 use App\Tools\Database;
 use PDOException;
@@ -10,15 +11,15 @@ class CreateDatabase
 {
     use AbortsCommands;
 
-    protected $finder;
     protected $shell;
+    protected $database;
     protected $consoleWriter;
-    protected $databaseUtil;
 
-    public function __construct(Shell $shell, Database $database)
+    public function __construct(Shell $shell, Database $database, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
-        $this->databaseUtil = $database;
+        $this->database = $database;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
@@ -27,28 +28,34 @@ class CreateDatabase
             return;
         }
 
-        app('console-writer')->logStep('Creating database');
+        $this->consoleWriter->logStep('Creating database');
 
-        $host = config('lambo.store.database_host');
-        $user = config('lambo.store.database_username');
-        $password = config('lambo.store.database_password');
-        $port = config('lambo.store.database_port');
-        $schema = config('lambo.store.database_name');
+        $db_name = config('lambo.store.database_name');
 
         try {
-            $databaseCreated = $this->databaseUtil
-                ->url("mysql://{$user}:{$password}@{$host}:{$port}")
-                ->create($schema);
+            $databaseCreated = $this->database
+                ->fillFromLamboStore(config('lambo.store'))
+                ->create($db_name);
 
             if (! $databaseCreated) {
-                return app('console-writer')->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
+                return $this->consoleWriter->warn($this->failureToCreateError($db_name));
             }
         } catch (PDOException $e) {
-            app('console-writer')->warn("Failed to create database '{$schema}' using credentials <fg=yellow>mysql://{$user}:****@{$host}:{$port}</>");
-            app('console-writer')->warn($e->getMessage());
-            return app('console-writer')->warn('You will need to create the database manually.');
+            $this->consoleWriter->warn($e->getMessage());
+            return $this->consoleWriter->warn($this->failureToCreateError($db_name));
         }
 
-        return app('console-writer')->success("Created a new database '{$schema}'");
+        return $this->consoleWriter->success("Created a new database '{$db_name}'");
+    }
+
+    protected function failureToCreateError(string $db_name): string
+    {
+        return sprintf(
+            "Failed to create database '%s' using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to create the database mnually.",
+            $db_name,
+            config('lambo.store.database_username'),
+            config('lambo.store.database_host'),
+            config('lambo.store.database_port')
+        );
     }
 }

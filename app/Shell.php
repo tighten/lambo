@@ -9,13 +9,15 @@ class Shell
 {
     protected $rootPath;
     protected $projectPath;
+    protected $consoleWriter;
 
     private $useTTY = false;
 
-    public function __construct(Repository $config)
+    public function __construct(Repository $config, ConsoleWriter $consoleWriter)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function execInRoot($command)
@@ -40,7 +42,7 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
 
-        app('console-writer')->exec($command);
+        $this->consoleWriter->exec($command);
 
         $process->run(function ($type, $buffer) {
             if (empty(trim($buffer)) || $buffer === PHP_EOL) {
@@ -48,7 +50,7 @@ class Shell
             }
 
             foreach (explode(PHP_EOL, trim($buffer)) as $line) {
-                app('console-writer')->consoleOutput($line, $type);
+                $this->consoleWriter->consoleOutput($line, $type);
             }
         });
 

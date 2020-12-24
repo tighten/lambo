@@ -10,20 +10,34 @@ class Database
     private $username;
     private $password;
 
-    public function url(string $url)
+    public function fill(string $type, string $host, $port, string $username, $password): self
     {
-        $url = parse_url($url);
-        $databaseType = $url['scheme'];
-        $host = $url['host'];
-        $port = $url['port'];
-        $this->username = $url['user'];
-        $this->password = $url['pass'];
+        $this->dsn = "{$type}:host={$host};port={$port}";
+        $this->username = $username;
+        $this->password = $password;
 
-        $this->dsn = "{$databaseType}:host={$host};port={$port}";
         return $this;
     }
 
-    public function exists(string $databaseName = null)
+    public function fillFromUrl(string $url): self
+    {
+        $url = parse_url($url);
+
+        return $this->fill($url['scheme'], $url['host'], $url['port'], $url['user'], $url['pass']);
+    }
+
+    public function fillFromLamboStore(array $store): self
+    {
+        return $this->fill(
+            $type = 'mysql',
+            $host = $store['database_host'],
+            $port = $store['database_port'],
+            $username = $store['database_username'],
+            $password = $store['database_password']
+        );
+    }
+
+    public function ensureExists(string $databaseName = null)
     {
         $dsn = is_null($databaseName)
             ? $this->dsn

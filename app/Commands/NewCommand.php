@@ -26,6 +26,7 @@ use App\Configuration\LamboConfiguration;
 use App\Configuration\SavedConfiguration;
 use App\Configuration\SetConfig;
 use App\Configuration\ShellConfiguration;
+use App\ConsoleWriter;
 use App\LamboException;
 use App\Options;
 
@@ -35,6 +36,7 @@ class NewCommand extends LamboCommand
 
     protected $signature;
     protected $description = 'Creates a fresh Laravel application';
+    protected $consoleWriter;
 
     public function __construct()
     {
@@ -78,19 +80,20 @@ class NewCommand extends LamboCommand
             exit;
         }
 
+        $this->setConsoleWriter();
         $this->setConfig();
 
         if (app(UpgradeSavedConfiguration::class)()) {
-            app('console-writer')->newLine();
-            app('console-writer')->note('Your Lambo configuration (~/.lambo/config) has been updated.');
-            app('console-writer')->note('Please review the changes then run lambo again.');
+            $this->consoleWriter->newLine();
+            $this->consoleWriter->note('Your Lambo configuration (~/.lambo/config) has been updated.');
+            $this->consoleWriter->note('Please review the changes then run lambo again.');
             if ($this->confirm(sprintf("Review the changes now in %s?", config('lambo.store.editor')))) {
                 app(SavedConfig::class)->createOrEditConfigFile("config");
             }
             return;
         }
 
-        app('console-writer')->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
+        $this->consoleWriter->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
             app(ValidateConfiguration::class)();
@@ -109,16 +112,21 @@ class NewCommand extends LamboCommand
             app(OpenInEditor::class)();
             app(OpenInBrowser::class)();
         } catch (LamboException $e) {
-            app('console-writer')->exception($e->getMessage());
+            $this->consoleWriter->exception($e->getMessage());
             exit;
         }
 
-        app('console-writer')->newLine();
-        app('console-writer')->text([
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text([
             '<fg=green>Done, happy coding!</>',
             'Lambo is brought to you by the lovely folks at <fg=blue;href=https://tighten.co/>Tighten</>.',
         ]);
-        app('console-writer')->newLine();
+        $this->consoleWriter->newLine();
+    }
+
+    protected function setConsoleWriter()
+    {
+        $this->consoleWriter = app(ConsoleWriter::class);
     }
 
     private function setConfig(): void
@@ -199,7 +207,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::TLD => null,
         ]);
 
-        if (app('console-writer')->isDebug()) {
+        if ($this->consoleWriter->isDebug()) {
             $this->debugReport();
         }
     }

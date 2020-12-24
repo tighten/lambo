@@ -11,8 +11,8 @@ trait Debug
     protected function arrayToTable(array $data, array $filter = null, string $keyPrefix = '', array $headers = null): void
     {
         if (count($data) === 0) {
-            app('console-writer')->text(sprintf('No saved configuration found at "%s".', config('home_dir') . '/.lambo/config'));
-            app('console-writer')->newLine();
+            $this->consoleWriter->text(sprintf('No saved configuration found at "%s".', config('home_dir') . '/.lambo/config'));
+            $this->consoleWriter->newLine();
 
             return;
         }
@@ -39,18 +39,18 @@ trait Debug
                 return [$keyPrefix . $key, $value, $type];
             })->values()->toArray();
 
-        app('console-writer')->table($headers ? $headers : ['key', 'value', 'type'], $rows);
+        $this->consoleWriter->table($headers ? $headers : ['key', 'value', 'type'], $rows);
     }
 
     protected function debugReport(): void
     {
-        app('console-writer')->panel('Debug', 'Start', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
 
-        app('console-writer')->sectionTitle('Computed configuration');
-        app('console-writer')->text([
+        $this->consoleWriter->sectionTitle('Computed configuration');
+        $this->consoleWriter->text([
             'The following is the configuration lambo has computed by merging:',
         ]);
-        app('console-writer')->listing([
+        $this->consoleWriter->listing([
             'command line parameters',
             'saved configuration',
             'shell environment variables.',
@@ -58,12 +58,12 @@ trait Debug
 
         $this->configToTable();
 
-        app('console-writer')->sectionTitle('Pre-flight Configuration');
+        $this->consoleWriter->sectionTitle('Pre-flight Configuration');
 
-        app('console-writer')->text('Command line arguments:');
+        $this->consoleWriter->text('Command line arguments:');
         $this->arrayToTable($this->arguments());
 
-        app('console-writer')->text('Command line options:');
+        $this->consoleWriter->text('Command line options:');
         $this->arrayToTable(
             $this->options(),
             [
@@ -90,7 +90,7 @@ trait Debug
             ], '--'
         );
 
-        app('console-writer')->text('Saved configuration:');
+        $this->consoleWriter->text('Saved configuration:');
 
         $savedConfig = [];
         if (File::isFile(config('home_dir') . '/.lambo/config')) {
@@ -119,7 +119,7 @@ trait Debug
             ]
         );
 
-        app('console-writer')->text('Shell environment variables:');
+        $this->consoleWriter->text('Shell environment variables:');
         $this->arrayToTable(
             $_SERVER,
             [
@@ -128,7 +128,7 @@ trait Debug
             '$'
         );
 
-        app('console-writer')->panel('Debug', 'End', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 
     protected function configToTable(): void

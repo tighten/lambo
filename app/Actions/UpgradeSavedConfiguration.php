@@ -131,8 +131,8 @@ class UpgradeSavedConfiguration
         }
 
         return implode(PHP_EOL, [
-            '# Lambo has commented out the following configuration items as they are no',
-            '# longer used, you may safely remove them:',
+            '# Lambo has commented out the following configuration items; they are no',
+            '# longer used, and you may safely remove them:',
             collect($this->commented)->reduce(function ($carry, $item) {
                 return "$carry#   {$item}\n";
             }, '')
@@ -158,6 +158,6 @@ class UpgradeSavedConfiguration
             );
 
             return "{$carry}{$description}{$configurationItem}";
-        }, "# Lambo has introduced new configuration options. They have been added here\n# with sensible defaults, however, you should review them.\n#\n");
+        }, "# Lambo has introduced new configuration options. They have been added here\n# with sensible defaults; however, you should review them.\n#\n");
     }
 }

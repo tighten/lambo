@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Shell;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -13,9 +14,10 @@ class ConfigureFrontendFramework
     protected $shell;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
@@ -26,7 +28,7 @@ class ConfigureFrontendFramework
             return;
         }
 
-        app('console-writer')->logStep("Installing {$configuredFrontend} UI scaffolding");
+        $this->consoleWriter->logStep("Installing {$configuredFrontend} UI scaffolding");
 
         $this->ensureJetstreamInstalled();
 
@@ -44,7 +46,7 @@ class ConfigureFrontendFramework
             app(CompileAssets::class)();
         }
 
-        app('console-writer')->success("{$configuredFrontend} UI scaffolding installed.");
+        $this->consoleWriter->success("{$configuredFrontend} UI scaffolding installed.");
     }
 
     public function ensureJetstreamInstalled()
@@ -54,12 +56,12 @@ class ConfigureFrontendFramework
             return;
         }
 
-        app('console-writer')->note('Installing required composer package laravel/jetstream.');
+        $this->consoleWriter->note('Installing required composer package laravel/jetstream.');
 
         $process = $this->shell->execInProject('composer require laravel/jetstream' . (config('lambo.store.with_output') ? '' : ' --quiet'));
 
         $this->abortIf(! $process->isSuccessful(), "Installation of laravel/jetstream did not complete successfully.", $process);
 
-        app('console-writer')->success('laravel/jetstream installed.');
+        $this->consoleWriter->success('laravel/jetstream installed.');
     }
 }

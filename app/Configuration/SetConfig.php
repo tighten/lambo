@@ -3,6 +3,7 @@
 namespace App\Configuration;
 
 use App\Commands\NewCommand;
+use App\ConsoleWriter;
 use App\LamboException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -13,6 +14,7 @@ class SetConfig
     private $commandLineConfiguration;
     private $savedConfiguration;
     private $shellConfiguration;
+    protected $consoleWriter;
 
     protected $fullFlags = [
         LamboConfiguration::CREATE_DATABASE,
@@ -21,11 +23,12 @@ class SetConfig
         LamboConfiguration::VALET_SECURE,
     ];
 
-    public function __construct(CommandLineConfiguration $commandLineConfiguration, SavedConfiguration $savedConfiguration, ShellConfiguration $shellConfiguration)
+    public function __construct(CommandLineConfiguration $commandLineConfiguration, SavedConfiguration $savedConfiguration, ShellConfiguration $shellConfiguration, ConsoleWriter $consoleWriter)
     {
         $this->commandLineConfiguration = $commandLineConfiguration;
         $this->savedConfiguration = $savedConfiguration;
         $this->shellConfiguration = $shellConfiguration;
+        $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke($defaultConfiguration)
@@ -113,12 +116,13 @@ class SetConfig
         if ($this->commandLineConfiguration->inertia || $this->commandLineConfiguration->livewire) {
             return true;
         }
+
         return $this->get($key, $default);
     }
 
     private function getWithOutput(string $key, $default): bool
     {
-        if(app('console-writer')->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL) {
+        if ($this->consoleWriter->getVerbosity() > SymfonyStyle::VERBOSITY_NORMAL) {
             return true;
         }
 

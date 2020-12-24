@@ -16,13 +16,15 @@ abstract class TestCase extends BaseTestCase
     function setUp(): void
     {
         parent::setUp();
+
         $this->mockConsoleWriter();
+
         $this->shell = $this->mock(Shell::class);
     }
 
     protected function mockConsoleWriter(): void
     {
-        $this->swap('console-writer', $this->mock(ConsoleWriter::class, function ($consoleWriter) {
+        $consoleWriter = $this->mock(ConsoleWriter::class, function ($consoleWriter) {
             $consoleWriter->shouldReceive('logstep');
             $consoleWriter->shouldReceive('success');
             $consoleWriter->shouldReceive('note');
@@ -30,7 +32,10 @@ abstract class TestCase extends BaseTestCase
             $consoleWriter->shouldReceive('warn');
             $consoleWriter->shouldReceive('fail');
             $consoleWriter->shouldReceive('newLine');
-        }));
+        });
+
+        $this->swap('console-writer', $consoleWriter);
+        $this->swap(ConsoleWriter::class, $consoleWriter);
     }
 
     protected function todo(array $lines)

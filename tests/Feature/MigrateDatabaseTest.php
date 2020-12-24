@@ -21,19 +21,23 @@ class MigrateDatabaseTest extends TestCase
     /** @test */
     function it_migrates_the_database()
     {
-        config(['lambo.store.migrate_database' => true]);
-        config(['lambo.store.database_host' => 'example.test']);
-        config(['lambo.store.database_port' => 3306]);
-        config(['lambo.store.database_username' => 'user']);
-        config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'foo']);
+        $fakeStore = [
+            'migrate_database' => true,
+            'database_host' => 'example.test',
+            'database_port' => 3306,
+            'database_username' => 'user',
+            'database_password' => 'password',
+            'database_name' => 'foo',
+        ];
 
-        $this->database->shouldReceive('url')
-            ->with('mysql://user:password@example.test:3306')
+        config(['lambo.store' => $fakeStore]);
+
+        $this->database->shouldReceive('fillFromLamboStore')
+            ->with($fakeStore)
             ->once()
             ->andReturnSelf();
 
-        $this->database->shouldReceive('exists')
+        $this->database->shouldReceive('ensureExists')
             ->once()
             ->andReturnTrue();
 
@@ -48,19 +52,23 @@ class MigrateDatabaseTest extends TestCase
     /** @test */
     function failed_migrations_do_not_halt_execution()
     {
-        config(['lambo.store.migrate_database' => true]);
-        config(['lambo.store.database_host' => 'example.test']);
-        config(['lambo.store.database_port' => 3306]);
-        config(['lambo.store.database_username' => 'user']);
-        config(['lambo.store.database_password' => 'password']);
-        config(['lambo.store.database_name' => 'foo']);
+        $fakeStore = [
+            'migrate_database' => true,
+            'database_host' => 'example.test',
+            'database_port' => 3306,
+            'database_username' => 'user',
+            'database_password' => 'password',
+            'database_name' => 'foo',
+        ];
 
-        $this->database->shouldReceive('url')
-            ->with('mysql://user:password@example.test:3306')
+        config(['lambo.store' => $fakeStore]);
+
+        $this->database->shouldReceive('fillFromLamboStore')
+            ->with($fakeStore)
             ->once()
             ->andReturnSelf();
 
-        $this->database->shouldReceive('exists')
+        $this->database->shouldReceive('ensureExists')
             ->once()
             ->andReturnTrue();
 
@@ -92,8 +100,8 @@ class MigrateDatabaseTest extends TestCase
 
         app(MigrateDatabase::class)();
 
-        $databaseSpy->shouldNotHaveReceived('url');
-        $databaseSpy->shouldNotHaveReceived('exists');
+        $databaseSpy->shouldNotHaveReceived('fillFromLamboStore');
+        $databaseSpy->shouldNotHaveReceived('ensureExists');
         $shellSpy->shouldNotHaveReceived('execInProject');
     }
 }

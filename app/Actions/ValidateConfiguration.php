@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Commands\Debug;
+use App\ConsoleWriter;
 
 class ValidateConfiguration
 {
@@ -10,16 +11,21 @@ class ValidateConfiguration
 
     protected $consoleWriter;
 
+    public function __construct(ConsoleWriter $consoleWriter)
+    {
+        $this->consoleWriter = $consoleWriter;
+    }
+
     public function __invoke()
     {
-        app('console-writer')->logStep('Validating configuration');
+        $this->consoleWriter->logStep('Validating configuration');
 
         config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
         $this->checkTeamsConfiguration();
 
-        app('console-writer')->success('Configuration is valid.');
+        $this->consoleWriter->success('Configuration is valid.');
 
-        if (app('console-writer')->isDebug()) {
+        if ($this->consoleWriter->isDebug()) {
             $this->debugReport();
         }
     }
@@ -42,7 +48,7 @@ class ValidateConfiguration
 
     private function chooseBetweenFrontends()
     {
-        app('console-writer')->warn('inertia and livewire cannot be used together. ');
+        $this->consoleWriter->warn('inertia and livewire cannot be used together. ');
 
         $options = [
             'use inertia' => 'inertia',
@@ -51,7 +57,7 @@ class ValidateConfiguration
         ];
         $choice = app('console')->choice('What would you like to do?', array_keys($options), 2);
 
-        app('console-writer')->ok($choice);
+        $this->consoleWriter->ok($choice);
 
         return $options[$choice];
     }
@@ -59,20 +65,20 @@ class ValidateConfiguration
     private function checkTeamsConfiguration()
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
-            app('console-writer')->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
+            $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
     }
 
     protected function debugReport(): void
     {
-        app('console-writer')->panel('Debug', 'Start', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
 
-        app('console-writer')->text([
+        $this->consoleWriter->text([
             'Configuration may have changed after validation',
             'Configuration is now as follows:',
         ]);
         $this->configToTable();
 
-        app('console-writer')->panel('Debug', 'End', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 }
