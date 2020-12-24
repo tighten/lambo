@@ -7,6 +7,7 @@ class FakeProcess
     public $isSuccessful;
     public $failedCommand;
     private $output;
+    private $errorOutput;
 
     public function __construct(bool $isSuccessful, string $failedCommand = '')
     {
@@ -43,5 +44,15 @@ class FakeProcess
     public function getOutput()
     {
         return $this->output;
+    }
+
+    public function getErrorOutput()
+    {
+        return $this->errorOutput;
+    }
+
+    public function getExitCode()
+    {
+        return $this->isSuccessful ? 0 : 1;
     }
 }

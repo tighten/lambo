@@ -2,10 +2,13 @@
 
 namespace App\Actions;
 
+use App\Commands\Debug;
 use App\ConsoleWriter;
 
 class ValidateConfiguration
 {
+    use Debug;
+
     protected $consoleWriter;
 
     public function __construct(ConsoleWriter $consoleWriter)
@@ -18,52 +21,64 @@ class ValidateConfiguration
         $this->consoleWriter->logStep('Validating configuration');
 
         config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
-
         $this->checkTeamsConfiguration();
 
-        $this->consoleWriter->verbose()->success('Configuration is valid.');
+        $this->consoleWriter->success('Configuration is valid.');
+
+        if ($this->consoleWriter->isDebug()) {
+            $this->debugReport();
+        }
     }
 
-    protected function getFrontendConfiguration(): string
+    private function getFrontendConfiguration(): string
     {
-        if ($configuration = $this->validateFrontendConfiguration()) {
-            return $configuration;
+        $inertia = config('lambo.store.inertia');
+        $livewire = config('lambo.store.livewire');
+
+        if ($inertia && $livewire) {
+            return $this->chooseBetweenFrontends();
         }
 
+        if (! $inertia && ! $livewire) {
+            return 'none';
+        }
+
+        return $inertia ? 'inertia' : 'livewire';
+    }
+
+    private function chooseBetweenFrontends()
+    {
         $this->consoleWriter->warn('inertia and livewire cannot be used together. ');
+
         $options = [
             'use inertia' => 'inertia',
             'use livewire' => 'livewire',
             "continue without frontend scaffolding" => 'none',
         ];
-
         $choice = app('console')->choice('What would you like to do?', array_keys($options), 2);
 
-        $this->consoleWriter->verbose()->ok($choice);
+        $this->consoleWriter->ok($choice);
 
         return $options[$choice];
     }
 
-    protected function validateFrontendConfiguration()
-    {
-        $inertia = config('lambo.store.inertia');
-        $livewire = config('lambo.store.livewire');
-
-        if ($inertia xor $livewire) {
-            return $inertia ? 'inertia' : 'livewire';
-        }
-
-        if (! ($inertia && $livewire)) {
-            return 'none';
-        }
-
-        return false;
-    }
-
-    protected function checkTeamsConfiguration()
+    private function checkTeamsConfiguration()
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
-            $this->consoleWriter->verbose()->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
+            $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
+    }
+
+    protected function debugReport(): void
+    {
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
+
+        $this->consoleWriter->text([
+            'Configuration may have changed after validation',
+            'Configuration is now as follows:',
+        ]);
+        $this->configToTable();
+
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 }

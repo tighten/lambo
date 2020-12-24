@@ -4,17 +4,11 @@ namespace Tests\Feature;
 
 use App\Actions\ValetLink;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class ValetLinkTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        }
-
     /** @test */
     function it_runs_valet_link()
     {

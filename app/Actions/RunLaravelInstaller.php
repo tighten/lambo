@@ -10,7 +10,7 @@ class RunLaravelInstaller
     use AbortsCommands;
 
     protected $shell;
-    private $consoleWriter;
+    protected $consoleWriter;
 
     public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
@@ -23,19 +23,16 @@ class RunLaravelInstaller
         $this->consoleWriter->logStep("Running the Laravel installer");
 
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
-
         $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
 
-        $this->consoleWriter->verbose()->success($this->getFeedback());
+        $this->consoleWriter->success($this->getFeedback());
     }
 
     public function extraOptions()
     {
         return sprintf('%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
-            ''
-            /* @todo: while laravel installer is busted we must not use --quiet
-            config('lambo.store.with_output') ? '' : ' --quiet' */
+            config('lambo.store.with_output') ? '' : ' --quiet'
         );
     }
 

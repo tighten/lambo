@@ -4,17 +4,11 @@ namespace Tests\Feature;
 
 use App\Actions\InitializeGitRepo;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class InitializeGitRepoTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        }
-
     /** @test */
     function it_initialises_the_projects_git_repository()
     {

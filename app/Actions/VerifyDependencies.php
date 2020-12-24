@@ -10,7 +10,7 @@ class VerifyDependencies
     use AbortsCommands;
 
     protected $finder;
-    private $consoleWriter;
+    protected $consoleWriter;
 
     private $dependencies = [
         [
@@ -30,7 +30,7 @@ class VerifyDependencies
         ],
     ];
 
-    public function __construct(ConsoleWriter $consoleWriter, ExecutableFinder $finder)
+    public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
     {
         $this->finder = $finder;
         $this->consoleWriter = $consoleWriter;
@@ -44,10 +44,10 @@ class VerifyDependencies
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
                 list($command, $label, $instructionsUrl) = array_values($dependency);
                 if (($installedDependency = $this->finder->find($command)) === null) {
-                    $this->consoleWriter->fail("{$command} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                    $this->consoleWriter->warn("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
                     return true;
                 }
-                $this->consoleWriter->verbose()->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                $this->consoleWriter->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
                 return $carry ?? false;
             }),
             'Please install missing dependencies and try again.');

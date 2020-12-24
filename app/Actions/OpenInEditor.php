@@ -26,10 +26,9 @@ class OpenInEditor
 
         $this->consoleWriter->logStep('Opening In Editor');
 
-        $process = $this->shell->execInProject(sprintf("%s .", config('lambo.store.editor')));
-
+        $process = $this->shell->withTTY()->execInProject(sprintf("%s .", config('lambo.store.editor')));
         $this->abortIf(! $process->isSuccessful(), sprintf("Failed to open editor %s", config('lambo.store.editor')), $process);
 
-        $this->consoleWriter->verbose()->success('Opening your project in ' . config('lambo.store.editor'));
+        $this->consoleWriter->success('Opening your project in ' . config('lambo.store.editor'));
     }
 }

@@ -22,15 +22,15 @@ class RunAfterScript
     public function __invoke()
     {
         $afterScriptPath = config('home_dir') . '/.lambo/after';
-
-        if (File::isFile($afterScriptPath)) {
-            $this->consoleWriter->logStep('Running after script');
-
-            $process = $this->shell->execInProject("sh " . $afterScriptPath);
-
-            $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
-
-            $this->consoleWriter->verbose()->success('After script has completed.');
+        if (! File::isFile($afterScriptPath)) {
+            return;
         }
+
+        $this->consoleWriter->logStep('Running after script');
+
+        $process = $this->shell->execInProject("sh " . $afterScriptPath);
+        $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
+
+        $this->consoleWriter->success('After script has completed.');
     }
 }

@@ -26,7 +26,7 @@ class GenerateAppKey
 
         $this->abortIf(! $process->isSuccessful(), 'Failed to generated APP_KEY successfully', $process);
 
-        $this->consoleWriter->verbose()->success('APP_KEY has been set.');
+        $this->consoleWriter->success('APP_KEY has been set.');
     }
 
     private function withQuiet()

@@ -22,18 +22,16 @@ class CompileAssets
 
     public function __invoke()
     {
-        $this->silentDevScript->add();
-
         $this->consoleWriter->logStep('Compiling project assets');
 
+        $this->silentDevScript->add();
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
-
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
-
         $this->silentDevScript->remove();
 
-        $this->consoleWriter->verbose()->success('Project assets compiled successfully.');
+        $this->consoleWriter->success('Project assets compiled successfully.');
     }
+
     public function extraOptions()
     {
         return config('lambo.store.with_output') ? '' : ' --silent';

@@ -1,0 +1,4 @@
+CODEEDITOR=vim
+QUIET=true
+AUTH=false
+NODE=

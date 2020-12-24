@@ -23,11 +23,10 @@ class InstallNpmDependencies
         $this->consoleWriter->logStep('Installing node dependencies');
 
         $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
-
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
         $this->consoleWriter->newLine();
-        $this->consoleWriter->verbose()->success('Npm dependencies installed.');
+        $this->consoleWriter->success('Npm dependencies installed.');
     }
 
     public function withQuiet()

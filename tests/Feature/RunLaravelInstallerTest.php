@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\RunLaravelInstaller;
-use App\ConsoleWriter;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -15,27 +13,21 @@ class RunLaravelInstallerTest extends TestCase
     function it_runs_the_laravel_installer()
     {
         collect([
-            /*[
-                @todo: disabled while there is a bug in the Laravel installer
-                    that causes installation to fail with --quiet
-
+            [
                 'command' => 'laravel new my-project --quiet',
                 'lambo.store.dev' => false,
                 'lambo.store.with_output' => false,
-            ],*/
+            ],
             [
                 'command' => 'laravel new my-project',
                 'lambo.store.dev' => false,
                 'lambo.store.with_output' => true,
             ],
-            /*[
-                @todo: disabled while there is a bug in the Laravel installer
-                    that causes installation to fail with --quiet
-
+            [
                 'command' => 'laravel new my-project --dev --quiet',
                 'lambo.store.dev' => true,
                 'lambo.store.with_output' => false,
-            ],*/
+            ],
             [
                 'command' => 'laravel new my-project --dev',
                 'lambo.store.dev' => true,

@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\VerifyPathAvailable;
-use App\ConsoleWriter;
 use App\LamboException;
 use Exception;
 use Illuminate\Support\Facades\File;

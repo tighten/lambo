@@ -27,9 +27,8 @@ class ValetLink
         $this->consoleWriter->logStep('Running valet link');
 
         $process = $this->shell->execInProject('valet link');
-
         $this->abortIf(! $process->isSuccessful(), 'valet link did not complete successfully', $process);
 
-        $this->consoleWriter->verbose()->success('valet link successful');
+        $this->consoleWriter->success('valet link successful');
     }
 }

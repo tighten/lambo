@@ -46,7 +46,7 @@ trait Debug
     {
         $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
 
-        $this->consoleWriter->section('Computed configuration');
+        $this->consoleWriter->sectionTitle('Computed configuration');
         $this->consoleWriter->text([
             'The following is the configuration lambo has computed by merging:',
         ]);
@@ -56,10 +56,9 @@ trait Debug
             'shell environment variables.',
         ]);
 
-        $config = Arr::prepend(config('lambo.store'), config('home_dir'), 'home_dir');
-        $this->arrayToTable($config, null, 'lambo.store.', ['Configuration key', 'Value', 'Type']);
+        $this->configToTable();
 
-        $this->consoleWriter->section('Pre-flight Configuration');
+        $this->consoleWriter->sectionTitle('Pre-flight Configuration');
 
         $this->consoleWriter->text('Command line arguments:');
         $this->arrayToTable($this->arguments());
@@ -130,5 +129,11 @@ trait Debug
         );
 
         $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
+    }
+
+    protected function configToTable(): void
+    {
+        $config = Arr::prepend(config('lambo.store'), config('home_dir'), 'home_dir');
+        $this->arrayToTable($config, null, 'lambo.store.', ['Configuration key', 'Value', 'Type']);
     }
 }

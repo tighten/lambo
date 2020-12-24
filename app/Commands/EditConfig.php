@@ -43,7 +43,7 @@ class EditConfig extends LamboCommand
         ]);
 
         try {
-            $this->make(SavedConfig::class)->createOrEditConfigFile("config");
+            app(SavedConfig::class)->createOrEditConfigFile("config");
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }

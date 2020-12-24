@@ -4,21 +4,21 @@ namespace App\Actions;
 
 use App\ConsoleWriter;
 use App\Shell;
-use Illuminate\Support\Str;
-use Symfony\Component\Process\ExecutableFinder;
+use App\Tools\Database;
+use PDOException;
 
 class CreateDatabase
 {
     use AbortsCommands;
 
-    protected $finder;
     protected $shell;
+    protected $database;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, ExecutableFinder $finder, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell, Database $database, ConsoleWriter $consoleWriter)
     {
-        $this->finder = $finder;
         $this->shell = $shell;
+        $this->database = $database;
         $this->consoleWriter = $consoleWriter;
     }
 
@@ -30,38 +30,32 @@ class CreateDatabase
 
         $this->consoleWriter->logStep('Creating database');
 
-        if (! $this->mysqlExists() || ! $this->mysqlServerRunning()) {
-            $this->consoleWriter->warn('Skipping database creation');
-            $this->consoleWriter->warn("Either MySQL is not installed or it's not running.");
-            return;
+        $db_name = config('lambo.store.database_name');
+
+        try {
+            $databaseCreated = $this->database
+                ->fillFromLamboStore(config('lambo.store'))
+                ->create($db_name);
+
+            if (! $databaseCreated) {
+                return $this->consoleWriter->warn($this->failureToCreateError($db_name));
+            }
+        } catch (PDOException $e) {
+            $this->consoleWriter->warn($e->getMessage());
+            return $this->consoleWriter->warn($this->failureToCreateError($db_name));
         }
 
-        $process = $this->shell->exec($this->command());
-
-        $this->abortIf(! $process->isSuccessful(), "The new database was not created.", $process);
-
-        $this->consoleWriter->verbose()->success('Created a new database ' . config('lambo.store.database_name'));
+        return $this->consoleWriter->success("Created a new database '{$db_name}'");
     }
 
-    protected function mysqlExists()
-    {
-        return ! is_null($this->finder->find('mysql'));
-    }
-
-    private function mysqlServerRunning(): bool
-    {
-        $this->consoleWriter->text('Searching for a running MySQL server');
-        $output = $this->shell->exec('mysql.server status')->getOutput();
-        return Str::of($output)->contains('MySQL running');
-    }
-
-    private function command()
+    protected function failureToCreateError(string $db_name): string
     {
         return sprintf(
-            'mysql --user=%s --password=%s -e "CREATE DATABASE IF NOT EXISTS %s";',
+            "Failed to create database '%s' using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to create the database mnually.",
+            $db_name,
             config('lambo.store.database_username'),
-            config('lambo.store.database_password'),
-            config('lambo.store.database_name')
+            config('lambo.store.database_host'),
+            config('lambo.store.database_port')
         );
     }
 }

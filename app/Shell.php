@@ -9,11 +9,11 @@ class Shell
 {
     protected $rootPath;
     protected $projectPath;
+    protected $consoleWriter;
 
     private $useTTY = false;
-    private $consoleWriter;
 
-    public function __construct(ConsoleWriter $consoleWriter, Repository $config)
+    public function __construct(Repository $config, ConsoleWriter $consoleWriter)
     {
         $this->rootPath = $config->get('lambo.store.root_path');
         $this->projectPath = $config->get('lambo.store.project_path');
@@ -42,10 +42,10 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
 
-        $this->consoleWriter->verbose()->exec($command);
+        $this->consoleWriter->exec($command);
 
         $process->run(function ($type, $buffer) {
-            if (! $this->shouldReportProgress($buffer)) {
+            if (empty(trim($buffer)) || $buffer === PHP_EOL) {
                 return;
             }
 
@@ -62,14 +62,5 @@ class Shell
     {
         $this->useTTY = true;
         return $this;
-    }
-
-    private function shouldReportProgress($buffer): bool
-    {
-        if (empty(trim($buffer)) || $buffer === PHP_EOL) {
-            return false;
-        }
-
-        return $this->consoleWriter->isVerbose() || config('lambo.store.with_output');
     }
 }
