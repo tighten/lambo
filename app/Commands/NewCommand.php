@@ -181,7 +181,8 @@ class NewCommand extends LamboCommand
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            $this->consoleWriter
         ))([
             LamboConfiguration::COMMAND => self::class,
             LamboConfiguration::EDITOR => 'nano',

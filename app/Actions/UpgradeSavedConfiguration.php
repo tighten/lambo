@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 
 class UpgradeSavedConfiguration
 {
+    // IMPORTANT NOTE: Every time we make *any* changes to configuration, we need
+    // to increment this configurationVersion so that users get upgraded config
     private $configurationVersion = 1;
 
     private $removedConfigurationKeys = [
@@ -23,31 +25,31 @@ class UpgradeSavedConfiguration
             'default' => 'false',
             'description' => [
                 'Run the standard Laravel database migrations.',
-                'options:',
+                'Possible values:',
                 '  true, 1, "yes" or "on"',
                 '  false (default), 0, "no" or "off"',
-            ]
+            ],
         ],
         'DB_HOST' => [
-            'commented' => false,
+            'commented' => true,
             'default' => '127.0.0.1',
             'description' => [
-                'The database host.',
+                'The database host. Defaults to 127.0.0.1.',
             ]
         ],
         'DB_PORT' => [
             'commented' => true,
             'default' => '',
             'description' => [
-                'The database port.',
-            ]
+                'The database port. Defaults to 3306.',
+            ],
         ],
         'DB_NAME' => [
             'commented' => true,
             'default' => '',
             'description' => [
-                'The database name.',
-            ]
+                'The database name. Defaults to the project name.',
+            ],
         ],
     ];
 

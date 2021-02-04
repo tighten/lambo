@@ -11,9 +11,11 @@ abstract class LamboCommand extends Command
 {
     public function run(InputInterface $input, OutputInterface $output)
     {
-        app()->singleton('console-writer', function () use ($input, $output) {
-            return  new ConsoleWriter($input, $output);
+        app()->singleton(ConsoleWriter::class, function () use ($input, $output) {
+            return new ConsoleWriter($input, $output);
         });
+
+        app()->alias(ConsoleWriter::class, 'console-writer');
 
         return parent::run($input, $output);
     }

@@ -4,7 +4,7 @@
 
 Super-powered `laravel new` for Laravel and Valet.
 
-<strong>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire: 
+<strong>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire:
 
 There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch and the [v0.5.5](https://github.com/tighten/lambo/releases/tag/v0.5.5) release.</strong>
 
@@ -33,7 +33,7 @@ The below readme is still being cleaned up from references to the current Lambo 
 - You'll want to run `lambo new myApplication` instead of `lambo myApplication`.
 - Lambo now targets Laravel 8+ and [Laravel Jetstream](https://jetstream.laravel.com/1.x/introduction.html) which means the current options, `--vue`, `--bootstrap` and `--react` have been replaced by `--inertia` and `--livewire`. You may add the `--teams` option to enable team support with inertia and livewire.
 - The `--quiet` option has been removed. Lambo now uses quiet/silent mode for git, npm and the laravel installer by default. You may use `--with-output` if terminal output is required.
-  
+
 
 -----
 
@@ -254,3 +254,9 @@ If you're working with us and are assigned to push a release, here's the easiest
     `- Add a superpower (#92)`
 8. Hit `Publish release`
 9. Profit
+
+## Notes for future development
+
+- All new configuration keys must be added to the `$newConfiguration` property in `UpgradeSavedConfiguration`
+- All removed or deprecated configuration keys must be added to the `$removedConfigurationKeys` property in `UpgradeSavedConfiguration`
+- Any time configuration keys are changed, the `$configurationVersion` property in `UpgradeSavedConfiguration` needs to be incremented
