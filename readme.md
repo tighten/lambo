@@ -120,6 +120,10 @@ You also have access to variables from your config file such as `$PROJECTPATH` a
 
 List coming soon. For now, just run `lambo help` and it'll give you the full list.
 
+-----
+
+# For contributors:
+
 ## Process for release
 
 If you're working with us and are assigned to push a release, here's the easiest process:
