@@ -23,27 +23,28 @@ class EditConfig extends LamboCommand
         });
 
         $commandLineConfiguration = new CommandLineConfiguration([
-            'editor' => LamboConfiguration::EDITOR
+            'editor' => LamboConfiguration::EDITOR,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'CODEEDITOR' => LamboConfiguration::EDITOR
+            'CODEEDITOR' => LamboConfiguration::EDITOR,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
-            'EDITOR' => LamboConfiguration::EDITOR
+            'EDITOR' => LamboConfiguration::EDITOR,
         ]);
 
         (new SetConfig(
             $commandLineConfiguration,
             $savedConfiguration,
-            $shellConfiguration
+            $shellConfiguration,
+            app('console-writer')
         ))([
-            LamboConfiguration::EDITOR => 'nano'
+            LamboConfiguration::EDITOR => 'nano',
         ]);
 
         try {
-            app(SavedConfig::class)->createOrEditConfigFile("config");
+            app(SavedConfig::class)->createOrEditConfigFile('config');
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }

@@ -9,7 +9,7 @@ class DisplayHelpScreen
     protected $indent = 30;
 
     protected $commands = [
-        'help-screen' => 'Display this screen',
+        'help' => 'Display this screen',
         'edit-config' => 'Edit config file',
         'edit-after' => 'Edit "after" file',
     ];
