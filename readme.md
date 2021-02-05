@@ -2,48 +2,20 @@
 
 [![Run tests](https://github.com/tighten/takeout/workflows/Run%20tests/badge.svg?branch=main)](https://github.com/tighten/lambo/actions?query=workflow%3A%22Run+Tests%22)
 
-Super-powered `laravel new` for Laravel and Valet.
+**Super-powered `laravel new` for Laravel and Valet**
 
-<strong>A new version of Lambo is coming that will introduce new features and provide a better platform for future enhancements... Oh, and it's being re-written from the ground-up in PHP! :fire:
-
-There's a good chance the non-beta no longer works usefully for creating Laravel 8+ apps. If you are interested in using the old version, check out the [pre-php](https://github.com/tighten/lambo/tree/pre-php) branch and the [v0.5.5](https://github.com/tighten/lambo/releases/tag/v0.5.5) release.</strong>
-
-# For beta testers
-
-To try the beta without installing it globally:
-
-```bash
-git clone https://github.com/tightenco/lambo.git
-cd lambo
-./lambo
-```
-
-To try the beta globally:
-
-1. Open `~/.composer/composer.json`
-2. Make sure you have the Laravel installer required at `^4.0`
-3. Modify your `tightenco/lambo` line to have the version constraint of `^1.0@dev`
-4. Save that, and exit
-5. Run `composer global update tightenco/lambo`
-6. Cross your fingers
-
-The below readme is still being cleaned up from references to the current Lambo version, so please note the following major changes:
-
-- You'll need PHP 7.2+ to run Lambo.
-- You'll want to run `lambo new myApplication` instead of `lambo myApplication`.
-- Lambo now targets Laravel 8+ and [Laravel Jetstream](https://jetstream.laravel.com/1.x/introduction.html) which means the current options, `--vue`, `--bootstrap` and `--react` have been replaced by `--inertia` and `--livewire`. You may add the `--teams` option to enable team support with inertia and livewire.
-- The `--quiet` option has been removed. Lambo now uses quiet/silent mode for git, npm and the laravel installer by default. You may use `--with-output` if terminal output is required.
+Lambo is a command-line tool that replaces the Laravel installer and wraps up the most common tasks you might take when creating a Laravel app: opening it in your editor and your browser, initialize a git repository, tweak your `.env` and `.env.example`, and more.
 
 
------
+## Requirements
 
-# Current non-beta version
+- PHP 7.3+
+- (optional, but beneficial) [Laravel Valet](https://laravel.com/docs/valet)
 
 ## Installation
 
-### For Laravel 8+ once we release this from beta
 ```bash
-composer global require tightenco/lambo
+composer global require tightenco/lambo:^1.0
 ```
 
 ## Upgrading
@@ -58,142 +30,34 @@ Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
 ```bash
 cd ~/Sites
-lambo new superApplication
+lambo new myNextProject
 ```
 
 ### What exactly does it do?
 
 - `laravel new $PROJECTNAME`
-- Initialize a git repo, add all of the files, and make a commit with the text "Initial commit."
-- Open the project in your editor
-- Replace the `.env` database credentials with the default macOS MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
-- Replace the `.env` `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
+- Initialize a git repo, add all of the files, and, after some changes below, make a commit with the text "Initial commit."
+- Replace the `.env` (and `.env.example`) database credentials with the default macOS MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
+- Replace the `.env` (and `.env.example`) `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
+- Generate an app key
+- Open the project in your favorite editor
 - Open `$PROJECTNAME.$YOURVALETTLD` in your browser
-- TODO: What else does it do in the new version? Anything else?
 
 > Note: If your `$PROJECTNAME` has dashes (`-`) in it, they will be replaced with underscores (`_`) in the database name.
 
-There are also a few optional behaviors based on the parameters you pass (or define in your config file).
+There are also a few optional behaviors based on the parameters you pass (or define in your config file), including creating a database, migrating, installing Jetstream, running Valet Link and/or Secure, and running a custom bash script of your definition after the fact.
 
-### Optional Arguments
+## Customizing Lambo
 
-TODO: Update all of these for the new version
+While the default actions Lambo provides are great, most users will want to customize at least a few of the steps. Thankfully, Lambo is built to be customized!
 
-- `-h` or `--help` to get the help dialog
+There are two ways to customize your usage of Lambo: command-line arguments and a config file.
 
-  ```bash
-  lambo --help
-  ```
+Most users will want to set their preferred configuration options once and then never think about it again. That's best solved by creating a config file.
 
-- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
+But if you find yourself needing to change the way you interact with Lambo on a project-by-project basis, you may also want to use the command-line parameters to customize Lambo when you're using it.
 
-  ```bash
-  # runs "subl ." in the project directory after creating the project
-  lambo new superApplication --editor=subl
-  ```
-
-- `-m` or `--message` to set the first commit message.
-
-  ```bash
-  lambo new superApplication --message="This lambo runs fast!"
-  ```
-
-- `-p` or `--path` to specify where to install the application.
-
-  ```bash
-  lambo new superApplication --path=~/Sites
-  ```
-
-- `-q` or `--quiet` use quiet/silent mode for `git`, `yarn`/`npm` and laravel installer.
-
-- `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install
-
-  ```bash
-  lambo new superApplication --dev
-  ```
-
-- `-a` or `--auth` to use Artisan to scaffold all of the routes and views you need for authentication
-
-  ```bash
-  lambo new superApplication --auth
-  ```
-
-- `--node` to run `yarn` if installed, otherwise runs `npm install` after creating the project
-
-  ```bash
-  lambo new superApplication --node
-  ```
-
-- `-l` or `--link` to create a Valet link to the project directory.
-
-  ```bash
-  lambo new superApplication --link
-  ```
-
-- `-s` or `--secure` to secure the Valet site using https.
-
-  ```bash
-  lambo new superApplication --secure
-  ```
-
-- `--create-db` create a new MySql database which has the same name as your project.
-  This requires `mysql` command to be available on your system.
-
-  ```bash
-  lambo new superApplication --create-db
-  ```
-
-- `--dbuser` specify the database username.
-
-  ```bash
-  lambo new superApplication --dbuser=USER
-  ```
-
-- `--dbpassword` specify the database password.
-
-  ```bash
-  lambo new superApplication --dbpassword=SECRET
-  ```
-
-- `--vue` to set the frontend to the default Laravel 5.* scaffolding (set by default)
-
-  ```bash
-  lambo new superApplication --vue
-  ```
-
-- `--bootstrap` to set the frontend to Bootstrap
-
-  ```bash
-  lambo new superApplication --bootstrap
-  ```
-
-- `--react` to set the frontend to React
-
-  ```bash
-  lambo new superApplication --react
-  ```
-
-### Commands
-
-- `edit-config` edits your config file
-
-  ```bash
-  lambo edit-config
-  ```
-
-- `make-after` creates an "after" file so you can run additional commands after Lambo finishes
-
-  ```bash
-  lambo make-after
-  ```
-
-- `edit-after` edits your after file
-
-  ```bash
-  lambo edit-after
-  ```
-
-### Config File
+### Creating a config file
 
 You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
 
@@ -202,6 +66,26 @@ The following command creates the file, if it doesn't exist, and edits it:
 ```bash
 lambo edit-config
 ```
+
+The config file contains the configuration parameters you can customize, and will be read on every usage of Lambo.
+
+### Using command-line parameters
+
+Any command-line parameters passed in will override Lambo's defaults and your config settings. See a [full list of the parameters you can pass in](#parameters).
+
+### Commands
+
+- `edit-config` edits your config file (and creates one if it doesn't exist)
+
+  ```bash
+  lambo edit-config
+  ```
+
+- `edit-after` edits your "after" file (and creates one if it doesn't exist)
+
+  ```bash
+  lambo edit-after
+  ```
 
 ### After File
 
@@ -231,13 +115,10 @@ cp -R ~/.lambo/includes/ $PROJECTPATH
 
 You also have access to variables from your config file such as `$PROJECTPATH` and `$CODEEDITOR`.
 
-## Requirements
+<a id="parameters"></a>
+### Configurable parameters
 
-- macOS or Linux.
-- [Git](https://git-scm.com).
-- The [Laravel installer](https://laravel.com/docs/installation#installing-laravel) and [Laravel Valet](https://laravel.com/docs/valet) installed globally.
-
-> A Linux fork of Valet can be found [here](https://github.com/cpriego/valet-linux)
+List coming soon. For now, just run `lambo help` and it'll give you the full list.
 
 ## Process for release
 
