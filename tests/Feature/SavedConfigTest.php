@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Actions\SavedConfig;
 use App\LamboException;
-use App\Shell;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;

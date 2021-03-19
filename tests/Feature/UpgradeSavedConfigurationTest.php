@@ -25,7 +25,7 @@ class UpgradeSavedConfigurationTest extends TestCase
             'description' => [
                 'The THING parameter enables Lambo to do a thing.',
                 'Valid options are foo, bar and flibble (default if not specified).',
-            ]
+            ],
         ],
         'ANOTHER_THING' => [
             'commented' => false,
@@ -33,7 +33,7 @@ class UpgradeSavedConfigurationTest extends TestCase
             'description' => [
                 'The ANOTHER_THING parameter enables Lambo to do a another thing.',
                 'Valid options are true or false (default if not specified).',
-            ]
+            ],
         ],
     ];
 

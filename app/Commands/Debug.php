@@ -87,7 +87,8 @@ trait Debug
                 'livewire',
                 'with-teams',
                 'projectName',
-            ], '--'
+            ],
+            '--'
         );
 
         $this->consoleWriter->text('Saved configuration:');
@@ -120,13 +121,7 @@ trait Debug
         );
 
         $this->consoleWriter->text('Shell environment variables:');
-        $this->arrayToTable(
-            $_SERVER,
-            [
-                'EDITOR'
-            ],
-            '$'
-        );
+        $this->arrayToTable($_SERVER, ['EDITOR',], '$');
 
         $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }

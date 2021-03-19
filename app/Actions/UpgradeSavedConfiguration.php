@@ -37,7 +37,7 @@ class UpgradeSavedConfiguration
             'default' => '127.0.0.1',
             'description' => [
                 'The database host. Defaults to 127.0.0.1.',
-            ]
+            ],
         ],
         'DB_PORT' => [
             'commented' => true,
@@ -132,7 +132,7 @@ class UpgradeSavedConfiguration
             '# Lambo has commented out the following configuration items as they',
             '# are no-longer used. You may safely remove them:',
             collect($this->commented)->reduce(function ($carry, $item) {
-                return "$carry#   {$item}\n";
+                return "{$carry}#   {$item}\n";
             }, '')
         ]);
     }
@@ -145,7 +145,7 @@ class UpgradeSavedConfiguration
 
         return collect(array_keys($newConfiguration))->reduce(function ($carry, $key) use ($newConfiguration) {
             $description = collect($newConfiguration[$key]['description'])->reduce(function ($carry, $item) {
-                return "$carry# {$item}\n";
+                return "{$carry}# {$item}\n";
             }, '');
 
             $configurationItem = sprintf(

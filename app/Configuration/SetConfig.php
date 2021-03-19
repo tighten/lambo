@@ -11,11 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SetConfig
 {
-    private $commandLineConfiguration;
-    private $savedConfiguration;
-    private $shellConfiguration;
     protected $consoleWriter;
-
     protected $fullFlags = [
         LamboConfiguration::CREATE_DATABASE,
         LamboConfiguration::MIGRATE_DATABASE,
@@ -23,8 +19,16 @@ class SetConfig
         LamboConfiguration::VALET_SECURE,
     ];
 
-    public function __construct(CommandLineConfiguration $commandLineConfiguration, SavedConfiguration $savedConfiguration, ShellConfiguration $shellConfiguration, ConsoleWriter $consoleWriter)
-    {
+    private $commandLineConfiguration;
+    private $savedConfiguration;
+    private $shellConfiguration;
+
+    public function __construct(
+        CommandLineConfiguration $commandLineConfiguration,
+        SavedConfiguration $savedConfiguration,
+        ShellConfiguration $shellConfiguration,
+        ConsoleWriter $consoleWriter
+    ) {
         $this->commandLineConfiguration = $commandLineConfiguration;
         $this->savedConfiguration = $savedConfiguration;
         $this->shellConfiguration = $shellConfiguration;
@@ -45,7 +49,8 @@ class SetConfig
         // If we're in the "new" command, generate a few config items which
         // require others to be set above first.
         if (config('lambo.store.command') === NewCommand::class) {
-            config(['lambo.store.project_path' => config('lambo.store.root_path') . '/' . config('lambo.store.project_name')]);
+            $projectPath = config('lambo.store.root_path') . '/' . config('lambo.store.project_name');
+            config(['lambo.store.project_path' => $projectPath]);
             config(['lambo.store.project_url' => $this->getProjectURL()]);
         }
 
@@ -86,7 +91,14 @@ class SetConfig
             return json_decode(File::get($legacyValetConfig))->domain;
         }
 
-        throw new LamboException("Unable to find valet domain (tld) configuration.\nNo Valet configuration located at either of the following locations: \n  - {$valetConfig}\n  - {$legacyValetConfig}");
+        throw new LamboException(
+            implode(PHP_EOL, [
+                'Unable to find valet domain (tld) configuration.',
+                'No Valet configuration located at either of the following locations:',
+                  "- {$valetConfig}",
+                  "- {$legacyValetConfig}",
+            ])
+        );
     }
 
     private function getRootPath(string $key, $default)
@@ -105,10 +117,12 @@ class SetConfig
 
     private function getProjectURL(): string
     {
-        return sprintf("http%s://%s.%s",
+        return sprintf(
+            'http%s://%s.%s',
             config('lambo.store.valet_secure') ? 's' : '',
             config('lambo.store.project_name'),
-            config('lambo.store.tld'));
+            config('lambo.store.tld')
+        );
     }
 
     private function getMigrateDatabase(string $key, $default)

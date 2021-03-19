@@ -27,7 +27,8 @@
     "require-dev": {
         "laravel-zero/framework": "^8.0",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "tightenco/duster": "^0.2.1"
     },
     "autoload": {
         "psr-4": {

@@ -30,6 +30,19 @@ class ValidateConfiguration
         }
     }
 
+    protected function debugReport(): void
+    {
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
+
+        $this->consoleWriter->text([
+                                       'Configuration may have changed after validation',
+                                       'Configuration is now as follows:',
+                                   ]);
+        $this->configToTable();
+
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
+    }
+
     private function getFrontendConfiguration(): string
     {
         $inertia = config('lambo.store.inertia');
@@ -53,7 +66,7 @@ class ValidateConfiguration
         $options = [
             'use inertia' => 'inertia',
             'use livewire' => 'livewire',
-            "continue without frontend scaffolding" => 'none',
+            'continue without frontend scaffolding' => 'none',
         ];
         $choice = app('console')->choice('What would you like to do?', array_keys($options), 2);
 
@@ -67,18 +80,5 @@ class ValidateConfiguration
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
             $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
-    }
-
-    protected function debugReport(): void
-    {
-        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
-
-        $this->consoleWriter->text([
-            'Configuration may have changed after validation',
-            'Configuration is now as follows:',
-        ]);
-        $this->configToTable();
-
-        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 }
