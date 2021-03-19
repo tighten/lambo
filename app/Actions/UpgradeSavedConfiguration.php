@@ -28,28 +28,28 @@ class UpgradeSavedConfiguration
                 'options:',
                 '  true, 1, "yes" or "on"',
                 '  false (default), 0, "no" or "off"',
-            ]
+            ],
         ],
         'DB_HOST' => [
             'commented' => false,
             'default' => '127.0.0.1',
             'description' => [
                 'The database host.',
-            ]
+            ],
         ],
         'DB_PORT' => [
             'commented' => true,
             'default' => '',
             'description' => [
                 'The database port.',
-            ]
+            ],
         ],
         'DB_NAME' => [
             'commented' => true,
             'default' => '',
             'description' => [
                 'The database name.',
-            ]
+            ],
         ],
     ];
 
@@ -130,7 +130,7 @@ class UpgradeSavedConfiguration
             '# Lambo has commented out the following configuration items as they',
             '# are no-longer used. You may safely remove them:',
             collect($this->commented)->reduce(function ($carry, $item) {
-                return "$carry#   {$item}\n";
+                return "{$carry}#   {$item}\n";
             }, '')
         ]);
     }
@@ -143,7 +143,7 @@ class UpgradeSavedConfiguration
 
         return collect(array_keys($newConfiguration))->reduce(function ($carry, $key) use ($newConfiguration) {
             $description = collect($newConfiguration[$key]['description'])->reduce(function ($carry, $item) {
-                return "$carry# {$item}\n";
+                return "{$carry}# {$item}\n";
             }, '');
 
             $configurationItem = sprintf(

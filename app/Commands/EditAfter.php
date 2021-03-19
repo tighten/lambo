@@ -23,15 +23,15 @@ class EditAfter extends LamboCommand
         });
 
         $commandLineConfiguration = new CommandLineConfiguration([
-            'editor' => LamboConfiguration::EDITOR
+            'editor' => LamboConfiguration::EDITOR,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'CODEEDITOR' => LamboConfiguration::EDITOR
+            'CODEEDITOR' => LamboConfiguration::EDITOR,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
-            'EDITOR' => LamboConfiguration::EDITOR
+            'EDITOR' => LamboConfiguration::EDITOR,
         ]);
 
         (new SetConfig(
@@ -39,11 +39,11 @@ class EditAfter extends LamboCommand
             $savedConfiguration,
             $shellConfiguration
         ))([
-            LamboConfiguration::EDITOR => 'nano'
+            LamboConfiguration::EDITOR => 'nano',
         ]);
 
         try {
-            app(SavedConfig::class)->createOrEditConfigFile("after");
+            app(SavedConfig::class)->createOrEditConfigFile('after');
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }

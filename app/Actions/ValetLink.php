@@ -10,6 +10,7 @@ class ValetLink
     use AbortsCommands;
 
     protected $shell;
+
     private $consoleWriter;
 
     public function __construct(Shell $shell, ConsoleWriter $consoleWriter)

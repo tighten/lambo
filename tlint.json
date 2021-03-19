@@ -1,0 +1,7 @@
+{
+    "preset": "tighten",
+    "disabled": [],
+    "excluded": [
+        "node_modules"
+    ]
+}
