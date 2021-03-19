@@ -51,9 +51,8 @@ class NewCommand extends LamboCommand
 
     public function buildSignature()
     {
-        return collect((new Options)->all())->reduce(
-            function ($carry, $option)
-            {
+        return collect((new Options())->all())->reduce(
+            function ($carry, $option) {
                 return $carry . $this->buildSignatureOption($option);
             },
             "new\n{projectName? : Name of the Laravel project}"
@@ -87,8 +86,8 @@ class NewCommand extends LamboCommand
             $this->consoleWriter->newLine();
             $this->consoleWriter->note('Your Lambo configuration (~/.lambo/config) has been updated.');
             $this->consoleWriter->note('Please review the changes then run lambo again.');
-            if ($this->confirm(sprintf("Review the changes now in %s?", config('lambo.store.editor')))) {
-                app(SavedConfig::class)->createOrEditConfigFile("config");
+            if ($this->confirm(sprintf('Review the changes now in %s?', config('lambo.store.editor')))) {
+                app(SavedConfig::class)->createOrEditConfigFile('config');
             }
             return;
         }

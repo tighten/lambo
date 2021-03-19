@@ -38,7 +38,7 @@ class VerifyDependencies
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep("Verifying dependencies");
+        $this->consoleWriter->logStep('Verifying dependencies');
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
@@ -50,6 +50,7 @@ class VerifyDependencies
                 $this->consoleWriter->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
                 return $carry ?? false;
             }),
-            'Please install missing dependencies and try again.');
+            'Please install missing dependencies and try again.'
+        );
     }
 }

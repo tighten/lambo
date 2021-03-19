@@ -19,7 +19,7 @@ class SavedConfig
     public function createOrEditConfigFile(string $fileName)
     {
         $configDir = config('home_dir') . '/.lambo';
-        $configFilePath = $configDir . "/" . $fileName;
+        $configFilePath = $configDir . '/' . $fileName;
 
         if (! File::isDirectory($configDir)) {
             app('console-writer')->note("Configuration directory '{$configDir}' does not exist, creating it now...");

@@ -35,7 +35,7 @@ class OpenInBrowser
             return;
         }
 
-        $this->shell->execInProject("valet open");
+        $this->shell->execInProject('valet open');
     }
 
     public function browser()

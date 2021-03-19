@@ -17,9 +17,9 @@ class DisplayHelpScreen
     public function __invoke()
     {
         app('console-writer')->newLine();
-        app('console-writer')->text("<comment>Usage:</comment>");
+        app('console-writer')->text('<comment>Usage:</comment>');
         app('console-writer')->text("  lambo new myApplication [arguments]\n");
-        app('console-writer')->text("<comment>Commands (lambo COMMANDNAME):</comment>");
+        app('console-writer')->text('<comment>Commands (lambo COMMANDNAME):</comment>');
 
         foreach ($this->commands as $command => $description) {
             $spaces = $this->makeSpaces(strlen($command));
@@ -27,9 +27,9 @@ class DisplayHelpScreen
         }
 
         app('console-writer')->newLine();
-        app('console-writer')->text("<comment>Options (lambo new myApplication OPTIONS):</comment>");
+        app('console-writer')->text('<comment>Options (lambo new myApplication OPTIONS):</comment>');
 
-        foreach ((new Options)->all() as $option) {
+        foreach ((new Options())->all() as $option) {
             app('console-writer')->text($this->createCliStringForOption($option));
         }
     }
@@ -54,6 +54,6 @@ class DisplayHelpScreen
 
     public function makeSpaces($count)
     {
-        return str_repeat(" ", $this->indent - $count);
+        return str_repeat(' ', $this->indent - $count);
     }
 }

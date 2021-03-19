@@ -33,6 +33,6 @@ class SilentDevScript
         $silentDevelopmentCommand = str_replace('--progress', '--no-progress', Arr::get($packageJson, 'scripts.development'));
         Arr::set($packageJson, 'scripts.development', $silentDevelopmentCommand);
 
-        return json_encode($packageJson,  JSON_UNESCAPED_SLASHES);
+        return json_encode($packageJson, JSON_UNESCAPED_SLASHES);
     }
 }

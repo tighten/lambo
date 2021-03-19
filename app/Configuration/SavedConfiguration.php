@@ -3,7 +3,6 @@
 namespace App\Configuration;
 
 use Dotenv\Dotenv;
-
 use Illuminate\Support\Facades\File;
 
 class SavedConfiguration extends LamboConfiguration

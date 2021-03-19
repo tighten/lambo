@@ -20,17 +20,18 @@ class RunLaravelInstaller
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep("Running the Laravel installer");
+        $this->consoleWriter->logStep('Running the Laravel installer');
 
         $process = $this->shell->execInRoot('laravel new ' . config('lambo.store.project_name') . $this->extraOptions());
-        $this->abortIf(! $process->isSuccessful(), "The laravel installer did not complete successfully.", $process);
+        $this->abortIf(! $process->isSuccessful(), 'The laravel installer did not complete successfully.', $process);
 
         $this->consoleWriter->success($this->getFeedback());
     }
 
     public function extraOptions()
     {
-        return sprintf('%s%s',
+        return sprintf(
+            '%s%s',
             config('lambo.store.dev') ? ' --dev' : '',
             config('lambo.store.with_output') ? '' : ' --quiet'
         );
@@ -38,10 +39,10 @@ class RunLaravelInstaller
 
     public function getFeedback(): string
     {
-        return sprintf("A new application '%s' has been created from the %s branch.",
+        return sprintf(
+            "A new application '%s' has been created from the %s branch.",
             config('lambo.store.project_name'),
             config('lambo.store.dev') ? 'develop' : 'release'
         );
     }
-
 }
