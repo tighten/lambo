@@ -20,14 +20,15 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "laravel/installer": "^4.0",
         "ext-json": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "laravel/installer": "^4.0"
     },
     "require-dev": {
         "laravel-zero/framework": "^8.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^9.0",
+        "spatie/laravel-ray": "^1.17",
         "tightenco/duster": "^0.2.1"
     },
     "autoload": {
