@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\GetTimezone;
+
 return [
 
     /*
@@ -40,6 +42,19 @@ return [
     */
 
     'env' => 'development',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Timezone
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the timezone that Lambo is currently running in.
+    | It will be the value of "date.timezone" in php.ini or the value set
+    | by your operating system. If php cannot determine the value set
+    | by your operating system, then UTC will be used. You may set
+    | this value manually to use a timezone of your choosing.
+    */
+    'timezone' => app(GetTimezone::class)(),
 
     /*
     |--------------------------------------------------------------------------

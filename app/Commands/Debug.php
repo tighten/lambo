@@ -2,9 +2,11 @@
 
 namespace App\Commands;
 
+use Carbon\Carbon;
 use Dotenv\Dotenv;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
+use IntlTimeZone;
 
 trait Debug
 {
@@ -121,7 +123,9 @@ trait Debug
         );
 
         $this->consoleWriter->text('Shell environment variables:');
-        $this->arrayToTable($_SERVER, ['EDITOR',], '$');
+        $this->arrayToTable($_SERVER, ['EDITOR'], '$');
+
+        $this->logTimezoneData();
 
         $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
@@ -130,5 +134,34 @@ trait Debug
     {
         $config = Arr::prepend(config('lambo.store'), config('home_dir'), 'home_dir');
         $this->arrayToTable($config, null, 'lambo.store.', ['Configuration key', 'Value', 'Type']);
+    }
+
+    protected function logTimezoneData(string $offset = null)
+    {
+        $this->consoleWriter->sectionTitle('Timezone configuration');
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text('System settings');
+        $this->arrayToTable([
+            'OS Config ("/etc/localtime")' => exec('/bin/ls -l /etc/localtime|/usr/bin/cut -d"/" -f8-'),
+            "ini_get('date.timezone')" => ini_get('date.timezone') ?: 'Not configured',
+            'IntlTimeZone::createDefault()' => IntlTimeZone::createDefault()->getID(),
+            'date_default_timezone_get()' => date_default_timezone_get(),
+            'config->get("app.timezone")' => config()->get('app.timezone'),
+        ]);
+
+        $this->consoleWriter->text('Carbon');
+        $this->arrayToTable([
+            // UTC, GMT, Atlantic/Azores
+            'Carbon (Timezone identifier)' => Carbon::now()->format('e'),
+
+            // 1 if Daylight Saving Time, 0 otherwise.
+            'Carbon (Daylight savings)' => (bool)Carbon::now()->format('I'),
+
+            // Difference to Greenwich time (GMT)
+            'Carbon (Difference to GMT w/O)' => Carbon::now()->format('O'), // +0200'Carbon (Difference to GMT w/P)' => Carbon::now()->format('P'), // +02:00
+
+            // Examples: EST, MDT
+            'Carbon (tz abbreviation)' => Carbon::now()->format('T'),
+        ]);
     }
 }
