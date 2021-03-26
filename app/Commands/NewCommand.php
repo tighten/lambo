@@ -7,6 +7,7 @@ use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
+use App\Actions\EditConfigFile;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
 use App\Actions\MigrateDatabase;
@@ -14,7 +15,6 @@ use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
 use App\Actions\RunLaravelInstaller;
-use App\Actions\SavedConfig;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
@@ -87,7 +87,7 @@ class NewCommand extends LamboCommand
             $this->consoleWriter->note('Your Lambo configuration (~/.lambo/config) has been updated.');
             $this->consoleWriter->note('Please review the changes then run lambo again.');
             if ($this->confirm(sprintf('Review the changes now in %s?', config('lambo.store.editor')))) {
-                app(SavedConfig::class)->createOrEditConfigFile('config');
+                app(EditConfigFile::class)('config');
             }
             return;
         }
