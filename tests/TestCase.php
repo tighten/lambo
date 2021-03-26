@@ -45,7 +45,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function skipWithMessage(array $lines, $title = 'SKIPPED'): void
     {
-
         $lineLength = 80;
         $header = $this->center(" [ {$title} ] ", '=', $lineLength);
         $testName = $this->center(str_replace('_', ' ', $this->getName()), ' ', $lineLength);
