@@ -5,7 +5,7 @@ namespace App\Actions;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
-class SilentDevScript
+class SilenceNpm
 {
     private $packageJsonPath;
     private $backupPackageJsonPath;
@@ -16,13 +16,13 @@ class SilentDevScript
         $this->backupPackageJsonPath = config('lambo.store.project_path') . '/package-original.json';
     }
 
-    public function add()
+    public function silence()
     {
         File::copy($this->packageJsonPath, $this->backupPackageJsonPath);
         File::replace($this->packageJsonPath, $this->getSilentPackageJson($this->packageJsonPath));
     }
 
-    public function remove()
+    public function unsilence()
     {
         File::move($this->backupPackageJsonPath, $this->packageJsonPath);
     }

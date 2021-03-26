@@ -3,25 +3,25 @@
 namespace Tests\Feature;
 
 use App\Actions\CompileAssets;
-use App\Actions\SilentDevScript;
+use App\Actions\SilenceNpm;
 use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
 class CompileAssetsTest extends TestCase
 {
-    private $silentDevScript;
+    private $npm;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->silentDevScript = $this->mock(SilentDevScript::class);
+        $this->npm = $this->mock(SilenceNpm::class);
     }
 
     /** @test */
     function it_compiles_project_assets_and_hides_console_output()
     {
-        $this->silentDevScript->shouldReceive('add')
+        $this->npm->shouldReceive('silence')
             ->once()
             ->globally()
             ->ordered();
@@ -33,7 +33,7 @@ class CompileAssetsTest extends TestCase
             ->globally()
             ->ordered();
 
-        $this->silentDevScript->shouldReceive('remove')
+        $this->npm->shouldReceive('unsilence')
             ->once()
             ->globally()
             ->ordered();
@@ -44,7 +44,7 @@ class CompileAssetsTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_asset_compilation_fails()
     {
-        $this->silentDevScript->shouldReceive('add')
+        $this->npm->shouldReceive('silence')
             ->once()
             ->globally()
             ->ordered();

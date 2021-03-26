@@ -10,13 +10,13 @@ class CompileAssets
     use AbortsCommands;
 
     protected $shell;
-    protected $silentDevScript;
+    protected $npm;
     protected $consoleWriter;
 
-    public function __construct(Shell $shell, SilentDevScript $silentDevScript, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell, SilenceNpm $silenceNpm, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
-        $this->silentDevScript = $silentDevScript;
+        $this->npm = $silenceNpm;
         $this->consoleWriter = $consoleWriter;
     }
 
@@ -24,10 +24,10 @@ class CompileAssets
     {
         $this->consoleWriter->logStep('Compiling project assets');
 
-        $this->silentDevScript->add();
+        $this->npm->silence();
         $process = $this->shell->execInProject("npm run dev{$this->extraOptions()}");
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
-        $this->silentDevScript->remove();
+        $this->npm->unsilence();
 
         $this->consoleWriter->success('Project assets compiled successfully.');
     }
