@@ -62,7 +62,7 @@ class VerifyPathAvailableTest extends TestCase
             ->once()
             ->andReturn(true)
             ->globally()
-            ->ordered();;
+            ->ordered();
 
         $this->expectException(LamboException::class);
 
@@ -84,7 +84,7 @@ class VerifyPathAvailableTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        app( VerifyPathAvailable::class)();
+        app(VerifyPathAvailable::class)();
     }
 
     /** @test */
@@ -102,6 +102,6 @@ class VerifyPathAvailableTest extends TestCase
 
         $this->expectException(Exception::class);
 
-        app( VerifyPathAvailable::class)();
+        app(VerifyPathAvailable::class)();
     }
 }

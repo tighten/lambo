@@ -45,7 +45,7 @@ class UpgradeSavedConfigurationTest extends TestCase
         $upgradedConfiguration = app(UpgradeSavedConfiguration::class)->upgrade($this->getConfiguration(), $this->removedConfigurationKeys, $this->newConfiguration);
 
         $commented =
-'VALID_KEY=foo
+        'VALID_KEY=foo
 ANOTHER_VALID_KEY=foo
 #OLD_KEY=foo
 #ANOTHER_OLD_KEY=foo
@@ -84,5 +84,4 @@ ANOTHER_THING=false
             return "{$carry}{$configurationKey}=foo\n";
         }, '');
     }
-
 }

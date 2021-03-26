@@ -10,7 +10,7 @@ class SignatureBuilderTest extends TestCase
     /** @test */
     function it_offers_short_and_long_codes()
     {
-        $newCommand = new NewCommand;
+        $newCommand = new NewCommand();
         $output = $newCommand->buildSignatureOption([
             'short' => 'e',
             'long' => 'editor',
@@ -23,7 +23,7 @@ class SignatureBuilderTest extends TestCase
     /** @test */
     function it_functions_given_only_long_code()
     {
-        $newCommand = new NewCommand;
+        $newCommand = new NewCommand();
         $output = $newCommand->buildSignatureOption([
             'long' => 'editor',
             'cli_description' => '',
@@ -35,7 +35,7 @@ class SignatureBuilderTest extends TestCase
     /** @test */
     function it_sets_expectation_for_values_if_option_expects_parameters()
     {
-        $newCommand = new NewCommand;
+        $newCommand = new NewCommand();
         $output = $newCommand->buildSignatureOption([
             'long' => 'editor',
             'param_description' => 'a',
@@ -48,7 +48,7 @@ class SignatureBuilderTest extends TestCase
     /** @test */
     function it_does_not_set_expectation_for_values_if_option_does_not_expect_parameters()
     {
-        $newCommand = new NewCommand;
+        $newCommand = new NewCommand();
         $output = $newCommand->buildSignatureOption([
             'long' => 'editor',
             'cli_description' => '',
@@ -60,7 +60,7 @@ class SignatureBuilderTest extends TestCase
     /** @test */
     function it_defines_description()
     {
-        $newCommand = new NewCommand;
+        $newCommand = new NewCommand();
         $output = $newCommand->buildSignatureOption([
             'long' => 'editor',
             'cli_description' => 'The Option Description',
