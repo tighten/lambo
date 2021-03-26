@@ -121,7 +121,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
         $this->skipWithMessage([
             'Currently failing due to WIP refactor.',
             'the App\Shell mock needs to return both a successful and a failed',
-            'process execution.'
+            'process execution.',
         ]);
         $this->shouldFailFrontendFrameworkInstallation('inertia');
 
@@ -168,10 +168,12 @@ class ConfigureFrontendFrameworkTest extends TestCase
         config(['lambo.store.frontend' => $frontendFramework]);
         config(['lambo.store.teams' => $withTeams]);
 
-        $command = sprintf("php artisan jetstream:install %s%s%s",
+        $command = sprintf(
+            'php artisan jetstream:install %s%s%s',
             $frontendFramework,
             $withTeams ? ' --teams' : '',
-            $withOutput ? '' : ' --quiet');
+            $withOutput ? '' : ' --quiet'
+        );
 
         $expectation = $this->shell->shouldReceive('execInProject')
             ->with($command)

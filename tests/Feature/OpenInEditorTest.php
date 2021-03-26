@@ -19,7 +19,7 @@ class OpenInEditorTest extends TestCase
             ->andReturnSelf();
 
         $this->shell->shouldReceive('execInProject')
-            ->with("my-editor .")
+            ->with('my-editor .')
             ->once()
             ->andReturn(FakeProcess::success());
 
@@ -36,9 +36,9 @@ class OpenInEditorTest extends TestCase
             ->andReturnSelf();
 
         $this->shell->shouldReceive('execInProject')
-            ->with("my-editor .")
+            ->with('my-editor .')
             ->once()
-            ->andReturn(FakeProcess::fail("my-editor ."));
+            ->andReturn(FakeProcess::fail('my-editor .'));
 
         $this->expectException(LamboException::class);
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\SilentDevScript;
+use App\Actions\SilenceNpm;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
@@ -35,7 +35,7 @@ class SilentDevScriptTest extends TestCase
             ->globally()
             ->ordered();
 
-        app(SilentDevScript::class)->add();
+        app(SilenceNpm::class)->silence();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class SilentDevScriptTest extends TestCase
             ->with('/some/project/path/package-original.json', '/some/project/path/package.json')
             ->once();
 
-        app(SilentDevScript::class)->remove();
+        app(SilenceNpm::class)->unsilence();
     }
 }

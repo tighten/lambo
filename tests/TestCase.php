@@ -47,9 +47,11 @@ abstract class TestCase extends BaseTestCase
     {
         $lineLength = 80;
         $header = $this->center(" [ {$title} ] ", '=', $lineLength);
+        $testName = $this->center(str_replace('_', ' ', $this->getName()), ' ', $lineLength);
         $section = str_repeat('=', $lineLength);
+        $horizontalRule = str_repeat('-', $lineLength);
         $message = implode(PHP_EOL, $lines);
-        $this->markTestSkipped("{$header}\n{$message}\n{$section}");
+        $this->markTestSkipped("{$header}\n{$testName}\n{$horizontalRule}\n{$message}\n{$section}");
     }
 
     protected function center(string $title, string $padChar = ' ', int $lineLength = 80): string

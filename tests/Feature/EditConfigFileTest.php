@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Actions\SavedConfig;
+use App\Actions\EditConfigFile;
 use App\LamboException;
-use App\Shell;
 use Illuminate\Support\Facades\File;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
-class SavedConfigTest extends TestCase
+class EditConfigFileTest extends TestCase
 {
     private $fileName;
     private $configDirectory;
@@ -43,7 +42,7 @@ class SavedConfigTest extends TestCase
 
         $then->the_config_file_is_opened_for_editing();
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     /** @test */
@@ -54,7 +53,7 @@ class SavedConfigTest extends TestCase
         $this->successfullyCreateConfigFile();
         $this->successfullyOpenInEditor();
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     /** @test */
@@ -64,7 +63,7 @@ class SavedConfigTest extends TestCase
         $this->configFileExists();
         $this->successfullyOpenInEditor();
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     /** @test */
@@ -76,7 +75,7 @@ class SavedConfigTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     /** @test */
@@ -87,11 +86,11 @@ class SavedConfigTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     /** @test */
-    function failing_to_create_the_configuration_file_throws_an_exception()
+    public function failing_to_create_the_configuration_file_throws_an_exception()
     {
         $this->configDirectoryExists();
         $this->configFileExists(false);
@@ -99,7 +98,7 @@ class SavedConfigTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(SavedConfig::class)->createOrEditConfigFile($this->fileName);
+        app(EditConfigFile::class)($this->fileName);
     }
 
     private function configDirectoryExists(bool $exists = true): void

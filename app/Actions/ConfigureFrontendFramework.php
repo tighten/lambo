@@ -33,7 +33,7 @@ class ConfigureFrontendFramework
         $this->ensureJetstreamInstalled();
 
         $process = $this->shell->execInProject(sprintf(
-            "php artisan jetstream:install %s%s%s",
+            'php artisan jetstream:install %s%s%s',
             $configuredFrontend,
             config('lambo.store.teams') ? ' --teams' : '',
             config('lambo.store.with_output') ? '' : ' --quiet'
@@ -60,7 +60,7 @@ class ConfigureFrontendFramework
 
         $process = $this->shell->execInProject('composer require laravel/jetstream' . (config('lambo.store.with_output') ? '' : ' --quiet'));
 
-        $this->abortIf(! $process->isSuccessful(), "Installation of laravel/jetstream did not complete successfully.", $process);
+        $this->abortIf(! $process->isSuccessful(), 'Installation of laravel/jetstream did not complete successfully.', $process);
 
         $this->consoleWriter->success('laravel/jetstream installed.');
     }

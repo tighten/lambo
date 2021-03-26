@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Shell;
 use Illuminate\Support\Facades\File;
 
-class SavedConfig
+class EditConfigFile
 {
     use AbortsCommands;
 
@@ -16,10 +16,10 @@ class SavedConfig
         $this->shell = $shell;
     }
 
-    public function createOrEditConfigFile(string $fileName)
+    public function __invoke(string $fileName)
     {
         $configDir = config('home_dir') . '/.lambo';
-        $configFilePath = $configDir . "/" . $fileName;
+        $configFilePath = $configDir . '/' . $fileName;
 
         if (! File::isDirectory($configDir)) {
             app('console-writer')->note("Configuration directory '{$configDir}' does not exist, creating it now...");

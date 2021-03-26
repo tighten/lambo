@@ -6,6 +6,7 @@ class FakeProcess
 {
     public $isSuccessful;
     public $failedCommand;
+
     private $output;
     private $errorOutput;
 

@@ -6,29 +6,29 @@ use Illuminate\Support\Str;
 
 abstract class LamboConfiguration
 {
-    const EDITOR = 'editor';
-    const PROJECT_NAME = 'project_name';
-    const ROOT_PATH = 'root_path';
-    const WITH_OUTPUT = 'with_output';
-    const USE_DEVELOP_BRANCH = 'dev';
-    const CREATE_DATABASE = 'create_database';
-    const MIGRATE_DATABASE = 'migrate_database';
-    const DATABASE_HOST = 'database_host';
-    const DATABASE_PORT = 'database_port';
-    const DATABASE_NAME = 'database_name';
-    const DATABASE_USERNAME = 'database_username';
-    const DATABASE_PASSWORD = 'database_password';
-    const FRONTEND_FRAMEWORK = 'frontend';
-    const FULL = 'full';
-    const TLD = 'tld';
-    const COMMIT_MESSAGE = 'commit_message';
-    const VALET_LINK = 'valet_link';
-    const VALET_SECURE = 'valet_secure';
-    const BROWSER = 'browser';
-    const INERTIA = 'inertia';
-    const LIVEWIRE = 'livewire';
-    const TEAMS = 'teams';
-    const COMMAND = 'command';
+    public const EDITOR = 'editor';
+    public const PROJECT_NAME = 'project_name';
+    public const ROOT_PATH = 'root_path';
+    public const WITH_OUTPUT = 'with_output';
+    public const USE_DEVELOP_BRANCH = 'dev';
+    public const CREATE_DATABASE = 'create_database';
+    public const MIGRATE_DATABASE = 'migrate_database';
+    public const DATABASE_HOST = 'database_host';
+    public const DATABASE_PORT = 'database_port';
+    public const DATABASE_NAME = 'database_name';
+    public const DATABASE_USERNAME = 'database_username';
+    public const DATABASE_PASSWORD = 'database_password';
+    public const FRONTEND_FRAMEWORK = 'frontend';
+    public const FULL = 'full';
+    public const TLD = 'tld';
+    public const COMMIT_MESSAGE = 'commit_message';
+    public const VALET_LINK = 'valet_link';
+    public const VALET_SECURE = 'valet_secure';
+    public const BROWSER = 'browser';
+    public const INERTIA = 'inertia';
+    public const LIVEWIRE = 'livewire';
+    public const TEAMS = 'teams';
+    public const COMMAND = 'command';
 
     public function __construct(array $keyMap)
     {
@@ -53,11 +53,11 @@ abstract class LamboConfiguration
                 return null;
             }
 
-            if (in_array(Str::lower($array[$key]), ["1", "true", "on", "yes"])) {
+            if (in_array(Str::lower($array[$key]), ['1', 'true', 'on', 'yes'])) {
                 return true;
             }
 
-            if (in_array(Str::lower($array[$key]), ["0", "false", "off", "no"])) {
+            if (in_array(Str::lower($array[$key]), ['0', 'false', 'off', 'no'])) {
                 return false;
             }
 

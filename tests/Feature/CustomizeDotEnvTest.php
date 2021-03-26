@@ -40,9 +40,9 @@ class CustomizeDotEnvTest extends TestCase
         config()->set('lambo.store.database_username', 'root');
 
         $customizeDotEnv = app(CustomizeDotEnv::class);
-        $contents = "DB_USERNAME=previous";
+        $contents = 'DB_USERNAME=previous';
         $contents = $customizeDotEnv->customize($contents);
-        $this->assertEquals("DB_USERNAME=root", $contents);
+        $this->assertEquals('DB_USERNAME=root', $contents);
     }
 
     /** @test */

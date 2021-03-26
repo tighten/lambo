@@ -261,7 +261,7 @@ class SetConfigTest extends TestCase
         ))([
             'root_path' => getcwd(),
             'project_name' => null,
-            'database_name' => null
+            'database_name' => null,
         ]);
 
         $this->assertEquals('h_y_p_h_e_n_s', config('lambo.store.database_name'));

@@ -26,7 +26,7 @@ class ValetSecure
 
         $this->consoleWriter->logStep('Running valet secure');
 
-        $process = $this->shell->execInProject("valet secure");
+        $process = $this->shell->execInProject('valet secure');
         $this->abortIf(! $process->isSuccessful(), 'valet secure did not complete successfully', $process);
 
         $this->consoleWriter->success('valet secure successful');

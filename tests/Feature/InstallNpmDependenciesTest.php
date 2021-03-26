@@ -15,7 +15,7 @@ class InstallNpmDependenciesTest extends TestCase
         config(['lambo.store.with_output' => false]);
 
         $this->shell->shouldReceive('execInProject')
-            ->with("npm install --silent")
+            ->with('npm install --silent')
             ->once()
             ->andReturn(FakeProcess::success());
 
@@ -28,7 +28,7 @@ class InstallNpmDependenciesTest extends TestCase
         config(['lambo.store.with_output' => true]);
 
         $this->shell->shouldReceive('execInProject')
-            ->with("npm install")
+            ->with('npm install')
             ->once()
             ->andReturn(FakeProcess::success());
 

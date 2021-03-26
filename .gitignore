@@ -1,3 +1,4 @@
 /vendor
 .phpunit.result.cache
 /storage/framework/
+.php_cs.cache

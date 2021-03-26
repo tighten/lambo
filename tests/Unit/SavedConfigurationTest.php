@@ -64,7 +64,7 @@ class SavedConfigurationTest extends TestCase
             'CONFIGURATION_VALUE' => 'genericOption',
         ]);
 
-        $this->assertNull((new SavedConfiguration)->genericOption);
+        $this->assertNull((new SavedConfiguration())->genericOption);
     }
 
     /** @test */

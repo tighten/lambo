@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Actions\SavedConfig;
+use App\Actions\EditConfigFile;
 use App\Configuration\CommandLineConfiguration;
 use App\Configuration\LamboConfiguration;
 use App\Configuration\SavedConfiguration;
@@ -44,7 +44,7 @@ class EditAfter extends LamboCommand
         ]);
 
         try {
-            app(SavedConfig::class)->createOrEditConfigFile('after');
+            app(EditConfigFile::class)('after');
         } catch (LamboException $e) {
             app('console-writer')->exception($e->getMessage());
         }
