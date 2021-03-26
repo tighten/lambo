@@ -35,9 +35,9 @@ class ValidateConfiguration
         $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
 
         $this->consoleWriter->text([
-                                       'Configuration may have changed after validation',
-                                       'Configuration is now as follows:',
-                                   ]);
+            'Configuration may have changed after validation',
+            'Configuration is now as follows:',
+        ]);
         $this->configToTable();
 
         $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
