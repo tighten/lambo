@@ -15,8 +15,14 @@ class Options
         [
             'short' => 'm',
             'long' => 'message',
-            'param_description' => '"message"',
+            'param_description' => 'MESSAGE',
             'cli_description' => 'Customize the initial commit message (wrap with quotes!)',
+        ],
+        [
+            'short' => 'B',
+            'long' => 'branch',
+            'param_description' => 'BRANCH',
+            'cli_description' => 'The branch that should be created for a new repository <comment>[default: "main"]</comment>',
         ],
         [
             'short' => 'p',
@@ -27,33 +33,33 @@ class Options
         [
             'short' => 'b',
             'long' => 'browser',
-            'param_description' => '"BROWSER"',
+            'param_description' => 'BROWSER',
             'cli_description' => 'Open the site in the specified <info>BROWSER</info>. E.g. <info>firefox</info>',
         ],
         [
             'long' => 'dbhost',
             'param_description' => 'HOST',
-            'cli_description' => 'Specify the database host',
+            'cli_description' => 'Specify the database <info>HOST</info>',
         ],
         [
             'long' => 'dbport',
             'param_description' => 'PORT',
-            'cli_description' => 'Specify the database port',
+            'cli_description' => 'Specify the database <info>PORT</info>',
         ],
         [
             'long' => 'dbname',
-            'param_description' => 'DBNAME',
-            'cli_description' => 'Specify the database name',
+            'param_description' => 'NAME',
+            'cli_description' => 'Specify the database <info>NAME</info>',
         ],
         [
             'long' => 'dbuser',
             'param_description' => 'USERNAME',
-            'cli_description' => 'Specify the database user',
+            'cli_description' => 'Specify the database <info>USERNAME</info>',
         ],
         [
             'long' => 'dbpassword',
             'param_description' => 'PASSWORD',
-            'cli_description' => 'Specify the database password',
+            'cli_description' => 'Specify the database <info>PASSWORD</info>',
         ],
         [
             'long' => 'create-db',

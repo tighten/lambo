@@ -22,9 +22,18 @@ class InitializeGitRepo
     {
         $this->consoleWriter->logStep('Initializing git repository');
 
-        $this->exec("git init{$this->withQuiet()}");
+        $this->exec(sprintf(
+            'git init%s --initial-branch=%s',
+            config('lambo.store.with_output') ? '' : ' --quiet',
+            config('lambo.store.branch')
+        ));
+
         $this->exec('git add .');
-        $this->exec(sprintf('git commit%s -m "%s"', $this->withQuiet(), config('lambo.store.commit_message')));
+
+        $this->exec(sprintf(
+            'git commit%s -m "%s"',
+            config('lambo.store.with_output') ? '' : ' --quiet',
+            config('lambo.store.commit_message')));
 
         $this->consoleWriter->success('New git repository initialized.');
     }
@@ -33,10 +42,5 @@ class InitializeGitRepo
     {
         $process = $this->shell->execInProject($command);
         $this->abortIf(! $process->isSuccessful(), 'Initialization of git repository did not complete successfully.', $process);
-    }
-
-    private function withQuiet()
-    {
-        return config('lambo.store.with_output') ? '' : ' --quiet';
     }
 }

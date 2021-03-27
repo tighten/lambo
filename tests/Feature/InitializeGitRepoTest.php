@@ -10,12 +10,13 @@ use Tests\TestCase;
 class InitializeGitRepoTest extends TestCase
 {
     /** @test */
-    function it_initialises_the_projects_git_repository()
+    function it_initialises_git_with_the_specified_branch_name()
     {
         config(['lambo.store.commit_message' => 'Initial commit']);
+        config(['lambo.store.branch' => 'foo-branch']);
 
         $this->shell->shouldReceive('execInProject')
-            ->with('git init --quiet')
+            ->with('git init --quiet --initial-branch=foo-branch')
             ->once()
             ->andReturn(FakeProcess::success());
 
@@ -35,8 +36,10 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_init_fails()
     {
+        config(['lambo.store.branch' => 'main']);
+
         $this->shell->shouldReceive('execInProject')
-            ->with('git init --quiet')
+            ->with('git init --quiet --initial-branch=main')
             ->once()
             ->andReturn(FakeProcess::fail('git init'));
 
@@ -48,8 +51,10 @@ class InitializeGitRepoTest extends TestCase
     /** @test */
     function it_throws_an_exception_if_git_add_fails()
     {
+        config(['lambo.store.branch' => 'main']);
+
         $this->shell->shouldReceive('execInProject')
-            ->with('git init --quiet')
+            ->with('git init --quiet --initial-branch=main')
             ->once()
             ->andReturn(FakeProcess::success());
 
@@ -67,8 +72,9 @@ class InitializeGitRepoTest extends TestCase
     function it_throws_an_exception_if_git_commit_fails()
     {
         config(['lambo.store.commit_message' => 'Initial commit']);
+        config(['lambo.store.branch' => 'main']);
 
-        $command = 'git init --quiet';
+        $command = 'git init --quiet --initial-branch=main';
         $this->shell->shouldReceive('execInProject')
             ->with($command)
             ->once()
@@ -93,10 +99,11 @@ class InitializeGitRepoTest extends TestCase
     function it_removes_the_quiet_flag_when_show_output_is_enabled()
     {
         config(['lambo.store.commit_message' => 'Initial commit']);
+        config(['lambo.store.branch' => 'main']);
         config(['lambo.store.with_output' => true]);
 
         $this->shell->shouldReceive('execInProject')
-            ->with('git init')
+            ->with('git init --initial-branch=main')
             ->once()
             ->andReturn(FakeProcess::success());
 
