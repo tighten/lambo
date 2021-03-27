@@ -10,11 +10,11 @@ use App\Actions\DisplayLamboWelcome;
 use App\Actions\EditConfigFile;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitRepo;
+use App\Actions\InstallLaravel;
 use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
-use App\Actions\InstallLaravel;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
@@ -144,6 +144,7 @@ class NewCommand extends LamboCommand
             'dbuser' => LamboConfiguration::DATABASE_USERNAME,
             'dbpassword' => LamboConfiguration::DATABASE_PASSWORD,
             'create-db' => LamboConfiguration::CREATE_DATABASE,
+            'force' => LamboConfiguration::FORCE_CREATE,
             'migrate-db' => LamboConfiguration::MIGRATE_DATABASE,
             'link' => LamboConfiguration::VALET_LINK,
             'secure' => LamboConfiguration::VALET_SECURE,
@@ -194,6 +195,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::DATABASE_USERNAME => 'root',
             LamboConfiguration::DATABASE_PASSWORD => '',
             LamboConfiguration::CREATE_DATABASE => false,
+            LamboConfiguration::FORCE_CREATE => false,
             LamboConfiguration::MIGRATE_DATABASE => false,
             LamboConfiguration::VALET_LINK => false,
             LamboConfiguration::VALET_SECURE => false,

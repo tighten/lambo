@@ -60,6 +60,11 @@ class Options
             'cli_description' => 'Create a new MySQL database',
         ],
         [
+            'short' => 'f',
+            'long' => 'force',
+            'cli_description' => 'Forces install even if the directory already exists',
+        ],
+        [
             'long' => 'migrate-db',
             'cli_description' => 'Run database migrations',
         ],

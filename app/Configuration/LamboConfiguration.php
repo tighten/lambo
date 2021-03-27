@@ -12,6 +12,7 @@ abstract class LamboConfiguration
     public const WITH_OUTPUT = 'with_output';
     public const USE_DEVELOP_BRANCH = 'dev';
     public const CREATE_DATABASE = 'create_database';
+    public const FORCE_CREATE = 'force_create';
     public const MIGRATE_DATABASE = 'migrate_database';
     public const DATABASE_HOST = 'database_host';
     public const DATABASE_PORT = 'database_port';
