@@ -28,10 +28,10 @@ class ConsoleWriter extends OutputStyle
 
     public function exec(string $command)
     {
-        $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
+        $this->labeledLine(' EXEC ', $command, 'bg=blue;fg=black');
     }
 
-    public function success($message, $label = 'PASS'): void
+    public function success($message, $label = ' PASS '): void
     {
         $this->labeledLine($label, $message, 'fg=black;bg=green');
     }
@@ -41,12 +41,12 @@ class ConsoleWriter extends OutputStyle
         $this->success($message, ' OK ');
     }
 
-    public function note($message, $label = 'NOTE'): void
+    public function note($message, $label = ' NOTE '): void
     {
         $this->labeledLine($label, $message, 'fg=black;bg=yellow');
     }
 
-    public function warn($message, $label = 'WARN'): void
+    public function warn($message, $label = ' WARN '): void
     {
         $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
     }
@@ -80,16 +80,16 @@ class ConsoleWriter extends OutputStyle
     {
         if (config('lambo.store.with_output')) {
             ($type === Process::ERR)
-                ? $this->labeledLine('!', "<fg=yellow>{$line}</>", 'bg=yellow;fg=black', 3)
-                : $this->labeledLine('✓', "{$line}", 'bg=blue;fg=black', 3);
+                ? $this->labeledLine('!️', '┃ ' . $line, 'fg=yellow')
+                : $this->labeledLine('✓︎', '┃ ' . $line, 'fg=green;');
         }
     }
 
-    private function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
+    public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
     {
         $indentString = str_repeat(' ', $indent);
         $this->isDecorated()
-            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
+            ? parent::text("{$indentString}<{$labelFormat}>{$label}</> {$message}")
             : parent::text("{$indentString}[{$label}] {$message}");
     }
 }

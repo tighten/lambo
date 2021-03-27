@@ -43,7 +43,7 @@ class Shell
             ->enableOutput();
 
         $this->consoleWriter->exec($command);
-
+        $this->consoleWriter->newLine();
         $process->run(function ($type, $buffer) {
             if (empty(trim($buffer)) || $buffer === PHP_EOL) {
                 return;
@@ -53,6 +53,7 @@ class Shell
                 $this->consoleWriter->consoleOutput($line, $type);
             }
         });
+        $this->consoleWriter->newLine();
 
         $this->useTTY = false;
         return $process;

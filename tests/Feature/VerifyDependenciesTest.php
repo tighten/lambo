@@ -22,8 +22,8 @@ class VerifyDependenciesTest extends TestCase
     {
         $this->executableFinder
             ->shouldReceive('find')
-            ->with('laravel')
-            ->andReturn('/path/to/laravel');
+            ->with('composer')
+            ->andReturn('/path/to/composer');
 
         $this->executableFinder
             ->shouldReceive('find')
@@ -41,7 +41,7 @@ class VerifyDependenciesTest extends TestCase
     /** @test */
     function it_throws_a_lambo_exception_if_laravel_is_missing()
     {
-        $this->dependencyIsMissing('laravel');
+        $this->dependencyIsMissing('composer');
         $this->dependencyIsAvailable('valet');
         $this->dependencyIsAvailable('git');
 
@@ -53,7 +53,7 @@ class VerifyDependenciesTest extends TestCase
     /** @test */
     function it_throws_a_lambo_exception_if_valet_is_missing()
     {
-        $this->dependencyIsAvailable('laravel');
+        $this->dependencyIsAvailable('composer');
         $this->dependencyIsMissing('valet');
         $this->dependencyIsAvailable('git');
 
@@ -65,7 +65,7 @@ class VerifyDependenciesTest extends TestCase
     /** @test */
     function it_throws_a_lambo_exception_if_git_is_missing()
     {
-        $this->dependencyIsAvailable('laravel');
+        $this->dependencyIsAvailable('composer');
         $this->dependencyIsAvailable('valet');
         $this->dependencyIsMissing('git');
 

@@ -14,9 +14,9 @@ class VerifyDependencies
 
     private $dependencies = [
         [
-            'command' => 'laravel',
-            'label' => 'The Laravel Installer',
-            'instructions_url' => 'https://laravel.com/docs/installation#installing-laravel',
+            'command' => 'composer',
+            'label' => 'Composer',
+            'instructions_url' => 'https://getcomposer.org',
         ],
         [
             'command' => 'valet',

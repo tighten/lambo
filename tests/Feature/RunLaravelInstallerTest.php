@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\RunLaravelInstaller;
+use App\Actions\InstallLaravel;
 use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -13,37 +13,25 @@ class RunLaravelInstallerTest extends TestCase
     function it_runs_the_laravel_installer()
     {
         collect([
-            [
-                'command' => 'laravel new my-project --quiet',
-                'lambo.store.dev' => false,
-                'lambo.store.with_output' => false,
-            ],
-            [
-                'command' => 'laravel new my-project',
-                'lambo.store.dev' => false,
-                'lambo.store.with_output' => true,
-            ],
-            [
-                'command' => 'laravel new my-project --dev --quiet',
-                'lambo.store.dev' => true,
-                'lambo.store.with_output' => false,
-            ],
-            [
-                'command' => 'laravel new my-project --dev',
-                'lambo.store.dev' => true,
-                'lambo.store.with_output' => true,
-            ],
+            ['lambo.store.dev' => false, 'lambo.store.with_output' => false],
+            ['lambo.store.dev' => false, 'lambo.store.with_output' => true],
+            ['lambo.store.dev' => true, 'lambo.store.with_output' => false],
+            ['lambo.store.dev' => true, 'lambo.store.with_output' => true],
         ])->each(function ($options) {
             config(['lambo.store.project_name' => 'my-project']);
             config(['lambo.store.dev' => $options['lambo.store.dev']]);
             config(['lambo.store.with_output' => $options['lambo.store.with_output']]);
-
             $this->shell->shouldReceive('execInRoot')
-                ->with($options['command'])
+                ->with(sprintf(
+                    'composer create-project laravel/laravel %s%s --remove-vcs --prefer-dist %s',
+                    config('lambo.store.project_name'),
+                    config('lambo.store.dev') ? ' dev-master' : '',
+                    config('lambo.store.with_output') ? '' : '--quiet'
+                ))
                 ->once()
                 ->andReturn(FakeProcess::success());
 
-            app(RunLaravelInstaller::class)();
+            app(InstallLaravel::class)();
         });
     }
 
@@ -59,6 +47,6 @@ class RunLaravelInstallerTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(RunLaravelInstaller::class)();
+        app(InstallLaravel::class)();
     }
 }

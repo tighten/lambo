@@ -14,7 +14,7 @@ use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\RunAfterScript;
-use App\Actions\RunLaravelInstaller;
+use App\Actions\InstallLaravel;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
@@ -98,7 +98,7 @@ class NewCommand extends LamboCommand
             app(ValidateConfiguration::class)();
             app(VerifyPathAvailable::class)();
             app(VerifyDependencies::class)();
-            app(RunLaravelInstaller::class)();
+            app(InstallLaravel::class)();
             app(CustomizeDotEnv::class)();
             app(GenerateAppKey::class)();
             app(CreateDatabase::class)();
