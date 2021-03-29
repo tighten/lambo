@@ -158,7 +158,7 @@ You can optionally pass one or more of these parameters every time you use Lambo
 - `-l` or `--link` to create a Valet link to the project directory.
 
   ```bash
-  lambo superApplication --link
+  lambo new superApplication --link
   ```
 
 - `-s` or `--secure` to secure the Valet site using https.
@@ -214,12 +214,12 @@ You can optionally pass one or more of these parameters every time you use Lambo
 - `--teams` to install Jetstream using teams.
 
   ```bash
-  lambo superApplication --teams
+  lambo new superApplication --teams
   
 - `--full` to use `--create-db`, `--migrate-db`, `--link`, and `-secure`.
 
   ```bash
-  lambo superApplication --full
+  lambo new superApplication --full
 
 -----
 
