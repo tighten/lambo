@@ -7,24 +7,24 @@
 Lambo is a command-line tool that replaces the Laravel installer and wraps up the most common tasks you might take when creating a Laravel app: opening it in your editor and your browser, initialize a git repository, tweak your `.env` and `.env.example`, and more.
 
 
-## Requirements
+# Requirements
 
 - PHP 7.3+
 - (optional, but beneficial) [Laravel Valet](https://laravel.com/docs/valet)
 
-## Installation
+# Installation
 
 ```bash
 composer global require tightenco/lambo:^1.0
 ```
 
-## Upgrading
+# Upgrading
 
 ```bash
 composer global update tightenco/lambo
 ```
 
-## Usage
+# Usage
 
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
@@ -33,7 +33,7 @@ cd ~/Sites
 lambo new myNextProject
 ```
 
-### What exactly does it do?
+# What exactly does it do?
 
 - `laravel new $PROJECTNAME`
 - Initialize a git repo, add all of the files, and, after some changes below, make a commit with the text "Initial commit."
@@ -47,17 +47,17 @@ lambo new myNextProject
 
 There are also a few optional behaviors based on the parameters you pass (or define in your config file), including creating a database, migrating, installing Jetstream, running Valet Link and/or Secure, and running a custom bash script of your definition after the fact.
 
-## Customizing Lambo
+# Customizing Lambo
 
 While the default actions Lambo provides are great, most users will want to customize at least a few of the steps. Thankfully, Lambo is built to be customized!
 
-There are two ways to customize your usage of Lambo: command-line arguments and a config file.
+There are three ways to customize your usage of Lambo: command-line arguments, a config file, and an "after" file.
 
 Most users will want to set their preferred configuration options once and then never think about it again. That's best solved by creating a config file.
 
 But if you find yourself needing to change the way you interact with Lambo on a project-by-project basis, you may also want to use the command-line parameters to customize Lambo when you're using it.
 
-### Creating a config file
+## Creating a config file
 
 You can create a config file at `~/.lambo/config` rather than pass the same arguments each time you create a new project.
 
@@ -69,31 +69,9 @@ lambo edit-config
 
 The config file contains the configuration parameters you can customize, and will be read on every usage of Lambo.
 
-### Using command-line parameters
+## Creating an "after" file
 
-Any command-line parameters passed in will override Lambo's defaults and your config settings. See a [full list of the parameters you can pass in](#parameters).
-
-### Commands
-
-- `help` or `help-screen` show the help screen
-
-<a id="config-files"></a>
-- `edit-config` edits your config file (and creates one if it doesn't exist)
-
-  ```bash
-  lambo edit-config
-  ```
-
-- `edit-after` edits your "after" file (and creates one if it doesn't exist)
-
-  ```bash
-  lambo edit-after
-  ```
- 
-
-### After File
-
-You can create an after file at `~/.lambo/after` to run additional commands after you create a new project.
+You can also create an after file at `~/.lambo/after` to run additional commands after you create a new project.
 
 The following command creates the file, if it doesn't exist, and edits it:
 
@@ -101,7 +79,7 @@ The following command creates the file, if it doesn't exist, and edits it:
 lambo edit-after
 ```
 
-The after file is interpreted as a bash script, so you can include any commands here such as installing additional composer dependencies...
+The after file is interpreted as a bash script, so you can include any commands here, such as installing additional composer dependencies...
 
 ```bash
 # Install additional composer dependencies as you would from the command line.
@@ -119,8 +97,30 @@ cp -R ~/.lambo/includes/ $PROJECTPATH
 
 You also have access to variables from your config file such as `$PROJECTPATH` and `$CODEEDITOR`.
 
+## Using command-line parameters
+
+Any command-line parameters passed in will override Lambo's defaults and your config settings. See a [full list of the parameters you can pass in](#parameters).
+
+# Lambo Commands
+
+- `help` or `help-screen` show the help screen
+
+<a id="config-files"></a>
+- `edit-config` edits your config file (and creates one if it doesn't exist)
+
+  ```bash
+  lambo edit-config
+  ```
+
+- `edit-after` edits your "after" file (and creates one if it doesn't exist)
+
+  ```bash
+  lambo edit-after
+  ```
+
+
 <a id="parameters"></a>
-### Configurable parameters
+# Configurable parameters
 
 You can optionally pass one or more of these parameters every time you use Lambo. If you find yourself wanting to configure any of these settings every time you run Lambo, that's a perfect use for the [config files](#config-files).
 
