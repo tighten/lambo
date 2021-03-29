@@ -10,7 +10,7 @@ use Tests\TestCase;
 class InstallLaravelTest extends TestCase
 {
     /** @test */
-    function it_runs_the_laravel_installer()
+    function it_installs_laravel()
     {
         collect([
             ['lambo.store.dev' => false, 'lambo.store.with_output' => false],
@@ -36,7 +36,7 @@ class InstallLaravelTest extends TestCase
     }
 
     /** @test */
-    function it_throws_an_exception_if_the_laravel_installer_fails()
+    function it_throws_an_exception_if_laravel_fails_to_install()
     {
         config(['lambo.store.project_name' => 'my-project']);
         config(['lambo.store.dev' => false]);
