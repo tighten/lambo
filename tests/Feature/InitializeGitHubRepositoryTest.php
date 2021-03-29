@@ -193,7 +193,7 @@ class InitializeGitHubRepositoryTest extends TestCase
     protected function shouldPushToGitHub(): void
     {
         $this->shell->shouldReceive('execInProject')
-            ->with('git push -u origin foo-branch')
+            ->with("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin foo-branch")
             ->once()
             ->andReturn(FakeProcess::success());
     }
