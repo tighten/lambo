@@ -75,6 +75,9 @@ Any command-line parameters passed in will override Lambo's defaults and your co
 
 ### Commands
 
+- `help` or `help-screen` show the help screen
+
+<a id="config-files"></a>
 - `edit-config` edits your config file (and creates one if it doesn't exist)
 
   ```bash
@@ -86,6 +89,7 @@ Any command-line parameters passed in will override Lambo's defaults and your co
   ```bash
   lambo edit-after
   ```
+ 
 
 ### After File
 
@@ -118,7 +122,104 @@ You also have access to variables from your config file such as `$PROJECTPATH` a
 <a id="parameters"></a>
 ### Configurable parameters
 
-List coming soon. For now, just run `lambo help` and it'll give you the full list.
+You can optionally pass one or more of these parameters every time you use Lambo. If you find yourself wanting to configure any of these settings every time you run Lambo, that's a perfect use for the [config files](#config-files).
+
+- `-e` or `--editor` to define your editor command. Whatever is passed here will be run as `$EDITOR .` after creating the project.
+
+  ```bash
+  # runs "subl ." in the project directory after creating the project
+  lambo new superApplication --editor=subl
+  ```
+
+- `-m` or `--message` to set the first Git commit message.
+
+  ```bash
+  lambo new superApplication --message="This lambo runs fast!"
+  ```
+
+- `-p` or `--path` to specify where to install the application.
+
+  ```bash
+  lambo new superApplication --path=~/Sites
+  ```
+
+- `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install.
+
+  ```bash
+  lambo new superApplication --dev
+  ```
+
+- `-b` or `--browser` to define which browser you want to open the project in.
+
+  ```bash
+  lambo new superApplication --browser="/Applications/Google Chrome Canary.app"
+  ```
+
+- `-l` or `--link` to create a Valet link to the project directory.
+
+  ```bash
+  lambo superApplication --link
+  ```
+
+- `-s` or `--secure` to secure the Valet site using https.
+
+  ```bash
+  lambo new superApplication --secure
+  ```
+
+- `--create-db` to create a new MySQL database which has the same name as your project.
+  This requires `mysql` command to be available on your system.
+
+  ```bash
+  lambo new superApplication --create-db
+  ```
+
+- `--migrate-db` to migrate your database.
+
+  ```bash
+  lambo new superApplication --migrate-db
+  ```
+
+- `--dbuser` to specify the database username.
+
+  ```bash
+  lambo new superApplication --dbuser=USER
+  ```
+
+- `--dbpassword` specify the database password.
+
+  ```bash
+  lambo new superApplication --dbpassword=SECRET
+  ```
+
+- `--dbhost` specify the database host.
+
+  ```bash
+  lambo new superApplication --dbhost=127.0.0.1
+  ```
+
+
+- `--inertia` to install Jetstream using Inertia.
+
+  ```bash
+  lambo new superApplication --inertia
+  ```
+  
+- `--livewire` to install Jetstream using Livewire.
+
+  ```bash
+  lambo new superApplication --livewire
+  ```
+  
+- `--teams` to install Jetstream using teams.
+
+  ```bash
+  lambo superApplication --teams
+  
+- `--full` to use `--create-db`, `--migrate-db`, `--link`, and `-secure`.
+
+  ```bash
+  lambo superApplication --full
 
 -----
 
