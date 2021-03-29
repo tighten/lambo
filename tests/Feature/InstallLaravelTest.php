@@ -7,7 +7,7 @@ use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
-class RunLaravelInstallerTest extends TestCase
+class InstallLaravelTest extends TestCase
 {
     /** @test */
     function it_runs_the_laravel_installer()
