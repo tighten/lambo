@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Actions\InitializeGitRepo;
+use App\Actions\InitializeGitRepository;
 use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
@@ -30,7 +30,7 @@ class InitializeGitRepoTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::success());
 
-        app(InitializeGitRepo::class)();
+        app(InitializeGitRepository::class)();
     }
 
     /** @test */
@@ -45,7 +45,7 @@ class InitializeGitRepoTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(InitializeGitRepo::class)();
+        app(InitializeGitRepository::class)();
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class InitializeGitRepoTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(InitializeGitRepo::class)();
+        app(InitializeGitRepository::class)();
     }
 
     /** @test */
@@ -92,7 +92,7 @@ class InitializeGitRepoTest extends TestCase
 
         $this->expectException(LamboException::class);
 
-        app(InitializeGitRepo::class)();
+        app(InitializeGitRepository::class)();
     }
 
     /** @test */
@@ -117,6 +117,6 @@ class InitializeGitRepoTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::success());
 
-        app(InitializeGitRepo::class)();
+        app(InitializeGitRepository::class)();
     }
 }

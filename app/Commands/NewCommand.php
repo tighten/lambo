@@ -9,7 +9,8 @@ use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayLamboWelcome;
 use App\Actions\EditConfigFile;
 use App\Actions\GenerateAppKey;
-use App\Actions\InitializeGitRepo;
+use App\Actions\InitializeGitHubRepository;
+use App\Actions\InitializeGitRepository;
 use App\Actions\InstallLaravel;
 use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
@@ -104,8 +105,9 @@ class NewCommand extends LamboCommand
             app(CreateDatabase::class)();
             app(ConfigureFrontendFramework::class)();
             app(MigrateDatabase::class)();
-            app(InitializeGitRepo::class)();
+            app(InitializeGitRepository::class)();
             app(RunAfterScript::class)();
+            app(InitializeGitHubRepository::class)();
             app(ValetLink::class)();
             app(ValetSecure::class)();
             app(OpenInEditor::class)();
@@ -155,6 +157,7 @@ class NewCommand extends LamboCommand
             'teams' => LamboConfiguration::TEAMS,
             'inertia' => LamboConfiguration::INERTIA,
             'livewire' => LamboConfiguration::LIVEWIRE,
+            'github' => LamboConfiguration::GITHUB,
             'projectName' => LamboConfiguration::PROJECT_NAME,
         ]);
 
@@ -208,6 +211,7 @@ class NewCommand extends LamboCommand
             LamboConfiguration::INERTIA => false,
             LamboConfiguration::LIVEWIRE => false,
             LamboConfiguration::TEAMS => false,
+            LamboConfiguration::GITHUB => false,
             LamboConfiguration::PROJECT_NAME => null,
             LamboConfiguration::TLD => null,
         ]);

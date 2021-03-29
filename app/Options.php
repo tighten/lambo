@@ -105,6 +105,11 @@ class Options
             'long' => 'full',
             'cli_description' => 'Shortcut of --create-db --migrate-db --link --secure',
         ],
+        [
+            'short' => 'g',
+            'long' => 'github',
+            'cli_description' => 'Create a new repository on GitHub <comment>[default: false]</comment>',
+        ],
     ];
 
     public function all()

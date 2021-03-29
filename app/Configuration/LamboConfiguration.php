@@ -30,6 +30,7 @@ abstract class LamboConfiguration
     public const INERTIA = 'inertia';
     public const LIVEWIRE = 'livewire';
     public const TEAMS = 'teams';
+    public const GITHUB = 'initialize_github';
     public const COMMAND = 'command';
 
     public function __construct(array $keyMap)

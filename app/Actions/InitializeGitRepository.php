@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\ConsoleWriter;
 use App\Shell;
 
-class InitializeGitRepo
+class InitializeGitRepository
 {
     use AbortsCommands;
 
