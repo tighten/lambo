@@ -39,7 +39,7 @@ class VerifyDependenciesTest extends TestCase
     }
 
     /** @test */
-    function it_throws_a_lambo_exception_if_laravel_is_missing()
+    function it_throws_a_lambo_exception_if_composer_is_missing()
     {
         $this->dependencyIsMissing('composer');
         $this->dependencyIsAvailable('valet');
