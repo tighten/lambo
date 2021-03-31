@@ -61,11 +61,6 @@ class DisplayHelpScreen
         $spaces = $this->makeSpaces(strlen($flag));
         $description = $option['cli_description'];
 
-        if (isset($option['cli_description_extra'])) {
-            $description .= PHP_EOL . $this->makeSpaces(-3) . implode(PHP_EOL
-                    . $this->makeSpaces(-3), $option['cli_description_extra']);
-        }
-
         return "  <info>{$flag}</info>{$spaces}{$description}";
     }
 

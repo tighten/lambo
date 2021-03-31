@@ -27,7 +27,13 @@ class Options
         [
             'short' => 'g',
             'long' => 'github',
-            'cli_description' => 'Create a new repository on GitHub',
+            'param_description' => 'OPTIONS',
+            'cli_description' => 'Create a new repository on GitHub using the specified <info>OPTIONS</info>. <comment>[default: "false"]</comment>',
+        ],
+        [
+            'long' => 'github-org',
+            'param_description' => 'ORG',
+            'cli_description' => 'When used with --github, create the new repository under <info>ORG</info>. E.g. <info>ORG/project</info>',
         ],
         [
             'short' => 'b',
@@ -128,8 +134,7 @@ class Options
         [
             'short' => 'v|vv|vvv',
             'long' => 'verbose',
-            'param_description' => 'LEVEL',
-            'cli_description' => "Increase the verbosity of messages where <info>LEVEL</info> is 1 for normal output, 2 for more verbose output and 3 for debug",
+            'cli_description' => 'Increase the verbosity of messages where v is for extra information, and vvv is for debug',
         ],
     ];
 

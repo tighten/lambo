@@ -20,26 +20,15 @@ class InitializeGitHubRepository
 
     public function __invoke()
     {
-        if (! config('lambo.store.initialize_github')) {
+        $ghCommandOptions = config('lambo.store.github');
+        if (! $ghCommandOptions) {
             return;
         }
 
         $this->consoleWriter->logStep('Initializing GitHub repository');
 
-        $process = $this->shell->execInProject(sprintf(
-            'gh repo create %s --confirm %s%s%s%s%s%s',
-            $this->getRepositoryName(),
-            config('lambo.store.github.visibility') ?: '--private',
-            config('lambo.store.github.no-issues') ? ' --enable-issues=false' : '',
-            config('lambo.store.github.no-wiki') ? ' --enable-wiki=false' : '',
-            $this->getOption('--description', config('lambo.store.github.description')),
-            $this->getOption('--homepage', config('lambo.store.github.homepage')),
-            $this->getOption('--team', config('lambo.store.github.team')),
-        ));
-
-        $process = $this->shell->execInProject(
-            "git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin " . config('lambo.store.branch')
-        );
+        $process = $this->shell->execInProject("gh repo create --confirm {$this->getRepositoryName()} {$ghCommandOptions}");
+        $process = $this->shell->execInProject("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin {$this->getBranchName()}");
 
         $this->consoleWriter->success('GitHub repository initialized');
     }
@@ -47,12 +36,12 @@ class InitializeGitHubRepository
     protected function getRepositoryName()
     {
         $name = config('lambo.store.project_name');
-        $organization = config('lambo.store.github.organization');
+        $organization = config('lambo.store.github-org');
         return $organization ? "{$organization}/{$name}" : $name;
     }
 
-    private function getOption(string $optionKey, ?string $optionValue): string
+    protected function getBranchName()
     {
-        return $optionValue ? " {$optionKey}='{$optionValue}'" : '';
+        return config('lambo.store.branch');
     }
 }
