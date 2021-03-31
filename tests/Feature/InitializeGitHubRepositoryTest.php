@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Actions\InitializeGitHubRepository;
-use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -33,7 +32,7 @@ class InitializeGitHubRepositoryTest extends TestCase
     function it_initialises_a_repository_for_the_given_organisation()
     {
         $this->withConfig([
-            'github-org' => 'org'
+            'github-org' => 'org',
         ]);
 
         $this->shell->shouldReceive('execInProject')

@@ -5,7 +5,6 @@ namespace App\Configuration;
 use App\Commands\NewCommand;
 use App\ConsoleWriter;
 use App\LamboException;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Style\SymfonyStyle;

@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Options;
-use Illuminate\Support\Str;
 
 class DisplayHelpScreen
 {
