@@ -108,12 +108,6 @@ class Options
 
     protected $commonOptions = [
         [
-            'short' => 'e',
-            'long' => 'editor',
-            'param_description' => 'EDITOR',
-            'cli_description' => "Specify an <info>EDITOR</info> to use",
-        ],
-        [
             'short' => 'q',
             'long' => 'quiet',
             'cli_description' => 'Do not output to the console (except for user input)',
@@ -121,8 +115,7 @@ class Options
         [
             'short' => 'V',
             'long' => 'version',
-            'param_description' => 'EDITOR',
-            'cli_description' => 'Display Lambo\'s version',
+            'cli_description' => 'Display Lambo\'s version and exit',
         ],
         [
             'long' => 'ansi',

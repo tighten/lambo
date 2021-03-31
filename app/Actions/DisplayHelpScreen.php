@@ -10,9 +10,9 @@ class DisplayHelpScreen
     protected $indent = 30;
 
     protected $commands = [
+        'help' => 'Display this screen',
         'edit-config' => 'Edit "~/.lambo/config" file',
         'edit-after' => 'Edit "~/.lambo/after" file',
-        'help' => 'Display this screen',
         'new' => 'Scaffold a new Laravel application',
     ];
 
@@ -29,9 +29,9 @@ class DisplayHelpScreen
         app('console-writer')->newLine();
         app('console-writer')->text('<comment>Usage:</comment>');
         app('console-writer')->text('  lambo help');
-        app('console-writer')->text('  lambo edit-config [options]');
-        app('console-writer')->text('  lambo edit-after [options]');
-        app('console-writer')->text('  lambo new myApplication [options]');
+        app('console-writer')->text('  lambo [common options] edit-config [--editor=<editor>]');
+        app('console-writer')->text('  lambo [common options] edit-after [--editor=<editor>]');
+        app('console-writer')->text('  lambo [common options] new myApplication [--editor=<editor>] [options]');
 
         app('console-writer')->newLine();
         app('console-writer')->text('<comment>Options (lambo new myApplication):</comment>');
