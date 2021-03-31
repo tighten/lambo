@@ -7,10 +7,10 @@ class Options
     protected $options = [
         /** Parameters first, then flags */
         [
-            'short' => 'e',
-            'long' => 'editor',
-            'param_description' => 'EDITOR',
-            'cli_description' => "Specify an editor to run <info>'EDITOR .'</info> with after",
+            'short' => 'p',
+            'long' => 'path',
+            'param_description' => 'PATH',
+            'cli_description' => 'Customize the path in which the new project will be created',
         ],
         [
             'short' => 'm',
@@ -25,10 +25,9 @@ class Options
             'cli_description' => 'The branch that should be created for a new repository <comment>[default: "main"]</comment>',
         ],
         [
-            'short' => 'p',
-            'long' => 'path',
-            'param_description' => 'PATH',
-            'cli_description' => 'Customize the path in which the new project will be created',
+            'short' => 'g',
+            'long' => 'github',
+            'cli_description' => 'Create a new repository on GitHub',
         ],
         [
             'short' => 'b',
@@ -105,14 +104,48 @@ class Options
             'long' => 'full',
             'cli_description' => 'Shortcut of --create-db --migrate-db --link --secure',
         ],
+    ];
+
+    protected $commonOptions = [
         [
-            'short' => 'g',
-            'long' => 'github',
-            'cli_description' => 'Create a new repository on GitHub <comment>[default: false]</comment>',
+            'short' => 'e',
+            'long' => 'editor',
+            'param_description' => 'EDITOR',
+            'cli_description' => "Specify an <info>EDITOR</info> to use",
+        ],
+        [
+            'short' => 'q',
+            'long' => 'quiet',
+            'cli_description' => 'Do not output to the console (except for user input)',
+        ],
+        [
+            'short' => 'V',
+            'long' => 'version',
+            'param_description' => 'EDITOR',
+            'cli_description' => 'Display Lambo\'s version',
+        ],
+        [
+            'long' => 'ansi',
+            'cli_description' => 'Force ANSI output',
+        ],
+        [
+            'long' => 'no-ansi',
+            'cli_description' => 'Disable ANSI output',
+        ],
+        [
+            'short' => 'v|vv|vvv',
+            'long' => 'verbose',
+            'param_description' => 'LEVEL',
+            'cli_description' => "Increase the verbosity of messages where <info>LEVEL</info> is 1 for normal output, 2 for more verbose output and 3 for debug",
         ],
     ];
 
-    public function all()
+    public function common(): array
+    {
+        return $this->commonOptions;
+    }
+
+    public function all(): array
     {
         return $this->options;
     }
