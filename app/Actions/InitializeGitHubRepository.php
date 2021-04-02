@@ -28,9 +28,12 @@ class InitializeGitHubRepository
         $this->consoleWriter->logStep('Initializing GitHub repository');
 
         $process = $this->shell->execInProject("gh repo create --confirm {$this->getRepositoryName()} {$ghCommandOptions}");
-        $process = $this->shell->execInProject("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin {$this->getBranchName()}");
+        if (! $process->isSuccessful()) {
+            $this->consoleWriter->warn('Failed to create new GitHub repository');
+            return;
+        }
 
-        $this->consoleWriter->success('GitHub repository initialized');
+        $this->consoleWriter->success('Successfully created new GitHub repository');
     }
 
     protected function getRepositoryName()
@@ -38,10 +41,5 @@ class InitializeGitHubRepository
         $name = config('lambo.store.project_name');
         $organization = config('lambo.store.github-org');
         return $organization ? "{$organization}/{$name}" : $name;
-    }
-
-    protected function getBranchName()
-    {
-        return config('lambo.store.branch');
     }
 }

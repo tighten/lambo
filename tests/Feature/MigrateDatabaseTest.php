@@ -81,12 +81,6 @@ class MigrateDatabaseTest extends TestCase
     }
 
     /** @test */
-    function it_registers_a_lambo_summary_warning_if_execution_fails()
-    {
-        $this->markTestIncomplete('[ Incomplete ] It registers a lambo summary warning if execution fails');
-    }
-
-    /** @test */
     function it_skips_migrations()
     {
         $databaseSpy = $this->spy(Database::class);

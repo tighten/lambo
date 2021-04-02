@@ -6,6 +6,9 @@ use App\Actions\InitializeGitHubRepository;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
+/**
+ * @group git-and-github
+ */
 class InitializeGitHubRepositoryTest extends TestCase
 {
     private $ghRepoCreateCommand = 'gh repo create --confirm';
@@ -14,7 +17,17 @@ class InitializeGitHubRepositoryTest extends TestCase
     private $defaultBranchName = 'branch';
 
     /** @test */
-    function it_initialises_the_repository()
+    function it_skips_repository_creation()
+    {
+        $this->withConfig([
+            'github' => false,
+        ]);
+
+        app(InitializeGitHubRepository::class)();
+    }
+
+    /** @test */
+    function it_initialises_a_new_git_hub_repository()
     {
         $this->withConfig();
 
@@ -22,8 +35,6 @@ class InitializeGitHubRepositoryTest extends TestCase
             ->with("{$this->ghRepoCreateCommand} {$this->newProjectName} {$this->ghRepoCreateOptions}")
             ->once()
             ->andReturn(FakeProcess::success());
-
-        $this->shouldPushToGitHub();
 
         app(InitializeGitHubRepository::class)();
     }
@@ -40,15 +51,7 @@ class InitializeGitHubRepositoryTest extends TestCase
             ->once()
             ->andReturn(FakeProcess::success());
 
-        $this->shouldPushToGitHub();
-
         app(InitializeGitHubRepository::class)();
-    }
-
-    /** @test */
-    function it_registers_a_lambo_summary_warning_if_execution_fails()
-    {
-        $this->markTestIncomplete('[ Incomplete ] It registers a lambo summary warning if execution fails');
     }
 
     function withConfig(array $overrides = []): void
@@ -60,13 +63,5 @@ class InitializeGitHubRepositoryTest extends TestCase
                 'branch' => $this->defaultBranchName,
             ], $overrides)
         ]);
-    }
-
-    protected function shouldPushToGitHub(): void
-    {
-        $this->shell->shouldReceive('execInProject')
-            ->with("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin branch")
-            ->once()
-            ->andReturn(FakeProcess::success());
     }
 }

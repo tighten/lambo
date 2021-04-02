@@ -15,6 +15,7 @@ use App\Actions\InstallLaravel;
 use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
+use App\Actions\PushToGitHub;
 use App\Actions\RunAfterScript;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
@@ -108,6 +109,7 @@ class NewCommand extends LamboCommand
             app(InitializeGitRepository::class)();
             app(RunAfterScript::class)();
             app(InitializeGitHubRepository::class)();
+            app(PushToGitHub::class)();
             app(ValetLink::class)();
             app(ValetSecure::class)();
             app(OpenInEditor::class)();
