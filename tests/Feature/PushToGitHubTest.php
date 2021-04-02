@@ -11,13 +11,11 @@ use Tests\TestCase;
  */
 class PushToGitHubTest extends TestCase
 {
-    private $gitPushCommand = "git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin";
-    private $defaultBranchName = 'branch';
-
     /** @test */
     function it_pushes_to_github()
     {
-        $this->withConfig();
+        config(['lambo.store.push_to_github' => true]);
+        config(['lambo.store.branch' => 'branch']);
 
         $this->shell->shouldReceive('execInProject')
             ->with("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin branch")
@@ -30,16 +28,11 @@ class PushToGitHubTest extends TestCase
     /** @test */
     function it_skips_pushing_to_github()
     {
-        $this->markTestSkipped('-- Pending -- "it skips pushing to github"');
-    }
+        config(['lambo.store.branch' => 'branch']);
+        app(PushToGitHub::class)();
 
-    function withConfig(array $overrides = []): void
-    {
-        config([
-            'lambo.store' => array_merge([
-                'branch' => $this->defaultBranchName,
-                'push_to_github' => true,
-            ], $overrides)
-        ]);
+        config(['lambo.store.push_to_github' => false]);
+        config(['lambo.store.branch' => 'branch']);
+        app(PushToGitHub::class)();
     }
 }

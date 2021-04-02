@@ -30,9 +30,12 @@ class InitializeGitHubRepository
         $process = $this->shell->execInProject("gh repo create --confirm {$this->getRepositoryName()} {$ghCommandOptions}");
         if (! $process->isSuccessful()) {
             $this->consoleWriter->warn('Failed to create new GitHub repository');
+            $this->consoleWriter->warn("Failed to run {$process->getCommandLine()}");
+            $this->consoleWriter->showOutputErrors($process->getErrorOutput());
             return;
         }
 
+        config(['lambo.store.push_to_github' => true]);
         $this->consoleWriter->success('Successfully created new GitHub repository');
     }
 

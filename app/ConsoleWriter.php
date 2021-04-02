@@ -51,6 +51,15 @@ class ConsoleWriter extends OutputStyle
         $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
     }
 
+    public function showOutputErrors(string $errors)
+    {
+        parent::text([
+            '<fg=red;bg=default>--------------------------------------------------------------------------------',
+            str_replace(PHP_EOL, PHP_EOL . ' ', trim($errors)),
+            '--------------------------------------------------------------------------------</>',
+        ]);
+    }
+
     public function exception($message)
     {
         parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
