@@ -236,7 +236,7 @@ You can optionally pass one or more of these parameters every time you use Lambo
   lambo new superApplication --github='--private'
   ```
 
-Lambo uses the official GitHub command line tool to create your new repository so you must have it installed. You can find installation instructions [here]([cli/cli: GitHub's official command line tool](https://github.com/cli/cli#installation)).
+Lambo uses the official GitHub command line tool to create your new repository so you must have it installed. You can find installation instructions [here](https://github.com/cli/cli#installation).
 
 New repository creation is configured by passing the value of the Lambo `--github` command line option directly to the GitHub command line tool. You must pass at least the desired visibility of your new repository, one of, `--private`, `--public`, or `--internal`.
 
