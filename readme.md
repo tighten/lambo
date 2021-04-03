@@ -143,6 +143,13 @@ You can optionally pass one or more of these parameters every time you use Lambo
   lambo new superApplication --path=~/Sites
   ```
 
+- `-f` or `--force` to force install even if the directory already exists 
+
+  ```bash
+  # Creates a new Laravel application after deleting ~/Sites/superApplication  
+  lambo new superApplication --force =~/Sites
+  ```
+  
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install.
 
   ```bash
@@ -221,6 +228,33 @@ You can optionally pass one or more of these parameters every time you use Lambo
   ```bash
   lambo new superApplication --full
 
+## GitHub Repository Creation
+
+- `--github=<options>` to create a new GitHub repository and push your new project to it.
+
+  ```bash
+  lambo new superApplication --github='--private'
+  ```
+
+Lambo uses the official GitHub command line tool to create your new repository so you must have it installed. You can find installation instructions [here]([cli/cli: GitHub's official command line tool](https://github.com/cli/cli#installation)).
+
+New repository creation is configured by passing the value of the Lambo `--github` command line option directly to the GitHub command line tool. You must pass at least the desired visibility of your new repository, one of, `--private`, `--public`, or `--internal`.
+
+ ```bash
+ # Create a new GitHub repository <your_github_username>/superApplication with the desired visibility.
+  lambo new superApplication --github='--private'
+  lambo new superApplication --github='--public'
+  lambo new superApplication --github='--internal'
+ ```
+
+Please refer to the GitHub command line tool [repository creation documentation](https://cli.github.com/manual/gh_repo_create) for the full list of available options.
+
+- `--github-org=ORG` to specify under which organisation the new repository will be created.
+
+ ```bash
+ # Create a new public GitHub repository tighten/superApplication. 
+ lambo new superApplication --github='--public' --github-org=tighten
+ ```
 -----
 
 # For contributors:
