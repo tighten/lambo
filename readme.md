@@ -241,7 +241,7 @@ Lambo uses the official GitHub command line tool to create your new repository s
 New repository creation is configured by passing the value of the Lambo `--github` command line option directly to the GitHub command line tool. You must pass at least the desired visibility of your new repository, one of, `--private`, `--public`, or `--internal`.
 
  ```bash
- # Create a new GitHub repository <your_github_username>/superApplication with the desired visibility.
+ # Create a new GitHub repository <your_github_username>/superApplication with the desired visibility
   lambo new superApplication --github='--private'
   lambo new superApplication --github='--public'
   lambo new superApplication --github='--internal'
@@ -252,7 +252,7 @@ Please refer to the GitHub command line tool [repository creation documentation]
 - `--github-org=ORG` to specify under which organisation the new repository will be created.
 
  ```bash
- # Create a new public GitHub repository tighten/superApplication. 
+ # Create a new public GitHub repository tighten/superApplication
  lambo new superApplication --github='--public' --github-org=tighten
  ```
 -----
