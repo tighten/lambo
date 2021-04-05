@@ -52,5 +52,6 @@ class VerifyDependencies
             }),
             'Please install missing dependencies and try again.'
         );
+        exit;
     }
 }

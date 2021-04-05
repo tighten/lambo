@@ -4,16 +4,22 @@ namespace App\Actions;
 
 use App\Commands\Debug;
 use App\ConsoleWriter;
+use App\Shell;
+use Symfony\Component\Process\ExecutableFinder;
 
 class ValidateConfiguration
 {
     use Debug;
 
     protected $consoleWriter;
+    protected $shell;
+    protected $finder;
 
-    public function __construct(ConsoleWriter $consoleWriter)
+    public function __construct(ExecutableFinder $finder, Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->consoleWriter = $consoleWriter;
+        $this->shell = $shell;
+        $this->finder = $finder;
     }
 
     public function __invoke()
@@ -22,6 +28,8 @@ class ValidateConfiguration
 
         config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
         $this->checkTeamsConfiguration();
+
+        $this->checkGithubConfiguration();
 
         $this->consoleWriter->success('Configuration is valid.');
 
@@ -79,6 +87,49 @@ class ValidateConfiguration
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
             $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
+        }
+    }
+
+    private function checkGithubConfiguration()
+    {
+        $githubConfiguration = config('lambo.store.github');
+        if (! $githubConfiguration) {
+            return;
+        }
+
+        $ghInstalled = $this->finder->find('gh');
+        $this->warnWithExplanationIf(
+            ! $ghInstalled,
+            'Lambo is unable to create a new GitHub repository',
+            "Lambo uses the official GitHub command line tool to create new repositories but you don't seem to have it installed.",
+            'https://github.com/cli/cli#installation',
+        );
+
+        $authenticatedWithGitHub = $this->shell->execQuietly(['gh', 'auth', 'status'])->isSuccessful();
+        $this->warnWithExplanationIf(
+            $ghInstalled && ! $authenticatedWithGitHub,
+            'Lambo is unable to create a new GitHub repository',
+            'You are not logged into Github. Please run <comment>gh auth login</comment>.',
+            'https://cli.github.com/manual/gh_auth_login',
+        );
+
+        if (! $ghInstalled || ! $authenticatedWithGitHub) {
+            config(['lambo.store.github' => false]);
+            $choice = app('console')->confirm('Would you like Lambo to continue without GitHub repository creation?');
+            if (! $choice) {
+                exit;
+            }
+        }
+    }
+
+    private function warnWithExplanationIf(bool $shouldWarn, string $warning, string $explanation, string $url = ''): void
+    {
+        if ($shouldWarn) {
+            $this->consoleWriter->warn($warning);
+            $this->consoleWriter->text([
+                $explanation,
+                $url ? "For more information visit, {$url}." : '',
+            ]);
         }
     }
 }

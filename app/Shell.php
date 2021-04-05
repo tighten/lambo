@@ -59,6 +59,15 @@ class Shell
         return $process;
     }
 
+    public function execQuietly(array $command): Process
+    {
+        $process = (new Process($command))
+            ->setTimeout(null)
+            ->enableOutput();
+        $process->run();
+        return $process;
+    }
+
     public function withTTY()
     {
         $this->useTTY = true;

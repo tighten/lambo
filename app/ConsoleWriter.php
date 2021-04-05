@@ -60,6 +60,15 @@ class ConsoleWriter extends OutputStyle
         ]);
     }
 
+    public function showOutput(string $errors)
+    {
+        parent::text([
+            '--------------------------------------------------------------------------------',
+            str_replace(PHP_EOL, PHP_EOL . ' ', trim($errors)),
+            '--------------------------------------------------------------------------------',
+        ]);
+    }
+
     public function exception($message)
     {
         parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
