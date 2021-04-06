@@ -48,7 +48,6 @@ class Shell
             if (empty(trim($buffer)) || $buffer === PHP_EOL) {
                 return;
             }
-
             foreach (explode(PHP_EOL, trim($buffer)) as $line) {
                 $this->consoleWriter->consoleOutput($line, $type);
             }
