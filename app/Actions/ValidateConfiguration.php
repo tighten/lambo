@@ -4,20 +4,16 @@ namespace App\Actions;
 
 use App\Commands\Debug;
 use App\ConsoleWriter;
-use App\Shell;
 
 class ValidateConfiguration
 {
     use Debug;
 
     protected $consoleWriter;
-    protected $shell;
-    protected $finder;
 
-    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(ConsoleWriter $consoleWriter)
     {
         $this->consoleWriter = $consoleWriter;
-        $this->shell = $shell;
     }
 
     public function __invoke()
