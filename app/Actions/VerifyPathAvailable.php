@@ -36,6 +36,6 @@ class VerifyPathAvailable
             }
         }
 
-        app('console-writer')->success(sprintf('Directory "%s" is available.', config('lambo.store.project_path')));
+        app('console-writer')->success("Directory '{$projectPath}' is available.");
     }
 }
