@@ -59,9 +59,9 @@ class Shell
         return $process;
     }
 
-    public function execQuietly(array $command): Process
+    public function execQuietly(string $command)
     {
-        $process = (new Process($command))
+        $process =  Process::fromShellCommandline($command)
             ->setTimeout(null)
             ->enableOutput();
         $process->run();
