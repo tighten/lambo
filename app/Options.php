@@ -7,6 +7,12 @@ class Options
     protected $options = [
         /** Parameters first, then flags */
         [
+            'short' => 'e',
+            'long' => 'editor',
+            'param_description' => 'EDITOR',
+            'cli_description' => "Specify an editor to run <info>'EDITOR .'</info> with after",
+        ],
+        [
             'short' => 'p',
             'long' => 'path',
             'param_description' => 'PATH',
