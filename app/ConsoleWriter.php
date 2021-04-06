@@ -51,6 +51,11 @@ class ConsoleWriter extends OutputStyle
         $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
     }
 
+    public function warnCommandFailed($command): void
+    {
+        $this->warn("Failed to run {$command}");
+    }
+
     public function showOutputErrors(string $errors)
     {
         parent::text([

@@ -9,6 +9,7 @@ class InitializeGitHubRepository
 {
     use AbortsCommands;
 
+    public const WARNING_FAILED_TO_CREATE_REPOSITORY = 'Failed to create new GitHub repository';
     protected $shell;
     protected $consoleWriter;
 
@@ -29,8 +30,8 @@ class InitializeGitHubRepository
 
         $process = $this->shell->execInProject("gh repo create --confirm {$this->getRepositoryName()} {$ghCommandOptions}");
         if (! $process->isSuccessful()) {
-            $this->consoleWriter->warn('Failed to create new GitHub repository');
-            $this->consoleWriter->warn("Failed to run {$process->getCommandLine()}");
+            $this->consoleWriter->warn(self::WARNING_FAILED_TO_CREATE_REPOSITORY);
+            $this->consoleWriter->warnCommandFailed($process->getCommandLine());
             $this->consoleWriter->showOutputErrors($process->getErrorOutput());
             return;
         }
