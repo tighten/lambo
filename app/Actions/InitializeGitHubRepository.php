@@ -10,6 +10,7 @@ class InitializeGitHubRepository
     use AbortsCommands;
 
     public const WARNING_FAILED_TO_CREATE_REPOSITORY = 'Failed to create new GitHub repository';
+
     protected $shell;
     protected $consoleWriter;
 
