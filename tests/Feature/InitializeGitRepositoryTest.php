@@ -7,7 +7,7 @@ use App\LamboException;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
-class InitializeGitRepoTest extends TestCase
+class InitializeGitRepositoryTest extends TestCase
 {
     /** @test */
     function it_initialises_git_with_the_specified_branch_name()
