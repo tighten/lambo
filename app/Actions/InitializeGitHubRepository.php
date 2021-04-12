@@ -45,6 +45,7 @@ class InitializeGitHubRepository
     {
         $name = config('lambo.store.project_name');
         $organization = config('lambo.store.github-org');
+        
         return $organization ? "{$organization}/{$name}" : $name;
     }
 }

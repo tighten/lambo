@@ -31,8 +31,9 @@ class VerifyPathAvailable
             if (! config('lambo.store.force_create')) {
                 throw new LamboException("{$projectPath} is already a directory.");
             }
+
             if (! File::deleteDirectory($projectPath)) {
-                throw new LamboException("{$projectPath} is already a directory and although the force option was specified, deletion failed.");
+                throw new LamboException("{$projectPath} is already a directory and, although the force option was specified, deletion failed.");
             }
         }
 

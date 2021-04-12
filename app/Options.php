@@ -79,7 +79,7 @@ class Options
         [
             'short' => 'f',
             'long' => 'force',
-            'cli_description' => 'Forces install even if the directory already exists',
+            'cli_description' => 'Force install even if the directory already exists',
         ],
         [
             'long' => 'migrate-db',
