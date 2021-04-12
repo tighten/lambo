@@ -147,7 +147,7 @@ You can optionally pass one or more of these parameters every time you use Lambo
 
   ```bash
   # Creates a new Laravel application after deleting ~/Sites/superApplication  
-  lambo new superApplication --force =~/Sites
+  lambo new superApplication --force
   ```
   
 - `-d` or `--dev` to choose the `develop` branch instead of `master`, getting the beta install.
