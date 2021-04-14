@@ -34,6 +34,7 @@ class Options
             'short' => 'g',
             'long' => 'github',
             'param_description' => 'OPTIONS',
+            'default' => 'disabled',
             'cli_description' => 'Create a new repository on GitHub using the specified <info>OPTIONS</info>. <comment>[default: "false"]</comment>',
         ],
         [
@@ -133,11 +134,6 @@ class Options
         [
             'long' => 'no-ansi',
             'cli_description' => 'Disable ANSI output',
-        ],
-        [
-            'short' => 'v|vv|vvv',
-            'long' => 'verbose',
-            'cli_description' => 'Increase the verbosity of messages where v is for extra information, and vvv is for debug',
         ],
     ];
 

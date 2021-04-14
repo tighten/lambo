@@ -61,15 +61,15 @@ class NewCommand extends LamboCommand
         );
     }
 
-    public function buildSignatureOption($option)
+    public function buildSignatureOption($option): string
     {
-        $call = isset($option['short']) ? ($option['short'] . '|' . $option['long']) : $option['long'];
+        $commandlineOption = isset($option['short']) ? ($option['short'] . '|' . $option['long']) : $option['long'];
 
         if (isset($option['param_description'])) {
-            $call .= '=';
+            $commandlineOption .= '=' . ($option['default'] ?? '');
         }
 
-        return "\n{--{$call} : {$option['cli_description']}}";
+        return "\n{--{$commandlineOption} : {$option['cli_description']}}";
     }
 
     public function handle()
