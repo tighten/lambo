@@ -64,7 +64,7 @@ class Shell
             ->setTimeout(null)
             ->enableOutput();
         $process->run();
-        
+
         return $process;
     }
 
