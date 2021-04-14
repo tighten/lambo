@@ -116,9 +116,6 @@ class Options
             'long' => 'full',
             'cli_description' => 'Shortcut of --create-db --migrate-db --link --secure',
         ],
-    ];
-
-    protected $commonOptions = [
         [
             'short' => 'q',
             'long' => 'quiet',
@@ -143,11 +140,6 @@ class Options
             'cli_description' => 'Increase the verbosity of messages where v is for extra information, and vvv is for debug',
         ],
     ];
-
-    public function common(): array
-    {
-        return $this->commonOptions;
-    }
 
     public function all(): array
     {
