@@ -28,25 +28,25 @@ class ConsoleWriter extends OutputStyle
 
     public function exec(string $command)
     {
-        $this->labeledLine(' EXEC ', $command, 'bg=blue;fg=black');
+        $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
     }
 
-    public function success($message, $label = ' PASS '): void
+    public function success($message, $label = 'PASS'): void
     {
         $this->labeledLine($label, $message, 'fg=black;bg=green');
     }
 
     public function ok($message): void
     {
-        $this->success($message, ' OK ');
+        $this->success($message, 'OK');
     }
 
-    public function note($message, $label = ' NOTE '): void
+    public function note($message, $label = 'NOTE'): void
     {
         $this->labeledLine($label, $message, 'fg=black;bg=yellow');
     }
 
-    public function warn($message, $label = ' WARN '): void
+    public function warn($message, $label = 'WARN'): void
     {
         $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
     }
@@ -112,7 +112,7 @@ class ConsoleWriter extends OutputStyle
     {
         $indentString = str_repeat(' ', $indent);
         $this->isDecorated()
-            ? parent::text("{$indentString}<{$labelFormat}>{$label}</> {$message}")
-            : parent::text("{$indentString}[{$label}] {$message}");
+            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
+            : parent::text("{$indentString}[ {$label} ] {$message}");
     }
 }
