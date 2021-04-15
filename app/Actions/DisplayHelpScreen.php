@@ -32,11 +32,11 @@ class DisplayHelpScreen
         return collect([
             [
                 'usage' => 'lambo edit-config [--editor=<editor>]',
-                'description' => 'Edit "~/.lambo/config" file',
+                'description' => 'Create or edit your <comment>~/.lambo/config</comment> file',
             ],
             [
                 'usage' => 'lambo edit-after [--editor=<editor>]',
-                'description' => 'Edit "~/.lambo/after" file',
+                'description' => 'Create or edit your <comment>~/.lambo/after</comment> file',
             ],
             [
                 'usage' => 'lambo new myApplication [options]',
