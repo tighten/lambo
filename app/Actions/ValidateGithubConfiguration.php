@@ -8,7 +8,6 @@ use Symfony\Component\Process\ExecutableFinder;
 
 class ValidateGithubConfiguration
 {
-
     public const WARNING_UNABLE_TO_CREATE_REPOSITORY = 'Unable to create a new GitHub repository';
     public const INSTRUCTIONS_GH_NOT_INSTALLED = [
         "Lambo uses the official GitHub command line tool to create new repositories but it doesn't seem to be installed.",
@@ -40,7 +39,7 @@ class ValidateGithubConfiguration
         $ghInstalled = $this->finder->find('gh');
         if ($ghInstalled) {
             $authenticatedWithGitHub = $this->shell->execQuietly('gh auth status')->isSuccessful();
-            
+
             if (! $authenticatedWithGitHub) {
                 $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
                 $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
@@ -52,7 +51,7 @@ class ValidateGithubConfiguration
 
         if (! $ghInstalled || ! $authenticatedWithGitHub) {
             config(['lambo.store.github' => false]);
-            if (! $app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
+            if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
                 exit;
             }
         }
