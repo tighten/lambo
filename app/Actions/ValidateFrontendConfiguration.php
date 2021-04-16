@@ -37,14 +37,14 @@ class ValidateFrontendConfiguration
 
     private function chooseBetweenFrontends(): string
     {
-        $this->consoleWriter->warn('inertia and livewire cannot be used together. ');
+        $this->consoleWriter->warn('Inertia and Livewire cannot be used together. ');
 
         $options = [
-            'use inertia' => 'inertia',
-            'use livewire' => 'livewire',
-            'continue without frontend scaffolding' => 'none',
+            'Use Inertia' => 'inertia',
+            'Use Livewire' => 'livewire',
+            'Continue without frontend scaffolding' => 'none',
         ];
-        $choice = app('console')->choice('What would you like to do?', array_keys($options), 2);
+        $choice = app('console')->choice('How would you like to proceed?', array_keys($options), 2);
 
         $this->consoleWriter->ok($choice);
 

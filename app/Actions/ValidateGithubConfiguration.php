@@ -33,29 +33,26 @@ class ValidateGithubConfiguration
 
     public function __invoke()
     {
-        $githubConfiguration = config('lambo.store.github');
-        if (! $githubConfiguration) {
+        if (! config('lambo.store.github')) {
             return;
         }
 
         $ghInstalled = $this->finder->find('gh');
-        if (! $ghInstalled) {
-            $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
-            $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_INSTALLED);
-        }
-
         if ($ghInstalled) {
             $authenticatedWithGitHub = $this->shell->execQuietly('gh auth status')->isSuccessful();
+            
             if (! $authenticatedWithGitHub) {
                 $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
                 $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
             }
+        } else {
+            $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
+            $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_INSTALLED);
         }
 
         if (! $ghInstalled || ! $authenticatedWithGitHub) {
             config(['lambo.store.github' => false]);
-            $choice = app('console')->confirm(self::QUESTION_SHOULD_CONTINUE);
-            if (! $choice) {
+            if (! $app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
                 exit;
             }
         }
