@@ -36,7 +36,7 @@ class InitializeGitHubRepositoryTest extends TestCase
     }
 
     /** @test */
-    function it_initialises_a_new_git_hub_repository()
+    function it_initialises_a_new_github_repository()
     {
         $this->withConfig();
 
