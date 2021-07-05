@@ -24,8 +24,7 @@ class PushToGitHub
 
         $this->consoleWriter->logStep('Pushing new project to GitHub');
 
-        $branch = config('lambo.store.branch');
-        $process = $this->shell->execInProject("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin {$branch}");
+        $process = $this->shell->execInProject('git push -u origin ' . config('lambo.store.branch'));
         if (! $process->isSuccessful()) {
             $this->consoleWriter->warn('Failed to push project to GitHub.');
             $this->consoleWriter->warn("Failed to run {$process->getCommandLine()}");

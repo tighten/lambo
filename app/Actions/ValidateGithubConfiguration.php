@@ -2,16 +2,22 @@
 
 namespace App\Actions;
 
+use App\Actions\Concerns\InteractsWithGitHub;
+use App\Configuration\LamboConfiguration;
 use App\ConsoleWriter;
 use App\Shell;
-use Symfony\Component\Process\ExecutableFinder;
 
 class ValidateGithubConfiguration
 {
+    use InteractsWithGitHub;
+
     public const WARNING_UNABLE_TO_CREATE_REPOSITORY = 'Unable to create a new GitHub repository';
-    public const INSTRUCTIONS_GH_NOT_INSTALLED = [
-        "Lambo uses the official GitHub command line tool to create new repositories but it doesn't seem to be installed.",
-        'For installation instructions, please visit <fg=blue;options=underscore>https://github.com/cli/cli#installation</>',
+    public const INSTRUCTIONS_GITHUB_TOOLING_MISSING = [
+        'For Lambo to initialize a new repository on GitHub it requires either the',
+        'official GitHub command line tool or the unofficial hub tool, but neither',
+        'are installed. You can find more information about each tool by visiting:',
+        '    - <fg=blue;options=underscore>https://github.com/cli/cli#installation</>',
+        '    - <fg=blue;options=underscore>https://github.com/github/hub</>',
     ];
     public const INSTRUCTIONS_GH_NOT_AUTHENTICATED = [
         'You are not logged into Github. Please run <comment>gh auth login</comment>.',
@@ -21,39 +27,49 @@ class ValidateGithubConfiguration
 
     private $consoleWriter;
     private $shell;
-    private $finder;
 
-    public function __construct(ExecutableFinder $finder, Shell $shell, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->consoleWriter = $consoleWriter;
         $this->shell = $shell;
-        $this->finder = $finder;
+    }
+
+    private function shouldContinue()
+    {
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
+        if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
+            exit;
+        }
+    }
+
+    private function ghAuthenticated(): bool
+    {
+        $process = $this->shell->execQuietly('gh auth status');
+        return $process->isSuccessful();
     }
 
     public function __invoke()
     {
-        if (! config('lambo.store.github')) {
+        if (! $this->gitHubInitializationRequested()) {
+            config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
             return;
         }
 
-        $ghInstalled = $this->finder->find('gh');
-        if ($ghInstalled) {
-            $authenticatedWithGitHub = $this->shell->execQuietly('gh auth status')->isSuccessful();
+        if ($this->hubInstalled()) {
+            return;
+        }
 
-            if (! $authenticatedWithGitHub) {
+        if ($this->ghInstalled()) {
+            if (! $this->ghAuthenticated()) {
                 $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
                 $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
+                $this->shouldContinue();
+                return;
             }
         } else {
             $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
-            $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_INSTALLED);
-        }
-
-        if (! $ghInstalled || ! $authenticatedWithGitHub) {
-            config(['lambo.store.github' => false]);
-            if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
-                exit;
-            }
+            $this->consoleWriter->text(self::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
+            $this->shouldContinue();
         }
     }
 }

@@ -18,6 +18,11 @@ class InstallNpmDependencies
         $this->consoleWriter = $consoleWriter;
     }
 
+    public function withQuiet()
+    {
+        return config('lambo.store.with_output') ? '' : ' --silent';
+    }
+
     public function __invoke()
     {
         $this->consoleWriter->logStep('Installing node dependencies');
@@ -27,10 +32,5 @@ class InstallNpmDependencies
 
         $this->consoleWriter->newLine();
         $this->consoleWriter->success('Npm dependencies installed.');
-    }
-
-    public function withQuiet()
-    {
-        return config('lambo.store.with_output') ? '' : ' --silent';
     }
 }

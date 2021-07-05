@@ -20,6 +20,11 @@ class CompileAssets
         $this->consoleWriter = $consoleWriter;
     }
 
+    public function extraOptions(): string
+    {
+        return config('lambo.store.with_output') ? '' : ' --silent';
+    }
+
     public function __invoke()
     {
         $this->consoleWriter->logStep('Compiling project assets');
@@ -30,10 +35,5 @@ class CompileAssets
         $this->npm->unsilence();
 
         $this->consoleWriter->success('Project assets compiled successfully.');
-    }
-
-    public function extraOptions()
-    {
-        return config('lambo.store.with_output') ? '' : ' --silent';
     }
 }

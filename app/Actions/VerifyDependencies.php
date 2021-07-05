@@ -30,6 +30,19 @@ class VerifyDependencies
         ],
     ];
 
+    private $optionalDependencies = [
+        [
+            'command' => 'gh',
+            'label' => 'Unofficial GitHub command line tool',
+            'instructions_url' => 'https://github.com/github/hub',
+        ],
+        [
+            'command' => 'hub',
+            'label' => 'Official GitHub command line tool',
+            'instructions_url' => 'https://cli.github.com/',
+        ],
+    ];
+
     public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
     {
         $this->finder = $finder;
@@ -40,6 +53,22 @@ class VerifyDependencies
     {
         $this->consoleWriter->logStep('Verifying dependencies');
 
+        $this->consoleWriter->text('Optional dependencies');
+        $this->consoleWriter->newLine();
+        foreach ($this->optionalDependencies as $optionalDependency) {
+            list($command, $label, $instructionsUrl) = array_values($optionalDependency);
+            if (($installedDependency = $this->finder->find($command)) === null) {
+                $this->consoleWriter->note("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                config(["lambo.store.tools.{$command}" => false]);
+            } else {
+                $this->consoleWriter->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");
+                config(["lambo.store.tools.{$command}" => true]);
+            }
+        }
+
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text('Required dependencies');
+        $this->consoleWriter->newLine();
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
                 list($command, $label, $instructionsUrl) = array_values($dependency);

@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Actions\ValidateGithubConfiguration;
+use App\Configuration\LamboConfiguration;
 use App\ConsoleWriter;
 use LaravelZero\Framework\Commands\Command;
-use Symfony\Component\Process\ExecutableFinder;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -14,62 +14,84 @@ use Tests\TestCase;
  */
 class ValidateGithubConfigurationTest extends TestCase
 {
-    protected $consoleWriter;
-
-    private $executableFinder;
+    private $consoleWriter;
     private $console;
 
-    function setUp(): void
+    /** @test */
+    function it_skips_gh_command_line_tool_validation()
     {
-        parent::setUp();
-        $this->executableFinder = $this->mock(ExecutableFinder::class);
-        $this->consoleWriter = $this->mock(ConsoleWriter::class);
-        $this->console = $this->mock(Command::class);
+        config(['lambo.store.tools.gh' => true]);
+        config(['lambo.store.tools.hub' => true]);
 
-        config(['lambo.store.github' => 'foo']);
+        config(['lambo.store.initializeGitHub' => null]);
+        app(ValidateGithubConfiguration::class)();
+        $this->assertFalse(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
+
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
+        app(ValidateGithubConfiguration::class)();
+        $this->assertFalse(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
     }
 
     /** @test */
-    function it_validates_the_gh_command_line_tool_configuration()
+    function it_logs_a_warning_if_github_tooling_is_missing()
     {
-        $this->executableFinder->shouldReceive('find')
-            ->with('gh')
-            ->andReturn('/path/to/github');
+        $this->consoleWriter = $this->mock(ConsoleWriter::class);
+        $this->console = $this->mock(Command::class);
+
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => true]);
+        config(['lambo.store.tools.gh' => false]);
+        config(['lambo.store.tools.hub' => false]);
+
+        $this->shouldLogWarning();
+        $this->shouldLogInstructions(ValidateGithubConfiguration::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
+        $this->shouldAskToContinue();
+
+        app(ValidateGithubConfiguration::class)();
+
+        $this->assertFalse(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
+    }
+
+    /** @test */
+    function configuration_is_valid_if_hub_is_installed()
+    {
+        $this->consoleWriter = $this->mock(ConsoleWriter::class);
+
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => true]);
+        config(['lambo.store.tools.gh' => true]);
+        config(['lambo.store.tools.hub' => true]);
+
+        app(ValidateGithubConfiguration::class)();
+
+        $this->assertTrue(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
+    }
+
+    /** @test */
+    function configuration_is_valid_if_gh_is_installed_and_authenticated()
+    {
+        $this->consoleWriter = $this->mock(ConsoleWriter::class);
+
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => true]);
+        config(['lambo.store.tools.gh' => true]);
+        config(['lambo.store.tools.hub' => false]);
 
         $this->shell->shouldReceive('execQuietly')
             ->with('gh auth status')
             ->andReturn(FakeProcess::success());
 
         app(ValidateGithubConfiguration::class)();
+
+        $this->assertTrue(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
     }
 
     /** @test */
-    function it_skips_gh_command_line_tool_validation()
+    function it_logs_a_warning_if_gh_is_not_authenticated_with_github()
     {
-        config(['lambo.store.github' => null]);
-        app(ValidateGithubConfiguration::class)();
-    }
+        $this->consoleWriter = $this->mock(ConsoleWriter::class);
+        $this->console = $this->mock(Command::class);
 
-    /** @test */
-    function it_logs_a_warning_if_the_gh_command_line_tool_is_missing()
-    {
-        $this->executableFinder->shouldReceive('find')
-            ->with('gh')
-            ->andReturnNull();
-
-        $this->shouldLogWarning();
-        $this->shouldLogInstructions(ValidateGithubConfiguration::INSTRUCTIONS_GH_NOT_INSTALLED);
-        $this->shouldAskToContinue();
-
-        app(ValidateGithubConfiguration::class)();
-    }
-
-    /** @test */
-    function it_logs_a_warning_if_the_gh_command_line_tool_is_not_authenticated_with_github()
-    {
-        $this->executableFinder->shouldReceive('find')
-            ->with('gh')
-            ->andReturn('/path/to/github');
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => true]);
+        config(['lambo.store.tools.gh' => true]);
+        config(['lambo.store.tools.hub' => false]);
 
         $this->shell->shouldReceive('execQuietly')
             ->with('gh auth status')
@@ -80,6 +102,8 @@ class ValidateGithubConfigurationTest extends TestCase
         $this->shouldAskToContinue();
 
         app(ValidateGithubConfiguration::class)();
+
+        $this->assertFalse(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
     }
 
     private function shouldLogWarning(): void

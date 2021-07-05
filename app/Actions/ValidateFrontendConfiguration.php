@@ -13,12 +13,6 @@ class ValidateFrontendConfiguration
         $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke()
-    {
-        config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
-        $this->checkTeamsConfiguration();
-    }
-
     private function getFrontendConfiguration(): string
     {
         $inertia = config('lambo.store.inertia');
@@ -51,10 +45,16 @@ class ValidateFrontendConfiguration
         return $options[$choice];
     }
 
-    private function checkTeamsConfiguration()
+    private function checkTeamsConfiguration(): void
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
             $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
+    }
+
+    public function __invoke()
+    {
+        config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
+        $this->checkTeamsConfiguration();
     }
 }

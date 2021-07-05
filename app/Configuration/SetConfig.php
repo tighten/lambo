@@ -35,32 +35,6 @@ class SetConfig
         $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke($defaultConfiguration)
-    {
-        foreach ($defaultConfiguration as $configurationKey => $default) {
-            $methodName = 'get' . Str::of($configurationKey)->studly();
-            if (method_exists($this, $methodName)) {
-                config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
-            } else {
-                config(["lambo.store.{$configurationKey}" => $this->get($configurationKey, $default)]);
-            }
-        }
-
-        // If we're in the "new" command, generate a few config items which
-        // require others to be set above first.
-        if (config('lambo.store.command') === NewCommand::class) {
-            $projectPath = config('lambo.store.root_path') . '/' . config('lambo.store.project_name');
-            config(['lambo.store.project_path' => $projectPath]);
-            config(['lambo.store.project_url' => $this->getProjectURL()]);
-        }
-
-        if (config('lambo.store.full')) {
-            foreach ($this->fullFlags as $fullFlag) {
-                config(["lambo.store.{$fullFlag}" => true]);
-            }
-        }
-    }
-
     private function get(string $configurationKey, $default)
     {
         if (isset($this->commandLineConfiguration->$configurationKey)) {
@@ -143,13 +117,29 @@ class SetConfig
         return $this->get($key, $default);
     }
 
-    private function getGithub(string $key, $default)
+    public function __invoke($defaultConfiguration)
     {
-        $gh = app('console')->option('github');
-        if ($gh === 'disabled') {
-            return false;
+        foreach ($defaultConfiguration as $configurationKey => $default) {
+            $methodName = 'get' . Str::of($configurationKey)->studly();
+            if (method_exists($this, $methodName)) {
+                config(["lambo.store.{$configurationKey}" => $this->$methodName($configurationKey, $default)]);
+            } else {
+                config(["lambo.store.{$configurationKey}" => $this->get($configurationKey, $default)]);
+            }
         }
 
-        return $gh ?? '--private';
+        // If we're in the "new" command, generate a few config items which
+        // require others to be set above first.
+        if (config('lambo.store.command') === NewCommand::class) {
+            $projectPath = config('lambo.store.root_path') . '/' . config('lambo.store.project_name');
+            config(['lambo.store.project_path' => $projectPath]);
+            config(['lambo.store.project_url' => $this->getProjectURL()]);
+        }
+
+        if (config('lambo.store.full')) {
+            foreach ($this->fullFlags as $fullFlag) {
+                config(["lambo.store.{$fullFlag}" => true]);
+            }
+        }
     }
 }

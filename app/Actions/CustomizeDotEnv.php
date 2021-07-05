@@ -15,21 +15,7 @@ class CustomizeDotEnv
         $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke()
-    {
-        $this->consoleWriter->logStep('Customizing .env and .env.example');
-
-        $filePath = config('lambo.store.project_path') . '/.env.example';
-
-        $output = $this->customize(File::get($filePath));
-
-        File::put($filePath, $output);
-        File::put(str_replace('.env.example', '.env', $filePath), $output);
-
-        $this->consoleWriter->success('.env files configured.');
-    }
-
-    public function customize($contents)
+    public function customize($contents): string
     {
         return collect(explode("\n", $contents))->transform(function ($item) {
             $parts = explode('=', $item, 2);
@@ -59,5 +45,19 @@ class CustomizeDotEnv
         ];
 
         return Arr::get($replacements, $key, $fallback);
+    }
+
+    public function __invoke()
+    {
+        $this->consoleWriter->logStep('Customizing .env and .env.example');
+
+        $filePath = config('lambo.store.project_path') . '/.env.example';
+
+        $output = $this->customize(File::get($filePath));
+
+        File::put($filePath, $output);
+        File::put(str_replace('.env.example', '.env', $filePath), $output);
+
+        $this->consoleWriter->success('.env files configured.');
     }
 }

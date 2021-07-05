@@ -2,8 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Actions\Concerns\InteractsWithGitHub;
 use App\Actions\InitializeGitHubRepository;
+use App\Configuration\LamboConfiguration;
 use App\ConsoleWriter;
+use App\LamboException;
+use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -12,96 +16,183 @@ use Tests\TestCase;
  */
 class InitializeGitHubRepositoryTest extends TestCase
 {
-    private $ghRepoCreateCommand = 'gh repo create --confirm';
-    private $newProjectName = 'project';
-    private $ghRepoCreateOptions = '--options --to --pass --to --gh --repo --create';
-    private $defaultBranchName = 'branch';
+    use InteractsWithGitHub;
 
-    function setUp(): void
-    {
-        parent::setUp();
-        $this->consoleWriter = $this->mock(ConsoleWriter::class);
-        $this->consoleWriter->shouldReceive('logStep');
-        $this->consoleWriter->shouldReceive('success');
-    }
+    protected $toolConfigurations = [
+        ['gh' => true, 'hub' => true],
+        ['gh' => true, 'hub' => false],
+        ['gh' => false, 'hub' => true],
+        ['gh' => false, 'hub' => false],
+    ];
+
+    protected $gitHubConfigurations = [
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => false,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
+        ],
+        [
+            LamboConfiguration::GITHUB_PUBLIC => true,
+            LamboConfiguration::GITHUB_DESCRIPTION => 'My awesome project',
+            LamboConfiguration::GITHUB_HOMEPAGE => 'https://example.com',
+            LamboConfiguration::GITHUB_ORGANIZATION => 'org',
+        ],
+    ];
 
     /** @test */
-    function it_skips_repository_creation()
+    function it_manages_new_repository_initialization()
     {
-        $this->withConfig([
-            'github' => null,
-        ]);
+        foreach ([true, false] as $initializeGitHub) {
+            foreach ($this->toolConfigurations as $toolConfiguration) {
+                foreach ($this->gitHubConfigurations as $gitHubConfiguration) {
+                    $shell = $this->spy(Shell::class);
 
-        app(InitializeGitHubRepository::class)();
-    }
+                    config(['lambo.store.project_name' => 'name']);
+                    config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => $initializeGitHub]);
+                    config(['lambo.store.push_to_github' => false]);
+                    config(['lambo.store.tools' => $toolConfiguration]);
+                    config(['lambo.store' => array_merge(config('lambo.store'), $gitHubConfiguration)]);
 
-    /** @test */
-    function it_initialises_a_new_github_repository()
-    {
-        $this->withConfig();
+                    if ($this->shouldCreateRepository()) {
+                        $shell->shouldReceive('execInProject', [$this->getCommand()])
+                            ->andReturn(FakeProcess::success());
+                    }
 
-        $this->shell->shouldReceive('execInProject')
-            ->with("{$this->ghRepoCreateCommand} {$this->newProjectName} {$this->ghRepoCreateOptions}")
-            ->once()
-            ->andReturn(FakeProcess::success());
+                    if (! $this->gitHubToolingInstalled()) {
+                        $this->expectException(LamboException::class);
+                    }
 
-        app(InitializeGitHubRepository::class)();
-    }
+                    app(InitializeGitHubRepository::class)();
 
-    /** @test */
-    function it_initialises_a_repository_for_the_given_organisation()
-    {
-        $this->withConfig([
-            'github-org' => 'org',
-        ]);
-
-        $this->shell->shouldReceive('execInProject')
-            ->with("{$this->ghRepoCreateCommand} org/{$this->newProjectName} {$this->ghRepoCreateOptions}")
-            ->once()
-            ->andReturn(FakeProcess::success());
-
-        app(InitializeGitHubRepository::class)();
+                    if ($this->shouldCreateRepository()) {
+                        $this->assertTrue(config('lambo.store.push_to_github'));
+                    } else {
+                        $shell->shouldNotHaveReceived('execInProject');
+                        $this->assertFalse(config('lambo.store.push_to_github'));
+                    }
+                }
+            }
+        }
     }
 
     /** @test */
     function it_warns_the_user_if_repository_creation_fails()
     {
-        $this->withConfig();
+        $consoleWriter = $this->mock(ConsoleWriter::class);
+        $consoleWriter->shouldReceive('logStep');
 
-        $command = "{$this->ghRepoCreateCommand} {$this->newProjectName} {$this->ghRepoCreateOptions}";
+        config(['lambo.store.project_name' => 'name']);
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => true]);
+        config(['lambo.store.push_to_github' => false]);
+        config(['lambo.store.tools.gh' => true]);
+
         $failedCommandOutput = 'Failed command output';
 
         $this->shell->shouldReceive('execInProject')
-            ->with($command)
+            ->with($this->getCommand())
             ->once()
-            ->andReturn(FakeProcess::fail($command)->withErrorOutput($failedCommandOutput));
+            ->andReturn(FakeProcess::fail($this->getCommand())->withErrorOutput($failedCommandOutput));
 
-        $this->consoleWriter->shouldReceive('warn')
+        $consoleWriter->shouldReceive('warn')
             ->with(InitializeGitHubRepository::WARNING_FAILED_TO_CREATE_REPOSITORY)
             ->globally()
             ->ordered();
 
-        $this->consoleWriter->shouldReceive('warnCommandFailed')
-            ->with($command)
+        $consoleWriter->shouldReceive('warnCommandFailed')
+            ->with($this->getCommand())
             ->globally()
             ->ordered();
 
-        $this->consoleWriter->shouldReceive('showOutputErrors')
+        $consoleWriter->shouldReceive('showOutputErrors')
             ->with($failedCommandOutput)
             ->globally()
             ->ordered();
 
         app(InitializeGitHubRepository::class)();
-    }
-
-    function withConfig(array $overrides = []): void
-    {
-        config([
-            'lambo.store' => array_merge([
-                'github' => $this->ghRepoCreateOptions,
-                'project_name' => $this->newProjectName,
-                'branch' => $this->defaultBranchName,
-            ], $overrides)
-        ]);
     }
 }

@@ -22,6 +22,21 @@ class MigrateDatabase
         $this->consoleWriter = $consoleWriter;
     }
 
+    protected function failureMigrateError(): string
+    {
+        return sprintf(
+            "Skipping database migration using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to run the database migrations manually.",
+            config('lambo.store.database_username'),
+            config('lambo.store.database_host'),
+            config('lambo.store.database_port')
+        );
+    }
+
+    private function withQuiet()
+    {
+        return config('lambo.store.with_output') ? '' : ' --quiet';
+    }
+
     public function __invoke()
     {
         if (! config('lambo.store.migrate_database')) {
@@ -44,20 +59,5 @@ class MigrateDatabase
             $this->consoleWriter->warn($e->getMessage());
             return $this->consoleWriter->warn($this->failureMigrateError());
         }
-    }
-
-    protected function failureMigrateError(): string
-    {
-        return sprintf(
-            "Skipping database migration using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to run the database migrations manually.",
-            config('lambo.store.database_username'),
-            config('lambo.store.database_host'),
-            config('lambo.store.database_port')
-        );
-    }
-
-    private function withQuiet()
-    {
-        return config('lambo.store.with_output') ? '' : ' --quiet';
     }
 }

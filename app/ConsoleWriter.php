@@ -7,6 +7,16 @@ use Symfony\Component\Process\Process;
 
 class ConsoleWriter extends OutputStyle
 {
+    public const BLUE = 'fg=blue';
+    public const GREEN = 'fg=green';
+    public const RED = 'fg=red';
+    public const MAGENTA = 'fg=magenta';
+
+    public static function formatString(string $string, string $format): string
+    {
+        return "<{$format}>{$string}</>";
+    }
+
     public function panel(string $prefix, string $message, string $style)
     {
         parent::block($message, $prefix, $style, ' ', true, false);
@@ -108,11 +118,11 @@ class ConsoleWriter extends OutputStyle
         }
     }
 
-    public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indent = 0): void
+    public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indentColumns = 0): void
     {
-        $indentString = str_repeat(' ', $indent);
+        $indent = str_repeat(' ', $indentColumns);
         $this->isDecorated()
-            ? parent::text("{$indentString}<{$labelFormat}> {$label} </> {$message}")
-            : parent::text("{$indentString}[ {$label} ] {$message}");
+            ? parent::text("{$indent}<{$labelFormat}> {$label} </> {$message}")
+            : parent::text("{$indent}[ {$label} ] {$message}");
     }
 }

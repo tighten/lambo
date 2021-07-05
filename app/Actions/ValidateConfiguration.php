@@ -15,22 +15,6 @@ class ValidateConfiguration
     {
         $this->consoleWriter = $consoleWriter;
     }
-
-    public function __invoke()
-    {
-        $this->consoleWriter->logStep('Validating configuration');
-
-        app(ValidateFrontendConfiguration::class)();
-        $this->consoleWriter->newLine();
-        app(ValidateGithubConfiguration::class)();
-
-        $this->consoleWriter->success('Configuration is valid.');
-
-        if ($this->consoleWriter->isDebug()) {
-            $this->debugReport();
-        }
-    }
-
     protected function debugReport(): void
     {
         $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
@@ -42,5 +26,19 @@ class ValidateConfiguration
         $this->configToTable();
 
         $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
+    }
+
+    public function __invoke()
+    {
+        $this->consoleWriter->logStep('Validating configuration');
+
+        app(ValidateFrontendConfiguration::class)();
+        app(ValidateGithubConfiguration::class)();
+
+        $this->consoleWriter->success('Configuration is valid.');
+
+        if ($this->consoleWriter->isDebug()) {
+            $this->debugReport();
+        }
     }
 }

@@ -11,10 +11,17 @@ class OpenInBrowser
 
     protected $shell;
     protected $consoleWriter;
+    protected $environment;
 
-    public function __construct(Shell $shell)
+    public function __construct(Shell $shell, Environment $environment)
     {
         $this->shell = $shell;
+        $this->environment = $environment;
+    }
+
+    public function browser()
+    {
+        return config('lambo.store.browser');
     }
 
     public function __invoke()
@@ -25,7 +32,7 @@ class OpenInBrowser
 
         app('console-writer')->logStep('Opening in Browser');
 
-        if (Environment::isMac() && $this->browser()) {
+        if ($this->environment->isMac() && $this->browser()) {
             $this->shell->execInProject(sprintf(
                 'open -a "%s" "%s"',
                 $this->browser(),
@@ -36,10 +43,5 @@ class OpenInBrowser
         }
 
         $this->shell->execInProject('valet open');
-    }
-
-    public function browser()
-    {
-        return config('lambo.store.browser');
     }
 }

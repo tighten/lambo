@@ -18,7 +18,7 @@ class PushToGitHubTest extends TestCase
         config(['lambo.store.branch' => 'branch']);
 
         $this->shell->shouldReceive('execInProject')
-            ->with("git -c credential.helper= -c credential.helper='!gh auth git-credential' push -u origin branch")
+            ->with('git push -u origin branch')
             ->once()
             ->andReturn(FakeProcess::success());
 

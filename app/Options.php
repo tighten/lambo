@@ -33,12 +33,24 @@ class Options
         [
             'short' => 'g',
             'long' => 'github',
-            'param_description' => 'OPTIONS',
-            'default' => 'disabled',
-            'cli_description' => 'Create a new repository on GitHub using the specified <info>OPTIONS</info>. <comment>[default: "false"]</comment>',
+            'cli_description' => 'Initialize a new private repository on GitHub with the initial code. See <comment>GITHUB REPOSITORY CREATION</comment>.',
         ],
         [
-            'long' => 'github-org',
+            'long' => 'gh-public',
+            'cli_description' => 'Make the new GitHub repository public',
+        ],
+        [
+            'long' => 'gh-description',
+            'param_description' => 'DESCRIPTION',
+            'cli_description' => 'Initialize the repository with the provided <info>DESCRIPTION</info>',
+        ],
+        [
+            'long' => 'gh-homepage',
+            'param_description' => 'URL',
+            'cli_description' => 'Specify a homepage for the newly created repository at <info>URL</info>',
+        ],
+        [
+            'long' => 'gh-org',
             'param_description' => 'ORG',
             'cli_description' => 'When used with --github, create the new repository under <info>ORG</info>. E.g. <info>ORG/project</info>',
         ],
@@ -121,19 +133,6 @@ class Options
             'short' => 'q',
             'long' => 'quiet',
             'cli_description' => 'Do not output to the console (except for user input)',
-        ],
-        [
-            'short' => 'V',
-            'long' => 'version',
-            'cli_description' => 'Display Lambo\'s version and exit',
-        ],
-        [
-            'long' => 'ansi',
-            'cli_description' => 'Force ANSI output',
-        ],
-        [
-            'long' => 'no-ansi',
-            'cli_description' => 'Disable ANSI output',
         ],
     ];
 

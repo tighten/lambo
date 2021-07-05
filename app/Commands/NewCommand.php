@@ -97,9 +97,9 @@ class NewCommand extends LamboCommand
         $this->consoleWriter->sectionTitle("Creating a new Laravel app '{$this->argument('projectName')}'");
 
         try {
+            app(VerifyDependencies::class)();
             app(ValidateConfiguration::class)();
             app(VerifyPathAvailable::class)();
-            app(VerifyDependencies::class)();
             app(InstallLaravel::class)();
             app(CustomizeDotEnv::class)();
             app(GenerateAppKey::class)();
@@ -159,7 +159,11 @@ class NewCommand extends LamboCommand
             'teams' => LamboConfiguration::TEAMS,
             'inertia' => LamboConfiguration::INERTIA,
             'livewire' => LamboConfiguration::LIVEWIRE,
-            'github' => LamboConfiguration::GITHUB,
+            'github' => LamboConfiguration::INITIALIZE_GITHUB,
+            'gh-public' => LamboConfiguration::GITHUB_PUBLIC,
+            'gh-description' => LamboConfiguration::GITHUB_DESCRIPTION,
+            'gh-homepage' => LamboConfiguration::GITHUB_HOMEPAGE,
+            'gh-org' => LamboConfiguration::GITHUB_ORGANIZATION,
             'projectName' => LamboConfiguration::PROJECT_NAME,
         ]);
 
@@ -213,8 +217,12 @@ class NewCommand extends LamboCommand
             LamboConfiguration::INERTIA => false,
             LamboConfiguration::LIVEWIRE => false,
             LamboConfiguration::TEAMS => false,
-            LamboConfiguration::GITHUB => false,
+            LamboConfiguration::INITIALIZE_GITHUB => false,
+            LamboConfiguration::GITHUB_PUBLIC => false,
             LamboConfiguration::PROJECT_NAME => null,
+            LamboConfiguration::GITHUB_DESCRIPTION => null,
+            LamboConfiguration::GITHUB_HOMEPAGE => null,
+            LamboConfiguration::GITHUB_ORGANIZATION => null,
             LamboConfiguration::TLD => null,
         ]);
 

@@ -18,6 +18,17 @@ class InitializeGitRepository
         $this->consoleWriter = $consoleWriter;
     }
 
+    public function exec($command)
+    {
+        $process = $this->shell->execInProject($command);
+        $this->abortIf(! $process->isSuccessful(), 'Initialization of git repository did not complete successfully.', $process);
+    }
+
+    private function getBranchOption(): string
+    {
+        return config('lambo.store.branch') ? ' --initial-branch=' . config('lambo.store.branch') : '';
+    }
+
     public function __invoke()
     {
         $this->consoleWriter->logStep('Initializing git repository');
@@ -37,16 +48,5 @@ class InitializeGitRepository
         ));
 
         $this->consoleWriter->success('New git repository initialized.');
-    }
-
-    public function exec($command)
-    {
-        $process = $this->shell->execInProject($command);
-        $this->abortIf(! $process->isSuccessful(), 'Initialization of git repository did not complete successfully.', $process);
-    }
-
-    private function getBranchOption(): string
-    {
-        return config('lambo.store.branch') ? ' --initial-branch=' . config('lambo.store.branch') : '';
     }
 }
