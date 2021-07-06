@@ -7,7 +7,6 @@ use App\Actions\InitializeGitHubRepository;
 use App\Configuration\LamboConfiguration;
 use App\ConsoleWriter;
 use App\LamboException;
-use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -130,8 +129,6 @@ class InitializeGitHubRepositoryTest extends TestCase
         foreach ([true, false] as $initializeGitHub) {
             foreach ($this->toolConfigurations as $toolConfiguration) {
                 foreach ($this->gitHubConfigurations as $gitHubConfiguration) {
-                    $shell = $this->spy(Shell::class);
-
                     config(['lambo.store.project_name' => 'name']);
                     config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => $initializeGitHub]);
                     config(['lambo.store.push_to_github' => false]);
@@ -139,7 +136,7 @@ class InitializeGitHubRepositoryTest extends TestCase
                     config(['lambo.store' => array_merge(config('lambo.store'), $gitHubConfiguration)]);
 
                     if ($this->shouldCreateRepository()) {
-                        $shell->shouldReceive('execInProject', [$this->getCommand()])
+                        $this->shell->shouldReceive('execInProject', [$this->getCommand()])
                             ->andReturn(FakeProcess::success());
                     }
 
@@ -151,9 +148,6 @@ class InitializeGitHubRepositoryTest extends TestCase
 
                     if ($this->shouldCreateRepository()) {
                         $this->assertTrue(config('lambo.store.push_to_github'));
-                    } else {
-                        $shell->shouldNotHaveReceived('execInProject');
-                        $this->assertFalse(config('lambo.store.push_to_github'));
                     }
                 }
             }
