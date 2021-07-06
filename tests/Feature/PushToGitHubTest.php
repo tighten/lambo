@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\PushToGitHub;
+use App\Shell;
 use Tests\Feature\Fakes\FakeProcess;
 use Tests\TestCase;
 
@@ -28,11 +29,17 @@ class PushToGitHubTest extends TestCase
     /** @test */
     function it_skips_pushing_to_github()
     {
-        config(['lambo.store.branch' => 'branch']);
+        $shell = $this->spy(Shell::class);
+
+        config(['lambo.store.branch' => 'main']);
+        $pushCommand = 'git push -u origin ' . config('lambo.store.branch');
+
+        config(['lambo.store.push_to_github' => null]);
         app(PushToGitHub::class)();
+        $shell->shouldNotHaveReceived('execInProject', [$pushCommand]);
 
         config(['lambo.store.push_to_github' => false]);
-        config(['lambo.store.branch' => 'branch']);
         app(PushToGitHub::class)();
+        $shell->shouldNotHaveReceived('execInProject', [$pushCommand]);
     }
 }
