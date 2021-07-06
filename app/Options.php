@@ -33,7 +33,7 @@ class Options
         [
             'short' => 'g',
             'long' => 'github',
-            'cli_description' => 'Initialize a new private repository on GitHub with the initial code. See <comment>GITHUB REPOSITORY CREATION</comment>.',
+            'cli_description' => 'Initialize a new private GitHub repository',
         ],
         [
             'long' => 'gh-public',
@@ -42,17 +42,17 @@ class Options
         [
             'long' => 'gh-description',
             'param_description' => 'DESCRIPTION',
-            'cli_description' => 'Initialize the repository with the provided <info>DESCRIPTION</info>',
+            'cli_description' => 'Initialize the new GitHub repository with the provided <info>DESCRIPTION</info>',
         ],
         [
             'long' => 'gh-homepage',
             'param_description' => 'URL',
-            'cli_description' => 'Specify a homepage for the newly created repository at <info>URL</info>',
+            'cli_description' => 'Initialize the new GitHub repository with the provided homepage <info>URL</info>',
         ],
         [
             'long' => 'gh-org',
             'param_description' => 'ORG',
-            'cli_description' => 'When used with --github, create the new repository under <info>ORG</info>. E.g. <info>ORG/project</info>',
+            'cli_description' => 'Initialize the new GitHub repository for <info>ORG</info>/project',
         ],
         [
             'short' => 'b',
