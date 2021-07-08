@@ -44,16 +44,6 @@ trait InteractsWithGitHub
      */
     protected function getCommand(): string
     {
-        if ($this->hubInstalled()) {
-            return sprintf(
-                'hub create %s%s%s%s',
-                config('lambo.store.github_public') ? '' : '--private ',
-                $this->getDescription(),
-                $this->getHomepage(),
-                $this->getRepositoryName()
-            );
-        }
-
         if ($this->ghInstalled()) {
             return sprintf(
                 'gh repo create%s --confirm %s%s%s',
@@ -61,6 +51,16 @@ trait InteractsWithGitHub
                 config('lambo.store.github_public') ? ' --public' : ' --private',
                 $this->getDescription(),
                 $this->getHomepage(),
+            );
+        }
+
+        if ($this->hubInstalled()) {
+            return sprintf(
+                'hub create %s%s%s%s',
+                config('lambo.store.github_public') ? '' : '--private ',
+                $this->getDescription(),
+                $this->getHomepage(),
+                $this->getRepositoryName()
             );
         }
 
