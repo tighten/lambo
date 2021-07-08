@@ -7,7 +7,6 @@ use App\LamboException;
 
 trait InteractsWithGitHub
 {
-
     protected function shouldCreateRepository(): bool
     {
         return $this->gitHubInitializationRequested() && $this->gitHubToolingInstalled();
@@ -21,6 +20,7 @@ trait InteractsWithGitHub
     protected function getDescription(): string
     {
         $description = config('lambo.store.' . LamboConfiguration::GITHUB_DESCRIPTION);
+
         if (is_null($description)) {
             return '';
         }
@@ -31,6 +31,7 @@ trait InteractsWithGitHub
     protected function getHomepage(): string
     {
         $homepage = config('lambo.store.' . LamboConfiguration::GITHUB_HOMEPAGE);
+
         if (is_null($homepage)) {
             return '';
         }

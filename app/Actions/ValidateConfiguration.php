@@ -33,7 +33,7 @@ class ValidateConfiguration
         $this->consoleWriter->logStep('Validating configuration');
 
         app(ValidateFrontendConfiguration::class)();
-        app(ValidateGithubConfiguration::class)();
+        app(ValidateGitHubConfiguration::class)();
 
         $this->consoleWriter->success('Configuration is valid.');
 

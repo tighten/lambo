@@ -54,6 +54,7 @@ class CreateDatabase
         } catch (PDOException $e) {
             $this->consoleWriter->warn($e->getMessage());
             $this->consoleWriter->warn($this->failureToCreateError($db_name));
+            return;
         }
 
         $this->consoleWriter->success("Created a new database '{$db_name}'");

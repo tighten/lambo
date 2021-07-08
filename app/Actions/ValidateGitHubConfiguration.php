@@ -7,7 +7,7 @@ use App\Configuration\LamboConfiguration;
 use App\ConsoleWriter;
 use App\Shell;
 
-class ValidateGithubConfiguration
+class ValidateGitHubConfiguration
 {
     use InteractsWithGitHub;
 
@@ -20,7 +20,7 @@ class ValidateGithubConfiguration
         '    - <fg=blue;options=underscore>https://github.com/github/hub</>',
     ];
     public const INSTRUCTIONS_GH_NOT_AUTHENTICATED = [
-        'You are not logged into Github. Please run <comment>gh auth login</comment>.',
+        'You are not logged into GitHub. Please run <comment>gh auth login</comment>.',
         'For more information, please visit, <fg=blue;options=underscore>https://cli.github.com/manual/gh_auth_login</>',
     ];
     public const QUESTION_SHOULD_CONTINUE = 'Would you like Lambo to continue without GitHub repository creation?';
@@ -37,6 +37,7 @@ class ValidateGithubConfiguration
     private function shouldContinue()
     {
         config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
+
         if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
             exit;
         }
@@ -45,6 +46,7 @@ class ValidateGithubConfiguration
     private function ghAuthenticated(): bool
     {
         $process = $this->shell->execQuietly('gh auth status');
+
         return $process->isSuccessful();
     }
 
@@ -64,6 +66,7 @@ class ValidateGithubConfiguration
                 $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
                 $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
                 $this->shouldContinue();
+
                 return;
             }
         } else {

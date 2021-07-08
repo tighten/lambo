@@ -32,12 +32,12 @@ class VerifyDependencies
 
     private $optionalDependencies = [
         [
-            'command' => 'gh',
+            'command' => 'hub',
             'label' => 'Unofficial GitHub command line tool',
             'instructions_url' => 'https://github.com/github/hub',
         ],
         [
-            'command' => 'hub',
+            'command' => 'gh',
             'label' => 'Official GitHub command line tool',
             'instructions_url' => 'https://cli.github.com/',
         ],
@@ -55,10 +55,12 @@ class VerifyDependencies
 
         $this->consoleWriter->text('Optional dependencies');
         $this->consoleWriter->newLine();
+
         foreach ($this->optionalDependencies as $optionalDependency) {
             list($command, $label, $instructionsUrl) = array_values($optionalDependency);
+
             if (($installedDependency = $this->finder->find($command)) === null) {
-                $this->consoleWriter->note("{$label} is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
+                $this->consoleWriter->note("{$label}, an optional dependency, is missing. You can find installation instructions at:\n        <fg=blue;href={$instructionsUrl}>{$instructionsUrl}</>");
                 config(["lambo.store.tools.{$command}" => false]);
             } else {
                 $this->consoleWriter->success("{$label} found at:\n        <fg=blue>{$installedDependency}</>");

@@ -55,6 +55,7 @@ class ValidateFrontendConfiguration
     public function __invoke()
     {
         config(['lambo.store.frontend' => $this->getFrontendConfiguration()]);
+
         $this->checkTeamsConfiguration();
     }
 }
