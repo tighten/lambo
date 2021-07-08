@@ -62,6 +62,23 @@ class UpgradeSavedConfiguration
         $this->lastVersionUpdateFilePath = "{$this->configDir}/.last_version_update";
     }
 
+    public function __invoke(): bool
+    {
+        if (! $this->shouldUpgrade()) {
+            return false;
+        }
+
+        $savedConfiguration = File::get($this->configFilePath);
+        File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->toDateTimeLocalString());
+
+        File::put($this->configFilePath, $this->upgrade($savedConfiguration, $this->removedConfigurationKeys, $this->newConfiguration));
+
+        File::delete($this->lastVersionUpdateFilePath);
+        File::put($this->lastVersionUpdateFilePath, $this->configurationVersion);
+
+        return true;
+    }
+
     public function upgrade(string $savedConfiguration, array $removedConfigurationKeys, array $newConfiguration = []): string
     {
         return implode(PHP_EOL, [
@@ -140,22 +157,5 @@ class UpgradeSavedConfiguration
 
             return "{$carry}{$description}{$configurationItem}";
         }, "# Lambo has introduced new configuration options. They have been added here\n# with sensible defaults; however, you should review them.\n#\n");
-    }
-
-    public function __invoke(): bool
-    {
-        if (! $this->shouldUpgrade()) {
-            return false;
-        }
-
-        $savedConfiguration = File::get($this->configFilePath);
-        File::move($this->configFilePath, $this->configFilePath . '.' . Carbon::now()->toDateTimeLocalString());
-
-        File::put($this->configFilePath, $this->upgrade($savedConfiguration, $this->removedConfigurationKeys, $this->newConfiguration));
-
-        File::delete($this->lastVersionUpdateFilePath);
-        File::put($this->lastVersionUpdateFilePath, $this->configurationVersion);
-
-        return true;
     }
 }

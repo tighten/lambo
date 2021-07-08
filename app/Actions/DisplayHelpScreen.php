@@ -6,6 +6,12 @@ use App\Options;
 
 class DisplayHelpScreen
 {
+    public function __invoke()
+    {
+        app('console-writer')->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
+        app('console-writer')->text("\n <comment>Options (lambo new myApplication):</comment>{$this->createCliStringForOptionDescriptions()}");
+    }
+
     public function createCliStringForOptionDescriptions(): string
     {
         return collect((new Options())->all())->reduce(function ($carry, $option) {
@@ -39,11 +45,5 @@ class DisplayHelpScreen
         ])->reduce(function ($carry, $command) {
                 return $carry . sprintf("\n   <info>%-40s</info> %s", $command['usage'], $command['description']);
         });
-    }
-
-    public function __invoke()
-    {
-        app('console-writer')->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
-        app('console-writer')->text("\n <comment>Options (lambo new myApplication):</comment>{$this->createCliStringForOptionDescriptions()}");
     }
 }

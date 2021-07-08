@@ -22,17 +22,6 @@ class CreateDatabase
         $this->consoleWriter = $consoleWriter;
     }
 
-    protected function failureToCreateError(string $db_name): string
-    {
-        return sprintf(
-            "Failed to create database '%s' using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to create the database manually.",
-            $db_name,
-            config('lambo.store.database_username'),
-            config('lambo.store.database_host'),
-            config('lambo.store.database_port')
-        );
-    }
-
     public function __invoke()
     {
         if (! config('lambo.store.create_database')) {
@@ -58,5 +47,16 @@ class CreateDatabase
         }
 
         $this->consoleWriter->success("Created a new database '{$db_name}'");
+    }
+
+    protected function failureToCreateError(string $db_name): string
+    {
+        return sprintf(
+            "Failed to create database '%s' using credentials <fg=yellow>mysql://%s:****@%s:%s</>\nYou will need to create the database manually.",
+            $db_name,
+            config('lambo.store.database_username'),
+            config('lambo.store.database_host'),
+            config('lambo.store.database_port')
+        );
     }
 }

@@ -15,18 +15,6 @@ class ValidateConfiguration
     {
         $this->consoleWriter = $consoleWriter;
     }
-    protected function debugReport(): void
-    {
-        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
-
-        $this->consoleWriter->text([
-            'Configuration may have changed after validation',
-            'Configuration is now as follows:',
-        ]);
-        $this->configToTable();
-
-        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
-    }
 
     public function __invoke()
     {
@@ -40,5 +28,18 @@ class ValidateConfiguration
         if ($this->consoleWriter->isDebug()) {
             $this->debugReport();
         }
+    }
+
+    protected function debugReport(): void
+    {
+        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
+
+        $this->consoleWriter->text([
+            'Configuration may have changed after validation',
+            'Configuration is now as follows:',
+        ]);
+        $this->configToTable();
+
+        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
     }
 }

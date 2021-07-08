@@ -30,25 +30,6 @@ class VerifyDependencies
         ],
     ];
 
-    private $optionalDependencies = [
-        [
-            'command' => 'hub',
-            'label' => 'Unofficial GitHub command line tool',
-            'instructions_url' => 'https://github.com/github/hub',
-        ],
-        [
-            'command' => 'gh',
-            'label' => 'Official GitHub command line tool',
-            'instructions_url' => 'https://cli.github.com/',
-        ],
-    ];
-
-    public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
-    {
-        $this->finder = $finder;
-        $this->consoleWriter = $consoleWriter;
-    }
-
     public function __invoke()
     {
         $this->consoleWriter->logStep('Verifying dependencies');
@@ -83,5 +64,24 @@ class VerifyDependencies
             }),
             'Please install missing dependencies and try again.'
         );
+    }
+
+    private $optionalDependencies = [
+        [
+            'command' => 'hub',
+            'label' => 'Unofficial GitHub command line tool',
+            'instructions_url' => 'https://github.com/github/hub',
+        ],
+        [
+            'command' => 'gh',
+            'label' => 'Official GitHub command line tool',
+            'instructions_url' => 'https://cli.github.com/',
+        ],
+    ];
+
+    public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
+    {
+        $this->finder = $finder;
+        $this->consoleWriter = $consoleWriter;
     }
 }

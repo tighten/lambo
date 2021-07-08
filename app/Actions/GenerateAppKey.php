@@ -18,11 +18,6 @@ class GenerateAppKey
         $this->consoleWriter = $consoleWriter;
     }
 
-    private function withQuiet()
-    {
-        return config('lambo.store.with_output') ? '' : ' --quiet';
-    }
-
     public function __invoke()
     {
         $this->consoleWriter->logStep('Setting APP_KEY in .env');
@@ -32,5 +27,10 @@ class GenerateAppKey
         $this->abortIf(! $process->isSuccessful(), 'Failed to generated APP_KEY successfully', $process);
 
         $this->consoleWriter->success('APP_KEY has been set.');
+    }
+
+    private function withQuiet()
+    {
+        return config('lambo.store.with_output') ? '' : ' --quiet';
     }
 }

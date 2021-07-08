@@ -34,22 +34,6 @@ class ValidateGitHubConfiguration
         $this->shell = $shell;
     }
 
-    private function shouldContinue()
-    {
-        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
-
-        if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
-            exit;
-        }
-    }
-
-    private function ghAuthenticated(): bool
-    {
-        $process = $this->shell->execQuietly('gh auth status');
-
-        return $process->isSuccessful();
-    }
-
     public function __invoke()
     {
         if (! $this->gitHubInitializationRequested()) {
@@ -74,5 +58,21 @@ class ValidateGitHubConfiguration
             $this->consoleWriter->text(self::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
             $this->shouldContinue();
         }
+    }
+
+    private function shouldContinue()
+    {
+        config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
+
+        if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
+            exit;
+        }
+    }
+
+    private function ghAuthenticated(): bool
+    {
+        $process = $this->shell->execQuietly('gh auth status');
+
+        return $process->isSuccessful();
     }
 }

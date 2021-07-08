@@ -19,11 +19,6 @@ class OpenInBrowser
         $this->environment = $environment;
     }
 
-    public function browser()
-    {
-        return config('lambo.store.browser');
-    }
-
     public function __invoke()
     {
         if (config('lambo.store.no_browser')) {
@@ -43,5 +38,10 @@ class OpenInBrowser
         }
 
         $this->shell->execInProject('valet open');
+    }
+
+    public function browser()
+    {
+        return config('lambo.store.browser');
     }
 }
