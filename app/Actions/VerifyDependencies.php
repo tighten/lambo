@@ -30,6 +30,12 @@ class VerifyDependencies
         ],
     ];
 
+    public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
+    {
+        $this->finder = $finder;
+        $this->consoleWriter = $consoleWriter;
+    }
+
     public function __invoke()
     {
         $this->consoleWriter->logStep('Verifying dependencies');
@@ -78,10 +84,4 @@ class VerifyDependencies
             'instructions_url' => 'https://cli.github.com/',
         ],
     ];
-
-    public function __construct(ExecutableFinder $finder, ConsoleWriter $consoleWriter)
-    {
-        $this->finder = $finder;
-        $this->consoleWriter = $consoleWriter;
-    }
 }
