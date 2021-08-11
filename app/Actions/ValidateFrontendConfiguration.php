@@ -55,6 +55,7 @@ class ValidateFrontendConfiguration
     private function checkTeamsConfiguration(): void
     {
         if ((config('lambo.store.frontend') === 'none') && config('lambo.store.teams')) {
+            config(['lambo.store.teams' => false]);
             $this->consoleWriter->note('You specified --teams but neither inertia or livewire are being used. Skipping...');
         }
     }
