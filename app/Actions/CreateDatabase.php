@@ -39,6 +39,7 @@ class CreateDatabase
 
             if (! $databaseCreated) {
                 $this->consoleWriter->warn($this->failureToCreateError($db_name));
+                return;
             }
         } catch (PDOException $e) {
             $this->consoleWriter->warn($e->getMessage());
