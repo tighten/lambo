@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class ConfigureFrontendFrameworkTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +46,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
     }
 
     /** @test */
-    function it_throws_a_lambo_exception_if_laravel_jetstream_fails_to_install()
+    function it_throws_a_lambo_exception_if_jetstream_fails_to_install()
     {
         config(['lambo.store.project_path' => '/some/project/path']);
 
@@ -98,7 +98,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
             'Mock expectations are not being specified correctly.',
         ]);
 
-        $this->shouldInstallFrameworkWithTeams('inertia');
+        $this->shouldInstallInertiaWithTeams();
         app(ConfigureFrontendFramework::class)();
     }
 
@@ -123,7 +123,7 @@ class ConfigureFrontendFrameworkTest extends TestCase
             'the App\Shell mock needs to return both a successful and a failed',
             'process execution.',
         ]);
-        $this->shouldFailFrontendFrameworkInstallation('inertia');
+        $this->shouldFailInertiaInstallation();
 
         $this->expectException(LamboException::class);
 
@@ -158,9 +158,9 @@ class ConfigureFrontendFrameworkTest extends TestCase
             ->ordered();
     }
 
-    private function shouldFailFrontendFrameworkInstallation(string $frontendFramework)
+    private function shouldFailInertiaInstallation()
     {
-        $this->shouldInstallFramework($frontendFramework, false, false);
+        $this->shouldInstallFramework('inertia', false, false);
     }
 
     private function shouldInstallFramework(string $frontendFramework, bool $withTeams = false, bool $success = true, bool $withOutput = false): void
@@ -205,8 +205,8 @@ class ConfigureFrontendFrameworkTest extends TestCase
         }
     }
 
-    private function shouldInstallFrameworkWithTeams(string $framework)
+    private function shouldInstallInertiaWithTeams()
     {
-        $this->shouldInstallFramework($framework, true);
+        $this->shouldInstallFramework('inertia', true);
     }
 }
