@@ -136,7 +136,7 @@ class InitializeGitHubRepositoryTest extends TestCase
                     config(['lambo.store' => array_merge(config('lambo.store'), $gitHubConfiguration)]);
 
                     if ($this->shouldCreateRepository()) {
-                        $this->shell->shouldReceive('execInProject', [$this->getCommand()])
+                        $this->shell->shouldReceive('execInProject', [$this->getGitHubCreateCommand()])
                             ->andReturn(FakeProcess::success());
                     }
 
@@ -168,9 +168,9 @@ class InitializeGitHubRepositoryTest extends TestCase
         $failedCommandOutput = 'Failed command output';
 
         $this->shell->shouldReceive('execInProject')
-            ->with($this->getCommand())
+            ->with($this->getGitHubCreateCommand())
             ->once()
-            ->andReturn(FakeProcess::fail($this->getCommand())->withErrorOutput($failedCommandOutput));
+            ->andReturn(FakeProcess::fail($this->getGitHubCreateCommand())->withErrorOutput($failedCommandOutput));
 
         $consoleWriter->shouldReceive('warn')
             ->with(InitializeGitHubRepository::WARNING_FAILED_TO_CREATE_REPOSITORY)
@@ -178,7 +178,7 @@ class InitializeGitHubRepositoryTest extends TestCase
             ->ordered();
 
         $consoleWriter->shouldReceive('warnCommandFailed')
-            ->with($this->getCommand())
+            ->with($this->getGitHubCreateCommand())
             ->globally()
             ->ordered();
 

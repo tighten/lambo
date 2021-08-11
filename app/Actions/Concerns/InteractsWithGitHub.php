@@ -7,17 +7,17 @@ use App\LamboException;
 
 trait InteractsWithGitHub
 {
-    protected function shouldCreateRepository(): bool
+    protected static function shouldCreateRepository(): bool
     {
-        return $this->gitHubInitializationRequested() && $this->gitHubToolingInstalled();
+        return static::gitHubInitializationRequested() && static::gitHubToolingInstalled();
     }
 
-    protected function gitHubInitializationRequested(): bool
+    protected static function gitHubInitializationRequested(): bool
     {
         return config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB) === true;
     }
 
-    protected function getDescription(): string
+    protected static function getDescription(): string
     {
         $description = config('lambo.store.' . LamboConfiguration::GITHUB_DESCRIPTION);
 
@@ -28,7 +28,7 @@ trait InteractsWithGitHub
         return sprintf(' --description="%s"', $description);
     }
 
-    protected function getHomepage(): string
+    protected static function getHomepage(): string
     {
         $homepage = config('lambo.store.' . LamboConfiguration::GITHUB_HOMEPAGE);
 
@@ -42,32 +42,32 @@ trait InteractsWithGitHub
     /**
      * @throws LamboException
      */
-    protected function getCommand(): string
+    protected static function getGitHubCreateCommand(): string
     {
-        if ($this->ghInstalled()) {
+        if (static::ghInstalled()) {
             return sprintf(
                 'gh repo create%s --confirm %s%s%s',
-                $this->getRepositoryName(),
+                static::getRepositoryName(),
                 config('lambo.store.github_public') ? ' --public' : ' --private',
-                $this->getDescription(),
-                $this->getHomepage(),
+                static::getDescription(),
+                static::getHomepage(),
             );
         }
 
-        if ($this->hubInstalled()) {
+        if (static::hubInstalled()) {
             return sprintf(
                 'hub create %s%s%s%s',
                 config('lambo.store.github_public') ? '' : '--private ',
-                $this->getDescription(),
-                $this->getHomepage(),
-                $this->getRepositoryName()
+                static::getDescription(),
+                static::getHomepage(),
+                static::getRepositoryName()
             );
         }
 
         throw new LamboException("Missing tool. Expected one of 'gh' or 'hub' to be installed but none found.");
     }
 
-    protected function getRepositoryName(): string
+    protected static function getRepositoryName(): string
     {
         $name = config('lambo.store.project_name');
         $organization = config('lambo.store.' . LamboConfiguration::GITHUB_ORGANIZATION);
@@ -75,18 +75,18 @@ trait InteractsWithGitHub
         return $organization ? " {$organization}/{$name}" : " {$name}";
     }
 
-    public static function ghInstalled(): bool
+    protected static function ghInstalled(): bool
     {
         return config('lambo.store.tools.gh') === true;
     }
 
-    public static function hubInstalled(): bool
+    protected static function hubInstalled(): bool
     {
         return config('lambo.store.tools.hub') === true;
     }
 
-    public function gitHubToolingInstalled(): bool
+    protected static function gitHubToolingInstalled(): bool
     {
-        return $this->ghInstalled() || $this->hubInstalled();
+        return static::ghInstalled() || static::hubInstalled();
     }
 }

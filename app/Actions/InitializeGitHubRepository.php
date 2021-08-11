@@ -24,13 +24,13 @@ class InitializeGitHubRepository
 
     public function __invoke()
     {
-        if (! $this->gitHubInitializationRequested()) {
+        if (! static::gitHubInitializationRequested()) {
             return;
         }
 
         $this->consoleWriter->logStep('Initializing GitHub repository');
 
-        $process = $this->shell->execInProject($this->getCommand());
+        $process = $this->shell->execInProject(static::getGitHubCreateCommand());
 
         if (! $process->isSuccessful()) {
             $this->consoleWriter->warn(self::WARNING_FAILED_TO_CREATE_REPOSITORY);

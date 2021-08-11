@@ -60,6 +60,8 @@ class ValidateGitHubConfigurationTest extends TestCase
         config(['lambo.store.tools.gh' => true]);
         config(['lambo.store.tools.hub' => true]);
 
+        $this->shouldLogChosenGitHubTool('hub');
+
         app(ValidateGitHubConfiguration::class)();
 
         $this->assertTrue(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
@@ -77,6 +79,8 @@ class ValidateGitHubConfigurationTest extends TestCase
         $this->shell->shouldReceive('execQuietly')
             ->with('gh auth status')
             ->andReturn(FakeProcess::success());
+
+        $this->shouldLogChosenGitHubTool('gh');
 
         app(ValidateGitHubConfiguration::class)();
 
@@ -104,6 +108,14 @@ class ValidateGitHubConfigurationTest extends TestCase
         app(ValidateGitHubConfiguration::class)();
 
         $this->assertFalse(config('lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB));
+    }
+
+    private function shouldLogChosenGitHubTool(string $tool): void
+    {
+        $this->consoleWriter->shouldReceive('note')
+            ->with(sprintf(ValidateGitHubConfiguration::SELECTED_GITHUB_TOOL_MESSAGE_PATTERN, $tool))
+            ->globally()
+            ->ordered();
     }
 
     private function shouldLogWarning(): void

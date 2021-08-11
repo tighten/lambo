@@ -24,6 +24,7 @@ class ValidateGitHubConfiguration
         'For more information, please visit, <fg=blue;options=underscore>https://cli.github.com/manual/gh_auth_login</>',
     ];
     public const QUESTION_SHOULD_CONTINUE = 'Would you like Lambo to continue without GitHub repository creation?';
+    public const SELECTED_GITHUB_TOOL_MESSAGE_PATTERN = "Using the '%s' command for GitHub configuration.";
 
     private $consoleWriter;
     private $shell;
@@ -36,31 +37,34 @@ class ValidateGitHubConfiguration
 
     public function __invoke()
     {
-        if (! $this->gitHubInitializationRequested()) {
+        if (! static::gitHubInitializationRequested()) {
             config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
             return;
         }
 
-        if ($this->hubInstalled()) {
+        if (! static::gitHubToolingInstalled()) {
+            $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
+            $this->consoleWriter->text(self::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
+            $this->askToContinueWithoutGitHubSetup();
             return;
         }
 
-        if ($this->ghInstalled()) {
-            if (! $this->ghAuthenticated()) {
-                $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
-                $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
-                $this->shouldContinue();
-
-                return;
-            }
-        } else {
-            $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
-            $this->consoleWriter->text(self::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
-            $this->shouldContinue();
+        if (static::hubInstalled()) {
+            $this->consoleWriter->note(sprintf(self::SELECTED_GITHUB_TOOL_MESSAGE_PATTERN, 'hub'));
+            return;
         }
+
+        if (! $this->ghAuthenticated()) {
+            $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
+            $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
+            $this->askToContinueWithoutGitHubSetup();
+            return;
+        }
+
+        $this->consoleWriter->note(sprintf(self::SELECTED_GITHUB_TOOL_MESSAGE_PATTERN, 'gh'));
     }
 
-    private function shouldContinue()
+    private function askToContinueWithoutGitHubSetup()
     {
         config(['lambo.store.' . LamboConfiguration::INITIALIZE_GITHUB => false]);
 
