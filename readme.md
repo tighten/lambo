@@ -234,7 +234,7 @@ You can optionally pass one or more of these parameters every time you use Lambo
 - the official [GitHub command line tool](https://github.com/cli/cli#installation)
 - the [hub command line tool](https://github.com/github/hub#installation)
  
-Lambo will ignore an attempt to create a repository if neither tool is installed. 
+Lambo will give you the option to continue without GitHub repository creation if neither tool is installed.
 
 - `-g` or `--github` to  Initialize a new private GitHub repository and push your new project to it.
 
