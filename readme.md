@@ -131,16 +131,16 @@ You can optionally pass one or more of these parameters every time you use Lambo
   lambo new superApplication --editor=subl
   ```
 
-- `-m` or `--message` to set the first Git commit message.
-
-  ```bash
-  lambo new superApplication --message="This lambo runs fast!"
-  ```
-
 - `-p` or `--path` to specify where to install the application.
 
   ```bash
   lambo new superApplication --path=~/Sites
+  ```
+
+- `-m` or `--message` to set the first Git commit message.
+
+  ```bash
+  lambo new superApplication --message="This lambo runs fast!"
   ```
 
 - `-f` or `--force` to force install even if the directory already exists 
@@ -228,42 +228,44 @@ You can optionally pass one or more of these parameters every time you use Lambo
   ```bash
   lambo new superApplication --full
 
-## GitHub Repository Creation
+**GitHub Repository Creation**
 
-- `--github[=<options>]` to create a new GitHub repository and push your new project to it.
+**Important:** To create new repositories Lambo requires one of the following tools to be installed:
+- the official [GitHub command line tool](https://github.com/cli/cli#installation)
+- the [hub command line tool](https://github.com/github/hub#installation)
+ 
+Lambo will ignore an attempt to create a repository if neither tool is installed. 
 
-```bash
-# Create a new GitHub repository '<your_github_username>/my-app'and make
-# it private with issue tracking and a wiki.
-lambo new my-app --github
-```
-
-Lambo uses the official GitHub command line tool to create your new repository so you must have it installed. You can find installation instructions [here](https://github.com/cli/cli#installation).
-
-New repository creation is configured by providing a value to the `--github` command line option which is then passed directly to the GitHub command line tool. For example, to specify a different visibility you would do the following:
-
- ```bash
- lambo new my-app --github='--public'
- lambo new my-app --github='--internal'
- ```
-
-and to create a public repository without issue tracking or a wiki you would do the following:
+- `-g` or `--github` to  Initialize a new private GitHub repository and push your new project to it.
 
 ```bash
- lambo new my-app --github='--public --enable-issues=false --enable-wiki=false'
+# Repository created at https://github.com/<your_github_username>/superApplication
+lambo new superApplication --github
 ```
 
-Please refer to the GitHub command line tool [repository creation documentation](https://cli.github.com/manual/gh_repo_create) for the full list of available options.
+- Use `--gh-public` with `--github` to make the new GitHub repository public.
 
-**Note:** Lambo always passes the `--confirm` option.
+```bash
+lambo new superApplication --github --gh-public
+```
 
-- `--github-org=ORG` to specify under which organisation the new repository will be created.
+- Use `--gh-description` with `--github` to initialize the new GitHub repository with a description.
 
- ```bash
-# Create a new private GitHub repository 'tighten/my-app' and make
-# it private with issue tracking and a wiki.
- lambo new my-app --github --github-org=tighten
- ```
+```bash
+lambo new superApplication --github --gh-description='My super application'
+```
+- Use `--gh-homepage` with `--github` to initialize the new GitHub repository with a homepage url. 
+
+```bash
+lambo new superApplication --github --gh-homepage=https://example.com
+```
+- Use `--gh-org` with `--github` to initialize the new GitHub repository with a specified organization.
+
+```bash
+# Repository created at https://github.com/acme/superApplication
+lambo new superApplication --github --gh-org=acme
+```
+
 -----
 
 # For contributors:
