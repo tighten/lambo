@@ -20,10 +20,6 @@ class OpenInEditor
 
     public function __invoke()
     {
-        if (config('lambo.store.no_editor')) {
-            return;
-        }
-
         $this->consoleWriter->logStep('Opening In Editor');
 
         $process = $this->shell->withTTY()->execInProject(sprintf('%s .', config('lambo.store.editor')));

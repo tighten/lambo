@@ -23,7 +23,6 @@ abstract class LamboConfiguration
     public const FULL = 'full';
     public const TLD = 'tld';
     public const COMMIT_MESSAGE = 'commit_message';
-    public const BRANCH = 'branch';
     public const VALET_LINK = 'valet_link';
     public const VALET_SECURE = 'valet_secure';
     public const BROWSER = 'browser';
