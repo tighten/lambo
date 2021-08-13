@@ -25,12 +25,6 @@ class Options
             'cli_description' => 'Customize the initial commit message (wrap with quotes!)',
         ],
         [
-            'short' => 'B',
-            'long' => 'branch',
-            'param_description' => 'BRANCH',
-            'cli_description' => 'The branch that should be created for a new repository <comment>[default: "main"]</comment>',
-        ],
-        [
             'short' => 'g',
             'long' => 'github',
             'cli_description' => 'Initialize a new private GitHub repository',

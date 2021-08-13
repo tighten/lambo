@@ -20,7 +20,6 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "laravel/installer": "^4.0",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-intl": "*"

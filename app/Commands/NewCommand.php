@@ -139,7 +139,6 @@ class NewCommand extends LamboCommand
         $commandLineConfiguration = new CommandLineConfiguration([
             'editor' => LamboConfiguration::EDITOR,
             'message' => LamboConfiguration::COMMIT_MESSAGE,
-            'branch' => LamboConfiguration::BRANCH,
             'path' => LamboConfiguration::ROOT_PATH,
             'browser' => LamboConfiguration::BROWSER,
             'frontend' => LamboConfiguration::FRONTEND_FRAMEWORK,
@@ -170,7 +169,6 @@ class NewCommand extends LamboCommand
         $savedConfiguration = new SavedConfiguration([
             'PROJECTPATH' => LamboConfiguration::ROOT_PATH,
             'MESSAGE' => LamboConfiguration::COMMIT_MESSAGE,
-            'BRANCH' => LamboConfiguration::BRANCH,
             'DEVELOP' => LamboConfiguration::USE_DEVELOP_BRANCH,
             'CODEEDITOR' => LamboConfiguration::EDITOR,
             'BROWSER' => LamboConfiguration::BROWSER,
@@ -198,7 +196,6 @@ class NewCommand extends LamboCommand
             LamboConfiguration::COMMAND => self::class,
             LamboConfiguration::EDITOR => 'nano',
             LamboConfiguration::COMMIT_MESSAGE => 'Initial commit',
-            LamboConfiguration::BRANCH => 'main',
             LamboConfiguration::ROOT_PATH => getcwd(),
             LamboConfiguration::BROWSER => null,
             LamboConfiguration::DATABASE_HOST => '127.0.0.1',
