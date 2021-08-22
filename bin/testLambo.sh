@@ -40,49 +40,49 @@ PROJECT_PATH="$TEST_DIR/$NAME"
 TEMPLATE_PATH="$TEST_DIR/$TEMPLATE_NAME"
 
 if [ "$DEBUG" = true ]; then
-  echo "ℹ️  Start directory: $START_DIR"
-  echo "ℹ️  Script path: $SCRIPT_PATH"
-  echo "ℹ️  Test directory: $TEST_DIR"
-  echo "ℹ️  Project name: $NAME"
-  echo "ℹ️  Project path: $PROJECT_PATH"
-  echo "ℹ️  Template name: $TEMPLATE_NAME"
-  echo "ℹ️  Template path: $TEMPLATE_PATH"
+  echo " [INFO] Start directory: $START_DIR"
+  echo " [INFO] Script path: $SCRIPT_PATH"
+  echo " [INFO] Test directory: $TEST_DIR"
+  echo " [INFO] Project name: $NAME"
+  echo " [INFO] Project path: $PROJECT_PATH"
+  echo " [INFO] Template name: $TEMPLATE_NAME"
+  echo " [INFO] Template path: $TEMPLATE_PATH"
 fi
 
 # Create test directory
 if [ ! -d "$TEST_DIR" ]; then
-  echo "⚠️  Test directory '$TEST_DIR' does not exist, creating it now…"
+  echo "*[WARN] Test directory '$TEST_DIR' does not exist, creating it now…"
   mkdir $TEST_DIR
 else
-  echo "✅ Using test directory '$TEST_DIR'"
+  echo " [INFO] Using test directory '$TEST_DIR'"
 fi
 
 # Create template Laravel installation
 if [ ! -d "$TEMPLATE_PATH" ]; then
-  echo "⚠️  Laravel template '$TEMPLATE_PATH' does not exist, creating it now…"
+  echo "*[WARN] Laravel template '$TEMPLATE_PATH' does not exist, creating it now…"
   cd $TEST_DIR
-  laravel new $TEMPLATE_NAME --quiet
+  composer create-project laravel/laravel $TEMPLATE_NAME --remove-vcs --prefer-dist --quiet
   cd $START_DIR
-  echo "✅ Created template '$TEMPLATE_PATH'"
+  echo " [INFO] Created template '$TEMPLATE_PATH'"
 else
-  echo "✅ Using template '$TEMPLATE_PATH'"
+  echo " [INFO] Using template '$TEMPLATE_PATH'"
 fi
 
 # remove previous run.
 if [ -f "$TEST_DIR/.last-run" ]; then
   last_run=$(cat $TEST_DIR/.last-run)
   rm -rf $last_run
-  echo "✅ Deleted previous run '$last_run'"
+  echo " [INFO] Deleted previous run '$last_run'"
 fi
 
 cp -r $TEMPLATE_PATH $PROJECT_PATH
-echo "✅ Copied laravel template '$TEMPLATE_PATH' to '$PROJECT_PATH'"
+echo " [INFO] Copied laravel template '$TEMPLATE_PATH' to '$PROJECT_PATH'"
 
 cd $TEST_DIR
 echo $PROJECT_PATH > .last-run
 
 cd $SCRIPT_PATH
-echo "✅ Running Lambo…"
+echo " [INFO] Running Lambo…"
 echo
 echo "lambo new $NAME --path $TEST_DIR $*"
 ../lambo new $NAME --path $TEST_DIR $*

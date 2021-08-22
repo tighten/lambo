@@ -38,7 +38,8 @@ class EditAfter extends LamboCommand
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            app('console-writer')
+            app('console-writer'),
+            $this->input
         ))([
             LamboConfiguration::EDITOR => 'nano',
         ]);

@@ -37,14 +37,12 @@ class Shell
 
     public function exec(string $command)
     {
+        $this->consoleWriter->exec($command);
+
         $process = Process::fromShellCommandline($command)
             ->setTty($this->useTTY)
             ->setTimeout(null)
             ->enableOutput();
-
-        $this->consoleWriter->exec($command);
-        $this->consoleWriter->newLine();
-
         $process->run(function ($type, $buffer) {
             if (empty(trim($buffer)) || $buffer === PHP_EOL) {
                 return;
@@ -54,16 +52,14 @@ class Shell
                 $this->consoleWriter->consoleOutput($line, $type);
             }
         });
-
-        $this->consoleWriter->newLine();
-
         $this->useTTY = false;
+
         return $process;
     }
 
     public function execQuietly(string $command)
     {
-        $process =  Process::fromShellCommandline($command)
+        $process = Process::fromShellCommandline($command)
             ->setTimeout(null)
             ->enableOutput();
 

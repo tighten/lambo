@@ -26,8 +26,6 @@ abstract class LamboConfiguration
     public const VALET_LINK = 'valet_link';
     public const VALET_SECURE = 'valet_secure';
     public const BROWSER = 'browser';
-    public const INERTIA = 'inertia';
-    public const LIVEWIRE = 'livewire';
     public const TEAMS = 'teams';
     public const INITIALIZE_GITHUB = 'initialize_github';
     public const GITHUB_PUBLIC = 'github_public';
@@ -35,6 +33,8 @@ abstract class LamboConfiguration
     public const GITHUB_HOMEPAGE = 'github_homepage';
     public const GITHUB_ORGANIZATION = 'github_organization';
     public const COMMAND = 'command';
+    public const BREEZE = 'breeze';
+    public const JETSTREAM = 'jetstream';
 
     public function __construct(array $keyMap)
     {

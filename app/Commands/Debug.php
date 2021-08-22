@@ -68,6 +68,12 @@ trait Debug
 
         $this->consoleWriter->sectionTitle('Pre-flight Configuration');
 
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text('Raw commmand line:');
+        $this->arrayToTable(
+            $_SERVER['argv'],
+        );
+
         $this->consoleWriter->text('Command line arguments:');
         $this->arrayToTable($this->arguments());
 
@@ -76,24 +82,29 @@ trait Debug
             $this->options(),
             [
                 'editor',
-                'message',
                 'path',
+                'message',
+                'github',
+                'gh-public',
+                'gh-description',
+                'gh-homepage',
+                'gh-org',
+                'breeze',
+                'jetstream',
                 'browser',
-                'frontend',
+                'dbhost',
                 'dbport',
                 'dbname',
                 'dbuser',
                 'dbpassword',
                 'create-db',
+                'migrate-db',
+                'force',
                 'link',
                 'secure',
                 'quiet',
-                'with-output',
                 'dev',
                 'full',
-                'inertia',
-                'livewire',
-                'with-teams',
                 'projectName',
             ],
             '--'
