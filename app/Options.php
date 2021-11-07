@@ -49,6 +49,16 @@ class Options
             'cli_description' => 'Initialize the new GitHub repository for <info>ORG</info>/project',
         ],
         [
+            'long' => 'breeze',
+            'param_description' => 'STACK',
+            'cli_description' => 'Use the Laravel Breeze starter kit. <info>STACK</info> may be either <info>blade</info>, <info>vue</info> or <info>react</info>.',
+        ],
+        [
+            'long' => 'jetstream',
+            'param_description' => 'STACK[,teams]',
+            'cli_description' => 'Use the Laravel Jetstream starter kit. <info>STACK</info> may be either <info>inertia</info> or <info>livewire</info>.' ,
+        ],
+        [
             'short' => 'b',
             'long' => 'browser',
             'param_description' => 'BROWSER',
@@ -91,18 +101,6 @@ class Options
         [
             'long' => 'migrate-db',
             'cli_description' => 'Run database migrations',
-        ],
-        [
-            'long' => 'inertia',
-            'cli_description' => 'Use inertia frontend scaffolding',
-        ],
-        [
-            'long' => 'livewire',
-            'cli_description' => 'Use livewire frontend scaffolding',
-        ],
-        [
-            'long' => 'teams',
-            'cli_description' => 'Use team features with inertia or livewire',
         ],
         [
             'short' => 'l',

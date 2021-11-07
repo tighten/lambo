@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Actions\InstallBreeze;
+use App\Actions\InstallJetstream;
 use App\Commands\NewCommand;
 use App\Configuration\CommandLineConfiguration;
 use App\Configuration\SavedConfiguration;
@@ -10,8 +12,12 @@ use App\Configuration\ShellConfiguration;
 use App\ConsoleWriter;
 use App\LamboException;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Mockery;
+use Mockery\MockInterface;
 use Tests\Feature\LamboTestEnvironment;
 use Tests\TestCase;
+use Tests\Unit\Fakes\FakeInput;
 
 class SetConfigTest extends TestCase
 {
@@ -38,7 +44,8 @@ class SetConfigTest extends TestCase
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['tld' => null]);
 
         $this->assertEquals('mytld', config('lambo.store.tld'));
@@ -72,7 +79,8 @@ class SetConfigTest extends TestCase
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['tld' => null]);
 
         $this->assertEquals('mytld', config('lambo.store.tld'));
@@ -101,7 +109,8 @@ class SetConfigTest extends TestCase
             $this->mock(CommandLineConfiguration::class),
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['tld' => null]);
     }
 
@@ -123,7 +132,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'testKey' => 'default',
         ]);
@@ -149,7 +159,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'testKey' => 'default',
         ]);
@@ -175,7 +186,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'testKey' => 'default',
         ]);
@@ -201,7 +213,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'testKey' => 'default',
         ]);
@@ -223,7 +236,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['root_path' => getcwd()]);
 
         $this->assertEquals('/home/user/path/from/command/line', config('lambo.store.root_path'));
@@ -237,7 +251,8 @@ class SetConfigTest extends TestCase
             $this->mock(CommandLineConfiguration::class),
             $savedConfiguration,
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['root_path' => getcwd()]);
 
         $this->assertEquals('/home/user/path/from/saved/configuration', config('lambo.store.root_path'));
@@ -257,7 +272,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'root_path' => getcwd(),
             'project_name' => null,
@@ -279,7 +295,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'command' => NewCommand::class,
             'tld' => null,
@@ -298,7 +315,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'command' => NewCommand::class,
             'tld' => null,
@@ -322,7 +340,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))(['project_name' => null]);
 
         $this->assertEquals('foo', config('lambo.store.project_name'));
@@ -342,7 +361,8 @@ class SetConfigTest extends TestCase
             $commandLineConfiguration,
             $this->mock(SavedConfiguration::class),
             $this->mock(ShellConfiguration::class),
-            app(ConsoleWriter::class)
+            app(ConsoleWriter::class),
+            new FakeInput()
         ))([
             'command' => NewCommand::class,
             'root_path' => getcwd(),
@@ -362,7 +382,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->create_database = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -373,7 +399,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->create_database = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -384,7 +416,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->create_database = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'create_database' => false,
@@ -404,7 +442,13 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -419,7 +463,13 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = true;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -434,7 +484,13 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -449,7 +505,13 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = true;
         $commandLineConfiguration->livewire = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -464,7 +526,13 @@ class SetConfigTest extends TestCase
         $commandLineConfiguration->migrate_database = false;
         $commandLineConfiguration->inertia = false;
         $commandLineConfiguration->livewire = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'migrate_database' => false,
@@ -483,7 +551,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->valet_link = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -494,7 +568,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -505,7 +585,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_link = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'valet_link' => false,
@@ -522,7 +608,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = true;
         $commandLineConfiguration->valet_secure = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => true,
             'valet_secure' => false,
@@ -533,7 +625,13 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = true;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'valet_secure' => true,
@@ -544,11 +642,251 @@ class SetConfigTest extends TestCase
 
         $commandLineConfiguration->full = false;
         $commandLineConfiguration->valet_secure = false;
-        (new SetConfig($commandLineConfiguration, $savedConfiguration, $this->mock(ShellConfiguration::class), app(ConsoleWriter::class)))([
+        (new SetConfig(
+            $commandLineConfiguration,
+            $savedConfiguration,
+            $this->mock(ShellConfiguration::class),
+            app(ConsoleWriter::class),
+            new FakeInput()
+        ))([
             'tld' => null,
             'full' => false,
             'valet_secure' => false,
         ]);
         $this->assertFalse(config('lambo.store.valet_secure'));
+    }
+
+    /**
+     * @test
+     * @group front-end-scaffolding
+     */
+    function it_sets_the_breeze_starter_kit_configuration()
+    {
+        $this->withValetTld('test-domain');
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+
+        foreach (InstallBreeze::VALID_STACKS as $stack) {
+            config(['lambo.store' => []]);
+            (new SetConfig(
+                $commandLineConfiguration,
+                $this->mock(SavedConfiguration::class),
+                $this->mock(ShellConfiguration::class),
+                app(ConsoleWriter::class),
+                new FakeInput([
+                    'breeze' => $stack,
+                ])
+            ))([
+                'breeze' => false,
+            ]);
+
+            static::assertEquals($stack, config('lambo.store.breeze'));
+            static::assertFalse(config('lambo.store.jetstream'));
+
+            if (in_array('--debug', $_SERVER['argv'], true)) {
+                $this->toSTDOUT(sprintf('[ Options ] -jetstream=%s', $stack));
+                $this->toSTDOUT(sprintf('[ Config  ] lambo.store.jetstream => %s', config('lambo.store.jetstream') ? config('lambo.store.jetstream') : 'false'));
+                $this->toSTDOUT(sprintf('[ Config  ] lambo.store.breeze => %s', config('lambo.store.breeze') ? config('lambo.store.breeze') : 'false'));
+                $this->toSTDOUT('-------------');
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @group front-end-scaffolding
+     */
+    function it_sets_the_jetstream_starter_kit_configuration()
+    {
+        $this->withValetTld('test-domain');
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+
+        foreach (InstallJetstream::VALID_CONFIGURATIONS as $stack) {
+            config(['lambo.store' => []]);
+            (new SetConfig(
+                $commandLineConfiguration,
+                $this->mock(SavedConfiguration::class),
+                $this->mock(ShellConfiguration::class),
+                app(ConsoleWriter::class),
+                new FakeInput([
+                    'jetstream' => $stack,
+                ])
+            ))([
+                'jetstream' => false,
+            ]);
+
+            static::assertEquals($stack, config('lambo.store.jetstream'));
+            static::assertFalse(config('lambo.store.breeze'));
+
+            if (in_array('--debug', $_SERVER['argv'], true)) {
+                $this->toSTDOUT(sprintf('[ Options ] -jetstream=%s', $stack));
+                $this->toSTDOUT(sprintf('[ Config  ] lambo.store.jetstream => %s', config('lambo.store.jetstream') ? config('lambo.store.jetstream') : 'false'));
+                $this->toSTDOUT(sprintf('[ Config  ] lambo.store.breeze => %s', config('lambo.store.breeze') ? config('lambo.store.breeze') : 'false'));
+                $this->toSTDOUT('-------------');
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @group front-end-scaffolding
+     */
+    function it_ensures_only_one_starter_kit_is_configured()
+    {
+        $this->withValetTld('test-domain');
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+
+        foreach (InstallBreeze::VALID_STACKS as $breezeStack) {
+            foreach (InstallJetstream::VALID_CONFIGURATIONS as $jetstreamStack) {
+                foreach (['None', 'Laravel Breeze', 'Laravel Jetstream',] as $stackChoice) {
+                    $consoleWriter = $this->mock(ConsoleWriter::class, function (MockInterface $consoleWriter) use ($stackChoice) {
+                        $consoleWriter->shouldReceive('newLine')->once()->globally()->ordered();
+                        $consoleWriter->shouldReceive('note')->once()->globally()->ordered();
+                        $consoleWriter->shouldReceive('choice')->once()->globally()->ordered()->andReturn($stackChoice);
+
+                        $stackChoice === 'None'
+                            ? $consoleWriter->shouldReceive('ok')->with('Skipping starter-kit installation.')->once()->globally()->ordered()
+                            : $consoleWriter->shouldReceive('ok')->with("Using {$stackChoice}")->once()->globally()->ordered();
+                    });
+
+                    config(['lambo.store' => []]);
+                    (new SetConfig(
+                        $commandLineConfiguration,
+                        $this->mock(SavedConfiguration::class),
+                        $this->mock(ShellConfiguration::class),
+                        $consoleWriter,
+                        new FakeInput([
+                            'jetstream' => $jetstreamStack,
+                            'breeze' => $breezeStack,
+                        ])
+                    ))([
+                        'breeze' => false,
+                        'jetstream' => false,
+                    ]);
+
+                    switch ($stackChoice) {
+                        case 'Laravel Breeze':
+                            static::assertEquals($breezeStack, config('lambo.store.breeze'));
+                            static::assertFalse(config('lambo.store.jetstream'));
+                            break;
+                        case 'Laravel Jetstream':
+                            static::assertEquals($jetstreamStack, config('lambo.store.jetstream'));
+                            static::assertFalse(config('lambo.store.breeze'));
+                            break;
+                        case 'None':
+                            static::assertFalse(config('lambo.store.breeze'));
+                            static::assertFalse(config('lambo.store.jetstream'));
+                            break;
+                    }
+
+                    if (in_array('--debug', $_SERVER['argv'], true)) {
+                        $this->toSTDOUT(sprintf('[ Options ] --breeze=%s --jetstream=%s', $breezeStack, $jetstreamStack));
+                        $this->toSTDOUT(sprintf('[ Choice  ] %s', $stackChoice));
+                        $this->toSTDOUT(sprintf('[ Config  ] lambo.store.jetstream => %s', config('lambo.store.jetstream') ? config('lambo.store.jetstream') : 'false'));
+                        $this->toSTDOUT(sprintf('[ Config  ] lambo.store.breeze => %s', config('lambo.store.breeze') ? config('lambo.store.breeze') : 'false'));
+                        $this->toSTDOUT('-------------');
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @group front-end-scaffolding
+     */
+    function it_asks_for_clarification_when_breeze_configuration_is_invalid()
+    {
+        $this->withValetTld('test-domain');
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+
+        foreach ([null, '', 'invalid'] as $invalidStack) {
+            foreach (array_keys(InstallBreeze::VALID_STACKS) as $stackChoice) {
+                $consoleWriter = $this->mock(ConsoleWriter::class, function (MockInterface $consoleWriter) use ($stackChoice) {
+                    $consoleWriter->shouldReceive('note')->once()->globally()->ordered();
+                    $consoleWriter->shouldReceive('choice')->once()->globally()->ordered()
+                        ->with(Mockery::type('string'), array_keys(InstallBreeze::VALID_STACKS))
+                        ->andReturn($stackChoice);
+                    $consoleWriter->shouldReceive('ok')->once()->globally()->ordered();
+                });
+                config(['lambo.store' => []]);
+
+                (new SetConfig(
+                    $commandLineConfiguration,
+                    $this->mock(SavedConfiguration::class),
+                    $this->mock(ShellConfiguration::class),
+                    $consoleWriter,
+                    new FakeInput([
+                        'breeze' => $invalidStack,
+                    ])
+                ))([
+                    'breeze' => false,
+                ]);
+
+                static::assertEquals(Str::lower($stackChoice), config('lambo.store.breeze'));
+                static::assertFalse(config('lambo.store.jetstream'));
+
+                if (in_array('--debug', $_SERVER['argv'], true)) {
+                    $this->toSTDOUT(sprintf('[ Options ] %s', is_null($invalidStack) ? '--breeze' : "--breeze={$invalidStack}"));
+                    $this->toSTDOUT(sprintf('[ Choice  ] %s', $stackChoice));
+                    $this->toSTDOUT(sprintf('[ Config  ] lambo.store.jetstream => %s', config('lambo.store.jetstream') ? config('lambo.store.jetstream') : 'false'));
+                    $this->toSTDOUT(sprintf('[ Config  ] lambo.store.breeze => %s', config('lambo.store.breeze') ? config('lambo.store.breeze') : 'false'));
+                    $this->toSTDOUT('-------------');
+                }
+            }
+        }
+    }
+
+    /**
+     * @test
+     * @group front-end-scaffolding
+     */
+    function it_asks_for_clarification_when_jetstream_configuration_is_invalid()
+    {
+        $this->withValetTld('test-domain');
+
+        $commandLineConfiguration = $this->mock(CommandLineConfiguration::class);
+
+        foreach ([null, '', 'invalid'] as $invalidStack) {
+            foreach (array_keys(InstallJetstream::VALID_STACKS) as $stackChoice) {
+                foreach ([true, false] as $useTeams) {
+                    $consoleWriter = $this->mock(ConsoleWriter::class, function (MockInterface $consoleWriter) use ($useTeams, $stackChoice) {
+                        $consoleWriter->shouldReceive('note')->once()->globally()->ordered();
+                        $consoleWriter->shouldReceive('choice')->once()->globally()->ordered()
+                            ->with(Mockery::type('string'), array_keys(InstallJetstream::VALID_STACKS))
+                            ->andReturn($stackChoice);
+                        $consoleWriter->shouldReceive('confirm')->once()->globally()->ordered()->andReturn($useTeams);
+                        $consoleWriter->shouldReceive('ok')->once()->globally()->ordered();
+                    });
+                    config(['lambo.store' => []]);
+
+                    (new SetConfig(
+                        $commandLineConfiguration,
+                        $this->mock(SavedConfiguration::class),
+                        $this->mock(ShellConfiguration::class),
+                        $consoleWriter,
+                        new FakeInput([
+                            'jetstream' => $invalidStack,
+                        ])
+                    ))([
+                        'jetstream' => false,
+                    ]);
+
+                    static::assertEquals(Str::lower($stackChoice) . ($useTeams ? ',teams' : ''), config('lambo.store.jetstream'));
+                    static::assertFalse(config('lambo.store.breeze'));
+
+                    if (in_array('--debug', $_SERVER['argv'], true)) {
+                        $this->toSTDOUT(sprintf('[ Options ] %s', is_null($invalidStack) ? '--breeze' : "--breeze={$invalidStack}"));
+                        $this->toSTDOUT(sprintf('[ Choice  ] %s%s', Str::lower($stackChoice), $useTeams ? ' with teams' : ''));
+                        $this->toSTDOUT(sprintf('[ Config  ] lambo.store.jetstream => %s', config('lambo.store.jetstream') ? config('lambo.store.jetstream') : 'false'));
+                        $this->toSTDOUT(sprintf('[ Config  ] lambo.store.breeze => %s', config('lambo.store.breeze') ? config('lambo.store.breeze') : 'false'));
+                        $this->toSTDOUT('-------------');
+                    }
+                }
+            }
+        }
     }
 }

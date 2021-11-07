@@ -48,7 +48,7 @@ class ConsoleWriter extends OutputStyle
 
     public function ok($message): void
     {
-        $this->success($message, 'OK');
+        $this->success($message, ' OK ');
     }
 
     public function note($message, $label = 'NOTE'): void

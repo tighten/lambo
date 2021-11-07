@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Actions\ConfigureFrontendFramework;
 use App\Actions\CreateDatabase;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
@@ -11,6 +10,8 @@ use App\Actions\EditConfigFile;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitHubRepository;
 use App\Actions\InitializeGitRepository;
+use App\Actions\InstallBreeze;
+use App\Actions\InstallJetstream;
 use App\Actions\InstallLaravel;
 use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
@@ -20,7 +21,7 @@ use App\Actions\RunAfterScript;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
 use App\Actions\ValetSecure;
-use App\Actions\ValidateConfiguration;
+use App\Actions\ValidateGitHubConfiguration;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Configuration\CommandLineConfiguration;
@@ -98,13 +99,14 @@ class NewCommand extends LamboCommand
 
         try {
             app(VerifyDependencies::class)();
-            app(ValidateConfiguration::class)();
+            app(ValidateGitHubConfiguration::class)();
             app(VerifyPathAvailable::class)();
             app(InstallLaravel::class)();
             app(CustomizeDotEnv::class)();
             app(GenerateAppKey::class)();
+            app(InstallBreeze::class)();
+            app(InstallJetstream::class)();
             app(CreateDatabase::class)();
-            app(ConfigureFrontendFramework::class)();
             app(MigrateDatabase::class)();
             app(InitializeGitRepository::class)();
             app(RunAfterScript::class)();
@@ -155,15 +157,14 @@ class NewCommand extends LamboCommand
             'with-output' => LamboConfiguration::WITH_OUTPUT,
             'dev' => LamboConfiguration::USE_DEVELOP_BRANCH,
             'full' => LamboConfiguration::FULL,
-            'teams' => LamboConfiguration::TEAMS,
-            'inertia' => LamboConfiguration::INERTIA,
-            'livewire' => LamboConfiguration::LIVEWIRE,
             'github' => LamboConfiguration::INITIALIZE_GITHUB,
             'gh-public' => LamboConfiguration::GITHUB_PUBLIC,
             'gh-description' => LamboConfiguration::GITHUB_DESCRIPTION,
             'gh-homepage' => LamboConfiguration::GITHUB_HOMEPAGE,
             'gh-org' => LamboConfiguration::GITHUB_ORGANIZATION,
             'projectName' => LamboConfiguration::PROJECT_NAME,
+            'breeze' => LamboConfiguration::BREEZE,
+            'jetstream' => LamboConfiguration::JETSTREAM,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
@@ -191,7 +192,8 @@ class NewCommand extends LamboCommand
             $commandLineConfiguration,
             $savedConfiguration,
             $shellConfiguration,
-            $this->consoleWriter
+            $this->consoleWriter,
+            $this->input
         ))([
             LamboConfiguration::COMMAND => self::class,
             LamboConfiguration::EDITOR => 'nano',
@@ -211,15 +213,14 @@ class NewCommand extends LamboCommand
             LamboConfiguration::WITH_OUTPUT => false,
             LamboConfiguration::USE_DEVELOP_BRANCH => false,
             LamboConfiguration::FULL => false,
-            LamboConfiguration::INERTIA => false,
-            LamboConfiguration::LIVEWIRE => false,
-            LamboConfiguration::TEAMS => false,
             LamboConfiguration::INITIALIZE_GITHUB => false,
             LamboConfiguration::GITHUB_PUBLIC => false,
             LamboConfiguration::PROJECT_NAME => null,
             LamboConfiguration::GITHUB_DESCRIPTION => null,
             LamboConfiguration::GITHUB_HOMEPAGE => null,
             LamboConfiguration::GITHUB_ORGANIZATION => null,
+            LamboConfiguration::BREEZE => false,
+            LamboConfiguration::JETSTREAM => false,
             LamboConfiguration::TLD => null,
         ]);
 
