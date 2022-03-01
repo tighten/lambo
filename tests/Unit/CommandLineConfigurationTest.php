@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class CommandLineConfigurationTest extends TestCase
 {
-
     private $mockConsole;
 
     public function setUp(): void

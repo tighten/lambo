@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class LamboCommand extends Command
 {
-    public function run(InputInterface $input, OutputInterface $output)
+    public function run(InputInterface $input, OutputInterface $output): int
     {
         app()->singleton(ConsoleWriter::class, function () use ($input, $output) {
             return new ConsoleWriter($input, $output);
