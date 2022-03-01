@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 
 class FakeInput implements InputInterface
 {
-    private $input;
-    private $parameterOptions;
+    private array $input;
+    private array $parameterOptions;
 
     public function __construct(array $input = [])
     {
@@ -20,12 +20,12 @@ class FakeInput implements InputInterface
         })->toArray();
     }
 
-    public function getFirstArgument()
+    public function getFirstArgument(): null|string
     {
         throw new Exception('getFirstArgument() has not been implemented.');
     }
 
-    public function hasParameterOption($values, bool $onlyParams = false)
+    public function hasParameterOption(array|string $values, bool $onlyParams = false): bool
     {
         return Arr::has($this->parameterOptions, (array) $values);
     }
@@ -45,7 +45,7 @@ class FakeInput implements InputInterface
         throw new Exception('validate() has not been implemented.');
     }
 
-    public function getArguments()
+    public function getArguments(): array
     {
         throw new Exception('getArguments() has not been implemented.');
     }
@@ -60,12 +60,12 @@ class FakeInput implements InputInterface
         throw new Exception('setArgument() has not been implemented.');
     }
 
-    public function hasArgument(string $name)
+    public function hasArgument(string $name): bool
     {
         throw new Exception('hasArgument() has not been implemented.');
     }
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->input;
     }
@@ -80,12 +80,12 @@ class FakeInput implements InputInterface
         throw new Exception('setOption() has not been implemented.');
     }
 
-    public function hasOption(string $name)
+    public function hasOption(string $name): bool
     {
         throw new Exception('hasOption() has not been implemented.');
     }
 
-    public function isInteractive()
+    public function isInteractive(): bool
     {
         throw new Exception('isInteractive() has not been implemented.');
     }
