@@ -15,7 +15,7 @@ Lambo is a command-line tool that replaces the Laravel installer and wraps up th
 # Installation
 
 ```bash
-composer global require tightenco/lambo:^1.0
+composer global require tightenco/lambo:^2.0
 ```
 
 # Upgrading
