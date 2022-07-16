@@ -36,7 +36,7 @@ lambo new myNextProject
 # What exactly does it do?
 
 - `laravel new $PROJECTNAME`
-- Initialize a git repo, add all of the files, and, after some changes below, make a commit with the text "Initial commit."
+- Initialize a git repo, add all the files, and, after some changes below, make a commit with the text "Initial commit."
 - Replace the `.env` (and `.env.example`) database credentials with the default macOS MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Replace the `.env` (and `.env.example`) `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Generate an app key
