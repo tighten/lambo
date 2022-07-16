@@ -68,6 +68,11 @@ abstract class TestCase extends BaseTestCase
         $this->shouldExecInProject($command, false);
     }
 
+    protected function isVerbose(): bool
+    {
+        return $this->isDebug() || in_array('--verbose', $_SERVER['argv'], true);
+    }
+
     protected function isDebug(): bool
     {
         return in_array('--debug', $_SERVER['argv'], true);

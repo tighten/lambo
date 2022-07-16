@@ -36,7 +36,7 @@ lambo new myNextProject
 # What exactly does it do?
 
 - `laravel new $PROJECTNAME`
-- Initialize a git repo, add all of the files, and, after some changes below, make a commit with the text "Initial commit."
+- Initialize a git repo, add all the files, and, after some changes below, make a commit with the text "Initial commit."
 - Replace the `.env` (and `.env.example`) database credentials with the default macOS MySQL credentials: database of `$PROJECTNAME`, user `root`, and empty password
 - Replace the `.env` (and `.env.example`) `APP_URL` with `$PROJECTNAME.$YOURVALETTLD`
 - Generate an app key
@@ -205,23 +205,22 @@ You can optionally pass one or more of these parameters every time you use Lambo
   lambo new superApplication --dbhost=127.0.0.1
   ```
 
-
-- `--inertia` to install Jetstream using Inertia.
+- `--breeze=STACK` to use the Laravel Breeze starter kit. `STACK` may be either `blade`, `vue` or `react`.
 
   ```bash
-  lambo new superApplication --inertia
+  lambo new superApplication --breeze=blade
+  lambo new superApplication --breeze=vue
+  lambo new superApplication --breeze=react
   ```
-  
-- `--livewire` to install Jetstream using Livewire.
+
+- `--jetstream=STACK[,teams]` to use the Laravel Jetstream starter kit. `STACK` may be either `inertia` or `livewire`.
 
   ```bash
-  lambo new superApplication --livewire
+  lambo new superApplication --jetstream=inertia
+  lambo new superApplication --jetstream=inertia,teams
+  lambo new superApplication --jetstream=livewire
+  lambo new superApplication --jetstream=livewire,teams
   ```
-  
-- `--teams` to install Jetstream using teams.
-
-  ```bash
-  lambo new superApplication --teams
   
 - `--full` to use `--create-db`, `--migrate-db`, `--link`, and `-secure`.
 
