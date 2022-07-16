@@ -28,8 +28,8 @@ class InstallJetstream
         'Livewire' => 'livewire',
     ];
 
-    private $consoleWriter;
-    private $shell;
+    private ConsoleWriter $consoleWriter;
+    private Shell $shell;
 
     public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
@@ -37,7 +37,10 @@ class InstallJetstream
         $this->consoleWriter = $consoleWriter;
     }
 
-    public function __invoke()
+    /**
+     * @throws LamboException
+     */
+    public function __invoke(): void
     {
         if (($stack = config('lambo.store.jetstream')) === false) {
             return;
@@ -56,6 +59,9 @@ class InstallJetstream
         $this->consoleWriter->success('Successfully installed Laravel Jetstream.');
     }
 
+    /**
+     * @throws LamboException
+     */
     protected function installJetstream(string $stack): void
     {
         $configuration = explode(',', $stack);

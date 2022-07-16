@@ -12,12 +12,15 @@ use Tests\TestCase;
  */
 class InstallJetstreamTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @throws LamboException
+     */
     function it_installs_laravel_jetstream()
     {
         foreach ([false, true] as $withOutput) {
             foreach ([false, true] as $useTeams) {
-                foreach (array_values(InstallJetstream::VALID_STACKS) as $stack) {
+                foreach (InstallJetstream::VALID_STACKS as $stack) {
                     config(['lambo.store.jetstream' => $stack]);
                     config(['lambo.store.with_output' => $withOutput]);
 
@@ -40,7 +43,10 @@ class InstallJetstreamTest extends TestCase
         }
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws LamboException
+     */
     function it_skips_jetstream_installation()
     {
         $this->spy(Shell::class);
@@ -111,7 +117,7 @@ class InstallJetstreamTest extends TestCase
 
     private function getCompileAssetsCommand($withOutput): string
     {
-        return 'npm run dev' . ($withOutput ? '' : ' --silent');
+        return 'npm run build' . ($withOutput ? '' : ' --silent');
     }
 
     private function logUseCase(string $stack, $useTeams, $showOutput): void
@@ -124,7 +130,7 @@ class InstallJetstreamTest extends TestCase
 
         $this->toSTDOUT("────────────────────────────\n");
         $this->toSTDOUT(sprintf(
-            " USECASE\n   lambo new <project> %s--jetstream=%s%s",
+            " USE CASE\n   lambo new <project> %s--jetstream=%s%s",
             $showOutput ? '-v[vv] ' : '',
             $stack,
             $useTeams ? ',teams' : ''

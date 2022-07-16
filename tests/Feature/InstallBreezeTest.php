@@ -12,15 +12,18 @@ use Tests\TestCase;
  */
 class InstallBreezeTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @throws LamboException
+     */
     function it_installs_laravel_breeze()
     {
         foreach ([false, true] as $withOutput) {
-            foreach (array_values(InstallBreeze::VALID_STACKS) as $stack) {
+            foreach (InstallBreeze::VALID_STACKS as $stack) {
                 config(['lambo.store.breeze' => $stack]);
                 config(['lambo.store.with_output' => $withOutput]);
 
-                if ($this->isDebug()) {
+                if ($this->isVerbose()) {
                     $this->logUseCase($stack, $withOutput);
                 }
 
@@ -38,7 +41,10 @@ class InstallBreezeTest extends TestCase
         }
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws LamboException
+     */
     function it_skips_breeze_installation()
     {
         $this->spy(Shell::class);
@@ -114,7 +120,7 @@ class InstallBreezeTest extends TestCase
 
     private function getCompileAssetsCommand($withOutput): string
     {
-        return 'npm run dev' . ($withOutput ? '' : ' --silent');
+        return 'npm run build' . ($withOutput ? '' : ' --silent');
     }
 
     private function logUseCase(string $stack, $showOutput): void
@@ -124,7 +130,7 @@ class InstallBreezeTest extends TestCase
         $this->toSTDOUT("────────────────────────────\n");
         $this->toSTDOUT(implode(PHP_EOL, [
             sprintf('   lambo new <project> %s--breeze=%s', $showOutput ? '-v(vv) ' : '', $stack),
-        ]), ' USECASE');
+        ]), ' USE CASE');
         $this->toSTDOUT(implode(PHP_EOL, [
             "   1. {$this->getComposerCommand($showOutput)}",
             "   2. {$this->getBreezeInstallCommand($stack, $showOutput)}",
