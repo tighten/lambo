@@ -28,7 +28,12 @@ class RunAfterScript
 
         $this->consoleWriter->logStep('Running after script');
 
-        $process = $this->shell->execInProject('sh ' . $afterScriptPath);
+        $this->shell->withTTY();
+        $process = $this->shell->execInProject(sprintf(
+            'env PROJECTPATH=%s sh %s',
+            config('lambo.store.project_path'),
+            $afterScriptPath
+        ));
         $this->abortIf(! $process->isSuccessful(), 'After file did not complete successfully', $process);
 
         $this->consoleWriter->success('After script has completed.');
