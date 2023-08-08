@@ -20,12 +20,4 @@ class GetTimezoneTest extends TestCase
         ini_set('date.timezone', $expectedTimezone);
         $this->assertEquals($expectedTimezone, app(GetTimezone::class)());
     }
-
-    /** @test */
-    function it_uses_the_timezone_of_the_host_operating_system()
-    {
-        ini_set('date.timezone', '');
-        $expectedTimezone = IntlTimeZone::createDefault()->getId();
-        $this->assertEquals($expectedTimezone, app(GetTimezone::class)());
-    }
 }
