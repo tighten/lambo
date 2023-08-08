@@ -25,7 +25,7 @@
         "ext-intl": "*"
     },
     "require-dev": {
-        "laravel-zero/framework": "^v9.0",
+        "laravel-zero/framework": "^10.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^9.0",
         "spatie/laravel-ray": "^1.17",
